@@ -1,0 +1,29 @@
+{
+  "name":    "simp-simplib",
+  "version": "1.0.0",
+  "author":  "simp",
+  "summary": "A collection of common SIMP functions, facts, and types",
+  "license": "Apache-2.0",
+  "source":  "https://github.com/simp/pupmod-simp-simplib",
+  "project_page": "https://github.com/simp/pupmod-simp-simplib",
+  "issues_url":   "https://simp-project.atlassian.net",
+  "tags": [ "simp", "functions" ],
+  "dependencies": [
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}
