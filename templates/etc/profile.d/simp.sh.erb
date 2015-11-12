@@ -1,0 +1,26 @@
+# This file managed by Puppet.
+# Any changes will be overwritten at the next run.
+
+<% if not @user_whitelist.empty? then -%>
+for user in <%= @user_whitelist.join(' ') %>; do
+  if [ "$USER" == "$user" ]; then
+    return
+  fi
+done
+<% end -%>
+<% if @prepend['sh'] then -%>
+<%= @prepend['sh'] %>
+
+<% end -%>
+[ $TMOUT ] || export TMOUT=<%= @session_timeout.to_i * 60 %>
+readonly TMOUT
+
+if tty -s; then
+  mesg <%= @mesg ? 'y' : 'n' %>
+fi
+
+umask <%= @umask %>
+<% if @append['sh'] then -%>
+
+<%= @append['sh'] %>
+<% end -%>

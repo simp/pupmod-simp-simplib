@@ -1,0 +1,22 @@
+[main]
+interval=<%= @tuning_interval %>
+
+[DiskMonitor]
+enabled=<%= @diskmonitor_enable.to_s.capitalize %>
+
+[DiskTuning]
+enabled=<%= @disktuning_enable.to_s.capitalize %>
+hdparm=<%= @disktuning_hdparm.to_s.capitalize %>
+alpm=<%= @disktuning_alpm.to_s.capitalize %>
+
+[NetMonitor]
+enabled=<%= @netmonitor_enable.to_s.capitalize %>
+
+[NetTuning]
+enabled=<%= @nettuning_enable.to_s.capitalize %>
+
+[CPUMonitor]
+enabled=<%= @cpumonitor_enable.to_s.capitalize %>
+
+[CPUTuning]
+enabled=<%= @cputuning_enable.to_s.capitalize %>

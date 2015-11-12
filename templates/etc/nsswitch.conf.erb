@@ -1,0 +1,65 @@
+<%
+# Build us some content!
+options = [
+  'passwd',
+  'shadow',
+  'group',
+  'initgroups',
+  'hosts',
+  'bootparams',
+  'ethers',
+  'netmasks',
+  'networks',
+  'protocols',
+  'rpc',
+  'services',
+  'netgroup',
+  'publickey',
+  'automount',
+  'aliases'
+]
+
+sss_affects = ['passwd','shadow','group', 'netgroup']
+ldap_affects = ['passwd','shadow', 'group', 'netgroup', 'automount']
+
+# This is just here to keep the class consistent with all of the other classes.
+variable_map = {
+  'sss'   => 'sssd',
+  'ldap'  => 'ldap'
+}
+
+def append_content(content,modlist,orig_hash)
+  to_mod = orig_hash.dup
+  modlist.each do |opt|
+    to_mod[opt].map!{|x|
+      if x == 'files' then
+        x = 'files [!NOTFOUND=return]'
+      else
+        x = x
+      end
+    }
+    to_mod[opt] = to_mod[opt] << content
+  end
+
+  to_mod
+end
+
+outfile = {}
+options.each do |opt|
+  next if eval("@#{opt}").empty?
+  outfile[opt] = eval("@#{opt}")
+end
+
+# SSSD Takes precedence
+['sss','ldap'].each do |x|
+  next if not eval("@use_#{variable_map[x]}")
+  outfile = append_content(x,eval("#{x}_affects"),outfile)
+end
+
+to_ret = []
+options.each do |k|
+  next if not outfile[k]
+  to_ret << "#{k}: #{outfile[k].join(' ')}"
+end
+-%>
+<%= to_ret.join("\n") %>

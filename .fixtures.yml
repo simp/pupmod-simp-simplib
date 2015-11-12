@@ -1,3 +1,21 @@
 fixtures:
+  repositories:
+    # from common
+    auditd:                 'git://github.com/simp/pupmod-simp-auditd.git'
+    augeasproviders_core:   'git://github.com/simp/augeasproviders_core.git'
+    augeasproviders_grub:   'git://github.com/simp/augeasproviders_grub.git'
+    augeasproviders_sysctl: 'git://github.com/simp/augeasproviders_sysctl.git'
+    simpcat:                'git://github.com/simp/pupmod-simp-concat.git'
+    functions:              'git://github.com/simp/pupmod-simp-functions.git'
+    gpasswd:                'git://github.com/simp/puppet-gpasswd.git'
+    iptables:               'git://github.com/simp/pupmod-simp-iptables.git'
+    named:                  'git://github.com/simp/pupmod-simp-named.git'
+    oddjob:                 'git://github.com/simp/pupmod-simp-oddjob.git'
+    pam:                    'git://github.com/simp/pupmod-simp-pam.git'
+    rsync:                  'git://github.com/simp/pupmod-simp-rsync.git'
+    stdlib:                 'git://github.com/simp/puppetlabs-stdlib.git'
+    sudo:                   'git://github.com/simp/pupmod-simp-sudo.git'
+    sysctl:                 'git://github.com/simp/pupmod-simp-sysctl.git'
+    upstart:                'git://github.com/simp/pupmod-simp-upstart.git'
   symlinks:
     simplib: "#{source_dir}"

@@ -1,0 +1,32 @@
+# NOTE: This file is managed by Puppet.  Any local changes will
+# be overwritten!
+#
+# ktune service configuration
+
+# This is the custom sysctl configuration file.  Comment this out to
+# use only the ktune settings.
+<% if @use_sysctl then -%>
+SYSCTL="/etc/sysctl.conf"
+<% else -%>
+# SYSCTL="/etc/sysctl.conf"
+<% end -%>
+
+# This is the ktune sysctl file.  Any settings in this file will be applied
+# after custom settings, overriding them.  Comment this out to not use ktune
+# settings.
+<% if @use_sysctl_post then -%>
+SYSCTL_POST="/etc/sysctl.ktune"
+<% else -%>
+# SYSCTL_POST="/etc/sysctl.ktune"
+<% end -%>
+
+# This is the I/O scheduler ktune will use.  This will *not* override anything
+# explicitly set on the kernel command line, nor will it change the scheduler
+# for any block device that is using a non-default scheduler when ktune starts.
+# You should probably leave this on "deadline", but "as", "cfq", and "noop" are
+# also legal values.  Comment this out to prevent ktune from changing I/O
+# scheduler settings.
+ELEVATOR="<%= @io_scheduler %>"
+
+# These are the devices, that should be tuned with the ELEVATOR
+ELEVATOR_TUNE_DEVS="/sys/block/{<%= Array(@elevator_tune_devs).join(',') %>}*/queue/scheduler"
