@@ -1,0 +1,237 @@
+#!/usr/bin/ruby
+
+#
+# This script adds and deletes users based on an input file.
+# It can also change the password of a user on the system and expects to be fed
+# a file of the following form:
+#
+# <!|+|->[username],[uid],[gid],<homedir>,[MD5 Password Hash]
+#
+# If you add a '!' to the beginning of an entry, the user will have its
+# password expiration set so that it never expires.
+#
+# If you add a '+' to the beginning of an entry, the user will retain its
+# existing password expiration entries but the last changed date will be
+# updated to reflect the current date if the password has changed.
+#
+# If you add a '-' to the beginning of the entry, the user and associated group
+# will be deleted from the system unless the uid is 0.
+#
+# 'homedir' is the optional home directory of the user.  If nothing is
+# specified, then the system default will be used.
+#
+# The *first* entry in the file will be used.
+#
+# It is highly recommended that you do not change the uid or gid after first
+# assignment unless absolutely necessary. The utility will change the entries
+# but may result in unowned files on your system if you are not extremely
+# careful.
+#
+# Do *not* assign the group for these users to a network-based primary group.
+# If you need the user to be in a network system (LDAP/NIS) then add them to a
+# supplementary group.
+#
+
+require 'shadow'
+require 'etc'
+
+# Allowed line modifiers
+ALLOWED_TYPES = ['!','+','-']
+
+# Users to never delete from the system.
+NEVER_DELETE  = [
+        'root',
+        'bin',
+        'daemon',
+        'nobody',
+        'puppet'
+                ]
+
+class User
+
+  attr_reader :type,
+              :uname,
+              :uid,
+              :gid,
+              :pass
+
+  attr_accessor :homedir
+
+  def initialize(type,uname,uid,gid,homedir,pass)
+    if type.nil? or valid_type?(type) then
+      @type = type
+      @uname = uname
+      @uid = uid
+      @gid = gid
+      @homedir = homedir
+      @pass = pass
+    end
+  end
+
+end
+
+def valid_type?(type)
+  if ALLOWED_TYPES.include?(type) then
+    return type
+  else
+    return nil
+  end
+end
+
+localusers = [
+  <%= @localusers.map{|x| x = "'#{x}'"}.join(",\n") %>
+]
+
+users = Array.new
+
+# Load the user file into an array of user objects.
+begin
+  localusers.each_with_index do |line,i|
+    if line =~ /^(\s*#|\s+$)/ then next end
+
+    uname,uid,gid,homedir,pass = line.chomp.split(',')
+
+    if homedir.nil? then
+      $stderr.puts("Error: Entry '#{i}' is missing required entries, skipping.")
+      i = i+1
+      next
+    # This could happen if someone leaves the commas where the homedir should
+    # be.
+    elsif homedir.empty? then
+      homedir = pass
+      pass = nil
+    end
+
+    type = valid_type?(uname[0].chr)
+    uname = uname[1..-1] if valid_type?(type)
+
+    if pass.nil? then
+      pass = homedir
+      homedir = nil
+    end
+
+    prev = false
+    users.each do |usr|
+      if usr.uname == uname then
+        $stderr.puts("Warning: found previous entry for #{uname}, skipping.")
+        prev = true
+      end
+    end
+
+    if not prev then
+      users << User.new(type,uname,uid,gid,homedir,pass)
+    end
+  end
+rescue Exception => e
+  $stderr.puts("Error: Something went wrong while processing ['#{localusers.join("', '")}']\n#{e}")
+end
+
+# Make sure we do deletes first
+
+u_tmp = Array.new
+
+users.each_index do |i|
+  if users[i].type == '-' then
+    u_tmp << users.delete_at(i)
+  end
+end
+
+users = u_tmp + users
+
+users.each do |user|
+
+  # Refuse to add anyone but root to gid 0
+  if user.gid.to_i == 0 and user.uname != 'root' then
+    $stderr.puts("Error: Refusing to add non-root user #{user.uname} to group '0'")
+    next
+  end
+
+  cmd = ""
+
+  shadow_ent = Shadow::Passwd.getspnam(user.uname)
+  begin
+    etc_ent = Etc.getpwnam(user.uname)
+  rescue ArgumentError
+    etc_ent = nil
+  end
+
+  # Just delete the user.
+  if user.type == '-' then
+    if NEVER_DELETE.include?(user.uname) then
+      $stderr.puts("Warning: Not deleting protected user '#{user.uname}'")
+    else
+      if shadow_ent then
+        if not system("/usr/sbin/userdel -r #{user.uname}") then
+          $stderr.puts("Error: Could not delete user #{user.uname}")
+        end
+      end
+      next
+    end
+  end
+
+  begin
+    Etc.getgrgid(user.gid.to_i)
+  rescue ArgumentError
+    if not system("/usr/sbin/groupadd -g #{user.gid} #{user.uname}") then
+      $stderr.puts("Warning: Could not add group #{user.uname}")
+    end
+  end
+
+  # Select whether we're adding or modifying.
+  if shadow_ent or etc_ent then
+    cmd << "/usr/sbin/usermod "
+  else
+    cmd << "/usr/sbin/useradd "
+  end
+
+  cmdlen = cmd.size
+
+  # Set the uid.
+  if not ( etc_ent and (user.uid.to_s == etc_ent.uid.to_s) ) then
+    cmd << "-u #{user.uid} "
+  end
+
+  # Set the gid.
+  if not ( etc_ent and (user.gid.to_s == etc_ent.gid.to_s) ) then
+    cmd << "-g #{user.gid} "
+  end
+
+  # Set the password
+  if not ( shadow_ent and (user.pass == shadow_ent.sp_pwdp) ) then
+    cmd << "-p '#{user.pass}' "
+  end
+
+  # Set the home directory
+  if user.homedir
+    if not ( etc_ent and (user.homedir == etc_ent.dir) ) then
+      cmd << "-d '#{user.homedir}' "
+    end
+  end
+
+  if cmd.size != cmdlen then
+    cmd << user.uname
+
+    if not system(cmd) then
+      $stderr.puts("Error: Could not alter user #{user.uname}")
+      next
+    end
+  end
+
+  # Make sure the entry doesn't expire if it is not suppoed to.
+  if user.type.eql?('!') then
+    # Re-grab this for the newly modified user
+    shadow_ent = Shadow::Passwd.getspnam(user.uname)
+
+    if not (
+      shadow_ent.sp_expire == -1 and
+      shadow_ent.sp_inact == -1 and
+      shadow_ent.sp_max == -1
+    ) then
+
+      if not system("/usr/bin/chage -E -1 -I -1 -M -1 #{user.uname}") then
+        $stderr.puts("Error: Could not reset expiration information for #{user.uname}")
+      end
+    end
+  end
+
+end

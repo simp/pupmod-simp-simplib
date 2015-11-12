@@ -1,0 +1,143 @@
+<%
+  t_bool_xlat = {
+    true => 'yes',
+    false => 'no'
+  }
+
+  if !@env_hz.empty? then
+    t_env_hz = @env_hz.dup
+    if t_env_hz !~ /^HZ=/ then
+      t_env_hz = "HZ=#{t_env_hz}"
+    end
+  end
+
+  if !@env_tz.empty? then
+    t_env_tz = @env_tz.dup
+    if t_env_tz !~ /^(\/|TZ=)/ then
+      t_env_tz = "TZ=#{t_env_tz}"
+    end
+  end
+-%>
+CHFN_AUTH <%= t_bool_xlat[@chfn_auth] %>
+CHFN_RESTRICT <%= @chfn_restrict %>
+CHSH_AUTH <%= t_bool_xlat[@chsh_auth] %>
+<% if !@console.empty? then -%>
+CONSOLE <%= @console.join(':') %>
+<% end -%>
+<% if !@console_groups.empty? then -%>
+CONSOLE_GROUPS <%= @console_groups.join(',') %>
+<% end -%>
+CREATE_HOME <%= t_bool_xlat[@create_home] %>
+DEFAULT_HOME <%= t_bool_xlat[@default_home] %>
+ENCRYPT_METHOD <%= @encrypt_method %>
+<% if !@env_hz.empty? then -%>
+ENV_HZ <%= t_env_hz %>
+<% end -%>
+<% if !@env_path.empty? then -%>
+ENV_PATH <%= @env_path.join(':') %>
+<% end -%>
+<% if !@env_supath.empty? then -%>
+ENV_SUPATH <%= @env_supath.join(':') %>
+<% end -%>
+<% if !@env_tz.empty? then -%>
+ENV_TZ <%= t_env_tz %>
+<% end -%>
+<% if !@environ_file.empty? then -%>
+ENVIRON_FILE <%= @environ_file %>
+<% end -%>
+<% if !@erasechar.empty? then -%>
+ERASECHAR <%= @erasechar %>
+<% end -%>
+FAIL_DELAY <%= @fail_delay %>
+FAILLOG_ENAB <%= t_bool_xlat[@faillog_enab] %>
+<% if !@fake_shell.empty? then -%>
+FAKE_SHELL <%= @fake_shell %>
+<% end -%>
+<% if !@ftmp_file.empty? then -%>
+FTMP_FILE <%= @ftmp_file %>
+<% end -%>
+GID_MAX <%= @gid_max %>
+GID_MIN <%= @gid_min %>
+<% if !@hushlogin_file.empty? then -%>
+HUSHLOGIN_FILE <%= @hushlogin_file %>
+<% end -%>
+ISSUE_FILE <%= @issue_file %>
+<% if !@killchar.empty? then -%>
+KILLCHAR <%= @killchar %>
+<% end -%>
+LASTLOG_ENAB <%= t_bool_xlat[@lastlog_enab] %>
+LOG_OK_LOGINS <%= t_bool_xlat[@log_ok_logins] %>
+LOG_UNKFAIL_ENAB <%= t_bool_xlat[@log_unkfail_enab] %>
+LOGIN_RETRIES <%= @login_retries %>
+<% if !@login_string.empty? then -%>
+LOGIN_STRING <%= @login_string %>
+<% end -%>
+LOGIN_TIMEOUT <%= @login_timeout %>
+MAIL_CHECK_ENAB <%= t_bool_xlat[@mail_check_enab] %>
+MAIL_DIR <%= @mail_dir %>
+<% if !@mail_file.empty? then -%>
+MAIL_FILE <%= @mail_file %>
+<% end -%>
+<% if !@max_members_per_group.empty? then -%>
+MAX_MEMBERS_PER_GROUP <%= @max_members_per_group %>
+<% end -%>
+<% if !@motd_file.empty? then -%>
+MOTD_FILE <%= @motd_file.join(':') %>
+<% end -%>
+<% if !@nologins_file.empty? then -%>
+NOLOGINS_FILE <%= @nologins_file %>
+<% end -%>
+OBSCURE_CHECKS_ENAB <%= t_bool_xlat[@obscure_checks_enab] %>
+PASS_ALWAYS_WARN <%= t_bool_xlat[@pass_always_warn] %>
+PASS_CHANGE_TRIES <%= @pass_change_tries %>
+PASS_MAX_DAYS <%= @pass_max_days %>
+PASS_MIN_DAYS <%= @pass_min_days %>
+PASS_WARN_AGE <%= @pass_warn_age %>
+<% if !@pass_max_len.empty? then -%>
+PASS_MAX_LEN <%= @pass_max_len %>
+<% end -%>
+PASS_MIN_LEN <%= @pass_min_len %>
+PORTTIME_CHECKS_ENAB <%= t_bool_xlat[@porttime_checks_enab] %>
+QUOTAS_ENAB <%= t_bool_xlat[@quotas_enab] %>
+SHA_CRYPT_MIN_ROUNDS <%= @sha_crypt_min_rounds %>
+SHA_CRYPT_MAX_ROUNDS <%= @sha_crypt_max_rounds %>
+<% if !@sulog_file.empty? then -%>
+SULOG_FILE <%= @sulog_file %>
+<% end -%>
+SU_NAME <%= @su_name %>
+SU_WHEEL_ONLY <%= t_bool_xlat[@su_wheel_only] %>
+<% if !@sys_gid_max.empty? then -%>
+SYS_GID_MAX <%= @sys_gid_max %>
+<% end -%>
+<% if !@sys_gid_min.empty? then -%>
+SYS_GID_MIN <%= @sys_gid_min %>
+<% end -%>
+<% if !@sys_uid_max.empty? then -%>
+SYS_UID_MAX <%= @sys_uid_max %>
+<% end -%>
+<% if !@sys_uid_min.empty? then -%>
+SYS_UID_MIN <%= @sys_uid_min %>
+<% end -%>
+SYSLOG_SG_ENAB <% t_bool_xlat[@syslog_sg_enab] %>
+SYSLOG_SU_ENAB <% t_bool_xlat[@syslog_su_enab] %>
+<% if !@ttygroup.empty? then -%>
+TTYGROUP <%= @ttygroup %>
+<% end -%>
+<% if !@ttyperm.empty? then -%>
+TTYPERM <%= @ttyperm %>
+<% end -%>
+<% if !@ttytype_file.empty? then -%>
+TTYTYPE_FILE <%= @ttytype_file %>
+<% end -%>
+UID_MAX <%= @uid_max %>
+<% if !@uid_min.empty? then -%>
+UID_MIN <%= @uid_min %>
+<% end -%>
+UMASK <%= @umask %>
+<% if !@ulimit.empty? then -%>
+ULIMIT <%= @ulimit %>
+<% end -%>
+<% if !@userdel_cmd.empty? then -%>
+USERDEL_CMD <%= @userdel_cmd %>
+<% end -%>
+USERGROUPS_ENAB <%= t_bool_xlat[@usergroups_enab] %>

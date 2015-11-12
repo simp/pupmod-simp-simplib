@@ -1,0 +1,10 @@
+# useradd defaults file
+GROUP=<%= @group %>
+HOME=<%= @home %>
+INACTIVE=<%= @inactive %>
+<% if !@expire.empty? then -%>
+EXPIRE=<%= @expire %>
+<% end -%>
+SHELL=<%= @shell %>
+SKEL=<%= @skel %>
+CREATE_MAIL_SPOOL=<%= @create_mail_spool ? 'yes' : 'no' %>
