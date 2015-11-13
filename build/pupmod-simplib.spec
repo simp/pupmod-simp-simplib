@@ -9,11 +9,13 @@ Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: puppetlabs-stdlib
 Requires: puppet >= 3.3.0
 Buildarch: noarch
+Obsoletes: pupmod-common
+Obsoletes: pupmod-functions
 
 Prefix: /etc/puppet/environments/simp/modules
 
 %description
-A collection of common SIMP functions, facts, and types
+A collection of common SIMP functions, files, facts, and types
 
 %prep
 %setup -q
@@ -46,5 +48,10 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
-* Tue Oct 13 2015 simp - 0.1.0-0
+* Fri Nov 13 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.0-0
+- Imported manifests/ template/ and files/ assets from pupmod-common
+- manifests/ assets from pupmod-functions are deprecated and will not be imported
+- All tests pass; first version is rolled up
+
+* Tue Oct 13 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 0.1.0-0
 - Initial rollup of lib/ assets from legacy modules simp-common and simp-functions
