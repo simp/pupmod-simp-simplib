@@ -9,10 +9,12 @@ Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: puppetlabs-stdlib
 Requires: puppet >= 3.3.0
 Buildarch: noarch
-Obsoletes: pupmod-common
-Obsoletes: pupmod-functions
+Obsoletes: pupmod-common < 5.0.0
+Provides: pupmod-common = 5.0.0-0
+Obsoletes: pupmod-functions < 3.0.0
+Provides: pupmod-functions = 3.0.0-0
 
-Prefix: /etc/puppet/environments/simp/modules
+Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
 %description
 A collection of common SIMP functions, files, facts, and types
