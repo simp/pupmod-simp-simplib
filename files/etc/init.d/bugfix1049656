@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# bugfix1049656 A double check that autorelabel is working
+# See https://bugzilla.redhat.com/show_bug.cgi?id=1049656
+# 
+# Make sure that the system set the SELinux contexts
+# Autorelabel does not always seem to work properly
+# for more information.
+#
+# chkconfig - 99 99
+# description: A double check that autorelabel is working
+#
+### BEGIN INIT INFO
+# Provides: $bugfix1049656
+# Short-Description: Double check that autorelabel is working
+# Description: Double check that autorelabel is working
+### END INIT INFO
+case "$1" in
+   start)
+      if [ -f '/.autorelabel' ]; then
+        echo 'Running fixfiles, this may take some time....'
+        fixfiles restore;
+        rm /.autorelabel
+      fi
+      ;;
+   status)
+      return 0;
+      ;;
+  stop)
+      return 0;
+      ;;
+esac
+EOF
