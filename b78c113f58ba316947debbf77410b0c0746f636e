@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ac7a964_cb34abe0",
+        "filename": "manifests/os_bugfixes.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2015-11-18T16:26:16Z",
+      "side": 1,
+      "message": "Should we use $::osfamily \u003d\u003d \u0027RedHat\u0027 to leave open support for Scientific Linux?",
+      "range": {
+        "startLine": 23,
+        "startChar": 7,
+        "endLine": 23,
+        "endChar": 48
+      },
+      "revId": "b78c113f58ba316947debbf77410b0c0746f636e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
