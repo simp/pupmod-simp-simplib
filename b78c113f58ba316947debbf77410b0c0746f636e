@@ -45,6 +45,24 @@
       "revId": "b78c113f58ba316947debbf77410b0c0746f636e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ac7a964_cbad8b8a",
+        "filename": "manifests/os_bugfixes.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-18T17:53:32Z",
+      "side": 1,
+      "message": "I don\u0027t know if that one is broken :-/",
+      "parentUuid": "7ac7a964_cb34abe0",
+      "revId": "b78c113f58ba316947debbf77410b0c0746f636e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
