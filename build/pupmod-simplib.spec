@@ -50,6 +50,11 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Thu Nov 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
+- Added validate_uri_list function
+- Ensure that nsswitch works properly for SSSD
+- Add sudoers support for SSSD and nsswitch
+
 * Fri Nov 13 2015 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.0-0
 - Imported manifests/ template/ and files/ assets from pupmod-common
 - manifests/ assets from pupmod-functions are deprecated and will not be imported
