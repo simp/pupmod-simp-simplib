@@ -75,7 +75,7 @@
 #
 # [*use_ldap*]
 # Type: boolean
-# Default: true
+# Default: false
 #   If true, inject LDAP settings into various options as appropriate.
 #
 # [*use_sssd*]
@@ -103,9 +103,10 @@ class simplib::nsswitch (
   $publickey =  ['nisplus'],
   $automount =  ['files','nisplus'],
   $aliases =  ['files','nisplus'],
-  $use_ldap = hiera('use_ldap',true),
-  $use_sssd = hiera('use_sssd',false)
-){
+  $sudoers = ['files'],
+  $use_ldap = '',
+  $use_sssd = defined('$::use_sssd') ? { true => $::use_sssd, default => hiera('use_sssd',false) }
+) {
   validate_array($passwd)
   validate_array($shadow)
   validate_array($group)
@@ -122,8 +123,22 @@ class simplib::nsswitch (
   validate_array($publickey)
   validate_array($automount)
   validate_array($aliases)
-  validate_bool($use_ldap)
   validate_bool($use_sssd)
+
+  # Unless we're explicitly using LDAP, let SSSD do its thing
+  if empty($use_ldap) {
+    if $use_sssd {
+      $_use_ldap = false
+    }
+    else {
+      $_use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',false) }
+    }
+  }
+  else {
+    $_use_ldap = $use_ldap
+  }
+
+  validate_bool($_use_ldap)
 
   file { '/etc/nsswitch.conf':
     owner   => 'root',
