@@ -104,9 +104,9 @@ class simplib::nsswitch (
   $automount =  ['files','nisplus'],
   $aliases =  ['files','nisplus'],
   $sudoers = ['files'],
-  $use_ldap = '',
-  $use_sssd = defined('$::use_sssd') ? { true => $::use_sssd, default => hiera('use_sssd',false) }
-) {
+  $use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',false) },
+  $use_sssd = $::simplib::params::use_sssd
+) inherits ::simplib::params {
   validate_array($passwd)
   validate_array($shadow)
   validate_array($group)
@@ -123,15 +123,15 @@ class simplib::nsswitch (
   validate_array($publickey)
   validate_array($automount)
   validate_array($aliases)
+  validate_bool($use_ldap)
   validate_bool($use_sssd)
 
-  # Unless we're explicitly using LDAP, let SSSD do its thing
-  if empty($use_ldap) {
+  if $use_ldap {
     if $use_sssd {
       $_use_ldap = false
     }
     else {
-      $_use_ldap = defined('$::use_ldap') ? { true => $::use_ldap, default => hiera('use_ldap',false) }
+      $_use_ldap = $use_ldap
     }
   }
   else {
