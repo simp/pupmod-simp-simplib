@@ -34,6 +34,24 @@
       "revId": "4b5b7a46dde8bd5a1c684763fb39cbfc298907c3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_e308d12f",
+        "filename": "manifests/nsswitch.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2015-11-25T15:42:18Z",
+      "side": 1,
+      "message": "if use_ldap is true and use_sssd is not true, it remains unset.  This is the default case in 4.2",
+      "parentUuid": "5ac4a560_a317b950",
+      "revId": "4b5b7a46dde8bd5a1c684763fb39cbfc298907c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
