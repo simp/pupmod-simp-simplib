@@ -16,6 +16,24 @@
       "revId": "4b5b7a46dde8bd5a1c684763fb39cbfc298907c3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_a317b950",
+        "filename": "manifests/nsswitch.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-11-25T15:40:37Z",
+      "side": 1,
+      "message": "Like the one below it?",
+      "parentUuid": "5ac4a560_4fd8d153",
+      "revId": "4b5b7a46dde8bd5a1c684763fb39cbfc298907c3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
