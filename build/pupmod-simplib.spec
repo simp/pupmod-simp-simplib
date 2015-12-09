@@ -52,6 +52,7 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 %changelog
 * Thu Dec 10 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-1
 - CCE-4241-6 Single user mode is now password protected.
+- Added a simp_enabled fact to return true if the 'simp' class is in the catalog.
 
 * Thu Nov 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
 - Added validate_uri_list function
