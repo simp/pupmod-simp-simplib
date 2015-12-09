@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -50,6 +50,9 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Wed Dec 09 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-1
+- Added a simp_enabled fact to return true if simp is in the catalog.
+
 * Thu Nov 19 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-0
 - Added validate_uri_list function
 - Ensure that nsswitch works properly for SSSD
