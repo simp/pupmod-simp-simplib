@@ -19,10 +19,12 @@ class simplib::sysconfig::init (
   $setcolor_failure = '"echo -en \\033[0;31m"',
   $setcolor_warning = '"echo -en \\033[0;33m"',
   $setcolor_normal = '"echo -en \\033[0;39m"',
+  $single_user_login = '/sbin/sulogin',
   $loglvl = '3',
   $prompt = false,
   $autoswap = false
 ) {
+  validate_string($single_user_login)
   validate_integer($res_col)
   validate_re($loglvl,'^[1-8]$')
   validate_bool($prompt)
