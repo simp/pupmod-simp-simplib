@@ -11,6 +11,7 @@ describe 'simplib::sysconfig::init' do
       SETCOLOR_FAILURE="echo -en \\\\033[0;31m"
       SETCOLOR_WARNING="echo -en \\\\033[0;33m"
       SETCOLOR_NORMAL="echo -en \\\\033[0;39m"
+      SINGLE=/sbin/sulogin
       LOGLEVEL=3
       PROMPT=no
       AUTOSWAP=no
