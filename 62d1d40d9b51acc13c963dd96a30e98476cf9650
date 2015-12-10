@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_9a965b93",
+        "filename": "build/pupmod-simplib.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-12-10T20:29:24Z",
+      "side": 1,
+      "message": "This needs to be a bit more clear.\n\nTry ... if the \u0027simp\u0027 class is in the catalog.",
+      "revId": "62d1d40d9b51acc13c963dd96a30e98476cf9650",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ac4a560_7a809f46",
+        "filename": "lib/facter/simp_enabled.rb",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-12-10T20:29:24Z",
+      "side": 1,
+      "message": "Use \u0027find_index\u0027 here instead of \u0027grep\u0027 as it is faster since we only want the first match.",
+      "revId": "62d1d40d9b51acc13c963dd96a30e98476cf9650",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
