@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ac4a560_81fa66bb",
+        "filename": "lib/facter/simp_enabled.rb",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-12-14T17:07:38Z",
+      "side": 1,
+      "message": "Use \u0027unless\u0027 instead of \u0027if not\u0027.\n\nAlso, you can just make this:\n\nretval \u003d true if IO.readlines(class_file).find{ |i| i.strip \u003d\u003d \u0027simp\u0027 }",
+      "revId": "6bb5b147e0a617b4fbb8602e336a0b38dc709a14",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
