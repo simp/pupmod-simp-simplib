@@ -200,6 +200,9 @@ class simplib::sysctl (
           'net.ipv6.conf.default.router_solicitations': value => $net__ipv6__conf__default__router_solicitations;
         }
       }
+      else {
+        sysctl::value { 'net.ipv6.conf.all.disable_ipv6': value => '1'; }
+      }
 
       file { '/var/core':
         ensure => 'directory',
