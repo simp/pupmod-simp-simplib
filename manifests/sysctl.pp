@@ -57,6 +57,7 @@ class simplib::sysctl (
   $net__ipv4__icmp_ignore_bogus_error_responses = '1',            # CCE-26993-6
   $net__ipv4__tcp_max_syn_backlog = '4096',
   $net__ipv4__tcp_syncookies = '1',                               # CCE-27053-8
+  $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) },
   $net__ipv6__conf__all__accept_redirects = '0',
   $net__ipv6__conf__all__autoconf = '0',
   $net__ipv6__conf__all__forwarding = '0',
@@ -114,6 +115,7 @@ class simplib::sysctl (
   validate_array_member($net__ipv4__icmp_ignore_bogus_error_responses,['0','1'])
   validate_integer($net__ipv4__tcp_max_syn_backlog)
   validate_array_member($net__ipv4__tcp_syncookies,['0','1'])
+  validate_bool($enable_ipv6)
   validate_array_member($net__ipv6__conf__all__accept_redirects,['0','1'])
   validate_array_member($net__ipv6__conf__all__autoconf,['0','1'])
   validate_array_member($net__ipv6__conf__all__forwarding,['0','1'])
@@ -184,21 +186,29 @@ class simplib::sysctl (
             sysctl::value { 'kernel.exec-shield': value => $kernel__exec_shield; }
       }
 
-      if $::ipv6_enabled {
-        sysctl::value {
-          'net.ipv6.conf.all.accept_redirects':         value => $net__ipv6__conf__all__accept_redirects;
-          'net.ipv6.conf.all.autoconf':                 value => $net__ipv6__conf__all__autoconf;
-          'net.ipv6.conf.all.forwarding':               value => $net__ipv6__conf__all__forwarding;
-          'net.ipv6.conf.default.accept_ra':            value => $net__ipv6__conf__default__accept_ra;
-          'net.ipv6.conf.default.accept_ra_defrtr':     value => $net__ipv6__conf__default__accept_ra_defrtr;
-          'net.ipv6.conf.default.accept_ra_pinfo':      value => $net__ipv6__conf__default__accept_ra_pinfo;
-          'net.ipv6.conf.default.accept_ra_rtr_pref':   value => $net__ipv6__conf__default__accept_ra_rtr_pref;
-          'net.ipv6.conf.default.accept_redirects':     value => $net__ipv6__conf__default__accept_redirects;
-          'net.ipv6.conf.default.autoconf':             value => $net__ipv6__conf__default__autoconf;
-          'net.ipv6.conf.default.dad_transmits':        value => $net__ipv6__conf__default__dad_transmits;
-          'net.ipv6.conf.default.max_addresses':        value => $net__ipv6__conf__default__max_addresses;
-          'net.ipv6.conf.default.router_solicitations': value => $net__ipv6__conf__default__router_solicitations;
+      if $enable_ipv6 {
+        if $::ipv6_enabled {
+          sysctl::value {
+            'net.ipv6.conf.all.accept_redirects':         value => $net__ipv6__conf__all__accept_redirects;
+            'net.ipv6.conf.all.autoconf':                 value => $net__ipv6__conf__all__autoconf;
+            'net.ipv6.conf.all.forwarding':               value => $net__ipv6__conf__all__forwarding;
+            'net.ipv6.conf.default.accept_ra':            value => $net__ipv6__conf__default__accept_ra;
+            'net.ipv6.conf.default.accept_ra_defrtr':     value => $net__ipv6__conf__default__accept_ra_defrtr;
+            'net.ipv6.conf.default.accept_ra_pinfo':      value => $net__ipv6__conf__default__accept_ra_pinfo;
+            'net.ipv6.conf.default.accept_ra_rtr_pref':   value => $net__ipv6__conf__default__accept_ra_rtr_pref;
+            'net.ipv6.conf.default.accept_redirects':     value => $net__ipv6__conf__default__accept_redirects;
+            'net.ipv6.conf.default.autoconf':             value => $net__ipv6__conf__default__autoconf;
+            'net.ipv6.conf.default.dad_transmits':        value => $net__ipv6__conf__default__dad_transmits;
+            'net.ipv6.conf.default.max_addresses':        value => $net__ipv6__conf__default__max_addresses;
+            'net.ipv6.conf.default.router_solicitations': value => $net__ipv6__conf__default__router_solicitations;
+          }
         }
+        else {
+          sysctl::value { 'net.ipv6.conf.all.disable_ipv6': value => '0'; }
+        }
+      }
+      else {
+        sysctl::value { 'net.ipv6.conf.all.disable_ipv6': value => '1'; }
       }
 
       file { '/var/core':
