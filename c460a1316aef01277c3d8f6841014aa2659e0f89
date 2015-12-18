@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac1b152_8ef82fe7",
+        "filename": "manifests/sysctl.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2015-12-18T14:11:06Z",
+      "side": 1,
+      "message": "This won\u0027t work as $::ipv6_enabled checks to see if the system has IPv6 enabled, it\u0027s not a global setting.\n\nYou need an option in this class (probably tied to a global like use_ipv6 in Hiera) that disables this explicitly.\n\nThat should also exclude all of the stuff above.",
+      "revId": "c460a1316aef01277c3d8f6841014aa2659e0f89",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
