@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.0
-Release: 2
+Release: 3
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -50,6 +50,9 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Thu Dec 24 2015 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.0-3
+- Removed the simp_enabled fact as it is not needed.
+
 * Thu Dec 17 2015 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.0-2
 - CCE-18455-6, CCE-3562-6 disable ipv6.  Ipv6 remains enabled at
   the kernel level, but is functionally disabled via sysctl when

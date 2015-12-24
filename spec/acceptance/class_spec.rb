@@ -17,7 +17,7 @@ describe 'simplib class' do
       end
 
       it 'should be idempotent' do
-        apply_manifest_on(host, manifest, :catch_failures => true)
+        apply_manifest_on(host, manifest, :catch_changes => true)
       end
     end
   end
