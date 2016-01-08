@@ -1,5 +1,7 @@
 # Return the UUID of the partition holding the /boot directory
 Facter.add('boot_dir_uuid') do
+  confine :kernel => 'Linux'
+
   setcode do
     df_cmd = Facter::Util::Resolution.which('df')
     blkid_cmd = Facter::Util::Resolution.which('blkid')
