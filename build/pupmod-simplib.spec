@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.1
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -50,6 +50,9 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Tue Feb 02 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.1-1
+- Removed `os_bugfixes` and `bugfix1049656`.
+
 * Fri Jan 08 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.1-0
 - Confined Linux facts that were causing errors during Windows agent runs
 
