@@ -101,12 +101,6 @@
 #   Ensure that /root has restricted permissions and proper SELinux
 #   contexts.
 #
-# [*use_os_bugfixes*]
-# Type: Boolean
-# Default: true
-#   If enabled, activate the OS specific bugfixes in the simplib::os_bugfixes
-#   class. These may be individually toggled using parameters in that class.
-#
 # [*use_fips*]
 # Type: Boolean
 # Default: false
@@ -169,7 +163,6 @@ class simplib (
   ],
   $manage_tmp_perms = true,
   $manage_root_perms = true,
-  $use_os_bugfixes = true,
   $use_fips = hiera('use_fips', false),
   # I'm not entirely sure what happens if you mix CPUs and one doesn't have AES
   # enabled...
@@ -189,14 +182,9 @@ class simplib (
   validate_array($securetty)
   validate_bool($manage_tmp_perms)
   validate_bool($manage_root_perms)
-  validate_bool($use_os_bugfixes)
   validate_bool($use_fips)
   validate_bool($use_fips_aesni)
   validate_array_member($proc_hidepid,['0','1','2'])
-
-  if $use_os_bugfixes {
-    include '::simplib::os_bugfixes'
-  }
 
   runlevel { $runlevel: }
 
