@@ -30,4 +30,3 @@ case "$1" in
       return 0;
       ;;
 esac
-EOF
