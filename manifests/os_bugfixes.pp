@@ -19,7 +19,7 @@ class simplib::os_bugfixes (
 
   validate_bool($include_bugfix1049656)
 
-  if ($include_bugfix1049656 == true and $::osfamily == 'zRedHat' and $::operatingsystemmajrelease == '7') {
+  if ($include_bugfix1049656 == true and $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '7') {
     file { '/etc/init.d/bugfix1049656':
       ensure => 'file',
       owner  => 'root',
