@@ -5,11 +5,11 @@ describe 'simplib::nsswitch' do
     on_supported_os.each do |os, facts|
       context "on #{os}" do
         let(:facts){ facts }
-        it { should compile.with_all_deps }
+        it { is_expected.to compile.with_all_deps }
         it {
           if facts[:osfamily] == 'RedHat'
             if facts[:operatingsystemmajrelease] < '7'
-              should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+              is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                 passwd: files
                 shadow: files
                 group: files
@@ -28,7 +28,7 @@ describe 'simplib::nsswitch' do
                 aliases: files nisplus
                 EOM
             else
-              should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+              is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                 passwd: files [!NOTFOUND=return] sss
                 shadow: files [!NOTFOUND=return] sss
                 group: files [!NOTFOUND=return] sss
@@ -56,7 +56,7 @@ describe 'simplib::nsswitch' do
           it {
             if facts[:osfamily] == 'RedHat'
               if facts[:operatingsystemmajrelease] < '7'
-                should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+                is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                   passwd: files
                   shadow: files
                   group: files
@@ -76,7 +76,7 @@ describe 'simplib::nsswitch' do
                   aliases: files nisplus
                   EOM
               else
-                should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+                is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                   passwd: files [!NOTFOUND=return] sss
                   shadow: files [!NOTFOUND=return] sss
                   group: files [!NOTFOUND=return] sss
@@ -106,7 +106,7 @@ describe 'simplib::nsswitch' do
           it {
             if facts[:osfamily] == 'RedHat'
               if facts[:operatingsystemmajrelease] < '7'
-                should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+                is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                   passwd: files
                   shadow: files
                   group: files
@@ -125,7 +125,7 @@ describe 'simplib::nsswitch' do
                   aliases: files nisplus
                   EOM
               else
-                should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+                is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
                   passwd: files [!NOTFOUND=return] sss
                   shadow: files [!NOTFOUND=return] sss
                   group: files [!NOTFOUND=return] sss
@@ -154,7 +154,7 @@ describe 'simplib::nsswitch' do
             :use_sssd => true
           }}
   
-          it { should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
             passwd: files [!NOTFOUND=return] sss
             shadow: files [!NOTFOUND=return] sss
             group: files [!NOTFOUND=return] sss
@@ -181,7 +181,7 @@ describe 'simplib::nsswitch' do
             :use_sssd => true
           }}
   
-          it { should create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
             passwd: files [!NOTFOUND=return] sss ldap
             shadow: files [!NOTFOUND=return] sss ldap
             group: files [!NOTFOUND=return] sss ldap

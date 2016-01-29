@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'simplib::sysconfig::init' do
 
-  it { should compile.with_all_deps }
-  it { should contain_file('/etc/sysconfig/init').with_content(<<-EOM.gsub(/^\s+/,'')
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to contain_file('/etc/sysconfig/init').with_content(<<-EOM.gsub(/^\s+/,'')
       BOOTUP=color
       RES_COL=60
       MOVE_TO_COL="echo -en \\\\033[${RES_COL}G"

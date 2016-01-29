@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'simplib::etc_default::useradd' do
 
-  it { should compile.with_all_deps }
-  it { should create_file('/etc/default/useradd').with_content(<<-EOM.gsub(/^\s+/,''))
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_file('/etc/default/useradd').with_content(<<-EOM.gsub(/^\s+/,''))
        # useradd defaults file
        GROUP=100
        HOME=/home
@@ -16,7 +16,7 @@ describe 'simplib::etc_default::useradd' do
 
   context 'expire' do
     let(:params){{:expire => '2020-01-10'}}
-    it { should create_file('/etc/default/useradd').with_content(<<-EOM.gsub(/^\s+/,''))
+    it { is_expected.to create_file('/etc/default/useradd').with_content(<<-EOM.gsub(/^\s+/,''))
        # useradd defaults file
        GROUP=100
        HOME=/home
@@ -41,7 +41,7 @@ describe 'simplib::etc_default::useradd' do
       let(:params){{:expire => exp }}
       it {
         expect {
-          should compile
+          is_expected.to compile
         }.to raise_error(/"#{exp}" does not match/)
       }
     end

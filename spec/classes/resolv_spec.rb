@@ -13,11 +13,11 @@ describe 'simplib::resolv' do
     :operatingsystem => 'RedHat'
   }}
 
-  it { should compile.with_all_deps }
+  it { is_expected.to compile.with_all_deps }
 
-  it { should_not contain_named__caching }
-  it { should contain_simp_file_line('resolv_peerdns') }
-  it { should contain_file('/etc/resolv.conf') }
+  it { is_expected.not_to contain_named__caching }
+  it { is_expected.to contain_simp_file_line('resolv_peerdns') }
+  it { is_expected.to contain_file('/etc/resolv.conf') }
   # I think rspec-puppet is broken...
   # it { should_not contain_file('/etc/resolv.conf').that_comes_before('Service[named]') }
 
@@ -26,9 +26,9 @@ describe 'simplib::resolv' do
       :nameservers => ['1.2.3.4','5.6.7.8','10.10.10.10']
     }}
 
-    it { should compile.with_all_deps }
-    it { should_not contain_named__caching }
-    it { should contain_named }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.not_to contain_named__caching }
+    it { is_expected.to contain_named }
     # I think rspec-puppet is broken...
     # it { should contain_file('/etc/resolv.conf').that_comes_before('Service[bind]') }
   end
@@ -46,9 +46,9 @@ describe 'simplib::resolv' do
       :nameservers => ['1.2.3.4','5.6.7.8','10.10.10.10']
     }}
 
-    it { should compile.with_all_deps }
-    it { should_not contain_named__caching }
-    it { should contain_named }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.not_to contain_named__caching }
+    it { is_expected.to contain_named }
     # I think rspec-puppet is broken...
     # it { should contain_file('/etc/resolv.conf').that_comes_before('Service[bind-chroot]') }
   end
@@ -65,8 +65,8 @@ describe 'simplib::resolv' do
       :nameservers => ['127.0.0.1','1.2.3.4','5.6.7.8']
     }}
 
-    it { should compile.with_all_deps }
-    it { should contain_named__caching }
+    it { is_expected.to compile.with_all_deps }
+    it { is_expected.to contain_named__caching }
   end
 
   context 'node_with_named_autoconf_and_caching_only_127.0.0.1' do
@@ -80,7 +80,7 @@ describe 'simplib::resolv' do
     let(:params){{
       :nameservers => ['127.0.0.1']
     }}
-    it { expect { should compile.with_all_deps}.to raise_error(/not be your only/) }
+    it { expect { is_expected.to compile.with_all_deps}.to raise_error(/not be your only/) }
   end
 
 end

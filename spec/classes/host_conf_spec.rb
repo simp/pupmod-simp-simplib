@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe 'simplib::host_conf' do
 
-  it { should compile.with_all_deps }
-  it { should create_file('/etc/host.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_file('/etc/host.conf').with_content(<<-EOM.gsub(/^\s+/,''))
        multi on
        spoof warn
        reorder on
@@ -12,7 +12,7 @@ describe 'simplib::host_conf' do
 
   context 'with_trim' do
     let(:params){{ :trim => ['.bar.baz','.alpha.beta'] }}
-    it { should create_file('/etc/host.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+    it { is_expected.to create_file('/etc/host.conf').with_content(<<-EOM.gsub(/^\s+/,''))
        multi on
        spoof warn
        reorder on
@@ -25,7 +25,7 @@ describe 'simplib::host_conf' do
     let(:params){{ :trim => ['bar.baz'] }}
     it {
       expect {
-      should compile.with_all_deps
+      is_expected.to compile.with_all_deps
       }.to raise_error(/"bar.baz" does not match/)
     }
   end

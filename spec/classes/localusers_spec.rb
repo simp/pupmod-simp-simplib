@@ -13,12 +13,12 @@ describe 'simplib::localusers' do
           let(:params){{ :source => $fh.path }}
       
           it {
-            should compile.with_all_deps
+            is_expected.to compile.with_all_deps
           }
         end
       
-        it { should contain_exec('modify_local_users').with_refreshonly(true) }
-        it { should contain_file('/usr/local/sbin/simp/localusers.rb').that_notifies('Exec[modify_local_users]') }
+        it { is_expected.to contain_exec('modify_local_users').with_refreshonly(true) }
+        it { is_expected.to contain_file('/usr/local/sbin/simp/localusers.rb').that_notifies('Exec[modify_local_users]') }
       
       end
     end

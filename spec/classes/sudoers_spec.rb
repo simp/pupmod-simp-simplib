@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'simplib::sudoers' do
 
-  it { should compile.with_all_deps }
-  it { should create_class('sudo') }
+  it { is_expected.to compile.with_all_deps }
+  it { is_expected.to create_class('sudo') }
 
 end

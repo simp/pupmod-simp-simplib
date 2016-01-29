@@ -7,20 +7,20 @@ describe 'simplib::profile_settings' do
     :operatingsystemmajrelease => '6'
   }}
 
-  it { should compile.with_all_deps }
+  it { is_expected.to compile.with_all_deps }
 
-  it { should create_file('/etc/profile.d/simp.sh').with_content(/TMOUT=900/) }
-  it { should create_file('/etc/profile.d/simp.sh').with_content(/mesg n/) }
-  it { should create_file('/etc/profile.d/simp.csh').with_content(/autologout=15/) }
-  it { should create_file('/etc/profile.d/simp.csh').with_content(/mesg n/) }
+  it { is_expected.to create_file('/etc/profile.d/simp.sh').with_content(/TMOUT=900/) }
+  it { is_expected.to create_file('/etc/profile.d/simp.sh').with_content(/mesg n/) }
+  it { is_expected.to create_file('/etc/profile.d/simp.csh').with_content(/autologout=15/) }
+  it { is_expected.to create_file('/etc/profile.d/simp.csh').with_content(/mesg n/) }
 
   context 'user_whitelist' do
     let(:params){{ :user_whitelist => ['bob', 'alice', 'eve'] }}
 
-    it { should create_file('/etc/profile.d/simp.sh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.sh').with_content(
       /for user in bob alice eve; do/
     )}
-    it { should create_file('/etc/profile.d/simp.csh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.csh').with_content(
       /foreach user \(bob alice eve\)/
     )}
   end
@@ -34,14 +34,14 @@ describe 'simplib::profile_settings' do
       }
     }}
 
-    it { should create_file('/etc/profile.d/simp.sh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.sh').with_content(
       /#{params[:prepend][:sh]}.*TMOUT/
     )}
-    it { should create_file('/etc/profile.d/simp.csh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.csh').with_content(
       /#{params[:prepend][:csh]}.*autologout/
     )}
-    it { should_not create_file('/etc/profile.d/simp.sh').with_content(/#{params[:prepend]['foo']}/) }
-    it { should_not create_file('/etc/profile.d/simp.csh').with_content(/#{params[:prepend]['foo']}/) }
+    it { is_expected.not_to create_file('/etc/profile.d/simp.sh').with_content(/#{params[:prepend]['foo']}/) }
+    it { is_expected.not_to create_file('/etc/profile.d/simp.csh').with_content(/#{params[:prepend]['foo']}/) }
   end
 
   context 'append' do
@@ -53,14 +53,14 @@ describe 'simplib::profile_settings' do
       }
     }}
 
-    it { should create_file('/etc/profile.d/simp.sh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.sh').with_content(
       /TMOUT.*#{params[:append][:sh]}/
     )}
-    it { should create_file('/etc/profile.d/simp.csh').with_content(
+    it { is_expected.to create_file('/etc/profile.d/simp.csh').with_content(
       /autologout.*#{params[:append][:csh]}/
     )}
-    it { should_not create_file('/etc/profile.d/simp.sh').with_content(/#{params[:append]['foo']}/) }
-    it { should_not create_file('/etc/profile.d/simp.csh').with_content(/#{params[:append]['foo']}/) }
+    it { is_expected.not_to create_file('/etc/profile.d/simp.sh').with_content(/#{params[:append]['foo']}/) }
+    it { is_expected.not_to create_file('/etc/profile.d/simp.csh').with_content(/#{params[:append]['foo']}/) }
   end
 
 end

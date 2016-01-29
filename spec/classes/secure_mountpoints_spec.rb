@@ -5,14 +5,14 @@ describe 'simplib::secure_mountpoints' do
 
     context "on #{os}" do
       let(:facts){ base_facts.dup }
-      it { should compile.with_all_deps }
-      it { should contain_mount('/dev/pts').with_options('rw,gid=5,mode=620,noexec') }
-      it { should contain_mount('/sys').with_options('rw,nodev,noexec') }
-      it { should contain_mount('/tmp').with({
+      it { is_expected.to compile.with_all_deps }
+      it { is_expected.to contain_mount('/dev/pts').with_options('rw,gid=5,mode=620,noexec') }
+      it { is_expected.to contain_mount('/sys').with_options('rw,nodev,noexec') }
+      it { is_expected.to contain_mount('/tmp').with({
         :options => 'bind,nodev,noexec,nosuid',
         :device  => '/tmp'
       })}
-      it { should contain_mount('/var/tmp').with({
+      it { is_expected.to contain_mount('/var/tmp').with({
         :options => 'bind,nodev,noexec,nosuid',
         :device  => '/tmp'
       })}
@@ -25,7 +25,7 @@ describe 'simplib::secure_mountpoints' do
 
         let(:facts){new_facts}
 
-        it { should contain_mount('/tmp').with({
+        it { is_expected.to contain_mount('/tmp').with({
           :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw',
           :device  => '/dev/sda3'
         })}
@@ -39,7 +39,7 @@ describe 'simplib::secure_mountpoints' do
 
         let(:facts){new_facts}
 
-        it { should contain_mount('/tmp').with({
+        it { is_expected.to contain_mount('/tmp').with({
           :options => "bind,nodev,noexec,nosuid",
           :device  => '/tmp'
         })}
@@ -53,7 +53,7 @@ describe 'simplib::secure_mountpoints' do
 
         let(:facts){new_facts}
 
-        it { should contain_mount('/var/tmp').with({
+        it { is_expected.to contain_mount('/var/tmp').with({
           :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw',
           :device  => '/dev/sda3'
         })}
@@ -67,7 +67,7 @@ describe 'simplib::secure_mountpoints' do
 
         let(:facts){new_facts}
 
-        it { should contain_mount('/var/tmp').with({
+        it { is_expected.to contain_mount('/var/tmp').with({
           :options => "bind,nodev,noexec,nosuid",
           :device  => new_facts[:tmp_mount_path_var_tmp]
         })}
@@ -81,7 +81,7 @@ describe 'simplib::secure_mountpoints' do
 
         let(:facts){new_facts}
 
-        it { should contain_mount('/dev/shm').with({
+        it { is_expected.to contain_mount('/dev/shm').with({
           :options => 'nodev,noexec,nosuid,rw',
           :device  => new_facts[:tmp_mount_path_dev_shm]
         })}
