@@ -6,7 +6,7 @@
 Facter.add("ipv6_enabled") do
   setcode do
     retval = false
-    ipv6_enabled = Facter::Core::Execution.exec('/sbin/sysctl -n net.ipv6.conf.all.disable_ipv6')
+    ipv6_enabled = Facter::Core::Execution.exec('/sbin/sysctl -n -e net.ipv6.conf.all.disable_ipv6')
 
     # we have observed this exec non-deterministically populate $? with
     # nil, although the exec succeeds.  This will happen with %x, ``, or
