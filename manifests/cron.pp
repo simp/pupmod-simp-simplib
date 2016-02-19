@@ -35,6 +35,9 @@ class simplib::cron (
   $rsync_timeout = hiera('rsync::timeout','2')
 ){
   validate_bool($use_rsync)
+
+  compliance_map()
+
   if !empty($rsync_server) { validate_net_list($rsync_server) }
 
   simplib::cron::add_user{ 'root': }

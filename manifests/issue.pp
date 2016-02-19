@@ -51,6 +51,7 @@ class simplib::issue (
   $rsync_server = hiera('rsync::server',''),
   $rsync_timeout = hiera('rsync::timeout','2')
 ){
+  compliance_map()
 
   $issue_file_base = { owner => 'root', group => 'root', mode  => '0644' }
 

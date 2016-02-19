@@ -34,6 +34,8 @@ class simplib::yum_schedule (
   validate_integer($randomize)
   validate_bool($quiet)
 
+  compliance_map()
+
   cron { 'yum_update':
     command  => template('simplib/yum-cron.erb'),
     user     => 'root',

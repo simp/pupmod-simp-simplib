@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.1
-Release: 1
+Release: 2
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -13,6 +13,7 @@ Obsoletes: pupmod-common < 5.0.0
 Provides: pupmod-common = 5.0.0-0
 Obsoletes: pupmod-functions < 3.0.0
 Provides: pupmod-functions = 3.0.0-0
+Requires: pupmod-onyxpoint-compliance_markup
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
@@ -50,6 +51,9 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Fri Feb 19 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.0.1-2
+- Added compliance function support
+
 * Tue Feb 02 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 1.0.1-1
 - Removed `os_bugfixes` and `bugfix1049656`.
 

@@ -73,6 +73,8 @@ class simplib::profile_settings (
   validate_hash($prepend)
   validate_hash($append)
 
+  compliance_map()
+
   file { '/etc/profile.d/simp.sh':
     ensure  => 'file',
     owner   => 'root',

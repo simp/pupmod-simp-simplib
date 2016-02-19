@@ -17,5 +17,6 @@ fixtures:
     sudo:                   'git://github.com/simp/pupmod-simp-sudo.git'
     sysctl:                 'git://github.com/simp/pupmod-simp-sysctl.git'
     upstart:                'git://github.com/simp/pupmod-simp-upstart.git'
+    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     simplib: "#{source_dir}"

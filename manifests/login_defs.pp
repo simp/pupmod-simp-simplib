@@ -143,6 +143,8 @@ class simplib::login_defs (
   if !empty($userdel_cmd) { validate_absolute_path($userdel_cmd) }
   validate_bool($usergroups_enab)
 
+  compliance_map()
+
   file { '/etc/login.defs':
     owner   => 'root',
     group   => 'root',

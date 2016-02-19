@@ -186,6 +186,8 @@ class simplib (
   validate_bool($use_fips_aesni)
   validate_array_member($proc_hidepid,['0','1','2'])
 
+  compliance_map()
+
   runlevel { $runlevel: }
 
   if $use_fips {

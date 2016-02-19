@@ -39,6 +39,8 @@ class simplib::prelink (
   validate_integer($full_time_interval)
   validate_integer($nonrpm_check_interval)
 
+  compliance_map()
+
   if $enable {
     package { 'prelink':
       ensure => 'latest',

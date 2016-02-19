@@ -126,6 +126,8 @@ class simplib::nsswitch (
   validate_bool($use_ldap)
   validate_bool($use_sssd)
 
+  compliance_map()
+
   if $use_ldap {
     if $use_sssd {
       $_use_ldap = false
