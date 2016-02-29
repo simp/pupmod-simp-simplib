@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.1
-Release: 2
+Release: 3
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -51,6 +51,12 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Mon Feb 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.1-3
+- Added a to_string() function which simply converts the passed argument to a
+  string.
+  This has been added to both pass linting and allow for the case where you
+  *know* you need a string and you want to make sure that is known.
+
 * Fri Feb 19 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.0.1-2
 - Added compliance function support
 
