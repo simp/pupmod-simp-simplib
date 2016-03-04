@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.0.1
-Release: 3
+Release: 4
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -51,6 +51,10 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Fri Mar 04 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.1-4
+- Updated the localusers function to be compatible with multiple versions
+  of ruby, and fixed a bug in the return value.
+
 * Mon Feb 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.0.1-3
 - Added a to_string() function which simply converts the passed argument to a
   string.

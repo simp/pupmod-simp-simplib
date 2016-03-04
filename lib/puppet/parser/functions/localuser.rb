@@ -23,7 +23,6 @@ module Puppet::Parser::Functions
   #     regex,<username>
   #     *.<domain>,<username>
   #     fqdn,<username>
-
   newfunction(:localuser, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
     Pull a pre-set password from a password list and return an array of
     user details associated with the passed hostname.
@@ -103,7 +102,7 @@ module Puppet::Parser::Functions
             # If not, then create one.
             else
               chars = ("a".."z").to_a + ("0".."9").to_a + %w{. /}
-              salt = "$6$rounds=10000$" + Array.new(8, '').collect{chars[rand(chars.size)]}.to_s
+              salt = "$6$rounds=10000$" + Array.new(8, '').collect{chars[rand(chars.size)]}.join
 
               hash = pass.crypt(salt)
 
@@ -111,7 +110,7 @@ module Puppet::Parser::Functions
               # We really should never get here on a modern system.
               if not hash.include?(salt) then
                 # Fall back to MD5
-                salt = "$1$" + Array.new(8, '').collect{chars[rand(chars.size)]}.to_s
+                salt = "$1$" + Array.new(8, '').collect{chars[rand(chars.size)]}.join
                 hash = pass.crypt(salt)
               end
 
@@ -123,9 +122,9 @@ module Puppet::Parser::Functions
               end
             end
             if ( homedir ) then
-              retval << "#{retval}#{extattr}#{username},#{uid},#{gid},#{homedir},#{hash}"
+              retval << "#{extattr}#{username},#{uid},#{gid},#{homedir},#{hash}"
             else
-              retval << "#{retval}#{extattr}#{username},#{uid},#{gid},#{hash}"
+              retval << "#{extattr}#{username},#{uid},#{gid},#{hash}"
             end
           end
         end
