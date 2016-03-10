@@ -1,6 +1,6 @@
 module Puppet::Parser::Functions
 
-  newfunction(:validate_between, :doc => <<-'ENDHEREDOC') do |args|
+  newfunction(:validate_between, :arity => 3, :doc => <<-'ENDHEREDOC') do |args|
     Validate that the first value is between the second and third
     values numerically.
 
@@ -8,12 +8,7 @@ module Puppet::Parser::Functions
 
     ENDHEREDOC
 
-    unless Array(args).length == 3 then
-      raise Puppet::ParseError, ("validate_between() takes exactly three arguments")
-    end
-
-    args[0].between?(args[1],args[2])
-
+    args[0].to_s.between?(args[1].to_s, args[2].to_s)
   end
 
 end

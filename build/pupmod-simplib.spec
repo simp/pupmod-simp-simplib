@@ -1,19 +1,21 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
-Version: 1.0.1
-Release: 4
+Version: 1.1.0
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: puppetlabs-stdlib
 Requires: puppet >= 3.3.0
+Requires: pupmod-simp-compliance_markup
+
 Buildarch: noarch
+
 Obsoletes: pupmod-common < 5.0.0
 Provides: pupmod-common = 5.0.0-0
 Obsoletes: pupmod-functions < 3.0.0
 Provides: pupmod-functions = 3.0.0-0
-Requires: pupmod-onyxpoint-compliance_markup
 
 Prefix: %{_sysconfdir}/puppet/environments/simp/modules
 
@@ -51,6 +53,12 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Thu Mar 10 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
+- Ensure that the validate_between() function can handle string/integer
+  combinations.
+- Add a to_integer() function which converts the passed argument to an integer.
+- Converted to Semantic Versioning 2.0.0
+
 * Fri Mar 04 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.0.1-4
 - Updated the localusers function to be compatible with multiple versions
   of ruby, and fixed a bug in the return value.

@@ -10,7 +10,8 @@ describe 'simplib::resolv' do
     :hostname => 'foo',
     :interfaces => 'eth0',
     :ipaddress_eth0 => '10.10.10.10',
-    :operatingsystem => 'RedHat'
+    :operatingsystem => 'RedHat',
+    :operatingsystemmajrelease => '7'
   }}
 
   it { is_expected.to compile.with_all_deps }
@@ -40,7 +41,8 @@ describe 'simplib::resolv' do
       :interfaces => 'eth0',
       :ipaddress_eth0 => '10.10.10.10',
       :selinux_enforced => true,
-      :operatingsystem => 'RedHat'
+      :operatingsystem => 'RedHat',
+      :operatingsystemmajrelease => '7'
     }}
     let(:params){{
       :nameservers => ['1.2.3.4','5.6.7.8','10.10.10.10']
@@ -59,7 +61,8 @@ describe 'simplib::resolv' do
       :hostname => 'foo',
       :interfaces => 'eth0',
       :ipaddress_eth0 => '10.10.10.10',
-      :operatingsystem => 'RedHat'
+      :operatingsystem => 'RedHat',
+      :operatingsystemmajrelease => '7'
     }}
     let(:params){{
       :nameservers => ['127.0.0.1','1.2.3.4','5.6.7.8']
@@ -75,7 +78,8 @@ describe 'simplib::resolv' do
       :hostname => 'foo',
       :interfaces => 'eth0',
       :ipaddress_eth0 => '10.10.10.10',
-      :operatingsystem => 'RedHat'
+      :operatingsystem => 'RedHat',
+      :operatingsystemmajrelease => '7'
     }}
     let(:params){{
       :nameservers => ['127.0.0.1']

@@ -39,6 +39,10 @@ This module collects custom functions, facts, and types relevant to SIMP that ar
 
 * Presently, simplib does not manage resource on its own.  Its only Puppet-relevant content is ruby code under the `lib/` directory.
 
+### Setup Requirements
+
+* pupmod-simp-compliance_markup
+
 ### Setup Requirements **OPTIONAL**
 
 * puppetlabs-stdlib

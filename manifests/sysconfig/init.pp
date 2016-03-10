@@ -15,10 +15,10 @@ class simplib::sysconfig::init (
   # The weird formatting here is just to get puppet lint to be quiet
   # until this can get fixed.
   $move_to_col = "\"echo -en \\\\033[\${RES_COL}G\"",
-  $setcolor_success = '"echo -en \\033[0;32m"',
-  $setcolor_failure = '"echo -en \\033[0;31m"',
-  $setcolor_warning = '"echo -en \\033[0;33m"',
-  $setcolor_normal = '"echo -en \\033[0;39m"',
+  $setcolor_success = "\"echo -en \\\\033[0;32m\"",
+  $setcolor_failure = "\"echo -en \\\\033[0;31m\"",
+  $setcolor_warning = "\"echo -en \\\\033[0;33m\"",
+  $setcolor_normal = "\"echo -en \\\\033[0;39m\"",
   $single_user_login = '/sbin/sulogin',
   $loglvl = '3',
   $prompt = false,
