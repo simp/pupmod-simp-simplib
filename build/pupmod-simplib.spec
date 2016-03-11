@@ -8,7 +8,7 @@ Source: %{name}-%{version}-%{release}.tar.gz
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires: puppetlabs-stdlib
 Requires: puppet >= 3.3.0
-Requires: pupmod-simp-compliance_markup
+Requires: pupmod-onyxpoint-compliance_markup
 
 Buildarch: noarch
 
