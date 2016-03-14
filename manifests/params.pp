@@ -3,7 +3,7 @@
 # A set of defaults for the 'simplib' namespace
 #
 # $use_sssd
-# Default: false on EL<7, true otherwise
+# Default: false on EL<6.7, true otherwise
 #   There are issues with ldap and nslcd on EL7+ which can result in users
 #   being locked out of the system. SSSD contains a bug which will allow users
 #   with a valid SSH key to bypass the password lockout as returned by LDAP but
@@ -11,7 +11,7 @@
 #   issues which significantly weaken your security posture.
 class simplib::params {
   if $::operatingsystem in ['RedHat','CentOS'] {
-    if versioncmp($::operatingsystemmajrelease,'7') < 0 {
+    if versioncmp($::operatingsystemmajrelease,'6.7') < 0 {
       $_use_sssd = false
     }
     else {
