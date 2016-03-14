@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
 Version: 1.1.0
-Release: 0
+Release: 1
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -53,6 +53,10 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Mon Mar 14 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.1.0-1
+- Modified nsswitch template to reference private _use_sssd and
+  _use_ldap logic, exclusively.
+
 * Thu Mar 10 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.1.0-0
 - Ensure that the validate_between() function can handle string/integer
   combinations.

@@ -56,10 +56,6 @@ end
   # This relies on knowing that our variables may have internal mappings
   # This all should probably be rewritten....
   opt = eval("@_use_#{variable_map[x]}")
-  unless opt
-    opt = eval("@use_#{variable_map[x]}")
-  end
-
   next unless opt
   outfile = append_content(x,eval("#{x}_affects"),outfile)
 end
