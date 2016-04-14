@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'parse_hosts' do
   # IPv4
   it do
-    retval = scope.function_parse_hosts([
+    retval = subject.call([
       'http://some.domain.net',
       'http://localhost.my.domain:8989',
       'https://localhost.my.domain:8990',
@@ -39,7 +39,7 @@ describe 'parse_hosts' do
 
   # IPv6
   it do
-    retval = scope.function_parse_hosts([
+    retval = subject.call([
       'http://[2001:db8:1f70::999:de8:7648:001]:100',
       'https://[2001:db8:1f70::999:de8:7648:001]:200',
       'http://[2001:db8:1f70::999:de8:7648:002]',

@@ -16,6 +16,7 @@ if Puppet.version < "4.0.0"
   end
 end
 
+
 if !ENV.key?( 'TRUSTED_NODE_DATA' )
   warn '== WARNING: TRUSTED_NODE_DATA is unset, using TRUSTED_NODE_DATA=yes'
   ENV['TRUSTED_NODE_DATA']='yes'
@@ -24,7 +25,6 @@ end
 default_hiera_config =<<-EOM
 ---
 :backends:
-  - "rspec"
   - "yaml"
 :yaml:
   :datadir: "stub"
@@ -46,7 +46,7 @@ EOM
 # end
 #
 def set_environment(environment = :production)
-    RSpec.configure { |c| c.default_facts['environment'] = environment.to_s }
+  RSpec.configure { |c| c.default_facts['environment'] = environment.to_s }
 end
 
 # This can be used from inside your spec tests to load custom hieradata within
@@ -68,7 +68,7 @@ end
 #
 # Note: Any colons (:) are replaced with underscores (_) in the class name.
 def set_hieradata(hieradata)
-    RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
+  RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
 end
 
 if not File.directory?(File.join(fixture_path,'hieradata')) then

@@ -1,16 +1,7 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe Puppet::Parser::Functions.function(:ipaddresses) do
-  let(:scope) do
-    PuppetlabsSpec::PuppetInternals.scope
-  end
-
-  subject do
-    function_name = Puppet::Parser::Functions.function(:ipaddresses)
-    scope.method(function_name)
-  end
-
+describe 'ipaddresses' do
   # Mock out the Facts
   context "All Interfaces Have IP Addresses" do
     before :each do
@@ -21,7 +12,7 @@ describe Puppet::Parser::Functions.function(:ipaddresses) do
     end
 
     it 'should return an array with no empty or nil values' do
-      expect { subject.call([]).delete_if{|x| x and x =~ /\S/}.to =~ [] }
+      expect { run.with_params('').delete_if{|x| x and x =~ /\S/}.to =~ [] }
     end
   end
 
@@ -34,7 +25,7 @@ describe Puppet::Parser::Functions.function(:ipaddresses) do
     end
 
     it 'should return an array with no empty or nil values' do
-      expect { subject.call([]).delete_if{|x| x and x =~ /\S/}.to =~ [] }
+      expect { run.with_params('').delete_if{|x| x and x =~ /\S/}.to =~ [] }
     end
   end
 
@@ -44,9 +35,8 @@ describe Puppet::Parser::Functions.function(:ipaddresses) do
     end
 
     it 'should not raise an error' do
-      expect {
-        subject.call([])
-      }.not_to raise_error
+      #expect { scope.function_ipaddresses([]) }.not_to raise_error
+      expect { run.with_params('') }.not_to raise_error
     end
   end
 end
