@@ -1,16 +1,7 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe Puppet::Parser::Functions.function(:to_integer) do
-  let(:scope) do
-    PuppetlabsSpec::PuppetInternals.scope
-  end
-
-  subject do
-    function_name = Puppet::Parser::Functions.function(:to_integer)
-    scope.method(function_name)
-  end
-
+describe 'to_integer' do
   it 'should run successfully' do
     expect {
       expect(subject.call([12])).to be == 12
