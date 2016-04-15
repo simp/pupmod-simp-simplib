@@ -1,7 +1,7 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
-Version: 1.2.2
-Release: 1
+Version: 1.2.3
+Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
 Source: %{name}-%{version}-%{release}.tar.gz
@@ -53,6 +53,10 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Thu Apr 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.3-0
+- The nsswitch.conf logic has been updated to work properly between SSSD and
+  non-SSSD systems.
+
 * Tue Apr 12 2016 Kendall Moore <kendall.moore@onyxpoint.com> - 1.2.2-1
 - Fixed deprecation warning in custom types
 
