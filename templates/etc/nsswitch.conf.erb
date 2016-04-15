@@ -23,12 +23,6 @@ options = [
 sss_affects = ['passwd','shadow','group', 'netgroup','sudoers']
 ldap_affects = ['passwd','shadow', 'group', 'netgroup', 'automount']
 
-# This is just here to keep the class consistent with all of the other classes.
-variable_map = {
-  'sss'   => 'sssd',
-  'ldap'  => 'ldap'
-}
-
 def append_content(content,modlist,orig_hash)
   to_mod = orig_hash.dup
   modlist.each do |opt|
@@ -52,12 +46,11 @@ options.each do |opt|
 end
 
 # SSSD Takes precedence
-['sss','ldap'].each do |x|
-  # This relies on knowing that our variables may have internal mappings
-  # This all should probably be rewritten....
-  opt = eval("@_use_#{variable_map[x]}")
-  next unless opt
-  outfile = append_content(x,eval("#{x}_affects"),outfile)
+if @use_sssd
+  outfile = append_content('sss',sss_affects,outfile)
+
+elsif @use_ldap
+  outfile = append_content('ldap',ldap_affects,outfile)
 end
 
 to_ret = []

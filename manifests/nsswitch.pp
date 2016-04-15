@@ -128,24 +128,6 @@ class simplib::nsswitch (
 
   compliance_map()
 
-  # Forcibly set _use_ldap false if use_sssd is true.
-  # Otherwise, use the default parameters.
-  if $use_ldap {
-    if $use_sssd {
-      $_use_sssd = true
-      $_use_ldap = false
-    }
-    else {
-      $_use_ldap = $use_ldap
-    }
-  }
-  else {
-    $_use_ldap = $use_ldap
-    $_use_sssd = $use_sssd
-  }
-
-  validate_bool($_use_ldap)
-
   file { '/etc/nsswitch.conf':
     owner   => 'root',
     group   => 'root',

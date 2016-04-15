@@ -175,6 +175,33 @@ describe 'simplib::nsswitch' do
           }
         end
 
+        context 'with_ldap_and_not_sssd' do
+          let(:params){{
+            :use_ldap => true,
+            :use_sssd => false
+          }}
+
+          it { is_expected.to create_file('/etc/nsswitch.conf').with_content(<<-EOM.gsub(/^\s+/,''))
+            passwd: files [!NOTFOUND=return] ldap
+            shadow: files [!NOTFOUND=return] ldap
+            group: files [!NOTFOUND=return] ldap
+            hosts: files dns
+            bootparams: nisplus [NOTFOUND=return] files
+            ethers: files
+            netmasks: files
+            networks: files
+            protocols: files
+            rpc: files
+            services: files
+            sudoers: files
+            netgroup: files [!NOTFOUND=return] ldap
+            publickey: nisplus
+            automount: files [!NOTFOUND=return] nisplus ldap
+            aliases: files nisplus
+            EOM
+          }
+        end
+
         context 'with_sssd_and_ldap' do
           let(:params){{
             :use_ldap => true,
