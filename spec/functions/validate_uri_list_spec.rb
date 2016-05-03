@@ -4,7 +4,7 @@ describe 'validate_uri_list' do
   context 'IPv4' do
     it do
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'rsync://127.0.0.1:1234',
             'http://some.domain.net',
@@ -17,7 +17,7 @@ describe 'validate_uri_list' do
       }.to_not raise_error
 
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://1.2.3.4',
             'ldaps://1.2.3.4'
@@ -32,7 +32,7 @@ describe 'validate_uri_list' do
 
     it do
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://1.2.3.4:bob:alice'
           ]].map(&:freeze)
@@ -42,7 +42,7 @@ describe 'validate_uri_list' do
 
     it do
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://1.2.3.4',
             'ldaps://1.2.3.4'
@@ -67,7 +67,7 @@ describe 'validate_uri_list' do
       }.to_not raise_error
 
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://[2001:db8:1f70::999:de8:7648:001]:100',
             'ldaps://[2001:db8:1f70::999:de8:7648:002]'
@@ -82,7 +82,7 @@ describe 'validate_uri_list' do
 
     it do
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://[2001:db8:1f70::999:de8:7648:]'
           ]].map(&:freeze)
@@ -92,7 +92,7 @@ describe 'validate_uri_list' do
 
     it do
       expect {
-        scope.function_validate_uri_list(
+        subject.call(
           [[
             'ldap://[2001:db8:1f70::999:de8:7648:001]:100',
             'ldaps://[2001:db8:1f70::999:de8:7648:002]'

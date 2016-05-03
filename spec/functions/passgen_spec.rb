@@ -1,11 +1,7 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe Puppet::Parser::Functions.function(:passgen) do
-  let(:scope) do
-    PuppetlabsSpec::PuppetInternals.scope
-  end
-
+describe 'passgen' do
   let(:default_chars) do
     (("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a).map do|x|
       x = Regexp.escape(x)
@@ -24,15 +20,8 @@ describe Puppet::Parser::Functions.function(:passgen) do
     end - safe_special_chars
   end
 
-  subject do
-    function_name = Puppet::Parser::Functions.function(:passgen)
-    scope.method(function_name)
-  end
-
   it 'should run successfully with default arguments' do
-    expect {
-      subject.call(['spectest'])
-    }.to_not raise_error
+    expect { run.with_params(['spectest']) }.to_not raise_error
   end
 
   it 'should return a password that is 32 alphanumeric characters long by default' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'strip_ports' do
   # IPv4
   it do
-    retval = scope.function_strip_ports([
+    retval = subject.call([
       'rsync://127.0.0.1:1234',
       'http://some.domain.net',
       'http://some.domain.net',
@@ -23,7 +23,7 @@ describe 'strip_ports' do
 
   # IPv6
   it do
-    retval = scope.function_strip_ports([
+    retval = subject.call([
       'http://[2001:db8:1f70::999:de8:7648:001]:100',
       'http://[2001:db8:1f70::999:de8:7648:002]',
       '[2001:db8:1f70::bbb:de8:7648:003]',
