@@ -84,7 +84,7 @@ class simplib::secure_mountpoints (
   # If we decide to secure the tmp mounts....
   if $secure_tmp_mounts {
     # If /tmp is mounted
-    if $::tmp_mount_tmp and !empty($::tmp_mount_tmp) {
+    if getvar('::tmp_mount_tmp') and !empty($::tmp_mount_tmp) {
       $tmp_mount_tmp_opts = split($::tmp_mount_tmp,',')
 
       # If /tmp is not a bind mount and doesn't contain the required options
@@ -140,12 +140,14 @@ class simplib::secure_mountpoints (
       }
     }
 
-    if defined('::simplib::manage_tmp_perms') and $::tmp_mount_tmp {
+    if (defined('$::simplib::manage_tmp_perms') and
+        getvar('::simplib::manage_tmp_perms') and
+        getvar('::tmp_mount_tmp')) {
       File['/tmp'] -> Mount['/tmp']
     }
 
     # If /var/tmp is mounted
-    if $::tmp_mount_var_tmp and !empty($::tmp_mount_var_tmp) {
+    if getvar('::tmp_mount_var_tmp') and !empty($::tmp_mount_var_tmp) {
       $tmp_mount_var_tmp_opts = split($::tmp_mount_var_tmp,',')
 
       # If /var/tmp is not a bind mount then mount it properly.
@@ -198,12 +200,14 @@ class simplib::secure_mountpoints (
       }
     }
 
-    if defined('::simplib::manage_tmp_perms') and $::tmp_mount_var_tmp {
+    if (defined('$::simplib::manage_tmp_perms') and
+        getvar('::simplib::manage_tmp_perms')  and
+        getvar('::tmp_mount_var_tmp')) {
       File['/var/tmp'] -> Mount['/var/tmp']
     }
 
     # If /dev/shm is mounted
-    if $::tmp_mount_dev_shm and !empty($::tmp_mount_dev_shm) {
+    if getvar('::tmp_mount_dev_shm') and !empty($::tmp_mount_dev_shm) {
       $tmp_mount_dev_shm_opts = split($::tmp_mount_dev_shm,',')
 
       # If /dev/shm doesn't contain the required options then mount it

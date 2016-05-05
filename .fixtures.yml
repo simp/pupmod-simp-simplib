@@ -1,28 +1,28 @@
 fixtures:
   repositories:
     # from common
-    auditd:                 'git://github.com/simp/pupmod-simp-auditd.git'
+    auditd:                 'https://github.com/simp/pupmod-simp-auditd'
     augeasproviders_core:
-      repo : 'git://github.com/simp/augeasproviders_core.git'
+      repo : 'https://github.com/simp/augeasproviders_core'
       branch : 'simp-master'
     augeasproviders_grub:
-      repo : 'git://github.com/simp/augeasproviders_grub.git'
+      repo : 'https://github.com/simp/augeasproviders_grub'
       branch : 'simp-master'
     augeasproviders_sysctl:
-      repo : 'git://github.com/simp/augeasproviders_sysctl.git'
+      repo : 'https://github.com/simp/augeasproviders_sysctl'
       branch : 'simp-master'
-    simpcat:                'git://github.com/simp/pupmod-simp-concat.git'
-    functions:              'git://github.com/simp/pupmod-simp-functions.git'
-    gpasswd:                'git://github.com/simp/puppet-gpasswd.git'
-    iptables:               'git://github.com/simp/pupmod-simp-iptables.git'
-    named:                  'git://github.com/simp/pupmod-simp-named.git'
-    oddjob:                 'git://github.com/simp/pupmod-simp-oddjob.git'
-    pam:                    'git://github.com/simp/pupmod-simp-pam.git'
-    rsync:                  'git://github.com/simp/pupmod-simp-rsync.git'
-    stdlib:                 'git://github.com/simp/puppetlabs-stdlib.git'
-    sudo:                   'git://github.com/simp/pupmod-simp-sudo.git'
-    sysctl:                 'git://github.com/simp/pupmod-simp-sysctl.git'
-    upstart:                'git://github.com/simp/pupmod-simp-upstart.git'
+    simpcat:                'https://github.com/simp/pupmod-simp-concat'
+    functions:              'https://github.com/simp/pupmod-simp-functions'
+    gpasswd:                'https://github.com/simp/puppet-gpasswd'
+    iptables:               'https://github.com/simp/pupmod-simp-iptables'
+    named:                  'https://github.com/simp/pupmod-simp-named'
+    oddjob:                 'https://github.com/simp/pupmod-simp-oddjob'
+    pam:                    'https://github.com/simp/pupmod-simp-pam'
+    rsync:                  'https://github.com/simp/pupmod-simp-rsync'
+    stdlib:                 'https://github.com/simp/puppetlabs-stdlib'
+    sudo:                   'https://github.com/simp/pupmod-simp-sudo'
+    sysctl:                 'https://github.com/simp/pupmod-simp-sysctl'
+    upstart:                'https://github.com/simp/pupmod-simp-upstart'
     compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     simplib: "#{source_dir}"
