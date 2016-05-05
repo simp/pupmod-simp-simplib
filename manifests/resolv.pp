@@ -73,10 +73,13 @@ class simplib::resolv (
     defined('named') and defined(Class['named'])
   ) or (
     $named_autoconf and host_is_me($nameservers)
-  )
-  {
+  ){
     $l_is_named_server = true
   }
+  else{
+    $l_is_named_server = false
+  }
+
 
   if $named_autoconf {
     # Having 127.0.0.1 or ::1 first tells us that we want to be a
@@ -114,8 +117,8 @@ class simplib::resolv (
     deconflict => true
   }
 
-  if defined(Class['named']) and ! $::named::chroot {
-    $bind_pkg = 'bind'
+  if defined_with_params(Class['named'], {'chroot' => false}) {
+      $bind_pkg = 'bind'
   }
   else {
     $bind_pkg = 'bind-chroot'

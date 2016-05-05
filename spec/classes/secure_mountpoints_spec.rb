@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'simplib::secure_mountpoints' do
-  on_supported_os.each do |os, base_facts|
+  on_supported_os({:selinux_mode => :disabled}).each do |os, base_facts|
 
     context "on #{os}" do
       let(:facts){ base_facts.dup }
@@ -18,14 +18,17 @@ describe 'simplib::secure_mountpoints' do
       })}
 
       context 'tmp_is_partition' do
-        new_facts = base_facts.dup
-        new_facts[:tmp_mount_tmp] = 'rw,seclabel,relatime,data=ordered'
-        new_facts[:tmp_mount_fstype_tmp] = 'ext4'
-        new_facts[:tmp_mount_path_tmp] = '/dev/sda3'
 
-        let(:facts){new_facts}
+        let(:facts){
+          new_facts = base_facts.dup
+          new_facts[:tmp_mount_tmp] = 'rw,seclabel,relatime,data=ordered'
+          new_facts[:tmp_mount_fstype_tmp] = 'ext4'
+          new_facts[:tmp_mount_path_tmp] = '/dev/sda3'
 
-        it { is_expected.to contain_mount('/tmp').with({
+          new_facts}
+
+        it {
+          is_expected.to contain_mount('/tmp').with({
           :options => 'data=ordered,nodev,noexec,nosuid,relatime,rw',
           :device  => '/dev/sda3'
         })}
