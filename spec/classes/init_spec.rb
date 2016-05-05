@@ -46,10 +46,6 @@ describe 'simplib' do
 
         context 'when_disabling_fips_and_fips_enabled' do
           let(:facts){ facts.merge({
-              :osfamily => 'RedHat',
-              :operatingsystem => 'CentOS',
-              :operatingsystemrelease => '6.5',
-              :operatingsystemmajrelease => '6',
               :fips_enabled => true,
               :boot_dir_uuid => '123-456-789'
           })}
@@ -70,10 +66,6 @@ describe 'simplib' do
 
         context 'when_disabling_fips_and_fips_not_enabled' do
           let(:facts){ facts.merge({
-            :osfamily => 'RedHat',
-            :operatingsystem => 'CentOS',
-            :operatingsystemrelease => '6.5',
-            :operatingsystemmajrelease => '6',
             :fips_enabled => false,
             :boot_dir_uuid => '123-456-789'
           })}

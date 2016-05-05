@@ -7,7 +7,7 @@
   "source":  "https://github.com/simp/pupmod-simp-simplib",
   "project_page": "https://github.com/simp/pupmod-simp-simplib",
   "issues_url":   "https://simp-project.atlassian.net",
-  "tags": [ "simp", "functions" ],
+  "tags": [ "simp", "functions", "facts", "types" ],
   "dependencies": [
     {
       "name": "onyxpoint/compliance_markup",
@@ -29,5 +29,16 @@
         "7"
       ]
     }
-  ]
+  ],
+  "requirements": [ 
+    {
+      "name": "pe", 
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "simp", 
+      "version_requirement": "3.x"
+    }
+  ],
+  "package_release_version": "0"
 }
