@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_b6062e84",
+        "filename": "manifests/secure_mountpoints.pp",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-05-11T05:39:15Z",
+      "side": 1,
+      "message": "This really requires File[\u0027/tmp\u0027] to be defined in Puppet 4.4.0.  The simplest fix is to `include \u0027simplib\u0027` at the top of `simplib::secure_mountpoints`.",
+      "revId": "99ef858195848dbc520fc0675f57c1af79e40c66",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
