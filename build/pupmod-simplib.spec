@@ -1,6 +1,6 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
-Version: 1.2.3
+Version: 1.2.4
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -53,6 +53,10 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Thu Jun 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.4-0
+- Added the gdm_version facts from xwindows and confined it on
+  the existence of the gdm binary.
+
 * Thu Apr 14 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.3-0
 - The nsswitch.conf logic has been updated to work properly between SSSD and
   non-SSSD systems.
