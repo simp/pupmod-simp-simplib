@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_782a1e92",
+        "filename": "manifests/params.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-06-27T20:31:36Z",
+      "side": 1,
+      "message": "install_tmpwatch should not be private",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 30,
+        "endChar": 31
+      },
+      "revId": "5ad34e8f3cb935381a6b5110b586080e7c528cff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
