@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_78b45e34",
+        "filename": "manifests/cron.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-06-27T16:38:41Z",
+      "side": 1,
+      "message": "Add documentation for install_tmpwatch",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 1
+      },
+      "revId": "ed298200bde83474ed1dacdd15ca1cfe465f5068",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_18a55203",
+        "filename": "manifests/params.pp",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-06-27T16:38:41Z",
+      "side": 1,
+      "message": "This will only install tmpwatch on cent \u003c\u003d 6.7.  Check on operatingsystemmajrelease \u003d 6 to get it on all el6 systems, per the ticket.",
+      "range": {
+        "startLine": 14,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 31
+      },
+      "revId": "ed298200bde83474ed1dacdd15ca1cfe465f5068",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
