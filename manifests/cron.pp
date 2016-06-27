@@ -32,8 +32,9 @@ class simplib::cron (
   $use_rsync = true,
   $rsync_root = 'default/global_etc',
   $rsync_server = hiera('rsync::server',''),
-  $rsync_timeout = hiera('rsync::timeout','2')
-){
+  $rsync_timeout = hiera('rsync::timeout','2'),
+  $install_tmpwatch = $::simplib::params::install_tmpwatch,
+) inherits simplib::params {
   validate_bool($use_rsync)
 
   compliance_map()
@@ -62,7 +63,6 @@ class simplib::cron (
   }
 
   if $use_rsync {
-
     rsync { 'cron':
       source  => "${rsync_root}/cron.*",
       target  => '/etc',
@@ -77,5 +77,9 @@ class simplib::cron (
     enable     => true,
     hasstatus  => true,
     hasrestart => true
+  }
+
+  if $install_tmpwatch {
+    package { 'tmpwatch': ensure => latest }
   }
 }
