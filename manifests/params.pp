@@ -22,6 +22,14 @@ class simplib::params {
       true => $::use_sssd,
       default => hiera('use_sssd',$_use_sssd)
     }
+
+    if $::operatingsystemmajrelease == '6' {
+      $install_tmpwatch = true
+    }
+    else{
+      $install_tmpwatch = false
+    }
+
   }
   else {
     fail("${::operatingsystem} not yet supported by ${module_name}")

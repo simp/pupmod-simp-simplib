@@ -1,6 +1,6 @@
 Summary: A collection of common SIMP functions, facts, and puppet code
 Name: pupmod-simplib
-Version: 1.2.4
+Version: 1.2.5
 Release: 0
 License: Apache License, Version 2.0
 Group: Applications/System
@@ -53,6 +53,9 @@ mkdir -p %{buildroot}/%{prefix}/simplib
 # Post uninstall stuff
 
 %changelog
+* Mon Jun 27 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.5-0
+- Added logic to ensure the tmpwatch package is installed on EL6 systems
+
 * Thu Jun 09 2016 Nick Markowski <nmarkowski@keywcorp.com> - 1.2.4-0
 - Added the gdm_version facts from xwindows and confined it on
   the existence of the gdm binary.
