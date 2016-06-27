@@ -13,15 +13,18 @@ class simplib::params {
   if $::operatingsystem in ['RedHat','CentOS'] {
     if versioncmp($::operatingsystemrelease,'6.7') < 0 {
       $_use_sssd = false
+      $_install_tmpwatch = true
     }
     else {
       $_use_sssd = true
+      $_install_tmpwatch = false
     }
 
     $use_sssd = defined('$::use_sssd') ? {
       true => $::use_sssd,
       default => hiera('use_sssd',$_use_sssd)
     }
+
   }
   else {
     fail("${::operatingsystem} not yet supported by ${module_name}")

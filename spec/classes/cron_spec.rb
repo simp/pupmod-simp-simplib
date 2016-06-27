@@ -18,6 +18,12 @@ describe 'simplib::cron' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to create_rsync('cron') }
         end
+
+        if facts['operatingsystemmajrelease' == 6 ]
+          it { is_expected.to contain_package('tmpwatch') }
+        else
+          it { is_expected.not_to contain_package('tmpwatch') }
+        end
       end
     end
 
