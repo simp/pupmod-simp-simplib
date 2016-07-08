@@ -1,3 +1,7 @@
+# _Description_
+#
+# Return the grub version installed on the system
+#
 Facter.add('grub_version') do
   setcode do
     if Facter::Util::Resolution.which('grub') then

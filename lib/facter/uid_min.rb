@@ -1,3 +1,7 @@
+# _Description_
+#
+# Return the minimum uid allowed
+#
 Facter.add('uid_min') do
   setcode do
     if File.readable?('/etc/login.defs') then
