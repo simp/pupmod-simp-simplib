@@ -1,0 +1,10 @@
+# Drop all Requires, Obsoletes, and Provides statements in here
+
+Requires: pupmod-simplib >= 1.2.5-0
+Requires: puppetlabs-stdlib >= 4.9.0-0.SIMP
+
+Obsoletes: pupmod-common < 5.0.0
+Provides: pupmod-common = 5.0.0-0
+Obsoletes: pupmod-functions < 3.0.0
+Provides: pupmod-functions = 3.0.0-0
+Requires: pupmod-onyxpoint-compliance_markup

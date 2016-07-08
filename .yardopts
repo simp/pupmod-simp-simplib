@@ -1,0 +1,4 @@
+lib/**/*.rb
+manifests/**/*.pp
+--markup markdown
+-f html
