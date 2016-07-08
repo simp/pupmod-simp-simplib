@@ -10,6 +10,10 @@
     * [Beginning with simplib](#beginning-with-simplib)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+    * [Available Facts](#available-facts)
+    * [Available Functions](#available-functions)
+    * [Available Types and Providers](#available-types-and-providers)
+    * [Available Classes](#available-classes)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
       * [Acceptance Tests - Beaker env variables](#acceptance-tests)
@@ -59,9 +63,116 @@ Put the classes, types, and resources for customizing, configuring, and doing th
 
 ## Reference
 
-**FIXME:** The text below is boilerplate copy.  Ensure that it is correct and remove this message!
+A list of things provided by simplib is below. Please reference the `doc/` directory in the top level of the repo or the code itself for more detailed documentation.
 
-Here, list the classes, types, providers, facts, etc contained in your module. This section should include all of the under-the-hood workings of your module so people know what the module is touching on their system but don't need to mess with things. (We are working on automating this message!)
+### Available facts:
+
+  * **acpid_enabled**        -  Return true if ACPI is available on the system
+  * **boot_dir_uuid**        -  Return the UUID of the partition holding the /boot directory
+  * **cmdline**              -  Returns the contents of `/proc/cmdline` as a hash
+  * **cpuinfo**              -  Returns the contents of `/proc/cpuinfo` as a hash
+  * **defaultgatewayiface**  -  Return the default gateway of the system
+  * **defaultgateway**       -  Return the default gw interface of the system
+  * **fips_enabled**         -  Determine whether or not FIPS is enabled on this system
+  * **fullrun**              -  Determine whether or not to do an intensive run
+  * **gdm_version**          -  Return the version of GDM that is installed
+  * **grub_version**         -  Return the grub version installed on the system
+  * **has_clustering**       -  Return true if the clvmd is running
+  * **init_systems**         -  Return a list of all init systems present on the system
+  * **ipv6_enabled**         -  Return true if IPv6 is enabled and false if not
+  * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
+  * **runlevel**             -  Return the current system runlevel
+  * **shmall**               -  Return the value of shmall from sysctl
+  * **tmp_mounts**           -  This fact provides information about `/tmp`, `/var/tmp`, and `/dev/shm` should they be present on the system
+  * **uid_min**              -  Return the minimum uid allowed
+
+### Available Functions:
+
+  * (rvalue)     -  **array_include**
+  * (rvalue)     -  **array_size**
+  * (rvalue)     -  **array_union**
+  * (rvalue)     -  **bracketize**
+  * (rvalue)     -  **deep_merge**
+  * (rvalue)     -  **generate_reboot_msg**
+  * (rvalue)     -  **get_ports**
+  * (rvalue)     -  **h2n**
+  * (rvalue)     -  **host_is_me**
+  * (rvalue)     -  **ip_is_me**
+  * (rvalue)     -  **ip_to_cron**
+  * (rvalue)     -  **ipaddresses**
+  * (rvalue)     -  **join_mount_opts**
+  * (rvalue)     -  **localuser**
+  * (rvalue)     -  **mapval**
+  * (rvalue)     -  **nets2cidr**
+  * (rvalue)     -  **nets2ddq**
+  * (rvalue)     -  **parse_hosts**
+  * (rvalue)     -  **passgen**
+  * (rvalue)     -  **rand_cron**
+  * (rvalue)     -  **simp_version**
+  * (rvalue)     -  **slice_array**
+  * (rvalue)     -  **strip_ports**
+  * (rvalue)     -  **to_integer**
+  * (rvalue)     -  **to_string**
+  * (statement)  -  **inspect**
+  * (statement)  -  **validate_array_member**
+  * (statement)  -  **validate_array_of_hashes**
+  * (statement)  -  **validate_between**
+  * (statement)  -  **validate_bool_simp**
+  * (statement)  -  **validate_deep_hash**
+  * (statement)  -  **validate_float**
+  * (statement)  -  **validate_integer**
+  * (statement)  -  **validate_macaddress**
+  * (statement)  -  **validate_net_list**
+  * (statement)  -  **validate_port**
+  * (statement)  -  **validate_re_array**
+  * (statement)  -  **validate_sysctl_value**
+  * (statement)  -  **validate_umask**
+  * (statement)  -  **validate_uri_list**
+
+### Available Types and Providers
+
+* **ftpusers**
+* **init_ulimit**
+* **prepend_file_line**
+* **reboot_notify**
+* **runlevel**
+* **script_umask**
+* **simp_file_line**
+
+### Available Classes
+
+  * simplib
+    * at
+      * add_user
+    * chkrootkit
+    * cron
+      * add_user
+    * etc_default
+      * nss
+      * useradd
+    * host_conf
+    * issue
+    * incron
+      * add_user
+      * add_system_table
+    * ktune
+    * libuser_conf
+    * localusers
+    * login_defs
+    * modprobe_blacklist
+    * nsswitch
+    * params
+    * prelink
+    * profile_settings
+    * resolv
+    * secure_mountpoints
+    * sudoers
+    * swappiness
+    * sysconfig
+      * init
+    * sysctl
+    * timezone
+    * yum_schedule
 
 ## Limitations
 
