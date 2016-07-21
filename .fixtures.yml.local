@@ -1,0 +1,20 @@
+--- 
+  fixtures: 
+    symlinks: 
+      auditd: "#{source_dir}/../auditd"
+      augeasproviders_core: "#{source_dir}/../augeasproviders_core"
+      augeasproviders_grub: "#{source_dir}/../augeasproviders_grub"
+      augeasproviders_sysctl: "#{source_dir}/../augeasproviders_sysctl"
+      compliance_markup: "#{source_dir}/../compliance_markup"
+      gpasswd: "#{source_dir}/../gpasswd"
+      iptables: "#{source_dir}/../iptables"
+      named: "#{source_dir}/../named"
+      oddjob: "#{source_dir}/../oddjob"
+      pam: "#{source_dir}/../pam"
+      rsync: "#{source_dir}/../rsync"
+      simpcat: "#{source_dir}/../simpcat"
+      simplib: "#{source_dir}"
+      stdlib: "#{source_dir}/../stdlib"
+      sudo: "#{source_dir}/../sudo"
+      sysctl: "#{source_dir}/../sysctl"
+      upstart: "#{source_dir}/../upstart"
