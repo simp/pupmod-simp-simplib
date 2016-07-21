@@ -1,6 +1,6 @@
 {
   "name":    "simp-simplib",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "author":  "simp",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",
@@ -10,7 +10,7 @@
   "tags": [ "simp", "functions", "facts", "types" ],
   "dependencies": [
     {
-      "name": "onyxpoint/compliance_markup",
+      "name": "simp/compliance_markup",
       "version_requirement": ">= 1.0.0"
     }
   ],

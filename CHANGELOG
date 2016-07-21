@@ -1,3 +1,6 @@
+* Fri Jul 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.7-0
+- Fixed the acceptance tests
+
 * Fri Jul 08 2016 Nick Miller <nick.miller@onyxpoint.com> - 1.2.6-0
 - Updated the readme
 - Updated to use the new packaging format
