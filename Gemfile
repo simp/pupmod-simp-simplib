@@ -15,6 +15,7 @@ group :test do
   gem 'puppet', puppetversion
   gem "rspec", '< 3.2.0'
   gem "rspec-puppet"
+  gem "hiera-puppet-helper"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "simp-rspec-puppet-facts", "~> 1.3"
@@ -25,7 +26,7 @@ group :test do
       # simp-rake-helpers and ruby 1.8.7 bomb Travis tests
       # TODO: fix upstream deps (parallel in simp-rake-helpers)
       RUBY_VERSION.sub(/\.\d+$/,'') != '1.8'
-    gem 'simp-rake-helpers', '>= 2.4.1'
+    gem 'simp-rake-helpers'
   end
 end
 
@@ -37,7 +38,6 @@ group :development do
   gem "guard-rake"
   gem 'pry'
   gem 'pry-doc'
-  gem 'puppet-strings'
 
   # `listen` is a dependency of `guard`
   # from `listen` 3.1+, `ruby_dep` requires Ruby version >= 2.2.3, ~> 2.2

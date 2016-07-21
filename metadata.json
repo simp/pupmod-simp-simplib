@@ -10,7 +10,7 @@
   "tags": [ "simp", "functions", "facts", "types" ],
   "dependencies": [
     {
-      "name": "onyxpoint/compliance_markup",
+      "name": "simp/compliance_markup",
       "version_requirement": ">= 1.0.0"
     }
   ],
