@@ -1,28 +1,30 @@
 fixtures:
   repositories:
-    # from common
     auditd:                 'https://github.com/simp/pupmod-simp-auditd'
     augeasproviders_core:
-      repo : 'https://github.com/simp/augeasproviders_core'
-      branch : 'simp-master'
+      repo:   'https://github.com/simp/augeasproviders_core'
+      branch: 'simp-master'
     augeasproviders_grub:
-      repo : 'https://github.com/simp/augeasproviders_grub'
-      branch : 'simp-master'
+      repo:   'https://github.com/simp/augeasproviders_grub'
+      branch: 'simp-master'
     augeasproviders_sysctl:
-      repo : 'https://github.com/simp/augeasproviders_sysctl'
-      branch : 'simp-master'
-    simpcat:                'https://github.com/simp/pupmod-simp-concat'
-    functions:              'https://github.com/simp/pupmod-simp-functions'
-    gpasswd:                'https://github.com/simp/puppet-gpasswd'
+      repo:   'https://github.com/simp/augeasproviders_sysctl'
+      branch: 'simp-master'
+    compliance_markup:      'https://github.com/simp/pupmod-simp-compliance_markup'
+    gpasswd:
+      repo:   'https://github.com/simp/puppet-gpasswd'
+      branch: 'simp-master'
     iptables:               'https://github.com/simp/pupmod-simp-iptables'
     named:                  'https://github.com/simp/pupmod-simp-named'
     oddjob:                 'https://github.com/simp/pupmod-simp-oddjob'
     pam:                    'https://github.com/simp/pupmod-simp-pam'
     rsync:                  'https://github.com/simp/pupmod-simp-rsync'
-    stdlib:                 'https://github.com/simp/puppetlabs-stdlib'
+    simpcat:                'https://github.com/simp/pupmod-simp-simpcat'
+    stdlib:
+      repo:   'https://github.com/simp/puppetlabs-stdlib'
+      branch: 'simp-master'
     sudo:                   'https://github.com/simp/pupmod-simp-sudo'
     sysctl:                 'https://github.com/simp/pupmod-simp-sysctl'
     upstart:                'https://github.com/simp/pupmod-simp-upstart'
-    compliance: "https://github.com/trevor-vaughan/pupmod-compliance"
   symlinks:
     simplib: "#{source_dir}"
