@@ -1,4 +1,6 @@
 # Drop all Requires, Obsoletes, and Provides statements in here
 Requires: pupmod-simp-compliance_markup
-Obsoletes: pupmod-common < 5.0.0
+Provides: pupmod-common >= 4.0.0
+Provides: pupmod-functions >= 3.0.0
+Obsoletes: pupmod-common < 4.0.0
 Obsoletes: pupmod-functions < 3.0.0
