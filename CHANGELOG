@@ -1,3 +1,10 @@
+* Thu Aug 11 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 1.2.8-0
+- Set sysctl `net.ipv4.tcp_challenge_ack_limit` to its maximum value to
+  mitigate CVE-2016-5696, off-path TCP hijack via a blind in-window attack
+  due to improperly rate-limited ACK segments.  Note that this does not
+  fix the vulnerability, it only makes it more difficult for an attacker
+  to exploit it.
+
 * Fri Jul 29 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.2.7-0
 - Fixed the acceptance tests
 
