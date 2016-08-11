@@ -55,6 +55,7 @@ class simplib::sysctl (
   $net__ipv4__conf__default__send_redirects = '0',                # CCE-27001-7
   $net__ipv4__icmp_echo_ignore_broadcasts = '1',                  # CCE-26883-9
   $net__ipv4__icmp_ignore_bogus_error_responses = '1',            # CCE-26993-6
+  $net__ipv4__tcp_challenge_ack_limit = '2147483647',             # CVE-2016-5696 mitigation
   $net__ipv4__tcp_max_syn_backlog = '4096',
   $net__ipv4__tcp_syncookies = '1',                               # CCE-27053-8
   $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) },
