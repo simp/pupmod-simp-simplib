@@ -55,6 +55,7 @@ class simplib::sysctl (
   $net__ipv4__conf__default__send_redirects = '0',                # CCE-27001-7
   $net__ipv4__icmp_echo_ignore_broadcasts = '1',                  # CCE-26883-9
   $net__ipv4__icmp_ignore_bogus_error_responses = '1',            # CCE-26993-6
+  $net__ipv4__tcp_challenge_ack_limit = '2147483647',             # CVE-2016-5696 mitigation
   $net__ipv4__tcp_max_syn_backlog = '4096',
   $net__ipv4__tcp_syncookies = '1',                               # CCE-27053-8
   $enable_ipv6 = defined('$::enable_ipv6') ? { true => $::enable_ipv6, default => hiera('enable_ipv6',true) },
@@ -114,6 +115,7 @@ class simplib::sysctl (
   validate_array_member($net__ipv4__icmp_echo_ignore_broadcasts,['0','1'])
   validate_array_member($net__ipv4__icmp_ignore_bogus_error_responses,['0','1'])
   validate_integer($net__ipv4__tcp_max_syn_backlog)
+  validate_integer($net__ipv4__tcp_challenge_ack_limit)
   validate_array_member($net__ipv4__tcp_syncookies,['0','1'])
   validate_bool($enable_ipv6)
   validate_array_member($net__ipv6__conf__all__accept_redirects,['0','1'])
@@ -180,6 +182,7 @@ class simplib::sysctl (
         'net.ipv4.conf.default.send_redirects':       value => $net__ipv4__conf__default__send_redirects;
         'net.ipv4.icmp_echo_ignore_broadcasts':       value => $net__ipv4__icmp_echo_ignore_broadcasts;
         'net.ipv4.icmp_ignore_bogus_error_responses': value => $net__ipv4__icmp_ignore_bogus_error_responses;
+        'net.ipv4.tcp_challenge_ack_limit':           value => $net__ipv4__tcp_challenge_ack_limit;
         'net.ipv4.tcp_max_syn_backlog':               value => $net__ipv4__tcp_max_syn_backlog;
         'net.ipv4.tcp_syncookies':                    value => $net__ipv4__tcp_syncookies;
       }
