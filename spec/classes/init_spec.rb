@@ -11,13 +11,14 @@ describe 'simplib' do
 
 
       context "on #{os}" do
-        context "with default parameters" do
-          it {
-            is_expected.to compile.with_all_deps
-          }
-          it { is_expected.to create_pam__limits__add('prevent_core') }
-          it { is_expected.to create_pam__limits__add('max_logins') }
-        end
+        it {
+          is_expected.to compile.with_all_deps
+        }
+        it { is_expected.to create_pam__limits__add('prevent_core') }
+        it { is_expected.to create_pam__limits__add('max_logins') }
+        it {
+          is_expected.to create_mount('/proc').with_options('hidepid=2')
+        }
 
         context 'no_core' do
           let(:params){{ :core_dumps => true }}
@@ -82,6 +83,22 @@ describe 'simplib' do
             is_expected.to create_kernel_parameter('fips').that_notifies('Reboot_notify[fips]')
           }
           it { is_expected.to create_reboot_notify('fips') }
+        end
+
+        context 'when not managing /proc' do
+          let(:params){{ :manage_proc => false }}
+
+          it {
+            is_expected.to_not create_mount('/proc')
+          }
+        end
+
+        context 'when allowing the group "seepids" to see process IDs' do
+          let(:params){{ :proc_gid => 'seepids'}}
+
+          it {
+            is_expected.to create_mount('/proc').with_options('hidepid=2,gid=seepids')
+          }
         end
       end
     end

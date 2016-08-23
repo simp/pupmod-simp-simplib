@@ -116,6 +116,11 @@
 # Default: 3
 #   The default runlevel to which the system should be set.
 #
+# [*manage_proc*]
+# Type: Boolean
+# Default: true
+#   If set, manage the /proc mount on the system
+#
 # [*proc_hidepid*]
 # Type: 0|1|2*
 # Default: 2
@@ -130,8 +135,13 @@
 #   with hidepid=1), but also the other process IDs are hidden for
 #   them in /proc!
 #
-#   If you undefine this option, then this class will not manage
-#   /proc.
+#   This option has no effect if ``$manage_proc`` is not ``true``
+#
+# [*proc_gid*]
+# Type: String
+# Default: ''
+#   If set, this group will be able to see all processes on the system
+#   regardless of the ``$proc_hidepid`` setting.
 #
 # == Authors
 #   * Trevor Vaughan <tvaughan@onyxpoint.com>
@@ -168,7 +178,9 @@ class simplib (
   # enabled...
   $use_fips_aesni = $::cpuinfo and member($::cpuinfo['processor0']['flags'],'aes'),
   $runlevel = '3',
-  $proc_hidepid = '2'
+  $manage_proc = true,
+  $proc_hidepid = '2',
+  $proc_gid = ''
 ){
   validate_umask($user_umask)
   validate_umask($daemon_umask)
@@ -184,7 +196,9 @@ class simplib (
   validate_bool($manage_root_perms)
   validate_bool($use_fips)
   validate_bool($use_fips_aesni)
+  validate_bool($manage_proc)
   validate_array_member($proc_hidepid,['0','1','2'])
+  validate_string($proc_gid)
 
   compliance_map()
 
@@ -370,14 +384,21 @@ class simplib (
     mode   => '0640'
   }
 
-  if ($proc_hidepid) {
+  if $manage_proc {
+    if !empty($proc_gid) {
+      $proc_options = "hidepid=${proc_hidepid},gid=${proc_gid}"
+    }
+    else {
+      $proc_options = "hidepid=${proc_hidepid}"
+    }
+
     mount { '/proc':
       ensure   => 'mounted',
       atboot   => true,
       device   => 'proc',
       fstype   => 'proc',
       remounts => true,
-      options  => "hidepid=${proc_hidepid}"
+      options  => $proc_options
     }
   }
 
