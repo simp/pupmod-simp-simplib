@@ -72,7 +72,6 @@ class simplib::sysctl (
   $net__ipv6__conf__default__max_addresses = '1',                 # SSG network_ipv6_limit_requests (No CCEs available at this time)
   $net__ipv6__conf__default__router_solicitations = '0'           # SSG network_ipv6_limit_requests (No CCEs available at this time)
 ) {
-  include 'sysctl'
 
   validate_integer($net__netfilter__nf_conntrack_max)
   validate_integer($net__unix__max_dgram_qlen)
@@ -136,8 +135,7 @@ class simplib::sysctl (
   case $::operatingsystem {
     'RedHat','CentOS': {
       # Performance Related Settings
-      sysctl::value {
-        'net.netfilter.nf_conntrack_max': value => $net__netfilter__nf_conntrack_max;
+      sysctl {
         'net.unix.max_dgram_qlen': value => $net__unix__max_dgram_qlen;
         'net.ipv4.neigh.default.gc_thresh3': value => $net__ipv4__neigh__default__gc_thresh3;
         'net.ipv4.neigh.default.gc_thresh2': value => $net__ipv4__neigh__default__gc_thresh2;
@@ -159,8 +157,14 @@ class simplib::sysctl (
         'net.ipv4.tcp_tw_reuse': value => $net__ipv4__tcp_tw_reuse
       }
 
+      # This may not exist until additional packages are present
+      sysctl { 'net.netfilter.nf_conntrack_max':
+        value  => $net__netfilter__nf_conntrack_max,
+        silent => true
+      }
+
       # Security Related Settings
-      sysctl::value {
+      sysctl {
         'fs.suid_dumpable':                           value => $fs__suid_dumpable;
         'kernel.core_pattern':                        value => $kernel__core_pattern;
         'kernel.core_uses_pid':                       value => $kernel__core_uses_pid;
@@ -188,13 +192,13 @@ class simplib::sysctl (
       }
 
       if ( $::operatingsystem in ['RedHat','CentOS'] ) and ( $::operatingsystemmajrelease == '6' ) {
-            sysctl::value { 'kernel.exec-shield': value => $kernel__exec_shield; }
+            sysctl { 'kernel.exec-shield': value => $kernel__exec_shield; }
       }
 
       if $enable_ipv6 {
-        sysctl::value { 'net.ipv6.conf.all.disable_ipv6': value => '0'; }
+        sysctl { 'net.ipv6.conf.all.disable_ipv6': value => '0'; }
           ->
-        sysctl::value {
+        sysctl {
           'net.ipv6.conf.all.accept_redirects':         value => $net__ipv6__conf__all__accept_redirects;
           'net.ipv6.conf.all.autoconf':                 value => $net__ipv6__conf__all__autoconf;
           'net.ipv6.conf.all.forwarding':               value => $net__ipv6__conf__all__forwarding;
@@ -211,7 +215,7 @@ class simplib::sysctl (
       }
       else {
         if $::ipv6_enabled {
-          sysctl::value { 'net.ipv6.conf.all.disable_ipv6': value => '1'; }
+          sysctl { 'net.ipv6.conf.all.disable_ipv6': value => '1'; }
         }
       }
 

@@ -13,7 +13,12 @@ describe 'simplib::sysctl' do
       end
 
       context "with enable_ipv6 = true" do
-        it { is_expected.to create_sysctl__value('net.ipv6.conf.all.disable_ipv6').with(:value => '0') }
+        let(:facts) do
+          facts[:enable_ipv6] = true
+          facts
+        end
+
+        it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => '0') }
       end
 
       context "with enable_ipv6 = false and ipv6_enabled = true" do
@@ -21,7 +26,7 @@ describe 'simplib::sysctl' do
         new_facts[:ipv6_enabled] = true
         let(:facts) { new_facts }
         let(:params) {{ :enable_ipv6 => false }}
-        it { is_expected.to create_sysctl__value('net.ipv6.conf.all.disable_ipv6').with(:value => '1') }
+        it { is_expected.to create_sysctl('net.ipv6.conf.all.disable_ipv6').with(:value => '1') }
       end
 
       context "kernel__core_pattern with absolute path" do

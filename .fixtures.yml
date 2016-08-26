@@ -1,6 +1,7 @@
 fixtures:
   repositories:
-    auditd:                 'https://github.com/simp/pupmod-simp-auditd'
+    auditd:
+      repo: 'https://github.com/simp/pupmod-simp-auditd'
     augeasproviders_core:
       repo:   'https://github.com/simp/augeasproviders_core'
       branch: 'simp-master'
@@ -10,21 +11,29 @@ fixtures:
     augeasproviders_sysctl:
       repo:   'https://github.com/simp/augeasproviders_sysctl'
       branch: 'simp-master'
-    compliance_markup:      'https://github.com/simp/pupmod-simp-compliance_markup'
+    compliance_markup:
+      repo: 'https://github.com/simp/pupmod-simp-compliance_markup'
     gpasswd:
       repo:   'https://github.com/simp/puppet-gpasswd'
       branch: 'simp-master'
-    iptables:               'https://github.com/simp/pupmod-simp-iptables'
-    named:                  'https://github.com/simp/pupmod-simp-named'
-    oddjob:                 'https://github.com/simp/pupmod-simp-oddjob'
-    pam:                    'https://github.com/simp/pupmod-simp-pam'
-    rsync:                  'https://github.com/simp/pupmod-simp-rsync'
-    simpcat:                'https://github.com/simp/pupmod-simp-simpcat'
+    iptables:
+      repo: 'https://github.com/simp/pupmod-simp-iptables'
+    named:
+      repo: 'https://github.com/simp/pupmod-simp-named'
+    oddjob:
+      repo: 'https://github.com/simp/pupmod-simp-oddjob'
+    pam:
+      repo: 'https://github.com/simp/pupmod-simp-pam'
+    rsync:
+      repo: 'https://github.com/simp/pupmod-simp-rsync'
+    simpcat:
+      repo: 'https://github.com/simp/pupmod-simp-simpcat'
     stdlib:
       repo:   'https://github.com/simp/puppetlabs-stdlib'
       branch: 'simp-master'
-    sudo:                   'https://github.com/simp/pupmod-simp-sudo'
-    sysctl:                 'https://github.com/simp/pupmod-simp-sysctl'
-    upstart:                'https://github.com/simp/pupmod-simp-upstart'
+    sudo:
+      repo: 'https://github.com/simp/pupmod-simp-sudo'
+    upstart:
+      repo: 'https://github.com/simp/pupmod-simp-upstart'
   symlinks:
     simplib: "#{source_dir}"
