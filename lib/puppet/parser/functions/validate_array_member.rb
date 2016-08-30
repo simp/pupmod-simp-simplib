@@ -2,16 +2,16 @@ module Puppet::Parser::Functions
 
   newfunction(:validate_array_member, :doc => <<-'ENDHEREDOC') do |args|
     Validate that the first string (or array) passed is a member of the second
-    array passed. An optional third argument can be passed that has the following
-    properties when set.
-
-      'i' => Ignore Case
-
+    array passed. An optional third argument of i can be passed, which ignores
+    the case of the objects inside the array. 
 
     Examples:
-      validate_array_member('foo',['foo','bar']) => true
-      validate_array_member('foo',['FOO','BAR']) => false
-      validate_array_member('foo',['FOO','BAR'],'i') => true
+      validate_array_member('foo',['foo','bar'])     # => true
+      validate_array_member('foo',['FOO','BAR'])     # => false
+
+      #Optional 'i' as third object, ignoring case of FOO and BAR#
+
+      validate_array_member('foo',['FOO','BAR'],'i') # => true
 
     ENDHEREDOC
 
