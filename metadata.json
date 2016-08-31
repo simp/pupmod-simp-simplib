@@ -10,8 +10,40 @@
   "tags": [ "simp", "functions", "facts", "types" ],
   "dependencies": [
     {
+      "name": "herculesteam/augeasproviders_core",
+      "version_requirement": ">= 2.1.1"
+    },
+    {
+      "name": "herculesteam/augeasproviders_grub",
+      "version_requirement": ">= 2.3.1"
+    },
+    {
+      "name": "herculesteam/augeasproviders_sysctl",
+      "version_requirement": ">= 2.1.0"
+    },
+    {
+      "name": "onyxpoint/gpasswd",
+      "version_requirement": ">= 1.0.0"
+    },
+    {
       "name": "simp/compliance_markup",
       "version_requirement": ">= 1.0.0"
+    },
+    {
+      "name": "simp/pam",
+      "version_requirement": ">= 4.2.5"
+    },
+    {
+      "name": "simp/simpcat",
+      "version_requirement": ">= 5.0.1"
+    },
+    {
+      "name": "simp/sudo",
+      "version_requirement": ">= 4.1.2"
+    },
+    {
+      "name": "simp/upstart",
+      "version_requirement": ">= 4.1.2"
     }
   ],
   "operatingsystem_support": [
