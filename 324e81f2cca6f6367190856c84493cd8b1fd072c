@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_917158ab",
+        "filename": "README.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-08-31T23:00:20Z",
+      "side": 1,
+      "message": "\"Available\" can be assumed if they are documented here.",
+      "range": {
+        "startLine": 19,
+        "startChar": 7,
+        "endLine": 19,
+        "endChar": 16
+      },
+      "revId": "324e81f2cca6f6367190856c84493cd8b1fd072c",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_1147884c",
         "filename": "README.md",
         "patchSetId": 5
