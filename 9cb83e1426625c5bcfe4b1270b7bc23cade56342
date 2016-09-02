@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0b199022",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "These should be \u0027String\u0027, \u0027Array\u0027, \u0027Hash\u0027 or something. \u0027rvalue\u0027 isn\u0027t very useful.",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_abd62425",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "Reformat this so that it looks nice (may need it in the code too, not sure).",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8bdb604f",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "What is \u0027hosts\u0027? The text above is OK, but need an actual example here or at least Array of Host Strings, or something.",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4be67817",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "Wat?",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_cb160858",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "This is probably what\u0027s in the code (thanks Kendall), but we should change this to something that might not offend anyone. DE:AD:BE:EF is usually OK.",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6b15bc47",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "Why is this a bulleted list?",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4b0b182c",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "To code block, or not to code block, that is the question!",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6e0caa3b",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 699,
+      "author": {
+        "id": 1004834
+      },
+      "writtenOn": "2016-09-02T13:11:25Z",
+      "side": 1,
+      "message": "We probably want to either include the docs for these here (ew, no) or indicate that people should reference the code headers in the appropriate files for full details.",
+      "revId": "9cb83e1426625c5bcfe4b1270b7bc23cade56342",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
