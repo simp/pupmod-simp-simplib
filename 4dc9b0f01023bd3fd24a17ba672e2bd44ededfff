@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_18c9dd25",
+        "filename": "manifests/swappiness.pp",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1005143
+      },
+      "writtenOn": "2016-09-05T20:42:36Z",
+      "side": 1,
+      "message": "QUESTION: Under this condition, *should* we set\n\n  file{\u0027/usr/local/sbin/dynamic_swappiness.rb\u0027: ensure \u003d\u003e absent }\n\nIf we should *not* remove the file, I suggest we move it out of the conditional to make our intentions explicit.",
+      "revId": "4dc9b0f01023bd3fd24a17ba672e2bd44ededfff",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
