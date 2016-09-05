@@ -7,7 +7,7 @@
 # minute steps are supported per crontab(5).
 #
 # An absolute value setting will always override the cron job.
-class simplib::swappiness (
+class simplib::swappiness(
 # _Variables_
 #
 # $cron_step:
@@ -55,14 +55,18 @@ class simplib::swappiness (
 
   if !is_integer($absolute_swappiness) { validate_bool($absolute_swappiness) }
 
-  if ! $absolute_swappiness {
+    # NOTE: This script is handy for keeping things alive in environments where
+    #       memory availability can fluctuate quite low.  You should read it!
     file { '/usr/local/sbin/dynamic_swappiness.rb':
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
       content => template('simplib/dynamic_swappiness.erb')
     }
+  if ! $absolute_swappiness {
 
+    # NOTE: One reason cron runs this is because in extreme cases, the Puppet
+    #       agent won't be able to run until the swappiness is adjusted.
     cron { 'dynamic_swappiness':
       user    => 'root',
       minute  => "*/${cron_step}",
@@ -71,15 +75,12 @@ class simplib::swappiness (
     }
   }
   else {
-    include 'sysctl'
-
-    sysctl::value { 'vm.swappiness':
-      value => inline_template('<%= @absolute_swappiness.to_i %>')
+    sysctl { 'vm.swappiness':
+      value  => inline_template('<%= @absolute_swappiness.to_i %>')
     }
 
     cron { 'dynamic_swappiness':
       ensure => absent
     }
-
   }
 }
