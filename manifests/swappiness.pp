@@ -7,7 +7,7 @@
 # minute steps are supported per crontab(5).
 #
 # An absolute value setting will always override the cron job.
-class simplib::swappiness (
+class simplib::swappiness(
 # _Variables_
 #
 # $cron_step:
@@ -73,13 +73,13 @@ class simplib::swappiness (
   else {
     include 'sysctl'
 
-    sysctl::value { 'vm.swappiness':
-      value => inline_template('<%= @absolute_swappiness.to_i %>')
+    sysctl { 'vm.swappiness':
+      ensure => present,
+      value  => inline_template('<%= @absolute_swappiness.to_i %>')
     }
 
     cron { 'dynamic_swappiness':
       ensure => absent
     }
-
   }
 }
