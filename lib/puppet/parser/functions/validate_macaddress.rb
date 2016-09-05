@@ -4,7 +4,7 @@ module Puppet::Parser::Functions
     Validate that all passed values are valid MAC addresses.
 
     The following values will pass:
-      $macaddress = 'CA:FE:BA:BE:00:11'
+      $macaddress = 'CA:FE:BE:EF:00:11'
       validate_macaddress($macaddress)
       validate_macaddress($macaddress, '00:11:22:33:44:55')
       validate_macaddress([$macaddress, '00:11:22:33:44:55'])
