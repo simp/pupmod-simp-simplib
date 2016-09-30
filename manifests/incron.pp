@@ -7,7 +7,7 @@ class simplib::incron {
 
   simplib::incron::add_user { 'root': }
 
-  concat_build { 'incron':
+  simpcat_build { 'incron':
     order            => ['*.user'],
     clean_whitespace => 'leading',
     target           => '/etc/incron.allow'
