@@ -8,8 +8,8 @@ describe 'simplib::cron' do
       describe 'with default parameters' do
         it { is_expected.to compile.with_all_deps }
 
-        it { is_expected.to create_concat_build('cron').with_target('/etc/cron.allow') }
-        it { is_expected.to create_file('/etc/cron.allow').that_subscribes_to('Concat_build[cron]') }
+        it { is_expected.to create_simpcat_build('cron').with_target('/etc/cron.allow') }
+        it { is_expected.to create_file('/etc/cron.allow').that_subscribes_to('Simpcat_build[cron]') }
         it { is_expected.to create_file('/etc/cron.deny').with_ensure('absent') }
         it { is_expected.to create_rsync('cron') }
 

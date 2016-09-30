@@ -1,8 +1,4 @@
 # Drop all Requires, Obsoletes, and Provides statements in here
-Obsoletes: pupmod-common < 4.0.0
-Obsoletes: pupmod-functions < 3.0.0
-Provides: pupmod-common >= 4.0.0
-Provides: pupmod-functions >= 3.0.0
 Requires: pupmod-herculesteam-augeasproviders_core < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_core >= 2.1.1-0
 Requires: pupmod-herculesteam-augeasproviders_grub < 3.0.0-0
@@ -13,11 +9,11 @@ Requires: pupmod-onyxpoint-gpasswd < 2.0.0-0
 Requires: pupmod-onyxpoint-gpasswd >= 1.0.0-0
 Requires: pupmod-simp-compliance_markup < 2.0.0-0
 Requires: pupmod-simp-compliance_markup >= 1.0.1-0
-Requires: pupmod-simp-pam < 5.0.0-0
-Requires: pupmod-simp-pam >= 4.2.5-0
-Requires: pupmod-simp-simpcat < 6.0.0-0
-Requires: pupmod-simp-simpcat >= 5.0.1-0
-Requires: pupmod-simp-sudo < 5.0.0-0
-Requires: pupmod-simp-sudo >= 4.1.2-0
+Requires: pupmod-simp-pam < 6.0.0-0
+Requires: pupmod-simp-pam >= 5.0.0-0
+Requires: pupmod-simp-simpcat < 7.0.0-0
+Requires: pupmod-simp-simpcat >= 6.0.0-0
+Requires: pupmod-simp-sudo < 6.0.0-0
+Requires: pupmod-simp-sudo >= 5.0.0-0
 Requires: pupmod-simp-upstart < 5.0.0-0
 Requires: pupmod-simp-upstart >= 4.1.2-0

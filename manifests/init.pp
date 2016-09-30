@@ -449,6 +449,6 @@ class simplib (
     ensure => 'directory',
     mode   => '0750',
     owner  => 'root',
-    group  => 'puppet'
+    group  => 'root'
   }
 }

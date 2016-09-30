@@ -7,7 +7,7 @@ class simplib::at {
 
   simplib::at::add_user{ 'root': }
 
-  concat_build { 'at':
+  simpcat_build { 'at':
     order            => ['*.user'],
     clean_whitespace => 'leading',
     target           => '/etc/at.allow'
@@ -18,7 +18,7 @@ class simplib::at {
     owner     => 'root',
     group     => 'root',
     mode      => '0600',
-    subscribe => Concat_build['at'],
+    subscribe => Simpcat_build['at'],
     audit     => 'content'
   }
 
