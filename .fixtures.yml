@@ -18,14 +18,20 @@ fixtures:
       branch: 'simp-master'
     iptables:
       repo: 'https://github.com/simp/pupmod-simp-iptables'
+    logrotate:
+      repo: 'https://github.com/simp/pupmod-simp-logrotate'
     named:
       repo: 'https://github.com/simp/pupmod-simp-named'
     oddjob:
       repo: 'https://github.com/simp/pupmod-simp-oddjob'
     pam:
       repo: 'https://github.com/simp/pupmod-simp-pam'
+    pki:
+      repo: 'https://github.com/simp/pupmod-simp-pki'
     rsync:
       repo: 'https://github.com/simp/pupmod-simp-rsync'
+    rsyslog:
+      repo: 'https://github.com/simp/pupmod-simp-rsyslog'
     simpcat:
       repo: 'https://github.com/simp/pupmod-simp-simpcat'
     stdlib:

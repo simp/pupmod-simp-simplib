@@ -71,7 +71,6 @@ documentation.
   * **fullrun**              -  Determine whether or not to do an intensive run
   * **gdm_version**          -  Return the version of GDM that is installed
   * **grub_version**         -  Return the grub version installed on the system
-  * **has_clustering**       -  Return true if the clvmd is running
   * **init_systems**         -  Return a list of all init systems present on
    the system
   * **ipv6_enabled**         -  Return true if IPv6 is enabled and false if not

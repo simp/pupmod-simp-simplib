@@ -11,7 +11,7 @@ define simplib::cron::add_user
 
   $l_name = regsubst($name,'/','__')
 
-  concat_fragment { "cron+${l_name}.user":
+  simpcat_fragment { "cron+${l_name}.user":
     content =>  "${name}\n"
   }
 
