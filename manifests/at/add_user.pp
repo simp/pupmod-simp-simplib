@@ -11,7 +11,7 @@ define simplib::at::add_user
 
   $l_name = regsubst($name,'/','__')
 
-  concat_fragment { "at+${l_name}.user":
+  simpcat_fragment { "at+${l_name}.user":
     content =>  "#${name}\n"
   }
 }

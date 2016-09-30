@@ -1,3 +1,10 @@
+* Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Updated to use the version of 'simpcat' that does not conflict with
+  'puppetlabs/concat'.
+- Removed the 'has_clustering' fact since it is no longer used in SIMP
+- Added a 'puppet_settings' fact that will provide a hash of *all* puppet
+  settings on the client system.
+
 * Tue Oct 11 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 1.3.3-0
 - Prior to this `named::resolv` made reference to `Service['named']`,
   causing errors in cases where the named servce was not called "named."
