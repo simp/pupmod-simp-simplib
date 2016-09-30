@@ -10,7 +10,7 @@ define simplib::incron::add_user
 {
   include 'simplib::incron'
 
-  concat_fragment { "incron+${name}.user":
+  simpcat_fragment { "incron+${name}.user":
     content =>  "${name}\n"
   }
 }
