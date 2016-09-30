@@ -49,7 +49,7 @@ class simplib::cron (
 
   simplib::cron::add_user{ 'root': }
 
-  concat_build { 'cron':
+  simpcat_build { 'cron':
     order            => ['*.user'],
     clean_whitespace => 'leading',
     target           => '/etc/cron.allow'
@@ -61,7 +61,7 @@ class simplib::cron (
     group     => 'root',
     mode      => '0600',
     audit     => 'content',
-    subscribe => Concat_build['cron']
+    subscribe => Simpcat_build['cron']
   }
 
   file { '/etc/cron.deny':
