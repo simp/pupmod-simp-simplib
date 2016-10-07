@@ -97,14 +97,14 @@ class simplib::resolv (
         $l_forwarders = inline_template('<%= @nameservers[1..-1].join(" ") %>')
         named::caching::forwarders { $l_forwarders: }
 
-        File['/etc/resolv.conf'] -> Service['named']
+        File['/etc/resolv.conf'] -> Class['named::service']
       }
     }
     else {
       if $l_is_named_server {
         include 'named'
 
-        File['/etc/resolv.conf'] -> Service['named']
+        File['/etc/resolv.conf'] -> Class['named::service']
       }
     }
   }
