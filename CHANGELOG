@@ -1,3 +1,9 @@
+* Tue Oct 11 2016 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 1.3.3-0
+- Prior to this `named::resolv` made reference to `Service['named']`,
+  causing errors in cases where the named servce was not called "named."
+  This commit changes the reference to `Class['named']` to abstract out
+  the service name and any other potential starup quirks.
+
 * Thu Aug 25 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 1.3.1-0
 - Update to provide the option to pass the 'gid' option to the /proc mount so
   that a specific group can be allowed to see the full process tree.
