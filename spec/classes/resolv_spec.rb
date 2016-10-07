@@ -20,7 +20,9 @@ describe 'simplib::resolv' do
         it { is_expected.not_to contain_named__caching }
         it { is_expected.to contain_simp_file_line('resolv_peerdns') }
         it { is_expected.to contain_file('/etc/resolv.conf') }
-        it { is_expected.not_to contain_file('/etc/resolv.conf').that_comes_before('Service[named]') }
+        it { is_expected.to contain_file('/etc/resolv.conf') }
+        it { is_expected.not_to contain_class('named') }
+        it { is_expected.not_to contain_class('named::caching') }
 
         context 'node_is_nameserver' do
           let(:facts){facts.merge({:ipaddress => '10.0.2.15'})}
@@ -32,8 +34,7 @@ describe 'simplib::resolv' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to contain_named__caching }
           it { is_expected.to contain_named }
-          # I think rspec-puppet is broken...
-          # it { should contain_file('/etc/resolv.conf').that_comes_before('Service[bind]') }
+          it { is_expected.to contain_file('/etc/resolv.conf').that_comes_before('Class[named::service]') }
         end
 
         context 'node_is_nameserver_with_selinux' do
@@ -51,8 +52,7 @@ describe 'simplib::resolv' do
           it { is_expected.to compile.with_all_deps }
           it { is_expected.not_to contain_named__caching }
           it { is_expected.to contain_named }
-          # I think rspec-puppet is broken...
-          # it { should contain_file('/etc/resolv.conf').that_comes_before('Service[bind-chroot]') }
+          it { is_expected.to contain_file('/etc/resolv.conf').that_comes_before('Class[named::service]') }
         end
 
         context 'node_with_named_autoconf_and_caching' do
