@@ -41,7 +41,7 @@
 #
 # [*hosts*]
 # Type: Array
-# Default: ['files','dns']
+# Default: $::simplib::params::nsswitch_hosts
 #
 # [*bootparams*]
 # Type: Array
@@ -91,7 +91,7 @@ class simplib::nsswitch (
   $shadow =  ['files'],
   $group =  ['files'],
   $initgroups =  [],
-  $hosts =  ['files','dns'],
+  $hosts =  $::simplib::params::nsswitch_hosts,
   $bootparams =  ['nisplus [NOTFOUND=return]','files'],
   $ethers =  ['files'],
   $netmasks =  ['files'],

@@ -2,6 +2,10 @@
 - Fix errors when validate_net_list uses regex strings and
   is validating IPv6.
 
+* Thu Oct 13 2016 Nick Markowski <nmarkowski@keywcorp.com> - 2.0.0-0
+- EL 7 machines now default nsswitch hosts to 'files','myhostname','dns'
+  in an attempt to mitigate https://bugs.centos.org/view.php?id=10635
+
 * Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Updated to use the version of 'simpcat' that does not conflict with
   'puppetlabs/concat'.
