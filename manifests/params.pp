@@ -30,6 +30,13 @@ class simplib::params {
       $install_tmpwatch = false
     }
 
+    if versioncmp($::operatingsystemmajrelease,'6') > 0 {
+      $nsswitch_hosts = ['files','myhostname','dns']
+    }
+    else {
+      $nsswitch_hosts = ['files','dns']
+    }
+
   }
   else {
     fail("${::operatingsystem} not yet supported by ${module_name}")
