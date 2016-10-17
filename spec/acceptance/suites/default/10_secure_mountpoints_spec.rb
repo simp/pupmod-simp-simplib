@@ -3,6 +3,21 @@ require 'spec_helper_acceptance'
 test_name 'Secure Mountpoints'
 
 describe 'simplib::secure_mountpoints class' do
+  # On CentOS6, secure_mountpoints
+  # includes 'upstart' class,
+  #  which uses the auditd::add_rules resource
+  #    which includes 'auditd' class
+  #      which  by default enables auditing ($enable_auditing) and syslog logging
+  #      ($to_syslog) and thus includes auditd::config::logging
+  #        which includes auditd::config::audidisp::syslog
+  #          which by default ($drop_audit_logs = true) uses rsyslog::rule::drop resource
+  #            which includes rsyslog
+  #              which by default enables (pki $enable_pki)
+  #                which requires pki setup
+  let(:hieradata) {{
+    'auditd::enable_auditing' => false
+  }}
+
   let(:manifest) {
     <<-EOS
       class { 'simplib::secure_mountpoints': }
@@ -16,6 +31,7 @@ describe 'simplib::secure_mountpoints class' do
   hosts.each do |host|
     context 'default parameters' do
       it 'should work with no errors' do
+        set_hieradata_on(host, hieradata)
         apply_manifest_on(host, manifest, :catch_failures => true)
 
         # Unfortunately...it has to run twice because /dev/shm has a relatime
