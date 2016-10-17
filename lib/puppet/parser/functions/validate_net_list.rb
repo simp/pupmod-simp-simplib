@@ -15,8 +15,8 @@ module Puppet::Parser::Functions
       $client_nets = '10.10.10.0/24'
       validate_net_list($client_nets)
 
-      $client_nets = ['10.10.10.0/24','1.2.3.4','any','ALL']
-      validate_net_list($client_nets,'^(any|ALL)$')
+      $client_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
+      validate_net_list($client_nets,'^(%any|ALL)$')
 
     The following values will fail:
 
@@ -41,7 +41,7 @@ module Puppet::Parser::Functions
     str_match = args.shift
 
     if str_match
-      str_match = Regexp.new(Regexp.escape(str_match))
+      str_match = Regexp.new(str_match)
       net_list.delete_if{|x| str_match.match(x)}
     end
 
@@ -52,21 +52,29 @@ module Puppet::Parser::Functions
     Puppet::Parser::Functions.autoloader.loadall
 
     net_list.each do |net|
+      # Do we have a port?
+      host,port = PuppetX::SIMP::Simplib.split_port(net)
+      function_validate_port(Array(port)) if (port && !port.empty?)
+
+      # Valid quad-dotted IPv4 addresses will validate as hostnames.
+      # So check for IP addresses first
       begin
-        # Do we have a port?
-        host,port = PuppetX::SIMP::Simplib.split_port(net)
-        function_validate_port(Array(port)) if (port && !port.empty?)
-
-        # Just skip it if it's a hostname.
-        next if PuppetX::SIMP::Simplib.hostname?(host)
-
         ip = IPAddr.new(host)
-        unless (ip.ipv4? || ip.ipv6?)
-         # This is just here to re-use the rescue below.
-         raise ArgumentError
+      # For some reason, can't see derived error class (IPAddr::Error)
+      # when run by Puppet
+      rescue ArgumentError => e
+        # if looks like quad-dotted set of decimal numbers, most likely
+        # it is not an oddly-named host, but a bad IPv4 address in which
+        # one or more of the octets is out of range (configuration
+        # fat-finger....)
+        if host.match(/^([0-9]+)(\.[0-9]+){3}$/)
+          raise Puppet::ParseError,("validate_net_list(): '#{net}' is not a valid network.")
         end
-      rescue ArgumentError
-        raise Puppet::ParseError,("validate_net_list(): '#{net}' is not a valid network.")
+
+        # assume OK if this looks like hostname
+        unless PuppetX::SIMP::Simplib.hostname_only?(host)
+          raise Puppet::ParseError,("validate_net_list(): '#{net}' is not a valid network.")
+        end
       end
     end
   end
