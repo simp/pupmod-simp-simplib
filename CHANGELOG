@@ -1,3 +1,7 @@
+* Fri Oct 14 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
+- Fix errors when validate_net_list uses regex strings and
+  is validating IPv6.
+
 * Wed Oct 12 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
 - Updated to use the version of 'simpcat' that does not conflict with
   'puppetlabs/concat'.
