@@ -29,6 +29,12 @@ class simplib::params {
     else{
       $install_tmpwatch = false
     }
+    if versioncmp($::operatingsystemmajrelease,'6') > 0 {
+      $nsswitch_hosts = ['files','myhostname','dns']
+    }
+    else {
+      $nsswitch_hosts = ['files','dns']
+    }
 
   }
   else {
