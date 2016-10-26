@@ -50,11 +50,11 @@ nonroot = <%= @shadow_nonroot %>
 
 [ldap]
 <% if @defaults_create_modules.include?('ldap') and !@defaults_modules.include?('ldap') then -%>
-<%   if !@ldap_userBranch.empty? then -%>
-userBranch = <%= @ldap_userBranch %>
+<%   if !@ldap_user_branch.empty? then -%>
+userBranch = <%= @ldap_user_branch %>
 <%   end -%>
-<%   if !@ldap_groupBranch.empty? then -%>
-groupBranch = <%= @ldap_groupBranch %>
+<%   if !@ldap_group_branch.empty? then -%>
+groupBranch = <%= @ldap_group_branch %>
 <%   end -%>
 <%   if !@ldap_server.empty? then -%>
 server = <%= @ldap_server %>
