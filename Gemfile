@@ -31,7 +31,7 @@ group :test do
 end
 
 group :development do
-  gem "travis"
+#  gem "travis"
   gem "travis-lint"
   gem "travish"
   gem "puppet-blacksmith"
