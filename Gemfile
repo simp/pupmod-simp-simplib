@@ -14,7 +14,12 @@ group :test do
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "simp-rspec-puppet-facts", ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 1.3')
-  gem 'simp-rake-helpers', ENV.fetch('SIMP_RAKE_HELPERS_VERSION', '~> 2.5')
+
+  if ENV['SIMP_RAKE_HELPERS_VERSION']
+    gem 'simp-rake-helpers', ENV['SIMP_RAKE_HELPERS_VERSION']
+  else
+    gem 'simp-rake-helpers', '>= 2.5', '< 4.0'
+  end
 end
 
 group :development do
