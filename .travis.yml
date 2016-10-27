@@ -7,7 +7,7 @@ before_script:
 bundler_args: --without development system_tests
 before_install: rm Gemfile.lock || true
 script:
-  - bundle exec rake test
+  - bundle exec rake syntax lint spec metadata
 notifications:
   email: false
 rvm:
