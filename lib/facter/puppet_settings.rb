@@ -36,8 +36,9 @@ Facter.add(:puppet_settings) do
 
         next if (!Puppet[key] || (Puppet[key].respond_to?(:empty?) && Puppet[key].empty?))
 
-        retval[params.section] ||= {}
-        retval[params.section][params.name] = Puppet[key]
+        # For older versions of Facter, no hash keys/values can be symbols
+        retval[params.section.to_s] ||= {}
+        retval[params.section.to_s][params.name.to_s] = Puppet[key].to_s
       end
     end
 
