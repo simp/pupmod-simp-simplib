@@ -7,8 +7,8 @@ Requires: pupmod-herculesteam-augeasproviders_sysctl < 3.0.0-0
 Requires: pupmod-herculesteam-augeasproviders_sysctl >= 2.1.0-0
 Requires: pupmod-onyxpoint-gpasswd < 2.0.0-0
 Requires: pupmod-onyxpoint-gpasswd >= 1.0.0-0
-Requires: pupmod-simp-compliance_markup < 2.0.0-0
-Requires: pupmod-simp-compliance_markup >= 1.0.1-0
+Requires: pupmod-simp-compliance_markup < 3.0.0-0
+Requires: pupmod-simp-compliance_markup >= 2.0.0-0
 Requires: pupmod-simp-pam < 6.0.0-0
 Requires: pupmod-simp-pam >= 5.0.0-0
 Requires: pupmod-simp-simpcat < 7.0.0-0
