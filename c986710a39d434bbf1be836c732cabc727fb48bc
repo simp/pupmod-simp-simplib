@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_0559945b",
+        "filename": "CHANGELOG",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1005194
+      },
+      "writtenOn": "2016-11-04T17:31:12Z",
+      "side": 1,
+      "message": "does not match metadata.",
+      "range": {
+        "startLine": 1,
+        "startChar": 62,
+        "endLine": 1,
+        "endChar": 63
+      },
+      "revId": "c986710a39d434bbf1be836c732cabc727fb48bc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
