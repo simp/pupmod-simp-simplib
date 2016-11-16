@@ -1,3 +1,6 @@
+* Wed Nov 16 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.0.0-0
+- Rewrite the ``puppet_settings`` fact to fix several issues
+
 * Fri Oct 14 2016 Liz Nemsick <lnemsick.simp@gmail.com> - 2.0.0-0
 - Fix errors when validate_net_list uses regex strings and
   is validating IPv6.
