@@ -178,7 +178,7 @@ Returns: `array`
 #### **bracketize**
 
 Add brackets to IP addresses and arrays of IP addresses based on the
-rules for bracketing IPv6 addresses. Ignore anything that doesn't 
+rules for bracketing IPv6 addresses. Ignore anything that doesn't
 look like an IPv6 address.
 
 Returns: `string` or `array`
@@ -491,7 +491,7 @@ Returns: `boolean`
 
 Validate that the first string (or array) passed is a member of the second
 array passed. An optional third argument of i can be passed, which ignores
-the case of the objects inside the array. 
+the case of the objects inside the array.
 
 Examples:
 

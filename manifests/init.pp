@@ -200,7 +200,6 @@ class simplib (
   validate_array_member($proc_hidepid,['0','1','2'])
   validate_string($proc_gid)
 
-  compliance_map()
 
   runlevel { $runlevel: }
 
