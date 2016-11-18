@@ -39,7 +39,6 @@ LU_GIDNUMBER = %u',
   validate_array($defaults_modules)
   validate_array_member($defaults_modules,['files','shadow','ldap'])
 
-  compliance_map()
 
   file { '/etc/libuser.conf':
     owner   => 'root',
