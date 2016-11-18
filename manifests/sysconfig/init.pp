@@ -30,7 +30,6 @@ class simplib::sysconfig::init (
   validate_bool($prompt)
   validate_bool($autoswap)
 
-  compliance_map()
 
   file { '/etc/sysconfig/init':
     ensure  => 'file',

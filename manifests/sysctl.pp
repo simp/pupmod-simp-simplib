@@ -130,7 +130,6 @@ class simplib::sysctl (
   validate_integer($net__ipv6__conf__default__max_addresses)
   validate_array_member($net__ipv6__conf__default__router_solicitations,['0','1'])
 
-  compliance_map()
 
   case $::operatingsystem {
     'RedHat','CentOS': {

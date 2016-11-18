@@ -57,7 +57,6 @@ class simplib::secure_mountpoints (
   validate_array($var_tmp_opts)
   validate_array($dev_shm_opts)
 
-  compliance_map()
 
   # Set some basic mounts (may be RHEL specific...)
   mount { '/dev/pts':
