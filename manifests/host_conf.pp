@@ -19,7 +19,6 @@ class simplib::host_conf (
   validate_array_member($spoof,['off','nowarn','warn'])
   validate_bool($reorder)
 
-  compliance_map()
 
   file { '/etc/host.conf':
     owner   => 'root',

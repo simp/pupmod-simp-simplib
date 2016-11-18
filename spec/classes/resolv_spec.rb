@@ -17,7 +17,6 @@ describe 'simplib::resolv' do
 
         it { is_expected.to compile.with_all_deps }
 
-        it { is_expected.not_to contain_named__caching }
         it { is_expected.to contain_simp_file_line('resolv_peerdns') }
         it { is_expected.to contain_file('/etc/resolv.conf') }
         it { is_expected.to contain_file('/etc/resolv.conf') }
@@ -32,8 +31,8 @@ describe 'simplib::resolv' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.not_to contain_named__caching }
-          it { is_expected.to contain_named }
+          it { is_expected.not_to contain_class('named::caching') }
+          it { is_expected.to contain_class('named') }
           it { is_expected.to contain_file('/etc/resolv.conf').that_comes_before('Class[named::service]') }
         end
 
@@ -50,8 +49,8 @@ describe 'simplib::resolv' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.not_to contain_named__caching }
-          it { is_expected.to contain_named }
+          it { is_expected.not_to contain_class('named::caching') }
+          it { is_expected.to contain_class('named') }
           it { is_expected.to contain_file('/etc/resolv.conf').that_comes_before('Class[named::service]') }
         end
 
@@ -67,7 +66,7 @@ describe 'simplib::resolv' do
           }}
 
           it { is_expected.to compile.with_all_deps }
-          it { is_expected.to contain_named__caching }
+          it { is_expected.to contain_class('named::caching') }
         end
 
         context 'node_with_named_autoconf_and_caching_only_127.0.0.1' do

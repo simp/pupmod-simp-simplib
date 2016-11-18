@@ -43,7 +43,6 @@ class simplib::cron (
 ) inherits simplib::params {
   validate_bool($use_rsync)
 
-  compliance_map()
 
   if !empty($rsync_server) { validate_net_list($rsync_server) }
 
