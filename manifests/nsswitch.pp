@@ -126,7 +126,6 @@ class simplib::nsswitch (
   validate_bool($use_ldap)
   validate_bool($use_sssd)
 
-  compliance_map()
 
   file { '/etc/nsswitch.conf':
     owner   => 'root',

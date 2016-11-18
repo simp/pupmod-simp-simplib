@@ -81,7 +81,6 @@ class simplib::modprobe_blacklist (
   validate_array($blacklist)
   validate_absolute_path($blacklist_method)
 
-  compliance_map()
 
   $blacklist_target = '/etc/modprobe.d/00_simp_blacklist.conf'
 

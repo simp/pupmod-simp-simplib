@@ -3,7 +3,7 @@ module Puppet::Parser::Functions
   newfunction(:validate_array_member, :doc => <<-'ENDHEREDOC') do |args|
     Validate that the first string (or array) passed is a member of the second
     array passed. An optional third argument of i can be passed, which ignores
-    the case of the objects inside the array. 
+    the case of the objects inside the array.
 
     Examples:
       validate_array_member('foo',['foo','bar'])     # => true

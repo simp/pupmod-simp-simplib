@@ -23,7 +23,6 @@ class simplib::chkrootkit (
   $weekday = '0',
   $destination = 'syslog'
 ) {
-  compliance_map()
 
   $_command = $destination ? {
     'syslog' => '/usr/sbin/chkrootkit -n | /bin/logger -p local6.notice -t chkrootkit',
