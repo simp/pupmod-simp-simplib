@@ -13,5 +13,5 @@ Requires: pupmod-simp-simpcat < 7.0.0-0
 Requires: pupmod-simp-simpcat >= 6.0.0-0
 Requires: pupmod-simp-sudo < 6.0.0-0
 Requires: pupmod-simp-sudo >= 5.0.0-0
-Requires: pupmod-simp-upstart < 5.0.0-0
-Requires: pupmod-simp-upstart >= 4.1.2-0
+Requires: pupmod-simp-upstart < 6.0.0-0
+Requires: pupmod-simp-upstart >= 5.0.0-0
