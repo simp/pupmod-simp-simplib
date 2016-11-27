@@ -1,3 +1,6 @@
+* Sun Nov 27 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
+- Added a 'simp_opt' function for retrieving SIMP6-style global catalysts.
+
 * Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
 - Updated to compliance_markup version 2
 
