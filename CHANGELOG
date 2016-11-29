@@ -1,3 +1,8 @@
+* Tue Nov 29 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.0-0
+- Renamed the file containing the puppet_settings fact to deconflict with
+  puppetlabs/puppetlabs-stdlib. They don't create any facts with the name
+  `puppet_settings`, so this works for now.
+
 * Mon Nov 21 2016 Chris Tessmer <chris.tessmer@onyxpoint.com> - 2.0.0-0
 - Updated to compliance_markup version 2
 
