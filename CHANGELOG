@@ -1,3 +1,7 @@
+* Wed Dec 07 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
+- Added a simplib::lookup() function that returns a globally scoped variable if
+  it exists before calling the traditional lookup() function.
+
 * Tue Nov 29 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.0.0-0
 - Renamed the file containing the puppet_settings fact to deconflict with
   puppetlabs/puppetlabs-stdlib. They don't create any facts with the name
