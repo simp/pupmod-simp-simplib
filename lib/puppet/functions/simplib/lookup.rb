@@ -37,7 +37,33 @@ Puppet::Functions.create_function(:'simplib::lookup') do
   end
 
   def lookup(param, options = nil)
-    global_param = closure_scope.find_global_scope.lookupvar(param)
+    class_name = param.split('::')
+
+    if class_name.size < 2
+      # This is a global variable
+      param_name = class_name
+      class_name = nil
+    else
+      param_name = class_name.pop
+      class_name = class_name.join('::')
+    end
+
+    if param_name
+      if class_name
+        global_scope = closure_scope.find_global_scope
+        catalog = global_scope.catalog
+
+        active_resource = catalog.resource("Class[#{class_name}]")
+        if active_resource
+          active_resource_param = active_resource.parameters[param_name.to_sym]
+          if active_resource_param
+            global_param = active_resource_param.value
+          end
+        end
+      else
+        global_param = closure_scope.find_global_scope.lookupvar(param)
+      end
+    end
 
     return global_param if global_param
 
