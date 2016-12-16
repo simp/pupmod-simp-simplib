@@ -35,7 +35,7 @@ fixtures:
       repo: https://github.com/simp/pupmod-simp-simpcat
     stdlib:
       repo: https://github.com/simp/puppetlabs-stdlib
-      branch: simp-master
+      branch: master
     sudo:
       repo: https://github.com/simp/pupmod-simp-sudo
     upstart:
