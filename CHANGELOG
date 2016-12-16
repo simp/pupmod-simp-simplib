@@ -2,8 +2,9 @@
 - Added a set of Data Types
   - Port (any of the below)
   - RandomPort (0)
-  - PrivilegedPort (1-1024)
-  - UnprivilegedPort (1025-65535)
+  - SystemPort (1-1024)
+  - UserPort (1025-49151)
+  - DynamicPort (49152-65535)
 - Added a simplib::lookup() function that returns a globally scoped variable if
   it exists before calling the traditional lookup() function.
 

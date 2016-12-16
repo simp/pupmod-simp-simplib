@@ -5,7 +5,7 @@ if Puppet.version.to_f >= 4.5
     describe 'valid handling' do
       let(:pre_condition) {%(
         class #{class_name} (
-          Simplib::PrivilegedPort $port
+          Simplib::SystemPort $port
         ){ }
 
         class { '#{class_name}':

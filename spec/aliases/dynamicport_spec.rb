@@ -5,7 +5,7 @@ if Puppet.version.to_f >= 4.5
     describe 'valid handling' do
       let(:pre_condition) {%(
         class #{class_name} (
-          Simplib::UnprivilegedPort $port
+          Simplib::DynamicPort $port
         ){ }
 
         class { '#{class_name}':
@@ -14,7 +14,7 @@ if Puppet.version.to_f >= 4.5
       )}
 
       context 'with valid ports' do
-        [1025,2345,65535].each do |port|
+        [49152,56789,65535].each do |port|
           let(:port){ port }
 
           it "should work with port #{port}" do
@@ -24,7 +24,7 @@ if Puppet.version.to_f >= 4.5
       end
 
       context 'with invalid ports' do
-        [0,1024,65536,'22',true].each do |port|
+        [0,49151,65536,'22',true].each do |port|
           let(:port){ port }
 
           it "should fail on port #{port}" do
