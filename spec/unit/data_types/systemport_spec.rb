@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 if Puppet.version.to_f >= 4.5
-  describe 'simplib_privilegedport', type: :class do
+  describe 'Simplib::SystemPort', type: :class do
     describe 'valid handling' do
       let(:pre_condition) {%(
         class #{class_name} (
