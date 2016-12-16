@@ -5,6 +5,8 @@
   - SystemPort (1-1024)
   - UserPort (1025-49151)
   - DynamicPort (49152-65535)
+  - EmailAddress
+  - URI
 - Added a simplib::lookup() function that returns a globally scoped variable if
   it exists before calling the traditional lookup() function.
 
