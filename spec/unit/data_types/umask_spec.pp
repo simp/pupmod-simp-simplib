@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 if Puppet.version.to_f >= 4.5
-  describe 'simplib_umask', type: :class do
+  describe 'Simplib::Umask', type: :class do
     describe 'valid handling' do
       let(:pre_condition) {%(
         class #{class_name} (
