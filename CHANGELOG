@@ -1,3 +1,8 @@
+* Mon Dec 19 2016 Nick Miller <nick.miller@onyxpoint.com> - 2.1.0-0
+- Added new types:
+  - SyslogFacility
+  - SyslogLevel
+
 * Wed Dec 07 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
 - Added a set of Data Types
   - EmailAddress
