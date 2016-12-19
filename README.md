@@ -945,6 +945,58 @@ and validation across the SIMP codebase.
     * 1025-49151
     * 49153-65534
 
+* Simplib::Syslog::Facility
+  * A syslog log facility, in either all uppercase or all lowercase.
+    * kern
+    * local6
+    * LOCAL6
+
+* Simplib::Syslog::LowerFacility
+  * A syslog log facility, in all lowercase.
+    * auth
+    * local4
+
+* Simplib::Syslog::UpperFacility
+  * A syslog log facility, in all uppercase.
+    * MAIL
+    * LOCAL7
+
+* Simplib::Syslog::Severity
+  * A syslog severity level, in either all uppercase or all lowercase.
+    * info
+    * WARNING
+
+* Simplib::Syslog::LowerSeverity
+  * A syslog severity level, in all lowercase.
+    * info
+    * emerg
+
+* Simplib::Syslog::UpperSeverity
+  * A syslog severity level, in all uppercase.
+    * DEBUG
+    * WARNING
+
+* Simplib::Syslog::Priority
+  * A syslog priority destination, in format 'facility.severity' and in either
+    all uppercase or all lowercase. This type only accepts the keyword
+    facilities and severities.
+    * mail.info
+    * KERN.EMERG
+
+* Simplib::Syslog::LowerPriority
+  * A syslog priority destination, in format 'facility.severity' and in only
+    all lowercase. This type only accepts the keyword
+    facilities and severities.
+    * mail.info
+    * user.err
+
+* Simplib::Syslog::UpperPriority
+  * A syslog priority destination, in format 'facility.severity' and in only
+    all uppercase. This type only accepts the keyword
+    facilities and severities.
+    * SYSLOG.WARNING
+    * AUTHPRIV.INFO
+
 * Simplib::Umask
     * A valid Umask
 
