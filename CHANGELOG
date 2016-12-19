@@ -1,11 +1,28 @@
 * Wed Dec 07 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 2.1.0-0
 - Added a set of Data Types
-  - Port (any of the below)
-  - RandomPort (0)
-  - SystemPort (1-1024)
-  - UserPort (1025-49151)
-  - DynamicPort (49152-65535)
   - EmailAddress
+  - Host (Single IP or Hostname)
+  - Hostname
+  - Hostname
+  - IP
+  - IP::V4
+  - IP::V4::CIDR
+  - IP::V4::DDQ
+  - IP::V4::Port (with port)
+  - IP::V6
+  - IP::V6::Base (Regular IPv6)
+  - IP::V6::Bracketed (IPv6 with Brackets)
+  - IP::V6::CIDR
+  - IP::V6::Port (with port)
+  - Netlist
+  - Netlist::IP
+  - Netlist::IP::V4
+  - Netlist::IP::V6
+  - Port (any of the below)
+  - Port::Dynamic (49152-65535)
+  - Port::Random (0)
+  - Port::System (1-1024)
+  - Port::User (1025-49151)
   - URI
 - Added a simplib::lookup() function that returns a globally scoped variable if
   it exists before calling the traditional lookup() function.
