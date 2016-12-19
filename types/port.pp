@@ -1,2 +1,2 @@
 # A valid port Type
-type Simplib::Port = Variant[Simplib::RandomPort, Simplib::SystemPort, Simplib::UserPort, Simplib::DynamicPort]
+type Simplib::Port = Variant[Simplib::Port::Random, Simplib::Port::System, Simplib::Port::User, Simplib::Port::Dynamic]

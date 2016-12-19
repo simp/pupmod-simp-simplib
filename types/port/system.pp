@@ -1,2 +1,2 @@
 # Corresponds to the usual privileged port range
-type Simplib::DynamicPort = Integer[49152,65535]
+type Simplib::Port::System = Integer[1,1024]
