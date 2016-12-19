@@ -18,11 +18,8 @@ compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-o
     * [Facts](#facts)
     * [Functions](#functions)
     * [Types](#types)
-    * [Classes](#classes)
-    * [Data Types](#data-types)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
-    * [Acceptance Tests - Beaker env variables](#acceptance-tests)
 
 ## Module Description
 
@@ -39,8 +36,7 @@ independently.
 
 ### What simplib affects
 
-simplib contains functions, facts, and small utility classes that effect small
-things not warranting their own module.
+simplib contains functions, facts, and small types.
 
 ### Setup Requirements
 
@@ -657,24 +653,24 @@ ignored from the list. Omit the beginning and ending '/' delimiters.
 The following values will pass:
 
 ```ruby
-$client_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
-validate_net_list($client_nets)
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+validate_net_list($trusted_nets)
 
-$client_nets = '10.10.10.0/24'
-validate_net_list($client_nets)
+$trusted_nets = '10.10.10.0/24'
+validate_net_list($trusted_nets)
 
-$client_nets = ['10.10.10.0/24','1.2.3.4','any','ALL']
-validate_net_list($client_nets,'^(any|ALL)$')
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','any','ALL']
+validate_net_list($trusted_nets,'^(any|ALL)$')
 ```
 
 The following values will fail:
 
 ```ruby
-$client_nets = '10.10.10.0/24,1.2.3.4'
-validate_net_list($client_nets)
+$trusted_nets = '10.10.10.0/24,1.2.3.4'
+validate_net_list($trusted_nets)
 
-$client_nets = 'bad stuff'
-validate_net_list($client_nets)
+$trusted_nets = 'bad stuff'
+validate_net_list($trusted_nets)
 ```
 
 Returns: `boolean`
@@ -767,242 +763,6 @@ Returns: `boolean`
 * **script_umask**
 * **simp_file_line**
 
-### Classes
-
---------------------
-
-> **NOTE**
->
-> Each class in manifests contains code headers describing the utility that class brings.
-> Please reference the classes individually to get more details.
-
---------------------
-
-#### Public Classes
-* `simplib`
-
-* `simplib::at`
-
-* `simplib::at::add_user`
-
-* `simplib::chkrootkit`
-
-* `simplib::cron`
-
-* `simplib::cron::add_user`
-
-* `simplib::etc_default`
-
-* `simplib::etc_default::nss`
-
-* `simplib::etc_default::useradd`
-
-* `simplib::host_conf`
-
-* `simplib::issue`
-
-* `simplib::incron`
-
-* `simplib::incron::add_user`
-
-* `simplib::incron::add_system_table`
-
-* `simplib::ktune`
-
-* `simplib::libuser_conf`
-
-* `simplib::localusers`
-
-* `simplib::login_defs`
-
-* `simplib::modprobe_blacklist`
-
-* `simplib::nsswitch`
-
-* `simplib::params`
-
-* `simplib::prelink`
-
-* `simplib::profile_settings`
-
-* `simplib::resolv`
-
-* `simplib::secure_mountpoints`
-
-* `simplib::sudoers`
-
-* `simplib::swappiness`
-
-* `simplib::sysconfig`
-
-* `simplib::sysconfig::init`
-
-* `simplib::sysctl`
-
-* `simplib::timezone`
-
-* `simplib::yum_schedule`
-
-### Data Types
-
-The following Puppet 4 compatible Data Types have been added for convenience
-and validation across the SIMP codebase.
-
-* Simplib::EmailAddress
-    * Simple e-mail address validator
-        * ``foo@bar.com``
-
-* Simplib::Host
-    * A single Host or an IP Address
-        * ``1.2.3.4``
-        * ``my-host.com``
-
-* Simplib::IP
-    * An IP Address
-        * ``1.2.3.4``
-
-* Simplib::IP::V4
-    * An IPv4 Address
-        * ``1.2.3.4``
-
-* Simplib::IP::V4::CIDR
-    * An IPv4 Address with a CIDR Subnet
-        * ``1.2.3.4/24``
-
-* Simplib::IP::V4::DDQ
-    * An IPv4 Address with a Dotted Quad Subnet
-        * ``1.2.3.4/255.255.0.0``
-
-* Simplib::IP::V4::Port
-    * An IPv4 Address with an attached Port
-        * ``1.2.3.4:443``
-
-* Simplib::IP::V6
-    * An IPv6 Address
-        * ``::1``
-        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334``
-        * ``[::1]``
-        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]``
-
-* Simplib::IP::V6::Base
-    * A regular IPv6 Address
-        * ``::1``
-        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334``
-
-* Simplib::IP::V6::Bracketed
-    * A bracketed IPv6 Address
-        * ``[::1]``
-        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]``
-
-* Simplib::IP::V6::CIDR
-    * An IPv6 address with a CIDR subnet
-        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334/96``
-
-* Simplib::IP::V6::Port
-    * An IPv6 address with an attached Port
-        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:443``
-
-* Simplib::Netlist
-    * An Array of network-relevant entries
-        * Hostname
-        * IPv4
-        * IPv4 with Subnet
-        * IPv4 with Port
-        * IPv6
-        * IPv4 with Subnet
-        * IPv4 with Port
-
-* Simplib::Netlist::Host
-    * An Array of Hosts
-        * Hostname
-        * IPv4
-        * IPv6
-
-* Simplib::Netlist::IP
-    * An Array of IP Addresses
-        * IPv4
-        * IPv6
-
-* Simplib::Netlist::IP::V4
-    * An Array of IPv4 Addresses
-
-* Simplib::Netlist::IP::V6
-    * An Array of IPv6 Addresses
-
-* Simplib::Port
-    * A Port Number
-
-* Simplib::Port::Dynamic
-    * Either 49152 or 65535
-
-* Simplib::Port::Random
-    * Port 0
-
-* Simplib::Port::System
-    * 1-1024
-
-* Simplib::Port::User
-    * 1025-49151
-    * 49153-65534
-
-* Simplib::Syslog::Facility
-  * A syslog log facility, in either all uppercase or all lowercase.
-    * kern
-    * local6
-    * LOCAL6
-
-* Simplib::Syslog::LowerFacility
-  * A syslog log facility, in all lowercase.
-    * auth
-    * local4
-
-* Simplib::Syslog::UpperFacility
-  * A syslog log facility, in all uppercase.
-    * MAIL
-    * LOCAL7
-
-* Simplib::Syslog::Severity
-  * A syslog severity level, in either all uppercase or all lowercase.
-    * info
-    * WARNING
-
-* Simplib::Syslog::LowerSeverity
-  * A syslog severity level, in all lowercase.
-    * info
-    * emerg
-
-* Simplib::Syslog::UpperSeverity
-  * A syslog severity level, in all uppercase.
-    * DEBUG
-    * WARNING
-
-* Simplib::Syslog::Priority
-  * A syslog priority destination, in format 'facility.severity' and in either
-    all uppercase or all lowercase. This type only accepts the keyword
-    facilities and severities.
-    * mail.info
-    * KERN.EMERG
-
-* Simplib::Syslog::LowerPriority
-  * A syslog priority destination, in format 'facility.severity' and in only
-    all lowercase. This type only accepts the keyword
-    facilities and severities.
-    * mail.info
-    * user.err
-
-* Simplib::Syslog::UpperPriority
-  * A syslog priority destination, in format 'facility.severity' and in only
-    all uppercase. This type only accepts the keyword
-    facilities and severities.
-    * SYSLOG.WARNING
-    * AUTHPRIV.INFO
-
-* Simplib::Umask
-    * A valid Umask
-
-* Simplib::URI
-    * A valid URI string (lightly sanity checked)
-
 ## Limitations
 
 SIMP Puppet modules are generally intended to be used on a Red Hat Enterprise
@@ -1024,26 +784,3 @@ Guidelines](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+S
 [System Integrity Management
 Platform](https://github.com/NationalSecurityAgency/SIMP)
 
-### Acceptance tests
-
-To run the system tests, you need `Vagrant` installed.
-
-You can then run the following to execute the acceptance tests:
-
-```shell bundle exec rake beaker:suites ```
-
-Some environment variables may be useful:
-
-```shell BEAKER_debug=true BEAKER_provision=no BEAKER_destroy=no
-BEAKER_use_fixtures_dir_for_modules=yes ```
-
-*  ``BEAKER_debug``: show the commands being run on the STU and their output.
-*  ``BEAKER_destroy=no``: prevent the machine destruction after the tests
-   finish so you can inspect the state.
-*  ``BEAKER_provision=no``: prevent the machine from being recreated.  This can
-   save a lot of time while you're writing the tests.
-*  ``BEAKER_use_fixtures_dir_for_modules=yes``: cause all module dependencies
-   to be loaded from the ``spec/fixtures/modules`` directory, based on the
-   contents of ``.fixtures.yml``. The contents of this directory are usually
-   populated by ``bundle exec rake spec_prep``. This can be used to run
-   acceptance tests to run on isolated networks.
