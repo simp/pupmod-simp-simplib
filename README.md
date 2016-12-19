@@ -19,6 +19,7 @@ compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-o
     * [Functions](#functions)
     * [Types](#types)
     * [Classes](#classes)
+    * [Data Types](#data-types)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
     * [Acceptance Tests - Beaker env variables](#acceptance-tests)
@@ -770,7 +771,7 @@ Returns: `boolean`
 
 --------------------
 
->NOTE:
+> **NOTE**
 >
 > Each class in manifests contains code headers describing the utility that class brings.
 > Please reference the classes individually to get more details.
@@ -841,6 +842,114 @@ Returns: `boolean`
 * `simplib::timezone`
 
 * `simplib::yum_schedule`
+
+### Data Types
+
+The following Puppet 4 compatible Data Types have been added for convenience
+and validation across the SIMP codebase.
+
+* Simplib::EmailAddress
+    * Simple e-mail address validator
+        * ``foo@bar.com``
+
+* Simplib::Host
+    * A single Host or an IP Address
+        * ``1.2.3.4``
+        * ``my-host.com``
+
+* Simplib::IP
+    * An IP Address
+        * ``1.2.3.4``
+
+* Simplib::IP::V4
+    * An IPv4 Address
+        * ``1.2.3.4``
+
+* Simplib::IP::V4::CIDR
+    * An IPv4 Address with a CIDR Subnet
+        * ``1.2.3.4/24``
+
+* Simplib::IP::V4::DDQ
+    * An IPv4 Address with a Dotted Quad Subnet
+        * ``1.2.3.4/255.255.0.0``
+
+* Simplib::IP::V4::Port
+    * An IPv4 Address with an attached Port
+        * ``1.2.3.4:443``
+
+* Simplib::IP::V6
+    * An IPv6 Address
+        * ``::1``
+        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334``
+        * ``[::1]``
+        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]``
+
+* Simplib::IP::V6::Base
+    * A regular IPv6 Address
+        * ``::1``
+        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334``
+
+* Simplib::IP::V6::Bracketed
+    * A bracketed IPv6 Address
+        * ``[::1]``
+        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]``
+
+* Simplib::IP::V6::CIDR
+    * An IPv6 address with a CIDR subnet
+        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334/96``
+
+* Simplib::IP::V6::Port
+    * An IPv6 address with an attached Port
+        * ``[2001:0db8:85a3:0000:0000:8a2e:0370:7334]:443``
+
+* Simplib::Netlist
+    * An Array of network-relevant entries
+        * Hostname
+        * IPv4
+        * IPv4 with Subnet
+        * IPv4 with Port
+        * IPv6
+        * IPv4 with Subnet
+        * IPv4 with Port
+
+* Simplib::Netlist::Host
+    * An Array of Hosts
+        * Hostname
+        * IPv4
+        * IPv6
+
+* Simplib::Netlist::IP
+    * An Array of IP Addresses
+        * IPv4
+        * IPv6
+
+* Simplib::Netlist::IP::V4
+    * An Array of IPv4 Addresses
+
+* Simplib::Netlist::IP::V6
+    * An Array of IPv6 Addresses
+
+* Simplib::Port
+    * A Port Number
+
+* Simplib::Port::Dynamic
+    * Either 49152 or 65535
+
+* Simplib::Port::Random
+    * Port 0
+
+* Simplib::Port::System
+    * 1-1024
+
+* Simplib::Port::User
+    * 1025-49151
+    * 49153-65534
+
+* Simplib::Umask
+    * A valid Umask
+
+* Simplib::URI
+    * A valid URI string (lightly sanity checked)
 
 ## Limitations
 
