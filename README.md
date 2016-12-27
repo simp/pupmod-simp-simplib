@@ -21,12 +21,10 @@ compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-o
     * [Data Types](#data-types)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
-    * [Acceptance Tests - Beaker env variables](#acceptance-tests)
 
 ## Module Description
 
-simplib is a collection custom functions, facts, and types relevant to SIMP that
-are common enough to rate distributing as their own module.
+simplib is a collection custom functions, facts, and small types.
 
 This module is a component of the [System Integrity Management
 Platform](https://github.com/NationalSecurityAgency/SIMP), a
@@ -38,8 +36,7 @@ independently.
 
 ### What simplib affects
 
-simplib contains functions, facts, and small utility classes that effect small
-things not warranting their own module.
+simplib contains functions, facts, and small utility classes.
 
 ### Setup Requirements
 
@@ -656,24 +653,24 @@ ignored from the list. Omit the beginning and ending '/' delimiters.
 The following values will pass:
 
 ```ruby
-$client_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
-validate_net_list($client_nets)
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+validate_net_list($trusted_nets)
 
-$client_nets = '10.10.10.0/24'
-validate_net_list($client_nets)
+$trusted_nets = '10.10.10.0/24'
+validate_net_list($trusted_nets)
 
-$client_nets = ['10.10.10.0/24','1.2.3.4','any','ALL']
-validate_net_list($client_nets,'^(any|ALL)$')
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','any','ALL']
+validate_net_list($trusted_nets,'^(any|ALL)$')
 ```
 
 The following values will fail:
 
 ```ruby
-$client_nets = '10.10.10.0/24,1.2.3.4'
-validate_net_list($client_nets)
+$trusted_nets = '10.10.10.0/24,1.2.3.4'
+validate_net_list($trusted_nets)
 
-$client_nets = 'bad stuff'
-validate_net_list($client_nets)
+$trusted_nets = 'bad stuff'
+validate_net_list($trusted_nets)
 ```
 
 Returns: `boolean`
@@ -969,26 +966,3 @@ Guidelines](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+S
 [System Integrity Management
 Platform](https://github.com/NationalSecurityAgency/SIMP)
 
-### Acceptance tests
-
-To run the system tests, you need `Vagrant` installed.
-
-You can then run the following to execute the acceptance tests:
-
-```shell bundle exec rake beaker:suites ```
-
-Some environment variables may be useful:
-
-```shell BEAKER_debug=true BEAKER_provision=no BEAKER_destroy=no
-BEAKER_use_fixtures_dir_for_modules=yes ```
-
-*  ``BEAKER_debug``: show the commands being run on the STU and their output.
-*  ``BEAKER_destroy=no``: prevent the machine destruction after the tests
-   finish so you can inspect the state.
-*  ``BEAKER_provision=no``: prevent the machine from being recreated.  This can
-   save a lot of time while you're writing the tests.
-*  ``BEAKER_use_fixtures_dir_for_modules=yes``: cause all module dependencies
-   to be loaded from the ``spec/fixtures/modules`` directory, based on the
-   contents of ``.fixtures.yml``. The contents of this directory are usually
-   populated by ``bundle exec rake spec_prep``. This can be used to run
-   acceptance tests to run on isolated networks.
