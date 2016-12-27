@@ -802,6 +802,11 @@ and validation across the SIMP codebase.
     * An IPv4 Address
         * ``1.2.3.4``
 
+* Simplib::IP::CIDR
+    * An IPv4 or IPv6 Address with a CIDR Subnet
+        * ``1.2.3.4/24``
+        * ``2001:0db8:85a3:0000:0000:8a2e:0370:7334/96``
+
 * Simplib::IP::V4::CIDR
     * An IPv4 Address with a CIDR Subnet
         * ``1.2.3.4/24``

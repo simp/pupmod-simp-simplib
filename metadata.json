@@ -11,7 +11,8 @@
     "simp",
     "functions",
     "facts",
-    "types"
+    "types",
+    "alias"
   ],
   "dependencies": [
   ],
@@ -19,12 +20,12 @@
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": ">= 3.7"
+      "name": "puppet",
+      "version_requirement": "4.x"
     },
     {
-      "name": "puppet",
-      "version_requirement": ">= 3.7"
+      "name": "pe",
+      "version_requirement": ">= 2016.2.0"
     }
   ],
   "package_release_version": "0"
