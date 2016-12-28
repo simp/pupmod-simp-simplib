@@ -9,22 +9,22 @@ module Puppet::Parser::Functions
 
     The following values will pass:
 
-      $client_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
-      validate_net_list($client_nets)
+      $trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+      validate_net_list($trusted_nets)
 
-      $client_nets = '10.10.10.0/24'
-      validate_net_list($client_nets)
+      $trusted_nets = '10.10.10.0/24'
+      validate_net_list($trusted_nets)
 
-      $client_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
-      validate_net_list($client_nets,'^(%any|ALL)$')
+      $trusted_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
+      validate_net_list($trusted_nets,'^(%any|ALL)$')
 
     The following values will fail:
 
-      $client_nets = '10.10.10.0/24,1.2.3.4'
-      validate_net_list($client_nets)
+      $trusted_nets = '10.10.10.0/24,1.2.3.4'
+      validate_net_list($trusted_nets)
 
-      $client_nets = 'bad stuff'
-      validate_net_list($client_nets)
+      $trusted_nets = 'bad stuff'
+      validate_net_list($trusted_nets)
 
     ENDHEREDOC
 
