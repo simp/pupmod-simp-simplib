@@ -1,3 +1,9 @@
+* Mon Jan 02 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
+- Added additional syslog data types and added tests for all syslog data types
+  - Syslog::CFacility
+  - Syslog::CPriority
+  - Syslog::CSeverity
+
 * Sat Dec 24 2016 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.1.0-0
 - Added types to cover entries with Ports
   - Host::Port

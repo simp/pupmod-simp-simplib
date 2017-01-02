@@ -887,6 +887,21 @@ and validation across the SIMP codebase.
     * 1025-49151
     * 49153-65534
 
+* Simplib::Syslog::CFacility
+  * A syslog log facility, in the form expected by ``syslog(3)``
+    * LOG_KERN
+    * LOG_LOCAL6
+
+* Simplib::Syslog::CPriority
+  * A syslog log priority, in the form expected by ``syslog(3)``
+    * LOG_KERN.LOG_INFO
+    * LOG_LOCAL6.LOG_WARNING
+
+* Simplib::Syslog::CSeverity
+  * A syslog log severity, in the form expected by ``syslog(3)``
+    * LOG_INFO
+    * LOG_WARNING
+
 * Simplib::Syslog::Facility
   * A syslog log facility, in either all uppercase or all lowercase.
     * kern
