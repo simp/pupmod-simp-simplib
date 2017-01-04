@@ -1,3 +1,4 @@
+#
 module Puppet::Parser::Functions
     newfunction(:passgen, :type => :rvalue, :doc => "Generates a random password string for a passed identifier. Uses Puppet[:environmentpath]/$environment/simp_autofiles/gen_passwd/ as the destination directory.
 
@@ -16,6 +17,10 @@ module Puppet::Parser::Functions
             * 0 => Use only Alphanumeric characters in your password (safest)
             * 1 => Add reasonably safe symbols
             * 2 => Printable ASCII
+          private options:
+          - 'password' => contains the string representation of the password to hash (used for testing)
+          - 'salt' => contains the string literal salt to use (used for testing)
+          - 'complex_only' => use only the characters explicitly added by the complexity rules (used for testing)
 
         If no, or an invalid, second argument is provided then it will return
         the currently stored string.
@@ -52,7 +57,8 @@ module Puppet::Parser::Functions
           'last'           => false,
           'length'         => @default_password_length,
           'hash'           => false,
-          'complexity'     => 0
+          'complexity'     => 0,
+          'complex_only'   => false,
         }
 
         # Convert legacy format to new hash format for options.
@@ -89,8 +95,7 @@ module Puppet::Parser::Functions
 
         passwd = ''
         salt = ''
-
-        def self.gen_random_pass(length,complexity)
+        def self.gen_random_pass(length,complexity,complex_only)
 
             length = length.to_i
             if length.eql?(0)
@@ -103,20 +108,30 @@ module Puppet::Parser::Functions
             begin
                 Timeout::timeout(30) do
                   default_charlist = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
-
+                  specific_charlist = nil
                   case complexity
                   when 1
-                    charlists = [
-                      default_charlist,
-                      ['@','%','-','_','+','=','~']
-                    ]
+                    specific_charlist = ['@','%','-','_','+','=','~']
                   when 2
-                    charlists = [
-                      default_charlist,
-                      (' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a
-                    ]
+                    specific_charlist = (' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a
                   else
-                    charlists = [default_charlist]
+                  end
+                  unless specific_charlist == nil
+                      if complex_only == true
+                         charlists = [
+                             specific_charlist
+                         ]
+                      else
+                         charlists = [
+                            default_charlist,
+                            specific_charlist
+                         ]
+                      end
+
+                  else
+                      charlists = [
+                          default_charlist
+                      ]
                   end
 
                   charlists.each do |charlist|
@@ -169,14 +184,22 @@ module Puppet::Parser::Functions
                 sf = "#{File.dirname(toread)}/#{File.basename(toread,'.last')}.salt.last"
                 saltfile = File.open(sf,'a+',0640)
                 if saltfile.stat.size.zero?
-                    salt = self.gen_random_pass(16,options['complexity'])
+                    if options.key?('salt')
+                        salt = options['salt']
+                    else
+                        salt = self.gen_random_pass(16,options['complexity'], options['complex_only'])
+                    end
                     saltfile.puts(salt)
                     saltfile.close
                 end
                 salt = IO.readlines(sf)[0].to_s.chomp
             else
                 Puppet.warning "Could not find a primary or 'last' file for #{@id}, please ensure that you have included this function in the proper order in your manifest!"
-                passwd = self.gen_random_pass(@default_password_length,options['complexity'])
+                if options.key?('password')
+                    passwd = options['password']
+                else
+                    passwd = self.gen_random_pass(@default_password_length,options['complexity'], options['complex_only'])
+                end
             end
         else
             # If the target file doesn't exist or the length of the password that
@@ -204,13 +227,21 @@ module Puppet::Parser::Functions
             # Create this if not there no matter what just in case we have an
             # upgraded system.
             if tgt_hash.stat.size.zero?
-                salt = self.gen_random_pass(16,options['complexity'])
+                if options.key?('salt')
+                    salt = options['salt']
+                else
+                    salt = self.gen_random_pass(16,options['complexity'], options['complex_only'])
+                end
                 tgt_hash.puts(salt)
                 tgt_hash.rewind
             end
 
             if tgt.stat.size.zero?
-                passwd = self.gen_random_pass(options['length'],options['complexity'])
+                if options.key?('password')
+                    passwd = options['password']
+                else
+                    passwd = self.gen_random_pass(options['length'],options['complexity'], options['complex_only'])
+                end
                 tgt.puts(passwd)
             else
                 passwd = tgt.gets.chomp
@@ -231,8 +262,8 @@ module Puppet::Parser::Functions
 
                   tgt.rewind
                   tgt.truncate(0)
-                  passwd = self.gen_random_pass(options['length'],options['complexity'])
-                  salt = self.gen_random_pass(16,options['complexity'])
+                  passwd = self.gen_random_pass(options['length'],options['complexity'], options['complex_only'])
+                  salt = self.gen_random_pass(16,options['complexity'], options['complex_only'])
                   tgt.puts(passwd)
                   tgt_hash.puts(salt)
                 end

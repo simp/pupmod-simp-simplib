@@ -1,5 +1,7 @@
+#
 ---
 fixtures:
   repositories:
+    stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:
     simplib: "#{source_dir}"
