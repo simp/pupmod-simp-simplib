@@ -12,7 +12,7 @@
   - IP::Port
 - Added IP::CIDR type
 
-* Wed Dec 14 2016 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
+* Tue Dec 20 2016 Nick Miller <nick.miller@onyxpoint.com> - 3.0.0-0
 - NOTE: THIS MODULE CONTAINS NO MORE CLASSES OR MANIFESTS
 - Migrated content in manifests and templates to other modules.
   - See SIMP-1679 for details
