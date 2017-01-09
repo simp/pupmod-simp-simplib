@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby -S rspec
-#
 require 'spec_helper'
 require 'base64'
 def parse_modular_crypt(input)

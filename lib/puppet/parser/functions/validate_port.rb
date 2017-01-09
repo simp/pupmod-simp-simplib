@@ -29,5 +29,3 @@ module Puppet::Parser::Functions
     end
   end
 end
-
-#

@@ -1,4 +1,3 @@
-#
 require 'spec_helper_acceptance'
 
 test_name 'passgen function'

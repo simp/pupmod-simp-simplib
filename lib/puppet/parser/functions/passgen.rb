@@ -1,4 +1,3 @@
-#
 module Puppet::Parser::Functions
     newfunction(:passgen, :type => :rvalue, :doc => "Generates a random password string for a passed identifier. Uses Puppet[:environmentpath]/$environment/simp_autofiles/gen_passwd/ as the destination directory.
 

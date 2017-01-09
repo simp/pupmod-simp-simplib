@@ -15,5 +15,3 @@ module Puppet::Parser::Functions
     Puppet.warning("Inspect: Type => '#{args.first.class}' Content => '#{args.first.to_pson}'")
   end
 end
-
-#
