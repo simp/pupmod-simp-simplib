@@ -199,6 +199,10 @@ describe 'passgen' do
         value = parse_modular_crypt(subject.call(['spectest', shared_options]));
         expect(value['algorithm_code']).to eql(object['code'])
       end
+      it 'should contain a salt of complexity 0' do
+        value = parse_modular_crypt(subject.call(['spectest', shared_options]));
+        expect(value['salt']).to match(/^(#{default_chars.join('|')})+$/)
+      end
       it 'should contain a base64 hash' do
         value = parse_modular_crypt(subject.call(['spectest', shared_options]));
         expect(value['hash_base64']).to match(/#{base64_regex}/)
