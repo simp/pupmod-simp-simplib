@@ -186,7 +186,7 @@ module Puppet::Parser::Functions
                     if options.key?('salt')
                         salt = options['salt']
                     else
-                        salt = self.gen_random_pass(16,options['complexity'], options['complex_only'])
+                        salt = self.gen_random_pass(16,0, options['complex_only'])
                     end
                     saltfile.puts(salt)
                     saltfile.close
@@ -229,7 +229,7 @@ module Puppet::Parser::Functions
                 if options.key?('salt')
                     salt = options['salt']
                 else
-                    salt = self.gen_random_pass(16,options['complexity'], options['complex_only'])
+                    salt = self.gen_random_pass(16,0, options['complex_only'])
                 end
                 tgt_hash.puts(salt)
                 tgt_hash.rewind
