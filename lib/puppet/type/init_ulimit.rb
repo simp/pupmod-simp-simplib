@@ -99,7 +99,7 @@ Puppet::Type.newtype(:init_ulimit) do
   def initialize(*args)
     super(*args)
 
-    if File.dirname(self[:target]) == '/etc/init.d' then
+    if File.dirname(self[:target]) == '/etc/init.d'
       self.provider = 'sysv'
     end
   end
@@ -113,7 +113,7 @@ Puppet::Type.newtype(:init_ulimit) do
     desc 'The service that will be modified. If you specify a full path, that will be used instead.'
 
     munge do |value|
-      if value !~ /^\// then
+      if value !~ /^\//
         # Prevent unexpected directory traversing!
         value = value.gsub('/','_') unless value[0].chr == '/'
       end
@@ -144,7 +144,7 @@ Puppet::Type.newtype(:init_ulimit) do
     end
 
     validate do |value|
-      if not $init_ulimit_opt_map.keys.include?(value.downcase) then
+      unless $init_ulimit_opt_map.keys.include?(value.downcase)
         raise(Puppet::Error, "'item' must be one of '#{$init_ulimit_opt_map.keys.join(', ')}")
       end
     end
@@ -158,7 +158,8 @@ Puppet::Type.newtype(:init_ulimit) do
       value = value.downcase.strip
 
       # Unlimited doesn't work in the case of file descriptors so munge it to the system max.
-      resource[:item] == 'n' and value == 'unlimited' and value = '1048576'
+      value = '1048576' if ((resource[:item] == 'n') && (value == 'unlimited'))
+
       value
     end
   end
@@ -168,8 +169,8 @@ Puppet::Type.newtype(:init_ulimit) do
       raise(Puppet::Error, "You must specify a valid 'target'")
     end
 
-    if self[:ensure] != :absent then
-      unless self[:item] and self[:value]
+    if self[:ensure] != :absent
+      unless self[:item] && self[:value]
         raise(Puppet::Error, "Both 'item' and 'value' are required parameters")
       end
     end
@@ -178,15 +179,16 @@ Puppet::Type.newtype(:init_ulimit) do
   def finish
     dep = @catalog.resource("Service[#{File.basename(self[:target])}]")
     res_comp = []
-    self[:notify] and res_comp = self[:notify].map{|x| x.to_s}
+    res_comp = self[:notify].map{|x| x.to_s} if self[:notify]
 
-    if dep then
-      if self[:notify] and not self[:notify].empty? and not res_comp.include?(dep.to_s) then
+    if dep
+      if self[:notify] && !self[:notify].empty? && !res_comp.include?(dep.to_s)
         self[:notify] << dep.retrieve_resource
       else
         self[:notify] = [ dep.to_s ]
       end
     end
+
     super
   end
 end
