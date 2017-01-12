@@ -147,36 +147,10 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     @provider = :redhat
     @target = @resource[:target]
 
-    if @target[0].chr != '/' then
-      @provider = @resource.catalog.resources.find{ |r|
-        r.is_a?(Puppet::Type.type(:service)) and r[:name] =~ /^#{@resource[:target]}(\.service)?$/
-      }[:provider]
-
-      case @provider
-        when :systemd
-          svc_name = "#{@target}.service" unless @target =~ /\.service$/
-
-          systemd_target = nil
-          Find.find('/etc/systemd/system') do |path|
-            next if not File.file?(path)
-
-            if File.basename(path) == svc_name then
-              systemd_target = path
-              break
-            end
-          end
-
-          raise(Puppet::ParseError,"Could not find a systemd service for #{svc_name}") unless systemd_target
-
-          @target = systemd_target
-        when :upstart
-          raise(Puppet::ParseError,'The init_ulimit type cannot modify upstart scripts!')
-        else
-          # Default to good ol' /etc/init.d
-          @target = "/etc/init.d/#{@target}"
-
-          raise(Puppet::ParseError,"File '#{@target}' not found.") unless File.exist?(@target)
-      end
+    if @target[0].chr != '/'
+      @target = "/etc/init.d/#{@target}"
     end
+
+    raise(Puppet::ParseError,"File '#{@target}' not found.") unless File.exist?(@target)
   end
 end

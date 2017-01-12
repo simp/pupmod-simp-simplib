@@ -44,7 +44,7 @@ Puppet::Type.type(:init_ulimit).provide(:systemd) do
     @item = @systemd_xlat[@resource[:item]]
     @svc_name = File.basename(@resource[:target],'.service') + '.service'
 
-    if not @item then
+    unless @item
       warning("Systemd systems do not have a match for ulimit option '#{@resource[:item]}'")
 
       # Faking out the return value because we want the service to

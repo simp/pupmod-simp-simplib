@@ -85,7 +85,15 @@ Puppet::Type.newtype(:init_ulimit) do
   ensurable
 
   def self.title_patterns
-    [ [/^(#{$init_ulimit_opt_map.keys.join('|')})(.*)$/,[ [:item, lambda{|x| x}] , [:target, lambda{|x| x}] ] ] ]
+    [
+      [
+        /^(\|?)(.*)$/,
+        [
+         [:item, lambda{|x| x}],
+         [:target, lambda{|x| x}]
+        ]
+      ]
+    ]
   end
 
   def initialize(*args)
@@ -97,7 +105,7 @@ Puppet::Type.newtype(:init_ulimit) do
   end
 
   newparam(:name) do
-    desc 'A required, but meaningless, name.'
+    desc 'A unique name for the resource'
   end
 
   newparam(:target) do
