@@ -37,17 +37,15 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     initial_comments = true
     wrote_content = false
 
-    fh = File.open("#{@target}")
-
     @source_file.each do |line|
-      if initial_comments then
-        if line =~ /^\s*#/ then
+      if initial_comments
+        if line =~ /^\s*#/
           new_content << line
           next
         else
           initial_comments = false
         end
-      elsif not wrote_content then
+      elsif !wrote_content
         new_content << "#{@warning_comment}\n"
         new_content << "#{ulimit_string}\n"
         wrote_content = true
@@ -66,13 +64,13 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     @source_file.each do |line|
 
       # Skip the actual item.
-      if skip_line and line =~ /^\s*ulimit -#{resource[:item]}/ then
+      if skip_line && (line =~ /^\s*ulimit -#{resource[:item]}/)
         skip_line = false
         next
       end
 
       # Skip the comment
-      if line =~ /^#\s*Puppet-'#{resource[:item]}'/ then
+      if line =~ /^#\s*Puppet-'#{resource[:item]}'/
         skip_line = true
         next
       end
@@ -87,17 +85,17 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     retval = 'UNKNOWN'
     found_comment = false
     @source_file.each do |line|
-      if found_comment then
+      if found_comment
         # This really shouldn't happen, but it's possible that someone might
         # stuff some empty lines in there or something.
-        if line =~ /^\s*ulimit -#{resource[:item]} (.*)/ then
+        if line =~ /^\s*ulimit -#{resource[:item]} (.*)/
           retval = $1
           break
         else
           next
         end
       end
-      if line =~ /^#\s*Puppet-'#{resource[:item]}'/ then
+      if line =~ /^#\s*Puppet-'#{resource[:item]}'/
         found_comment = true
         next
       end
@@ -112,11 +110,11 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     comment_line = @source_file.find_index{|x| x =~ /^#\s*Puppet-'#{resource[:item]}'/}
     ulimit_match = @source_file.find_index{|x| x =~ /^\s*ulimit -#{resource[:item]}/}
 
-    if comment_line and not ulimit_match then
+    if comment_line && !ulimit_match
       # Someone deleted the ulimit, but not the comment!
-      new_content.insert(comment_line+1,ulimit_string)
+      new_content.insert(comment_line+1, ulimit_string)
 
-    elsif ulimit_match < comment_line then
+    elsif ulimit_match < comment_line
       # Well, this is a bit of a mess, delete the comment and insert above the
       # ulimit
       new_content.delete_at[comment_line]
@@ -127,7 +125,6 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     end
 
     SELinux_kludge.new.replace_file("#{@target}",0644) { |f| f.puts new_content }
-
   end
 
   private
@@ -136,7 +133,7 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
   def ulimit_string
     toret = 'ulimit'
 
-    if resource[:limit_type] != 'both' then
+    if resource[:limit_type] != 'both'
       toret << " -#{resource[:limit_type][0].chr.upcase}"
     end
 
@@ -147,36 +144,10 @@ Puppet::Type.type(:init_ulimit).provide(:sysv) do
     @provider = :redhat
     @target = @resource[:target]
 
-    if @target[0].chr != '/' then
-      @provider = @resource.catalog.resources.find{ |r|
-        r.is_a?(Puppet::Type.type(:service)) and r[:name] =~ /^#{@resource[:target]}(\.service)?$/
-      }[:provider]
-
-      case @provider
-        when :systemd
-          svc_name = "#{@target}.service" unless @target =~ /\.service$/
-
-          systemd_target = nil
-          Find.find('/etc/systemd/system') do |path|
-            next if not File.file?(path)
-
-            if File.basename(path) == svc_name then
-              systemd_target = path
-              break
-            end
-          end
-
-          raise(Puppet::ParseError,"Could not find a systemd service for #{svc_name}") unless systemd_target
-
-          @target = systemd_target
-        when :upstart
-          raise(Puppet::ParseError,'The init_ulimit type cannot modify upstart scripts!')
-        else
-          # Default to good ol' /etc/init.d
-          @target = "/etc/init.d/#{@target}"
-
-          raise(Puppet::ParseError,"File '#{@target}' not found.") unless File.exist?(@target)
-      end
+    if @target[0].chr != '/'
+      @target = "/etc/init.d/#{@target}"
     end
+
+    raise(Puppet::ParseError,"File '#{@target}' not found.") unless File.exist?(@target)
   end
 end
