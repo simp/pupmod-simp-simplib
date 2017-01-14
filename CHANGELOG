@@ -1,3 +1,7 @@
+* Fri Jan 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.2.0-0
+- Added a simplib::ldap::domain_to_dn function for generating a reasonable Base
+  DN from the domain fact
+
 * Mon Jan 09 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.0-0
 - fixed how passgen generated salts to restrict it to non-special characters
 
