@@ -1,3 +1,6 @@
+* Fri Jan 20 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.0-0
+- Added type for the server distribution of puppet being used
+
 * Fri Jan 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.2.0-0
 - Added a simplib::ldap::domain_to_dn function for generating a reasonable Base
   DN from the domain fact

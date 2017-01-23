@@ -13,7 +13,6 @@ puppet-lint:
   tags:
     - docker
   image: ruby:2.1
-  allow_failure: true
   script:
     - bundle install
     - bundle exec rake lint
