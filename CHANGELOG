@@ -1,3 +1,6 @@
+* Fri Jan 27 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.2.0
+- Added openssl_ciphers fact to list avaiable OpenSSL ciphers
+
 * Fri Jan 20 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.0-0
 - Added type for the server distribution of puppet being used
 

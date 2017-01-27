@@ -63,6 +63,7 @@ documentation.
    hash
   * **defaultgatewayiface**  -  Return the default gw interface of the system
   * **defaultgateway**       -  Return the default gateway of the system
+  * **fips_ciphers**         -  Returns a list of available OpenSSL ciphers
   * **fips_enabled**         -  Determine whether or not FIPS is enabled on
    this system
   * **fullrun**              -  Determine whether or not to do an intensive run
