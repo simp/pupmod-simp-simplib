@@ -4,6 +4,6 @@ Facter.add('fips_ciphers') do
   confine :kernel => 'Linux'
 
   setcode do
-    Facter::Core::Execution.exec(`openssl ciphers FIPS:!LOW`).split(':')
+    Facter::Core::Execution.exec('openssl ciphers FIPS:!LOW').split(':')
   end
 end
