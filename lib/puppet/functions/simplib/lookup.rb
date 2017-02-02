@@ -61,7 +61,21 @@ Puppet::Functions.create_function(:'simplib::lookup') do
           end
         end
       else
-        global_param = closure_scope.find_global_scope.lookupvar(param)
+        # Save the state of the strict vars setting. Ignore it here since we do
+        # legitimate global scope lookups but make sure to restore it.
+        strict_vars = nil
+        begin
+          if Puppet[:strict]
+            strict_vars = Puppet[:strict]
+            Puppet[:strict] = :off
+          end
+
+          global_param = closure_scope.find_global_scope.lookupvar(param)
+        ensure
+          if strict_vars
+            Puppet[:strict] = strict_vars
+          end
+        end
       end
     end
 
