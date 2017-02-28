@@ -95,7 +95,7 @@ documentation.
   * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
   * **runlevel**             -  Return the current system runlevel
   * **shmall**               -  Return the value of shmall from sysctl
-  * **simp_puppet_settings** -  Returns a hash of all Puppet settings on a node
+  * **puppet_settings**      -  Returns a hash of all Puppet settings on a node
   * **tmp_mounts**           -  This fact provides information about `/tmp`,
   `/var/tmp`, and `/dev/shm` should they be present on the system
   * **uid_min**              -  Return the minimum uid allowed
