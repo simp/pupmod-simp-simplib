@@ -5,26 +5,46 @@ Status](https://travis-ci.org/simp/pupmod-simp-simplib.svg)](https://travis-ci.o
 compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)
 
 #### Table of Contents
-
-1. [Module Description - What the module does and why it is useful]
-(#module-description)
-2. [Setup - The basics of getting started with simplib](#setup)
+1. [Overview](#this-is-a-simp-module)
+2. [Module Description - What the module does and why it is useful](#module-description)
+3. [Setup - The basics of getting started with simplib](#setup)
     * [What simplib affects](#what-simplib-affects)
     * [Setup requirements](#setup-requirements)
     * [Beginning with simplib](#beginning-with-simplib)
-3. [Usage - Configuration options and additional functionality](#usage)
-4. [Reference - An under-the-hood peek at what the module is doing and how]
-(#reference)
+4. [Usage - Configuration options and additional functionality](#usage)
+5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Facts](#facts)
     * [Functions](#functions)
     * [Types](#types)
     * [Data Types](#data-types)
-5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+6. [Limitations - OS compatibility, etc.](#limitations)
+7. [Development - Guide for contributing to the module](#development)
+
+## This is a SIMP module
+This module is a component of the
+[System Integrity Management
+Platform](https://github.com/NationalSecurityAgency/SIMP),
+a compliance-management framework built on Puppet.
+
+If you find any issues, they can be submitted to our
+[JIRA](https://simp-project.atlassian.net/).
+
+Please read our [Contribution
+Guide](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP)
+and visit our [developer
+wiki](https://simp-project.atlassian.net/wiki/display/SD/SIMP+Development+Home).
+
+This module is optimally designed for use within a larger SIMP ecosystem, but it
+can be used independently:
+* When included within the SIMP ecosystem, security compliance settings will be
+managed from the Puppet server.
+* In the future, all SIMP-managed security subsystems will be disabled by
+default and must be explicitly opted into by administrators.  Please review
+*simp/simp_options* for details.
 
 ## Module Description
 
-simplib is a collection custom functions, facts, and small types.
+*simp/simplib* is a collection custom functions, facts, and small types.
 
 This module is a component of the [System Integrity Management
 Platform](https://github.com/NationalSecurityAgency/SIMP), a
@@ -61,8 +81,8 @@ documentation.
    hash
   * **cpuinfo**              -  Returns the contents of `/proc/cpuinfo` as a
    hash
-  * **defaultgatewayiface**  -  Return the default gw interface of the system
   * **defaultgateway**       -  Return the default gateway of the system
+  * **defaultgatewayiface**  -  Return the default gw interface of the system
   * **fips_ciphers**         -  Returns a list of available OpenSSL ciphers
   * **fips_enabled**         -  Determine whether or not FIPS is enabled on
    this system
@@ -75,6 +95,7 @@ documentation.
   * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
   * **runlevel**             -  Return the current system runlevel
   * **shmall**               -  Return the value of shmall from sysctl
+  * **puppet_settings**      -  Returns a hash of all Puppet settings on a node
   * **tmp_mounts**           -  This fact provides information about `/tmp`,
   `/var/tmp`, and `/dev/shm` should they be present on the system
   * **uid_min**              -  Return the minimum uid allowed
@@ -91,9 +112,9 @@ documentation.
 - [h2n](#h2n)
 - [host\_is\_me](#host_is_me)
 - [inspect](#inspect)
-- [ipaddresses](#ipaddresses)
 - [ip\_is\_me](#ip_is_me)
 - [ip\_to\_cron](#ip_to_cron)
+- [ipaddresses](#ipaddresses)
 - [join\_mount\_opts](#join_mount_opts)
 - [localuser](#localuser)
 - [mapval](#mapval)
@@ -107,16 +128,16 @@ documentation.
 - [strip\_ports](#strip_ports)
 - [to\_integer](#to_integer)
 - [to\_string](#to_string)
-- [validate\_array\_of\_hashes](#validate_array_of_hashes)
 - [validate\_array\_member](#validate_array_member)
+- [validate\_array\_of\_hashes](#validate_array_of_hashes)
 - [validate\_between](#validate_between)
 - [validate\_bool\_simp](#validate_bool_simp)
 - [validate\_deep\_hash](#validate_deep_hash)
 - [validate\_float](#validate_float)
 - [validate\_integer](#validate_integer)
 - [validate\_macaddress](#validate_macaddress)
-- [validate\_port](#validate_port)
 - [validate\_net\_list](#validate_net_list)
+- [validate\_port](#validate_port)
 - [validate\_re\_array](#validate_re_array)
 - [validate\_sysctl\_value](#validate_sysctl_value)
 - [validate\_umask](#validate_umask)
