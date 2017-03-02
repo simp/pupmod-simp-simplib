@@ -28,7 +28,6 @@ module Puppet::Parser::Functions
     ) do |args|
         require 'etc'
         require 'timeout'
-
         class SymbolicFileMode
           require 'puppet/util/symbolic_file_mode'
           include Puppet::Util::SymbolicFileMode
@@ -91,7 +90,12 @@ module Puppet::Parser::Functions
         if options['hash'] and !@crypt_map.keys.include?(options['hash'])
           raise Puppet::ParseError, "Error: '#{options['hash']}' is not a valid hash."
         end
-
+        unless (options.key?('libkv'))
+          options['libkv'] = call_function('simplib::lookup', ['simp_options::libkv', { 'default_value' => false}])
+        end
+        if (options['libkv'] == true)
+          call_function('simplib::passgen', [ @id, options])
+        else
         passwd = ''
         salt = ''
         def self.gen_random_pass(length,complexity,complex_only)
@@ -322,6 +326,7 @@ module Puppet::Parser::Functions
           return passwd.crypt("$#{@crypt_map[options['hash']]}$#{salt}")
         else
           return passwd
+        end
         end
     end
 end

@@ -9,7 +9,7 @@ group :test do
   gem 'rake'
   gem 'puppet', ENV.fetch('PUPPET_VERSION',  '~>4')
   gem 'rspec'
-  gem 'rspec-puppet'
+  gem 'rspec-puppet', :git => 'https://github.com/heliocentric/rspec-puppet.git', :branch => 'fix_function_test'
   gem 'puppet-strings'
   gem 'hiera-puppet-helper'
   gem 'puppetlabs_spec_helper'
@@ -27,6 +27,7 @@ group :development do
   gem 'puppet-blacksmith'
   gem 'guard-rake'
   gem 'pry'
+  gem 'pry-byebug'
   gem 'pry-doc'
 
   # `listen` is a dependency of `guard`

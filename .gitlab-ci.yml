@@ -1,5 +1,9 @@
 # 
 ---
+cache:
+  paths:
+    - vendor
+    - .bundle
 puppet-syntax:
   stage: test
   tags:
