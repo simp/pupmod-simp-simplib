@@ -153,7 +153,12 @@ module Puppet::Parser::Functions
             raise Puppet::ParseError, "Please enter an identifier!"
         end
 
-        keydir = "#{Puppet[:environmentpath]}/#{lookupvar('::environment')}/simp_autofiles/gen_passwd"
+	if ($PASSGEN_testdir == nil)
+          keydir = "/var/simp/environments/#{lookupvar('::environment')}/simp_autofiles/gen_passwd"
+        else
+          keydir = "#{$PASSGEN_testdir}/gen_passwd"
+        end
+
         if ( !File.directory?(keydir) )
             begin
                 FileUtils.mkdir_p(keydir,{:mode => 0750})
