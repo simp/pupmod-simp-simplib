@@ -1,3 +1,9 @@
+* Thu Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
+  - move passgen to /var/simp
+
+* Wed Mar 01 2017 Ryan Russel-Yates <ryan.russel-yates@onyxpoint.com> - 3.2.1-0
+  - updated Readme
+
 * Fri Jan 27 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.2.0
 - Added openssl_ciphers fact to list avaiable OpenSSL ciphers
 
