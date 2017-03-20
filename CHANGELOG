@@ -1,3 +1,6 @@
+* Mon Mar 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
+- move passgen to Puppet[:vardir]
+
 * Thu Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
   - move passgen to /var/simp
 
