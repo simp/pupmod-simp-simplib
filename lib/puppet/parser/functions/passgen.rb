@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-    newfunction(:passgen, :type => :rvalue, :doc => "Generates a random password string for a passed identifier. Uses Puppet[:environmentpath]/$environment/simp_autofiles/gen_passwd/ as the destination directory.
+    newfunction(:passgen, :type => :rvalue, :doc => "Generates a random password string for a passed identifier. Uses Puppet[:vardir]/simp_autofiles/gen_passwd/ as the destination directory.
 
     The minimum length password that this function will return is 6 characters.
 
@@ -154,7 +154,7 @@ module Puppet::Parser::Functions
         end
 
 	if ($PASSGEN_testdir == nil)
-          keydir = "/var/simp/environments/#{lookupvar('::environment')}/simp_autofiles/gen_passwd"
+          keydir = "#{Puppet[:vardir]}/simp_autofiles/gen_passwd"
         else
           keydir = "#{$PASSGEN_testdir}/gen_passwd"
         end
