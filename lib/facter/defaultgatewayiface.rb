@@ -3,8 +3,8 @@
 # Return the default gw interface of the system.
 #
 Facter.add(:defaultgatewayiface) do
+  confine :kernel => 'Linux'
   setcode do
-    confine :kernel => 'Linux'
 
     netstat = %x{/bin/netstat -rn}
     gw_iface = "unknown"
