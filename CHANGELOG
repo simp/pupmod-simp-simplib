@@ -1,3 +1,6 @@
+* Sun Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
+- Use PATH lookup for simp_version's rpm call
+
 * Mon Mar 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
 - move passgen to Puppet[:vardir]
 
