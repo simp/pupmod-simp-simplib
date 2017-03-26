@@ -10,7 +10,7 @@ module Puppet::Parser::Functions
     begin
       retval = File.read('/etc/simp/simp.version').gsub('simp-','')
     rescue
-      tmpval = %x{/bin/rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp}
+      tmpval = %x{PATH='/usr/local/bin:/usr/bin:/bin'; rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp}
       $?.success? and retval = tmpval
     end
 
