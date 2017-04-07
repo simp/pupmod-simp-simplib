@@ -2,5 +2,5 @@
 function simplib::ldap::domain_to_dn (
   String $domain = $facts['domain']
 ) {
-  join(split($domain,'\.').map |$x| { "dc=${x}" }, ',')
+  join(split($domain,'\.').map |$x| { "DC=${x}" }, ',')
 }

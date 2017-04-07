@@ -1,3 +1,6 @@
+* Fri Apr 07 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.3.1-0
+- Change case of simplib::ldap::domain_to_dn to be upper case
+
 * Fri Apr 07 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.3.0-0
 - Added a 'simplib::inspect' debugging function for dumping parameters during
   Puppet runs.
