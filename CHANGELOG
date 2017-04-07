@@ -1,3 +1,7 @@
+* Fri Apr 07 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.3.0-0
+- Added a 'simplib::inspect' debugging function for dumping parameters during
+  Puppet runs.
+
 * Sun Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
 - Use PATH lookup for simp_version's rpm call
 
