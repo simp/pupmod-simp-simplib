@@ -1,3 +1,8 @@
+* Thu Apr 27 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.4.0-0
+- Added a pre and post stage that wrap around the stdlib stages to ensure that
+  all SIMP components have proper buffers around the rest of the stdlib stages
+  that other users might be using.
+
 * Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.2-0
 - Use the standard ip utility to determine default gateway information,
   instead of the netstat utility. This removes a dependency on the
