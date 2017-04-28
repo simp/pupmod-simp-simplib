@@ -31,6 +31,12 @@ Facter.add("simplib_sysctl") do
       if ($?.nil? && module_value) ||
           (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?)
       then
+        module_value.strip!
+
+        if module_value =~ /^\d+$/
+          module_value = module_value.to_i
+        end
+
         retval[entry] = module_value
       end
     end
