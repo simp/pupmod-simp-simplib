@@ -2,6 +2,10 @@
 - Added a pre and post stage that wrap around the stdlib stages to ensure that
   all SIMP components have proper buffers around the rest of the stdlib stages
   that other users might be using.
+- Added a `simplib_sysctl` fact to provide values that are particularly
+  relevant to SIMP installations.
+- Fixed a bug in the `puppet_settings` fact in the case where `facter` was run
+  standalone
 
 * Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.2-0
 - Use the standard ip utility to determine default gateway information,
