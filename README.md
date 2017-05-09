@@ -107,6 +107,7 @@ documentation.
 - [array\_union](#array_union)
 - [bracketize](#bracketize)
 - [deep\_merge](#deep_merge)
+- [filtered](#filtered)
 - [generate\_reboot\_msg](#generate_reboot_msg)
 - [get\_ports](#get_ports)
 - [h2n](#h2n)
@@ -209,6 +210,44 @@ Perform a deep merge on two passed hashes.
 This code is shamelessly stolen from the guts of
 ActiveSupport::CoreExtensions::Hash::DeepMerge and munged together with the
 Puppet Labs stdlib 'merge' function.
+
+Returns: `hash`
+
+#### **filtered**
+##### data_hash variant
+
+Hiera v5 backend that takes a list of allowed hiera key names, and only returns
+results from the underlying backend function that match those keys.
+
+This allows hiera data to be delegated to end users in a multi-tenant environment
+without allowing them the ability to override every hiera data point (and potentially break systems)
+
+Usage:
+```yaml
+---
+version: 5 # Specific version of hiera we are using, required for v4 and v5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: "data"         # This path is relative to hiera.yaml's directory.
+  data_hash: "yaml_data"  # Use the built-in YAML backend.
+hierarchy: # Each hierarchy consists of multiple levels
+  - name: "OSFamily"
+    path: "osfamily/%{facts.osfamily}.yaml"
+  - name: "datamodules"
+    data_hash: simplib::filtered
+    datadir: "delegated-data"
+    paths: 
+            - "%{facts.sitename}/osfamily/%{facts.osfamily}.yaml"
+            - "%{facts.sitename}/os/%{facts.operatingsystem}.yaml"
+            - "%{facts.sitename}/host/%{facts.fqdn}.yaml"
+            - "%{facts.sitename}/common.yaml"
+    options: 
+       function: yaml_data
+       filter: 
+         - profiles::ntp::servers
+         - profiles::.*
+  - name: "Common"
+    path: "common.yaml"
+```
 
 Returns: `hash`
 
