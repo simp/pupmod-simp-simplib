@@ -9,7 +9,7 @@ Facter.add(:puppet_settings) do
   setcode do
     retval = {}
 
-    if Object.const_defined?('Puppet')
+    if Object.const_defined?('Puppet') && Puppet.respond_to?(:settings)
       puppet_settings = Hash[Puppet.settings.map{|k,v| [k,v]}]
 
       puppet_settings.each_pair do |name, obj|
