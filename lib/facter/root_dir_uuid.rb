@@ -6,7 +6,7 @@ Facter.add('root_dir_uuid') do
     df_cmd = Facter::Util::Resolution.which('df')
     blkid_cmd = Facter::Util::Resolution.which('blkid')
 
-    partition = Facter::Core::Execution.exec("#{df_cmd} -T /").strip.split("\n").last.split(' ').first
+    partition = Facter::Core::Execution.exec("#{df_cmd} -P /").strip.split("\n").last.split(' ').first
 
     uuid = Facter::Core::Execution.exec("#{blkid_cmd} -s UUID -o value #{partition}").strip
 
