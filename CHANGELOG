@@ -6,13 +6,16 @@
   relevant to SIMP installations.
 - Fixed a bug in the `puppet_settings` fact in the case where `facter` was run
   standalone
+- Added a 'root_dir_uuid' fact so that it can be compared against the `/boot`
+  partition in the fips module. Facter used to have a data structure of all
+  mountpoints but it was removed for performance reasons.
 
-* Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.2-0
+* Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.0-0
 - Use the standard ip utility to determine default gateway information,
   instead of the netstat utility. This removes a dependency on the
   net-tools package.
 
-* Fri Apr 07 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.3.1-0
+* Fri Apr 07 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.3.0-0
 - Change case of simplib::ldap::domain_to_dn to be upper case
 
 * Fri Apr 07 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.3.0-0
