@@ -1,3 +1,6 @@
+* Thu May 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.4.0-0
+- Add data type for catalyst `package_ensure`
+
 * Thu Apr 27 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.4.0-0
 - Added a pre and post stage that wrap around the stdlib stages to ensure that
   all SIMP components have proper buffers around the rest of the stdlib stages
