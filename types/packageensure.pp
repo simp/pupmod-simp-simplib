@@ -1,6 +1,8 @@
 type Simplib::PackageEnsure = Enum[
-  'latest',
   'absent',
+  'held'
+  'installed',
+  'latest',
   'present',
-  'installed'
+  'purged',
 ]
