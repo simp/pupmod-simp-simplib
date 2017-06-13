@@ -1,3 +1,10 @@
+* Tue Jun 13 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.4.0-0
+- Due to lack of support for knockout_prefix for arrays in older versions
+  of Puppet, simp::knockout functionality has been moved to
+  simplib::knockout because multiple modules are using the function.
+- A wrapper has been put around simp::knockout for backwards-compatibility
+  in our code.
+  
 * Thu Jun 12 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.0-0
 - Fix fullrun fact so it's confined to linux systems
 
