@@ -4,6 +4,7 @@
   simplib::knockout because multiple modules are using the function.
 - A wrapper has been put around simp::knockout for backwards-compatibility
   in our code.
+- Update puppet requirement in metadata.json
   
 * Thu Jun 12 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.0-0
 - Fix fullrun fact so it's confined to linux systems
