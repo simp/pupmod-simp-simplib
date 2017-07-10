@@ -4,8 +4,9 @@
   simplib::knockout because multiple modules are using the function.
 - A wrapper has been put around simp::knockout for backwards-compatibility
   in our code.
+- Update puppet requirement in metadata.json
   
-* Thu Jun 12 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.0-0
+* Sat Jun 10 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.0-0
 - Fix fullrun fact so it's confined to linux systems
 
 * Thu May 18 2017 Nick Miller <nick.miller@onyxpoint.com> - 3.4.0-0
@@ -23,7 +24,7 @@
   partition in the fips module. Facter used to have a data structure of all
   mountpoints but it was removed for performance reasons.
 
-* Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.3.0-0
+* Wed Apr 12 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.4.0-0
 - Use the standard ip utility to determine default gateway information,
   instead of the netstat utility. This removes a dependency on the
   net-tools package.
