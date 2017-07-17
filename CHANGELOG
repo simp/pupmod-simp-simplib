@@ -28,6 +28,11 @@
   - simplib::validate_port() replaces deprecated validate_port()
 - Add single-line json output option to simplib::inspect()
 
+* Thu Aug 03 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.5.0-0
+- Added a 'simplib::assert_metadata_os' function that will fail the compile if
+  the passed module does not support the operating systems defined in the
+  module's metadata.json.
+
 * Thu Aug 03 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.5.0-0
 - The fips_ciphers fact returns nil if the openssl binary is not available
 
