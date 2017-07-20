@@ -1,3 +1,6 @@
+* Tue Jul 18 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.1-0
+- Fix ipv6_enabled fact, so that it is confined only to linux systems
+
 * Tue Jun 13 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.4.0-0
 - Due to lack of support for knockout_prefix for arrays in older versions
   of Puppet, simp::knockout functionality has been moved to
