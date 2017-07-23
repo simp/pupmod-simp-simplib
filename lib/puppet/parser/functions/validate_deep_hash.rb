@@ -1,54 +1,54 @@
 module Puppet::Parser::Functions
   newfunction(:validate_deep_hash, :doc => <<-'ENDDOC') do |args|
-    Perform a deep validation on two passed hashes.
+    Perform a deep validation on two passed `Hashes`.
 
-    The first hash is the one to validate against, and the second is
-    the one being validated. The first hash (i.e. the source) exists
-    to define a valid structure and potential regular expression to
-    validate against, or nil top skip an entry. Arrays of values
-    will match each entry to the given regular expression. Below are
-    examples of a source hash and a hash to compare against it:
+    The first `Hash` is the one to validate against, and the second is the
+    one being validated. The first `Hash` (i.e. the source) exists to define
+    a valid structure and potential regular expression to validate against, or
+    `nil` top skip an entry.
 
-    'source' = {
-       'foo' => {
-         'bar' => {
-           #NOTE: Use single quotes for regular expressions
-           'baz' => '^\d+$',
-           'abc' => '^\w+$',
-           'def' => nil #NOTE: not 'nil' in quotes
-         },
-         'baz' => {
-           'xyz' => '^true|false$'
-         }
-       }
-     }
+    `Arrays` of values will match each entry to the given regular expression.
 
-    'to_check' = {
-       'foo' => {
-         'bar' => {
-           'baz' => '123',
-           'abc' => [ 'these', 'are', 'words' ],
-           'def' => 'Anything will work here!'
-         },
-         'baz' => {
-           'xyz' => 'false'
-         }
-       }
-     }
+    All keys must be defined in the source `Hash` that is being validated
+    against.
 
-    And an example of a hash that would fail validation:
+    Unknown keys in the `Hash` being compared will cause a failure in
+    validation
 
-    'source' => { 'foo' => '^\d+$' }
+    @example Passing Examples
+      'source' = {
+        'foo' => {
+          'bar' => {
+            #NOTE: Use single quotes for regular expressions
+            'baz' => '^\d+$',
+            'abc' => '^\w+$',
+            'def' => nil #NOTE: not 'nil' in quotes
+          },
+          'baz' => {
+            'xyz' => '^true|false$'
+          }
+        }
+      }
 
-    'to_check' => { 'foo' => 'abc' }
+      'to_check' = {
+        'foo' => {
+          'bar' => {
+            'baz' => '123',
+            'abc' => [ 'these', 'are', 'words' ],
+            'def' => 'Anything will work here!'
+          },
+          'baz' => {
+            'xyz' => 'false'
+          }
+        }
+      }
 
-    This fails because we expect the value of 'foo' to be a series of
-    digits, not letters.
+    @example Failing Examples
+      'source' => { 'foo' => '^\d+$' }
 
-    Additionally, all keys must be defined in the source hash that is being
-    validated against. Unknown keys in the hash being compared will cause a
-    failure in validation
+      'to_check' => { 'foo' => 'abc' }
 
+    @return [Nil]
     ENDDOC
 
     def self.deep_validate(source, to_check, level="TOP", invalid = Array.new)

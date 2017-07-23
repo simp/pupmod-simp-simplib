@@ -1,8 +1,8 @@
-[![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
-[![Build
-Status](https://travis-ci.org/simp/pupmod-simp-simplib.svg)](https://travis-ci.org/simp/pupmod-simp-simplib)
-[![SIMP
-compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-orange.svg)
+[![License](https://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/73/badge)](https://bestpractices.coreinfrastructure.org/projects/73)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/simp/simplib.svg)](https://forge.puppetlabs.com/simp/simplib)
+[![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/simp/simplib.svg)](https://forge.puppetlabs.com/simp/simplib)
+[![Build Status](https://travis-ci.org/simp/simp-core.svg)](https://travis-ci.org/simp/simp-core)
 
 #### Table of Contents
 1. [Overview](#this-is-a-simp-module)
@@ -17,40 +17,19 @@ compatibility](https://img.shields.io/badge/SIMP%20compatibility-4.2.*%2F5.1.*-o
     * [Functions](#functions)
     * [Types](#types)
     * [Data Types](#data-types)
-6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
+6. [Development - Guide for contributing to the module](#development)
 
 ## This is a SIMP module
 This module is a component of the
-[System Integrity Management
-Platform](https://github.com/NationalSecurityAgency/SIMP),
+[System Integrity Management Platform](https://simp-project.com),
 a compliance-management framework built on Puppet.
 
 If you find any issues, they can be submitted to our
 [JIRA](https://simp-project.atlassian.net/).
 
-Please read our [Contribution
-Guide](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP)
-and visit our [developer
-wiki](https://simp-project.atlassian.net/wiki/display/SD/SIMP+Development+Home).
-
-This module is optimally designed for use within a larger SIMP ecosystem, but it
-can be used independently:
-* When included within the SIMP ecosystem, security compliance settings will be
-managed from the Puppet server.
-* In the future, all SIMP-managed security subsystems will be disabled by
-default and must be explicitly opted into by administrators.  Please review
-*simp/simp_options* for details.
-
 ## Module Description
 
 *simp/simplib* is a collection custom functions, facts, and small types.
-
-This module is a component of the [System Integrity Management
-Platform](https://github.com/NationalSecurityAgency/SIMP), a
-compliance-management framework built on Puppet. It is optimally designed for
-use within a larger SIMP ecosystem, but many of its functions can be used
-independently.
 
 ## Setup
 
@@ -65,6 +44,8 @@ Agents will need to enable `pluginsync`.
 ## Usage
 
 Please see [reference](#reference) for usage.
+
+Full documentation can be found in the [module docs](docs/index.html)
 
 ## Reference
 
@@ -1021,24 +1002,13 @@ and validation across the SIMP codebase.
 * Simplib::URI
     * A valid URI string (lightly sanity checked)
 
-## Limitations
-
-SIMP Puppet modules are generally intended to be used on a Red Hat Enterprise
-Linux-compatible distribution.
-
 ## Development
 
-Please read our [Contribution
-Guide](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP)
-and visit our [Developer
-Wiki](https://simp-project.atlassian.net/wiki/display/SD/SIMP+Development+Home)
+Please read our [Contribution Guide](http://simp.readthedocs.io/en/master/contributors_guide/index.html)
+and visit our [Developer Wiki](https://simp-project.atlassian.net/wiki/display/SD/SIMP+Development+Home)
 
 If you find any issues, they can be submitted to our
 [JIRA](https://simp-project.atlassian.net).
 
-[SIMP Contribution
-Guidelines](https://simp-project.atlassian.net/wiki/display/SD/Contributing+to+SIMP)
-
-[System Integrity Management
-Platform](https://github.com/NationalSecurityAgency/SIMP)
+[System Integrity Management Platform](https://simp-project.com)
 

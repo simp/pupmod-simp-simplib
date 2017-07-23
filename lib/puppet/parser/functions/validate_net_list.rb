@@ -1,13 +1,14 @@
 module Puppet::Parser::Functions
   newfunction(:validate_net_list, :doc => <<-'ENDHEREDOC') do |args|
-    Validate that a passed list (Array or single String) of networks
-    is filled with valid IP addresses or hostnames. Hostnames are checked per
-    RFC 1123. Ports appended with a colon (:) are allowed.
+    Validate that a passed list (`Array` or single `String`) of networks is
+    filled with valid IP addresses or hostnames. Hostnames are checked per
+    RFC 1123. Ports appended with a colon `:` are allowed.
 
-    There is a second, optional argument that is a regex of strings that should
-    be ignored from the list. Omit the beginning and ending '/' delimiters.
+    There is a second, optional argument that is a regex of `Strings` that
+    should be ignored from the list. Omit the beginning and ending `/`
+    delimiters.
 
-    The following values will pass:
+    @example Passing
 
       $trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
       validate_net_list($trusted_nets)
@@ -18,7 +19,7 @@ module Puppet::Parser::Functions
       $trusted_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
       validate_net_list($trusted_nets,'^(%any|ALL)$')
 
-    The following values will fail:
+    @example Failing
 
       $trusted_nets = '10.10.10.0/24,1.2.3.4'
       validate_net_list($trusted_nets)
@@ -26,6 +27,7 @@ module Puppet::Parser::Functions
       $trusted_nets = 'bad stuff'
       validate_net_list($trusted_nets)
 
+    @return [Nil]
     ENDHEREDOC
 
     if ((args.length < 1) || (args.length > 2))
@@ -63,10 +65,10 @@ module Puppet::Parser::Functions
       # Valid quad-dotted IPv4 addresses will validate as hostnames.
       # So check for IP addresses first
       begin
-        ip = IPAddr.new(host)
+        IPAddr.new(host)
       # For some reason, can't see derived error class (IPAddr::Error)
       # when run by Puppet
-      rescue ArgumentError => e
+      rescue ArgumentError
         # if looks like quad-dotted set of decimal numbers, most likely
         # it is not an oddly-named host, but a bad IPv4 address in which
         # one or more of the octets is out of range (configuration

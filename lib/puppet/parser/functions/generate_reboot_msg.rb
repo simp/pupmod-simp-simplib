@@ -1,19 +1,28 @@
-# Generate a reboot message from a passed hash.
-#
-# Requires a hash of the following form:
-# {
-#   'id'  => 'reason',
-#   'id2' => 'reason2',
-#   ...
-# }
-#
-# Will return a message such as:
-#   A system reboot is required due to:
-#     id => reason
-#     id2 => reason2
-#
 module Puppet::Parser::Functions
-  newfunction(:generate_reboot_msg, :type => :rvalue) do |input_hash|
+  newfunction(:generate_reboot_msg, :type => :rvalue, :doc => <<-ENDHEREDOC) do |input_hash|
+    Generate a reboot message from a passed `Hash`.
+
+    Requires a `Hash` of the following form:
+
+    ``ruby
+    {
+      'id'  => 'reason',
+      'id2' => 'reason2',
+      ...
+    }
+    ``
+
+    Will return a message such as:
+
+    ``
+    A system reboot is required due to:
+      id => reason
+      id2 => reason2
+    ``
+
+    @return [String]
+    ENDHEREDOC
+
     input_hash = input_hash.shift
 
     raise(Puppet::ParseError,"Error: input to generate_reboot() must be a Hash, got '#{input_hash.class}'") unless input_hash.is_a?(Hash)

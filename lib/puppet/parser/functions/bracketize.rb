@@ -1,10 +1,11 @@
 module Puppet::Parser::Functions
   newfunction(:bracketize, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |ipaddr|
-    Add brackets to IP addresses and arrays of IP addresses based on the
+    Add brackets to IP addresses and `Arrays` of IP addresses based on the
     rules for bracketing IPv6 addresses.
 
-    Ignore anything that doesn't look like an IPv6 address.
+    Ignore anything that does not look like an IPv6 address.
 
+    @return [Variant[String, Array[String]]]
     ENDHEREDOC
 
     ipaddr = Array(ipaddr).flatten

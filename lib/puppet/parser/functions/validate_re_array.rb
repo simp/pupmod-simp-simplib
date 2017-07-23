@@ -1,31 +1,29 @@
 module Puppet::Parser::Functions
   # Derived from the Puppet Labs stdlib validate_re
   newfunction(:validate_re_array, :doc => <<-'ENDHEREDOC') do |args|
-    Perform simple validation of a string, or array of strings,
+    Perform simple validation of a `String`, or `Array` of `Strings`,
     against one or more regular expressions. The first argument of
-    this function should be a string to test, and the second argument
-    should be a stringified regular expression (without the //
-    delimiters) or an array of regular expressions.  If none of the
-    regular expressions match the string passed in, compilation will
-    abort with a parse error.
+    this function should be a `String` to test, and the second argument
+    should be a stringified regular expression (without the `//`
+    delimiters) or an `Array` of regular expressions.  If none of the regular
+    expressions match the string passed in, compilation will abort with a parse
+    error.
 
-    If a third argument is specified, this will be the error message
-    raised and seen by the user.
+    If a third argument is specified, this will be the error message raised and
+    seen by the user.
 
-    The following strings will validate against the regular expressions:
+    @example Passing
+      validate_re_array('one', '^one$')
+      validate_re_array('one', [ '^one', '^two' ])
+      validate_re_array(['one','two'], [ '^one', '^two' ])
 
-        validate_re_array('one', '^one$')
-        validate_re_array('one', [ '^one', '^two' ])
-        validate_re_array(['one','two'], [ '^one', '^two' ])
+    @example Failing
+      validate_re_array('one', [ '^two', '^three' ])
 
-    The following strings will fail to validate, causing compilation to abort:
+    @example Custom Error Message
+      validate_re_array($::puppetversion, '^2.7', 'The $puppetversion fact value does not match 2.7')
 
-        validate_re_array('one', [ '^two', '^three' ])
-
-    A helpful error message can be returned like this:
-
-        validate_re_array($::puppetversion, '^2.7', 'The $puppetversion fact value does not match 2.7')
-
+    @return [Nil]
     ENDHEREDOC
     if (args.length < 2) or (args.length > 3) then
       raise Puppet::ParseError, ("validate_re_array(): wrong number of arguments (#{args.length}; must be 2 or 3)")

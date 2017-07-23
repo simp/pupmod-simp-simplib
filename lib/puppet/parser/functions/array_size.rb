@@ -1,12 +1,12 @@
 module Puppet::Parser::Functions
-
   newfunction(:array_size, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
-    Returns the number of elements in an array. If a string is passed, simply
-    returns '1'.
+    Returns the number of elements in an `Array`. If a `String` is passed,
+      simply returns `1`.
 
-    This is in contrast to the Puppet Labs stdlib 'size' function which returns
-    the size of an array or the length of a string when called.
+    This is in contrast to the Puppet Labs `stdlib` `size()` function which
+    returns the size of an `Array` or the length of a `String` when called.
 
+    @return [Integer]
     ENDHEREDOC
 
     unless args.length == 1

@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Function: passgen (Ruby 3.x API)
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_functions_ruby3x::passgen";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_function_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (p)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Functions</span></span>
+     &raquo; 
+    <span class="title">passgen</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Function: passgen</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      lib/puppet/parser/functions/passgen.rb
+    </dd>
+  </dl>
+  <dl>
+    <dt>Function type:</dt>
+    <dd>Ruby 3.x API</dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="method_details first">
+  
+  <div class="tags overload overload_item">
+    <span class="overload">
+      <span class="overload_item">
+        <span class="signature first" style="margin-left: 0px;"><strong>passgen(String $identifier, Hash $modifier_hash)</strong> &#x21d2; <tt>Stri</tt> </span>
+      </span>
+    </span>
+  </div>
+  
+  <div class="docstring">
+    <div class="discussion">
+      
+<p>Generates a random password string for a passed identifier.</p>
+
+<p>Uses
+<code>Puppet[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/</code>
+as the destination directory.</p>
+
+<p>The minimum length password that this function will return is
+<code>6</code> characters.</p>
+
+<p>Arguments: identifier, &lt;modifier hash&gt;; in that order.</p>
+
+    </div>
+  </div>
+  <div class="tags">
+  
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>identifier</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Unique <code>String</code> to identify the password usage</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>modifier_hash</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>May contain any of the following options:</p>
+<ul><li>
+<p><code>last</code> =&gt; <code>false</code>(*) or <code>true</code></p>
+<ul><li>
+<p>Return the last generated password</p>
+</li><li>
+<p>Return the last generated password</p>
+</li></ul>
+</li><li>
+<p><code>length</code> =&gt; <code>Integer</code></p>
+<ul><li>
+<p>Length of the new password</p>
+</li></ul>
+</li><li>
+<p><code>hash</code> =&gt; <code>false</code>(*), <code>true</code>,
+<code>md5</code>, <code>sha256</code> (true), <code>sha512</code></p>
+<ul><li>
+<p>Return a <code>Hash</code> of the password instead of the password itself.</p>
+</li></ul>
+</li><li>
+<p><code>complexity</code> =&gt; <code>0</code>(*), <code>1</code>,
+<code>2</code></p>
+<ul><li>
+<p><code>0</code> =&gt; Use only Alphanumeric characters in your password
+(safest)</p>
+</li><li>
+<p><code>1</code> =&gt; Add reasonably safe symbols</p>
+</li><li>
+<p><code>2</code> =&gt; Printable ASCII</p>
+</li></ul>
+</li></ul>
+
+<p><strong>private options:</strong></p>
+<ul><li>
+<p><code>password</code> =&gt; contains the string representation of the
+password to hash (used for testing)</p>
+</li><li>
+<p><code>salt</code> =&gt; contains the string literal salt to use (used for
+testing)</p>
+</li><li>
+<p><code>complex_only</code> =&gt; use only the characters explicitly added by
+the complexity rules (used for testing)</p>
+</li></ul>
+
+<p>If no, or an invalid, second argument is provided then it will return the
+currently stored <code>String</code>.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Stri</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Stri</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'lib/puppet/parser/functions/passgen.rb', line 2</span>
+
+<span class='id identifier rubyid_newfunction'>newfunction</span><span class='lparen'>(</span><span class='symbol'>:passgen</span><span class='comma'>,</span> <span class='symbol'>:type</span> <span class='op'>=&gt;</span> <span class='symbol'>:rvalue</span><span class='comma'>,</span> <span class='symbol'>:doc</span> <span class='op'>=&gt;</span> <span class='heredoc_beg'>&lt;&lt;-EOM</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_args'>args</span><span class='op'>|</span>
+    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>etc</span><span class='tstring_end'>&#39;</span></span>
+<span class='tstring_content'>Generates a random password string for a passed identifier.
+
+Uses `Puppet[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
+as the destination directory.
+
+The minimum length password that this function will return is `6`
+characters.
+
+  Arguments: identifier, &lt;modifier hash&gt;; in that order.
+
+@param identifier [String]
+  Unique `String` to identify the password usage
+
+@param modifier_hash [Hash]
+  May contain any of the following options:
+
+    * `last` =&gt; `false`(*) or `true`
+       * Return the last generated password
+
+    * `length` =&gt; `Integer`
+       * Length of the new password
+
+    * `hash` =&gt; `false`(*), `true`, `md5`, `sha256` (true), `sha512`
+       * Return a `Hash` of the password instead of the password itself.
+
+    * `complexity` =&gt; `0`(*), `1`, `2`
+      * `0` =&gt; Use only Alphanumeric characters in your password (safest)
+      * `1` =&gt; Add reasonably safe symbols
+      * `2` =&gt; Printable ASCII
+
+    **private options:**
+
+    * `password` =&gt; contains the string representation of the password to hash (used for testing)
+    * `salt` =&gt; contains the string literal salt to use (used for testing)
+    * `complex_only` =&gt; use only the characters explicitly added by the complexity rules (used for testing)
+
+  If no, or an invalid, second argument is provided then it will return
+  the currently stored `String`.
+
+@return [String]
+</span><span class='heredoc_end'>EOM
+</span>    <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>timeout</span><span class='tstring_end'>&#39;</span></span>
+
+    <span class='kw'>class</span> <span class='const'>SymbolicFileMode</span>
+      <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>puppet/util/symbolic_file_mode</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_include'>include</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>Util</span><span class='op'>::</span><span class='const'>SymbolicFileMode</span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_sym_filemode_processor'>sym_filemode_processor</span> <span class='op'>=</span> <span class='const'>SymbolicFileMode</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+
+    <span class='id identifier rubyid_puppet_user'>puppet_user</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>puppet</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_puppet_user'>puppet_user</span> <span class='op'>=</span> <span class='const'>Puppet</span><span class='lbracket'>[</span><span class='symbol'>:user</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='const'>Puppet</span><span class='lbracket'>[</span><span class='symbol'>:user</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_puppet_group'>puppet_group</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>puppet</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_puppet_group'>puppet_group</span> <span class='op'>=</span> <span class='const'>Puppet</span><span class='lbracket'>[</span><span class='symbol'>:group</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='const'>Puppet</span><span class='lbracket'>[</span><span class='symbol'>:group</span><span class='rbracket'>]</span>
+
+    <span class='ivar'>@crypt_map</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>md5</span><span class='tstring_end'>&#39;</span></span>     <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sha256</span><span class='tstring_end'>&#39;</span></span>  <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>5</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sha512</span><span class='tstring_end'>&#39;</span></span>  <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>6</span><span class='tstring_end'>&#39;</span></span>
+    <span class='rbrace'>}</span>
+
+    <span class='ivar'>@default_password_length</span> <span class='op'>=</span> <span class='int'>32</span>
+
+    <span class='ivar'>@id</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+    <span class='id identifier rubyid_arg_options'>arg_options</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+    <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>return_current</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>last</span><span class='tstring_end'>&#39;</span></span>           <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span>         <span class='op'>=&gt;</span> <span class='ivar'>@default_password_length</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span>           <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span>     <span class='op'>=&gt;</span> <span class='int'>0</span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span>   <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='comma'>,</span>
+    <span class='rbrace'>}</span>
+
+    <span class='comment'># Convert legacy format to new hash format for options.
+</span>    <span class='kw'>if</span> <span class='lbracket'>[</span><span class='const'>String</span><span class='comma'>,</span><span class='const'>Fixnum</span><span class='comma'>,</span><span class='const'>Integer</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_arg_options'>arg_options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_arg_options'>arg_options</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^l</span><span class='regexp_end'>/</span></span>
+        <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>last</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span>
+      <span class='kw'>else</span>
+        <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_arg_options'>arg_options</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+      <span class='kw'>end</span>
+    <span class='kw'>elsif</span> <span class='id identifier rubyid_arg_options'>arg_options</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='const'>Hash</span>
+      <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_arg_options'>arg_options</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>return_current</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\d+$</span><span class='regexp_end'>/</span></span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error: Length must be an integer!</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>!~</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\d+$</span><span class='regexp_end'>/</span></span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error: Complexity must be an integer!</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+    <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+
+    <span class='comment'># Make sure a valid hash was passed if one was passed.
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='kw'>true</span>
+      <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sha256</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>end</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='kw'>and</span> <span class='op'>!</span><span class='ivar'>@crypt_map</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error: &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; is not a valid hash.</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='id identifier rubyid_length'>length</span><span class='comma'>,</span><span class='id identifier rubyid_complexity'>complexity</span><span class='comma'>,</span><span class='id identifier rubyid_complex_only'>complex_only</span><span class='rparen'>)</span>
+
+        <span class='id identifier rubyid_length'>length</span> <span class='op'>=</span> <span class='id identifier rubyid_length'>length</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+        <span class='kw'>if</span> <span class='id identifier rubyid_length'>length</span><span class='period'>.</span><span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_length'>length</span> <span class='op'>=</span> <span class='ivar'>@default_password_length</span>
+        <span class='kw'>elsif</span> <span class='id identifier rubyid_length'>length</span> <span class='op'>&lt;</span> <span class='int'>8</span>
+            <span class='id identifier rubyid_length'>length</span> <span class='op'>=</span> <span class='int'>8</span>
+        <span class='kw'>end</span>
+
+        <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+        <span class='kw'>begin</span>
+            <span class='const'>Timeout</span><span class='op'>::</span><span class='id identifier rubyid_timeout'>timeout</span><span class='lparen'>(</span><span class='int'>30</span><span class='rparen'>)</span> <span class='kw'>do</span>
+              <span class='id identifier rubyid_default_charlist'>default_charlist</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a</span><span class='tstring_end'>&quot;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>z</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Z</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0</span><span class='tstring_end'>&quot;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>9</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+              <span class='id identifier rubyid_specific_charlist'>specific_charlist</span> <span class='op'>=</span> <span class='kw'>nil</span>
+              <span class='kw'>case</span> <span class='id identifier rubyid_complexity'>complexity</span>
+              <span class='kw'>when</span> <span class='int'>1</span>
+                <span class='id identifier rubyid_specific_charlist'>specific_charlist</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>@</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>%</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>+</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>=</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+              <span class='kw'>when</span> <span class='int'>2</span>
+                <span class='id identifier rubyid_specific_charlist'>specific_charlist</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>[</span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>`</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>{</span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+              <span class='kw'>else</span>
+              <span class='kw'>end</span>
+              <span class='kw'>unless</span> <span class='id identifier rubyid_specific_charlist'>specific_charlist</span> <span class='op'>==</span> <span class='kw'>nil</span>
+                  <span class='kw'>if</span> <span class='id identifier rubyid_complex_only'>complex_only</span> <span class='op'>==</span> <span class='kw'>true</span>
+                     <span class='id identifier rubyid_charlists'>charlists</span> <span class='op'>=</span> <span class='lbracket'>[</span>
+                         <span class='id identifier rubyid_specific_charlist'>specific_charlist</span>
+                     <span class='rbracket'>]</span>
+                  <span class='kw'>else</span>
+                     <span class='id identifier rubyid_charlists'>charlists</span> <span class='op'>=</span> <span class='lbracket'>[</span>
+                        <span class='id identifier rubyid_default_charlist'>default_charlist</span><span class='comma'>,</span>
+                        <span class='id identifier rubyid_specific_charlist'>specific_charlist</span>
+                     <span class='rbracket'>]</span>
+                  <span class='kw'>end</span>
+
+              <span class='kw'>else</span>
+                  <span class='id identifier rubyid_charlists'>charlists</span> <span class='op'>=</span> <span class='lbracket'>[</span>
+                      <span class='id identifier rubyid_default_charlist'>default_charlist</span>
+                  <span class='rbracket'>]</span>
+              <span class='kw'>end</span>
+
+              <span class='id identifier rubyid_charlists'>charlists</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_charlist'>charlist</span><span class='op'>|</span>
+                <span class='lparen'>(</span><span class='id identifier rubyid_length'>length</span><span class='op'>/</span><span class='id identifier rubyid_charlists'>charlists</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ceil'>ceil</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_i'>i</span><span class='op'>|</span>
+                  <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>+=</span> <span class='id identifier rubyid_charlist'>charlist</span><span class='lbracket'>[</span><span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='id identifier rubyid_charlist'>charlist</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+                <span class='rbrace'>}</span>
+              <span class='kw'>end</span>
+
+              <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='id identifier rubyid_passwd'>passwd</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='lparen'>(</span><span class='id identifier rubyid_length'>length</span><span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+            <span class='kw'>end</span>
+        <span class='kw'>rescue</span> <span class='const'>Timeout</span><span class='op'>::</span><span class='const'>Error</span>
+            <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>passgen timed out for </span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_content'>!</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>end</span>
+
+        <span class='kw'>return</span> <span class='id identifier rubyid_passwd'>passwd</span>
+    <span class='kw'>end</span>
+
+
+    <span class='kw'>if</span> <span class='op'>!</span><span class='ivar'>@id</span>
+        <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Please enter an identifier!</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='lparen'>(</span><span class='gvar'>$PASSGEN_testdir</span> <span class='op'>==</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_keydir'>keydir</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>Puppet</span><span class='lbracket'>[</span><span class='symbol'>:vardir</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>/simp/environments/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_lookupvar'>lookupvar</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>::environment</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>/simp_autofiles/gen_passwd</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_keydir'>keydir</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='gvar'>$PASSGEN_testdir</span><span class='embexpr_end'>}</span><span class='tstring_content'>/gen_passwd</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>if</span> <span class='lparen'>(</span> <span class='op'>!</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_directory?'>directory?</span><span class='lparen'>(</span><span class='id identifier rubyid_keydir'>keydir</span><span class='rparen'>)</span> <span class='rparen'>)</span>
+        <span class='kw'>begin</span>
+            <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_mkdir_p'>mkdir_p</span><span class='lparen'>(</span><span class='id identifier rubyid_keydir'>keydir</span><span class='comma'>,</span><span class='lbrace'>{</span><span class='symbol'>:mode</span> <span class='op'>=&gt;</span> <span class='int'>0750</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+            <span class='comment'># This chown is applicable as long as it is applied
+</span>            <span class='comment'># by puppet, not puppetserver.
+</span>            <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_chown'>chown</span><span class='lparen'>(</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='comma'>,</span><span class='id identifier rubyid_puppet_group'>puppet_group</span><span class='comma'>,</span><span class='id identifier rubyid_keydir'>keydir</span><span class='rparen'>)</span>
+        <span class='kw'>rescue</span>
+            <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not make directory </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_keydir'>keydir</span><span class='embexpr_end'>}</span><span class='tstring_content'>. Ensure that </span><span class='embexpr_beg'>#{</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='id identifier rubyid_keydir'>keydir</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'> is writable by &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span>
+            <span class='kw'>return</span> <span class='id identifier rubyid_passwd'>passwd</span>
+        <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Here, we&#39;re trying to get the last entry, if it exists.  If it
+</span>    <span class='comment'># doesn&#39;t, then just return the current entry, or throw an error if that
+</span>    <span class='comment'># one doesn&#39;t exist. It&#39;s quite likely that you have something out of
+</span>    <span class='comment'># order in the calling manifest if an error is thrown.
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>last</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_toread'>toread</span> <span class='op'>=</span> <span class='kw'>nil</span>
+        <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_keydir'>keydir</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_content'>.last</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_toread'>toread</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_keydir'>keydir</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_content'>.last</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>else</span>
+            <span class='id identifier rubyid_toread'>toread</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_keydir'>keydir</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>end</span>
+
+        <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exists?'>exists?</span><span class='lparen'>(</span><span class='id identifier rubyid_toread'>toread</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id identifier rubyid_readlines'>readlines</span><span class='lparen'>(</span><span class='id identifier rubyid_toread'>toread</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span>
+            <span class='id identifier rubyid_sf'>sf</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='id identifier rubyid_toread'>toread</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='id identifier rubyid_toread'>toread</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.last</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>.salt.last</span><span class='tstring_end'>&quot;</span></span>
+            <span class='id identifier rubyid_saltfile'>saltfile</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_sf'>sf</span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>a+</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='int'>0640</span><span class='rparen'>)</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_saltfile'>saltfile</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+                <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>salt</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+                    <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>salt</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+                <span class='kw'>else</span>
+                    <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='int'>16</span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+                <span class='kw'>end</span>
+                <span class='id identifier rubyid_saltfile'>saltfile</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_salt'>salt</span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_saltfile'>saltfile</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='const'>IO</span><span class='period'>.</span><span class='id identifier rubyid_readlines'>readlines</span><span class='lparen'>(</span><span class='id identifier rubyid_sf'>sf</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span>
+        <span class='kw'>else</span>
+            <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_warning'>warning</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Could not find a primary or &#39;last&#39; file for </span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_content'>, please ensure that you have included this function in the proper order in your manifest!</span><span class='tstring_end'>&quot;</span></span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>password</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>password</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+            <span class='kw'>else</span>
+                <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='ivar'>@default_password_length</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+            <span class='kw'>end</span>
+        <span class='kw'>end</span>
+    <span class='kw'>else</span>
+        <span class='comment'># If the target file doesn&#39;t exist or the length of the password that
+</span>        <span class='comment'># was read from the file is not equal to the length of the expected
+</span>        <span class='comment'># password, then build a new password file.
+</span>        <span class='comment'>#
+</span>        <span class='comment'># If no options were passed, and the file exists, then just throw
+</span>        <span class='comment'># back the value in the file.  If the file is empty, create the new
+</span>        <span class='comment'># password anyway.
+</span>        <span class='comment'>#
+</span>        <span class='comment'># Rotate if you&#39;re creating a new password.
+</span>        <span class='comment'>#
+</span>        <span class='comment'># Add an associated &#39;salt&#39; file for returnting crypted passwords.
+</span>
+        <span class='comment'># Open the file in append + read mode to prepare for what is to
+</span>        <span class='comment'># come.
+</span>
+        <span class='id identifier rubyid_tgt'>tgt</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_keydir'>keydir</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='ivar'>@id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a+</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_tgt_hash'>tgt_hash</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='embexpr_end'>}</span><span class='tstring_content'>.salt</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a+</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+        <span class='comment'># These chowns are applicable as long as they are applied
+</span>        <span class='comment'># by puppet, not puppetserver.
+</span>        <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_chown'>chown</span><span class='lparen'>(</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='comma'>,</span><span class='id identifier rubyid_puppet_group'>puppet_group</span><span class='comma'>,</span><span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+        <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_chown'>chown</span><span class='lparen'>(</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='comma'>,</span><span class='id identifier rubyid_puppet_group'>puppet_group</span><span class='comma'>,</span><span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+
+        <span class='comment'># Create this if not there no matter what just in case we have an
+</span>        <span class='comment'># upgraded system.
+</span>        <span class='kw'>if</span> <span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>salt</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>salt</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+            <span class='kw'>else</span>
+                <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='int'>16</span><span class='comma'>,</span><span class='int'>0</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_salt'>salt</span><span class='rparen'>)</span>
+            <span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_rewind'>rewind</span>
+        <span class='kw'>end</span>
+
+        <span class='kw'>if</span> <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+            <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>password</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+                <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>password</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+            <span class='kw'>else</span>
+                <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+            <span class='kw'>end</span>
+            <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_passwd'>passwd</span><span class='rparen'>)</span>
+        <span class='kw'>else</span>
+            <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_gets'>gets</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span>
+            <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_gets'>gets</span><span class='period'>.</span><span class='id identifier rubyid_chomp'>chomp</span>
+
+            <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>return_current</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='kw'>and</span> <span class='id identifier rubyid_passwd'>passwd</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>!=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+              <span class='id identifier rubyid_tgt_last'>tgt_last</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='embexpr_end'>}</span><span class='tstring_content'>.last</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w+</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_last'>tgt_last</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_passwd'>passwd</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_last'>tgt_last</span><span class='period'>.</span><span class='id identifier rubyid_chmod'>chmod</span><span class='lparen'>(</span><span class='int'>0640</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_last'>tgt_last</span><span class='period'>.</span><span class='id identifier rubyid_flush'>flush</span>
+              <span class='id identifier rubyid_tgt_last'>tgt_last</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+
+              <span class='id identifier rubyid_tgt_hash_last'>tgt_hash_last</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='embexpr_end'>}</span><span class='tstring_content'>.last</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>w+</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_hash_last'>tgt_hash_last</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_salt'>salt</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_hash_last'>tgt_hash_last</span><span class='period'>.</span><span class='id identifier rubyid_chmod'>chmod</span><span class='lparen'>(</span><span class='int'>0640</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_hash_last'>tgt_hash_last</span><span class='period'>.</span><span class='id identifier rubyid_flush'>flush</span>
+              <span class='id identifier rubyid_tgt_hash_last'>tgt_hash_last</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+
+              <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_rewind'>rewind</span>
+              <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_truncate'>truncate</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_passwd'>passwd</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>length</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_salt'>salt</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gen_random_pass'>gen_random_pass</span><span class='lparen'>(</span><span class='int'>16</span><span class='comma'>,</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complexity</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>complex_only</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_passwd'>passwd</span><span class='rparen'>)</span>
+              <span class='id identifier rubyid_tgt_hash'>tgt_hash</span><span class='period'>.</span><span class='id identifier rubyid_puts'>puts</span><span class='lparen'>(</span><span class='id identifier rubyid_salt'>salt</span><span class='rparen'>)</span>
+            <span class='kw'>end</span>
+        <span class='kw'>end</span>
+
+        <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_chmod'>chmod</span><span class='lparen'>(</span><span class='int'>0640</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_flush'>flush</span>
+        <span class='id identifier rubyid_tgt'>tgt</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+
+    <span class='kw'>end</span>
+
+    <span class='comment'># Ensure that the password space is readable and writable by the Puppet
+</span>    <span class='comment'># user and no other users.
+</span>
+    <span class='id identifier rubyid_unowned_files'>unowned_files</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='const'>Find</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_keydir'>keydir</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_file'>file</span><span class='op'>|</span>
+      <span class='id identifier rubyid_file_stat'>file_stat</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_stat'>stat</span><span class='lparen'>(</span><span class='id identifier rubyid_file'>file</span><span class='rparen'>)</span>
+
+      <span class='comment'># Do we own this file?
+</span>      <span class='kw'>begin</span>
+        <span class='id identifier rubyid_file_owner'>file_owner</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getpwuid'>getpwuid</span><span class='lparen'>(</span><span class='id identifier rubyid_file_stat'>file_stat</span><span class='period'>.</span><span class='id identifier rubyid_uid'>uid</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
+
+        <span class='id identifier rubyid_unowned_files'>unowned_files</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_file'>file</span> <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_file_owner'>file_owner</span> <span class='op'>==</span> <span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='rparen'>)</span>
+      <span class='kw'>rescue</span> <span class='const'>ArgumentError</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+        <span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error getting UID for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_file'>file</span><span class='embexpr_end'>}</span><span class='tstring_content'>: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+
+        <span class='id identifier rubyid_unowned_files'>unowned_files</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_file'>file</span>
+      <span class='kw'>end</span>
+
+      <span class='comment'># Ignore any file/directory that we don&#39;t own
+</span>      <span class='const'>Find</span><span class='period'>.</span><span class='id identifier rubyid_prune'>prune</span> <span class='kw'>if</span> <span class='id identifier rubyid_unowned_files'>unowned_files</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span> <span class='op'>==</span> <span class='id identifier rubyid_file'>file</span>
+
+      <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_chown'>chown</span><span class='lparen'>(</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='comma'>,</span><span class='id identifier rubyid_puppet_group'>puppet_group</span><span class='comma'>,</span><span class='id identifier rubyid_file'>file</span><span class='rparen'>)</span>
+
+      <span class='id identifier rubyid_file_mode'>file_mode</span> <span class='op'>=</span> <span class='id identifier rubyid_file_stat'>file_stat</span><span class='period'>.</span><span class='id identifier rubyid_mode'>mode</span>
+      <span class='id identifier rubyid_desired_mode'>desired_mode</span> <span class='op'>=</span> <span class='id identifier rubyid_sym_filemode_processor'>sym_filemode_processor</span><span class='period'>.</span><span class='id identifier rubyid_symbolic_mode_to_int'>symbolic_mode_to_int</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>u+rwX,g+rX,o-rwx</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span><span class='id identifier rubyid_file_mode'>file_mode</span><span class='comma'>,</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_directory?'>directory?</span><span class='lparen'>(</span><span class='id identifier rubyid_file'>file</span><span class='rparen'>)</span><span class='rparen'>)</span>
+      <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_file_mode'>file_mode</span> <span class='op'>&amp;</span> <span class='int'>007777</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_desired_mode'>desired_mode</span>
+        <span class='const'>FileUtils</span><span class='period'>.</span><span class='id identifier rubyid_chmod'>chmod</span><span class='lparen'>(</span><span class='id identifier rubyid_desired_mode'>desired_mode</span><span class='comma'>,</span><span class='id identifier rubyid_file'>file</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+
+    <span class='kw'>unless</span> <span class='id identifier rubyid_unowned_files'>unowned_files</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='id identifier rubyid_err_msg'>err_msg</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;-EOM</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>^\s+</span><span class='regexp_end'>/</span></span><span class='comma'>,</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='tstring_content'>        Error: Could not verify ownership by &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_puppet_user'>puppet_user</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; on the following files:
+        * </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_unowned_files'>unowned_files</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\n* </span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>
+</span><span class='heredoc_end'>      EOM
+</span>      <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>ParseError</span><span class='comma'>,</span> <span class='id identifier rubyid_err_msg'>err_msg</span>
+    <span class='kw'>end</span>
+
+    <span class='comment'># Return the hash, not the password
+</span>    <span class='kw'>if</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+      <span class='kw'>return</span> <span class='id identifier rubyid_passwd'>passwd</span><span class='period'>.</span><span class='id identifier rubyid_crypt'>crypt</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>$</span><span class='embexpr_beg'>#{</span><span class='ivar'>@crypt_map</span><span class='lbracket'>[</span><span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>$</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_salt'>salt</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='kw'>return</span> <span class='id identifier rubyid_passwd'>passwd</span>
+    <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+      </td>
+    </tr>
+  </table>
+</div>
+
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Sun Jul 23 01:43:32 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.9 (ruby-2.1.9).
+</div>
+
+    </div>
+  </body>
+</html>

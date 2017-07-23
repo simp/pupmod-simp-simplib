@@ -1,12 +1,15 @@
 module Puppet::Parser::Functions
-
   newfunction(:validate_bool_simp, :doc => <<-'ENDHEREDOC') do |args|
-    Validate that all passed values are either true or false. Abort catalog
-    compilation if any value fails this check.
+    Validate that all passed values are either `true` or `false`.
 
-    Modified from the stdlib validate_bool to handle the strings 'true' and 'false'.
+    Abort catalog compilation if any value fails this check.
 
-    The following values will pass:
+    Modified from the stdlib validate_bool to handle the strings `true` and
+    `false`.
+
+    @example
+
+      The following values will pass:
 
         $iamtrue = true
         validate_bool(true)
@@ -14,11 +17,12 @@ module Puppet::Parser::Functions
         validate_bool("true")
         validate_bool(true, 'true', false, $iamtrue)
 
-    The following values will fail, causing compilation to abort:
+      The following values will fail, causing compilation to abort:
 
         $some_array = [ true ]
         validate_bool($some_array)
 
+    @return [Nil]
     ENDHEREDOC
 
     unless args.length > 0 then
@@ -31,7 +35,5 @@ module Puppet::Parser::Functions
         raise Puppet::ParseError, ("'#{arg}' is not a boolean.")
       end
     end
-
   end
-
 end

@@ -1,11 +1,12 @@
 module Puppet::Parser::Functions
   newfunction(:deep_merge, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
-    Perform a deep merge on two passed hashes.
+    Perform a deep merge on two passed `Hashes`.
 
     This code is shamelessly stolen from the guts of
-    ActiveSupport::CoreExtensions::Hash::DeepMerge and munged together with the
-    Puppet Labs stdlib 'merge' function.
+    `ActiveSupport::CoreExtensions::Hash::DeepMerge` and munged together with
+    the Puppet Labs `stdlib` `merge()` function.
 
+    @return [Hash]
     ENDHEREDOC
 
     def self.deep_merge(h1,h2)

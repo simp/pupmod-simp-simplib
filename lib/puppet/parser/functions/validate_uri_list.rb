@@ -2,16 +2,17 @@ module Puppet::Parser::Functions
   newfunction(:validate_uri_list, :arity => -1, :doc => <<-'ENDHEREDOC') do |args|
     Usage: validate_uri_list([LIST],[<VALID_SCHEMES>])
 
-    Validate that a passed list (Array or single String) of URIs is valid
-    according to Ruby's URI parser.
+    Validate that a passed list (`Array` or single `String`) of URIs is
+    valid according to Ruby's URI parser.
 
-    The following values will pass:
-
+    @example Passing
       $uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
       validate_uri_list($uris)
 
       $uris = ['ldap://my.ldap.server','ldaps://my.ldap.server']
       validate_uri_list($uris,['ldap','ldaps'])
+
+    @return [Nil]
     ENDHEREDOC
 
     uri_list = Array(args.shift)

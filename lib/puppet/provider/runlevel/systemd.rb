@@ -1,4 +1,7 @@
 Puppet::Type.type(:runlevel).provide(:systemd) do
+  desc <<-EOM
+    Set the system runlevel using systemd
+  EOM
 
   commands :systemctl => '/usr/bin/systemctl'
   defaultfor :kernel => 'Linux'

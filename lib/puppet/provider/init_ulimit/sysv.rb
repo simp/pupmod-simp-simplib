@@ -1,6 +1,9 @@
 require 'puppet/util/selinux'
 
 Puppet::Type.type(:init_ulimit).provide(:sysv) do
+  desc <<-EOM
+    A provider for updating ulimits in SYSV init.d startup scripts
+  EOM
 
   # TODO: Remove this when Puppet::Util::SELinux is fixed
   class SELinux_kludge

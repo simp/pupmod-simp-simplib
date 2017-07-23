@@ -3,12 +3,14 @@ module Puppet::Parser::Functions
   newfunction(:validate_macaddress, :doc => <<-'ENDHEREDOC') do |args|
     Validate that all passed values are valid MAC addresses.
 
-    The following values will pass:
+    @example Passing Values
+
       $macaddress = 'CA:FE:BE:EF:00:11'
       validate_macaddress($macaddress)
       validate_macaddress($macaddress, '00:11:22:33:44:55')
       validate_macaddress([$macaddress, '00:11:22:33:44:55'])
 
+    @return [Nil]
     ENDHEREDOC
 
     unless args.length > 0 then

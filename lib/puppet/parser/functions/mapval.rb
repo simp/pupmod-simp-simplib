@@ -1,26 +1,35 @@
 module Puppet::Parser::Functions
-  # This function pulls a mapped value from a text file with the format:
-  #
-  # <key> | <value>
-  #
-  # The input to the fuction should be (<ruby regex>,<map file>).
-  #
-  # Only the last value matched will be returned
+  newfunction(:mapval, :type => :rvalue, :doc => <<-EOM) do |args|
+    This function pulls a mapped value from a text file with the format:
 
-  newfunction(:mapval, :type => :rvalue, :doc => "Pull a mapped value from a text file.  Must provide a Ruby regex!.") do |args|
+    `<key> | <value>`
+
+    Only the **last** value matched will be returned
+
+    @param regex [String]
+      Ruby regular expression that will be mapped.
+      Do not add starting `^` or ending `$`
+
+    @param filename [Stdlib::Absolutepath]
+      The filename from which to pull the value
+
+    @return [String]
+    EOM
+
     regex = args[0]
     filename = args[1]
     retval = ''
     File.open(filename, 'r') do |file|
       while line = file.gets
-	      line.chomp
+        line.chomp
         line = line.split(" | ")
         if ( line[0] =~ /^#{regex}$/ )
-	        line.shift
+          line.shift
           retval = line.join.to_s.chomp
         end
       end
     end
+
     retval
   end
 end

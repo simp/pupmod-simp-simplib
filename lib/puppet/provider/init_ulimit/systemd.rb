@@ -1,4 +1,9 @@
 Puppet::Type.type(:init_ulimit).provide(:systemd) do
+  desc <<-EOM
+    Provides the ability to set ``ulimit`` settings for ``systemd`` scripts.
+
+    Deprecated: The ``systemd`` module shoould be used for this now.
+  EOM
 
   defaultfor :kernel => 'Linux'
 

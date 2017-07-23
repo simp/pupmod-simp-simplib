@@ -1,13 +1,15 @@
 module Puppet::Parser::Functions
-  # This function takes an input array of networks and returns an equivalent
-  # array in CIDR notation.
-  # It can also accept a string separated by spaces, commas, or semicolons.
+  newfunction(:nets2cidr, :type => :rvalue, :doc => <<-EOM) do |args|
+    Take an input `Array` of networks and returns an equivalent `Array` in
+    CIDR notation.
 
-  newfunction(
-    :nets2cidr,
-    :type => :rvalue,
-    :doc => "Convert an array of networks into CIDR notation"
-  ) do |args|
+    It can also accept a `String` separated by spaces, commas, or semicolons.
+
+    @param networks [Variant[Array[String], String]]
+
+    @return [Variant[Array[String], String]]
+    EOM
+
     require  File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
 
     networks = Array(args.dup).flatten

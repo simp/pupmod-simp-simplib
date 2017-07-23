@@ -1,18 +1,18 @@
 module Puppet::Parser::Functions
-
   newfunction(:array_union, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
-    Return the union of two arrays.
+    Return the union of two `Arrays`.
 
-    Example:
+    @example
 
-        $arr_x = ['1','2']
-        $arr_y = ['2','3','4']
+      $arr_x = ['1','2']
+      $arr_y = ['2','3','4']
 
-        $res = array_union($arr_x, $arr_y)
+      $res = array_union($arr_x, $arr_y)
 
-        $res contains:
-          ['1','2','3','4']
+      $res contains:
+        ['1','2','3','4']
 
+    @return [Array]
     ENDHEREDOC
 
     unless args.length == 2

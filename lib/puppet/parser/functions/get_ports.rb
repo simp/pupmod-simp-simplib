@@ -1,17 +1,16 @@
 module Puppet::Parser::Functions
-  newfunction(
-    :get_ports,
-    :type => :rvalue,
-    :doc  => <<-EOM) do |args|
-      Take an array of items that may contain port numbers and appropriately return
-      the port portion. Works with hostnames, IPv4, and IPv6.
+  newfunction(:get_ports, :type => :rvalue, :doc => <<-EOM) do |args|
+    Take an `Array` of items that may contain `port` numbers and
+    appropriately return the `port` portion. Works with hostnames, IPv4,
+    and IPv6.
 
-      Example:
-        $foo = ['https://mysite.net:8443','http://yoursite.net:8081']
-        $bar = strip_ports($foo)
-        $bar contains: ['8443','8081']
+    @example
+      $foo = ['https://mysite.net:8443','http://yoursite.net:8081']
+      $bar = strip_ports($foo)
+      $bar contains: ['8443','8081']
 
-  EOM
+    @return [Array[String]]
+    EOM
 
     raise Puppet::ParseError, "You must pass a list of hosts." if args.empty?
     Puppet::Parser::Functions.autoloader.loadall

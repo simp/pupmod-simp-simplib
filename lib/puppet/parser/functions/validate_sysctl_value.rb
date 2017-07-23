@@ -1,12 +1,14 @@
 module Puppet::Parser::Functions
 
-  newfunction(:validate_sysctl_value, :doc => <<-'ENDHEREDOC', :arity => 2) do |args|
-    Validate that the passed value is correct for the passed sysctl key.
+  newfunction(:validate_sysctl_value, :arity => 2, :doc => <<-ENDHEREDOC) do |args|
+    Validate that the passed value is correct for the passed `sysctl` key.
 
-    If a key is not know, simply returns that the value is valid.
+    If a key is not known, simply returns that the value is valid.
 
-    Example:
+    @example
       validate_sysctl_value('kernel.core_pattern','some_random_pattern %p')
+
+    @return [Nil]
     ENDHEREDOC
 
     # BEGIN: recognized value methods
