@@ -1,3 +1,7 @@
+* Mon Jul 31 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.4.1-0
+- Added slapd_version fact. Primary use is in the simp_openldap module,
+  which configures TLS options based on the version of slapd.
+
 * Tue Jul 18 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.1-0
 - Fix ipv6_enabled fact, so that it is confined only to linux systems
 
