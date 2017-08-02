@@ -3,11 +3,17 @@ module Puppet::Parser::Functions
   # array in dotted quad notation.
   # It can also accept a string separated by spaces, commas, or semicolons.
 
-  newfunction(
-    :nets2ddq,
-    :type => :rvalue,
-    :doc => "Convert an array of networks into dotted quad notation"
-  ) do |args|
+  newfunction(:nets2ddq, :type => :rvalue, :doc => <<-EOM) do |args|
+    Take an input `Array` of networks and returns an equivalent `Array` in
+    Dotted Quad notation.
+
+    It can also accept a `String` separated by spaces, commas, or semicolons.
+
+    @param networks [Variant[Array[String], String]]
+
+    @return [Variant[Array[String], String]]
+    EOM
+
     require File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
 
     networks = Array(args.dup).flatten

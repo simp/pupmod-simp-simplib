@@ -1,14 +1,25 @@
-# vim: set expandtab ts=2 sw=2:
+# A mock data function
 Puppet::Functions.create_function(:'simplib::mock_data') do
+  # @param options
+  # @param context
+  #
+  # @return [Any]
   dispatch :mock_data do
     param 'Hash', :options
     param 'Puppet::LookupContext', :context
   end
+
+  # @param key
+  # @param options
+  # @param context
+  #
+  # @return [Any]
   dispatch :mock_data_lookup_key do
     param 'String', :key
     param 'Hash', :options
     param 'Puppet::LookupContext', :context
   end
+
   def mock_data(options, context)
     case options["path"]
     when "/path/1"
@@ -29,6 +40,7 @@ Puppet::Functions.create_function(:'simplib::mock_data') do
       {}
     end
   end
+
   def mock_data_lookup_key(key, options, context)
     data = mock_data(options, context)
     if (data.key?(key))
@@ -38,3 +50,4 @@ Puppet::Functions.create_function(:'simplib::mock_data') do
     end
   end
 end
+# vim: set expandtab ts=2 sw=2:

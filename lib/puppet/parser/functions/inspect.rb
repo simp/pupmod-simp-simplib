@@ -1,12 +1,13 @@
 module Puppet::Parser::Functions
-  newfunction(:inspect, :doc => <<-EOS
-      Prints out Puppet warning messages that display the passed variable.
+  newfunction(:inspect, :doc => <<-EOM) do |args|
+    Prints out Puppet warning messages that display the passed variable.
 
-      This is mainly meant for debugging purposes.
-    EOS
-  ) do |args|
+    This is mainly meant for debugging purposes.
 
-    if (args.size != 1) then
+    @return [Nil]
+    EOM
+
+    if (args.size != 1)
       raise(Puppet::ParseError, "inspect(): Wrong number of arguments "+
         "given #{args.size} for 1")
     end

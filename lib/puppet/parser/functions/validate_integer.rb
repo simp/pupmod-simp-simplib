@@ -1,19 +1,18 @@
 module Puppet::Parser::Functions
-  newfunction(:validate_integer, :doc => <<-EOS
-      Validates whether or not the passed argument is an integer.
+  newfunction(:validate_integer, :doc => <<-EOS) do |args|
+    Validates that the passed argument is an `Integer`.
+
+    @return [Nil]
     EOS
-  ) do |arguments|
 
-    if (arguments.size != 1) then
-      raise(Puppet::ParseError, "is_integer(): Wrong number of arguments "+
-        "given #{arguments.size} for 1")
+    if (args.size != 1)
+      raise(Puppet::ParseError, "is_integer(): Wrong number of args given #{args.size} for 1")
     end
 
-    value = "#{arguments[0]}"
+    value = "#{args[0]}"
 
-    if value != value.to_i.to_s then
-      raise Puppet::ParseError, ("'#{arguments}' is not an integer.")
+    if value != value.to_i.to_s
+      raise Puppet::ParseError, ("'#{args}' is not an integer.")
     end
-
   end
 end

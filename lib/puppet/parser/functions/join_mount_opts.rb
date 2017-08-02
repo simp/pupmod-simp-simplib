@@ -1,10 +1,11 @@
 module Puppet::Parser::Functions
-  newfunction(
-    :join_mount_opts,
-    :type => :rvalue,
-    :doc  => "Merge two sets of 'mount' options in a reasonable fashion.
-              The second set will always override the first."
-  ) do |args|
+  newfunction(:join_mount_opts, :type => :rvalue, :doc  => <<-EOM) do |args|
+    Merge two sets of `mount` options in a reasonable fashion.
+
+    The second set will always override the first.
+
+    @return [Array[String]]
+    EOM
 
     # Input Validation
     if not args[0].is_a?(Array) or not args[1].is_a?(Array) then

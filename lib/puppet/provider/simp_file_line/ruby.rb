@@ -1,4 +1,9 @@
 Puppet::Type.type(:simp_file_line).provide(:ruby) do
+  desc <<-EOM
+    Provides the ability to prepend, append, or simply add lines to a file.
+
+    Will create the file if it doesn't exist.
+  EOM
 
   def exists?
     if file_managed? then

@@ -9,6 +9,7 @@
 # @param output_type
 #   The format that you wish to use to display the output during the run
 #
+# @return [None]
 function simplib::inspect (
   String $var_name,
   Enum['json','yaml'] $output_type = 'json'

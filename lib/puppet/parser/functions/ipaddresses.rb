@@ -1,14 +1,13 @@
 module Puppet::Parser::Functions
+  newfunction(:ipaddresses, :type => :rvalue, :doc => <<-EOM) do |args|
+      Return an `Array` of all IP addresses known to be associated with the
+      client.
 
-  newfunction(
-    :ipaddresses,
-    :type => :rvalue,
-    :doc => <<-EOS
-      Return an array of all IP addresses known to be associated with the
-      client. If an argument is passed, and is not false, then only return
+      If an argument is passed, and is not `false`, then only return
       non-local addresses.
-    EOS
-  ) do |args|
+
+      @return [Array[String]]
+    EOM
 
     only_remote = args[0]
 

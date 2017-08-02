@@ -1,4 +1,7 @@
 Puppet::Type.type(:runlevel).provide(:telinit) do
+  desc <<-EOM
+    Set the system runlevel using telinit
+  EOM
 
   commands :telinit => '/sbin/telinit'
 

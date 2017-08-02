@@ -1,10 +1,14 @@
 module Puppet::Parser::Functions
-  newfunction(:to_string, :type => :rvalue, :arity => 1, :doc => <<-EOS
-    Converts the argument into a String.
+  newfunction(:to_string, :type => :rvalue, :arity => 1, :doc => <<-EOS) do |arguments|
+    Converts the argument into a `String`.
 
-    Only works if the passed argument responds to the 'to_s' Ruby method.
+    Only works if the passed argument responds to the `to_s()` Ruby method.
+
+    @param input [Any]
+      The argument to convert into a `String`
+
+    @return [String]
     EOS
-  ) do |arguments|
 
     arg = arguments[0]
 

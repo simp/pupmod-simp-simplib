@@ -1,48 +1,51 @@
 Puppet::Type.newtype(:init_ulimit) do
   desc <<-EOT
-  Update ulimit settings in init scripts.
+  Please use the ``systemd`` module for systems that support ``systemd``
+
+  Update ``ulimit`` settings in init scripts.
 
   The resource name does have to be unique but is meaningless.
 
-  Valid 'limit_type' names are:
-    b|socket_buffer_size
-    c|max_core_size
-    d|max_data_segment
-    e|max_nice
-    f|max_file_size
-    i|max_pending_signals
-    l|max_memory_lock_size
-    m|max_resident_set_size
-    n|max_open_files (default)
-    p|max_queue_size
-    r|max_real_time_pri
-    s|max_stack_size
-    t|max_cpu_time
-    u|max_num_procs
-    v|max_virt_memory
-    x|max_file_locks
-    T|max_threads
+  Valid ``limit_type`` names are:
 
-  All of these are explained in the 'ulimit' section of bash_builtins(1)
+    * b|socket_buffer_size
+    * c|max_core_size
+    * d|max_data_segment
+    * e|max_nice
+    * f|max_file_size
+    * i|max_pending_signals
+    * l|max_memory_lock_size
+    * m|max_resident_set_size
+    * n|max_open_files (default)
+    * p|max_queue_size
+    * r|max_real_time_pri
+    * s|max_stack_size
+    * t|max_cpu_time
+    * u|max_num_procs
+    * v|max_virt_memory
+    * x|max_file_locks
+    * T|max_threads
+
+  All of these are explained in the ``ulimit`` section of ``bash_builtins(1)``
 
   The parameter names are taken from the descriptive field names used in
-  limits.conf.
+  ``limits.conf``.
 
-  Example:
+  @example Long Names
 
-  init_ulimit { 'rsyslog':
-    ensure     => 'present',
-    limit_type => 'both'
-    item       => 'max_open_files',
-    value      => 'unlimited'
-  }
+    init_ulimit { 'rsyslog':
+      ensure     => 'present',
+      limit_type => 'both'
+      item       => 'max_open_files',
+      value      => 'unlimited'
+    }
 
-  This is the same as:
+  @example Short Names
 
-  init_ulimit { 'rsyslog':
-    item       => 'n',
-    value      => 'unlimited'
-  }
+    init_ulimit { 'rsyslog':
+      item       => 'n',
+      value      => 'unlimited'
+    }
   EOT
 
   $init_ulimit_opt_map = {

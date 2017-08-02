@@ -1,44 +1,46 @@
 module Puppet::Parser::Functions
-  # This function pulls a passsword list from a file with the following format
-  # per line:
-  #
-  # [+-!]<fqdn-regex>,<username>,<uid>,<gid>,[<homedir>],<password>
-  #
-  # Lines beginning with the '#' symbol are ignored and commas (,) are not
-  # allowed in usernames or hostnames though any characters are allowed in
-  # passwords.
-  #
-  # homedir is the home directory of the user and is optional.  By default, the
-  # system will choose the home directory.
-  #
-  # The function will return a string with the following contents
-  #
-  # [attr]<username>,MD5-based password hash with random salt
-  #
-  # Hostname Ruby regular expressions are now fully supported.  The following
-  # formats are allowed:
-  #
-  #     /regex/opts,<username>
-  #     /regex/,<username>
-  #     regex,<username>
-  #     *.<domain>,<username>
-  #     fqdn,<username>
   newfunction(:localuser, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
-    Pull a pre-set password from a password list and return an array of
+    Pull a pre-set password from a password list and return an `array` of
     user details associated with the passed hostname.
 
-    If the password starts with the string '$1$' and the length is 34
-    characters, then it will be assumed to be an MD5 hash to be
-    directly applied to the system.
+    If the password starts with the string `$1$` and the length is `34`
+    characters, then it will be assumed to be an `MD5` hash to be directly
+    applied to the system.
 
-    If the password is in plain text form, then it will be hashed and
-    stored back into the source file for future use.  The plain text
-    version will be commented out in the file.
+    If the password is in plain text form, then it will be hashed and stored
+    back into the source file for future use.  The plain text version will be
+    commented out in the file.
 
-      Arguments:
-        * filename (path to the file containing the local users),
-                    hostname (host that you are trying to match
-                    against)
+    @example Password Line syntax
+
+      [+-!]<fqdn-regex>,<username>,<uid>,<gid>,[<homedir>],<password>
+
+    Lines beginning with the `#` symbol are ignored and commas `,` are not
+    allowed in usernames or hostnames though any characters are allowed in
+    passwords.
+
+    `homedir` is the home directory of the user and is optional. By default,
+    the system will choose the home directory.
+
+    The function will return a `String` with the following contents:
+
+    `[attr]<username>,MD5-based password hash with random salt`
+
+    Hostname Ruby regular expressions are fully supported. The following
+    formats are allowed:
+
+      * /regex/opts,<username>
+      * /regex/,<username>
+      * regex,<username>
+      * *.<domain>,<username>
+      * fqdn,<username>
+
+    @param filename [Stdlib::Absolutepath]
+      path to the file containing the local users
+    @param hostname
+      host that you are trying to match against
+
+    @return [String]
     ENDHEREDOC
     filename = args[0]
     hostname = args[1]

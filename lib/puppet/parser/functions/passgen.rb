@@ -1,31 +1,46 @@
 module Puppet::Parser::Functions
-    newfunction(:passgen, :type => :rvalue, :doc => "Generates a random password string for a passed identifier. Uses Puppet[:vardir]/simp/environments/<environment>/simp_autofiles/gen_passwd/ as the destination directory.
+  newfunction(:passgen, :type => :rvalue, :doc => <<-EOM) do |args|
+    Generates a random password string for a passed identifier.
 
-    The minimum length password that this function will return is 6 characters.
+    Uses `Puppet[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
+    as the destination directory.
 
-        Arguments: identifier, <modifier hash>; in that order.
+    The minimum length password that this function will return is `6`
+    characters.
 
-        <modifier hash> may contain any of the following options:
-          - 'last' => false(*) or true
-             * Return the last generated password
-          - 'length' => Integer
-             * Length of the new password
-          - 'hash' => false(*), true, md5, sha256 (true), sha512
-             * Return a hash of the password instead of the password itself.
-          - 'complexity' => 0(*), 1, 2
-            * 0 => Use only Alphanumeric characters in your password (safest)
-            * 1 => Add reasonably safe symbols
-            * 2 => Printable ASCII
-          private options:
-          - 'password' => contains the string representation of the password to hash (used for testing)
-          - 'salt' => contains the string literal salt to use (used for testing)
-          - 'complex_only' => use only the characters explicitly added by the complexity rules (used for testing)
+      Arguments: identifier, <modifier hash>; in that order.
 
-        If no, or an invalid, second argument is provided then it will return
-        the currently stored string.
+    @param identifier [String]
+      Unique `String` to identify the password usage
 
-        Returns: password string"
-    ) do |args|
+    @param modifier_hash [Hash]
+      May contain any of the following options:
+
+        * `last` => `false`(*) or `true`
+           * Return the last generated password
+
+        * `length` => `Integer`
+           * Length of the new password
+
+        * `hash` => `false`(*), `true`, `md5`, `sha256` (true), `sha512`
+           * Return a `Hash` of the password instead of the password itself.
+
+        * `complexity` => `0`(*), `1`, `2`
+          * `0` => Use only Alphanumeric characters in your password (safest)
+          * `1` => Add reasonably safe symbols
+          * `2` => Printable ASCII
+
+        **private options:**
+
+        * `password` => contains the string representation of the password to hash (used for testing)
+        * `salt` => contains the string literal salt to use (used for testing)
+        * `complex_only` => use only the characters explicitly added by the complexity rules (used for testing)
+
+      If no, or an invalid, second argument is provided then it will return
+      the currently stored `String`.
+
+    @return [String]
+    EOM
         require 'etc'
         require 'timeout'
 

@@ -1,32 +1,34 @@
 module Puppet::Parser::Functions
-  newfunction(
-    :parse_hosts,
-    :type => :rvalue,
-    :doc  => <<-EOM) do |args|
-       Take an array of items that may contain port numbers or protocols and
-       return the host information, ports, and protocols.  Works with
-       hostnames, IPv4, and IPv6.
+  newfunction(:parse_hosts, :type => :rvalue, :doc  => <<-EOM) do |args|
+    Take an `Array` of items that may contain port numbers or protocols and
+    return the host information, ports, and protocols.
 
-       Example:
+    Works with Hostnames as well as IPv4 and IPv6 addresses.
 
-        parse_hosts([
-          '1.2.3.4',
-          'http://1.2.3.4',
-          'https://1.2.3.4:443'
-        ])
+    **NOTE:** IPv6 addresses will be returned normalized with square brackets
+    around them for clarity.
 
-       Returns:
-        {
-         '1.2.3.4' => {
-           :ports     => ['443'],
-           :protocols => {
-             'http'  => [],
-             'https' => ['443']
-           }
+    @example
+
+      parse_hosts([
+        '1.2.3.4',
+        'http://1.2.3.4',
+        'https://1.2.3.4:443'
+      ])
+
+      # Returns
+
+      {
+        '1.2.3.4' => {
+          :ports     => ['443'],
+          :protocols => {
+            'http'  => [],
+            'https' => ['443']
+          }
         }
+      }
 
-       NOTE: IPv6 addresses will be returned normalized with square brackets
-             around them for clarity.
+    @return [Array[String]]
     EOM
 
     # Defaults

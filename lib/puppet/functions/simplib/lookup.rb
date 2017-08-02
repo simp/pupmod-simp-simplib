@@ -9,9 +9,9 @@
 #
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 Puppet::Functions.create_function(:'simplib::lookup') do
-  # @param param [String] The parameter that you wish to look up
+  # @param param The parameter that you wish to look up
   #
-  # @param options [Hash] Hash of options for regular ``lookup()``
+  # @param options Hash of options for regular ``lookup()``
   #
   #   * This **must** follow the syntax rules for the
   #   Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``

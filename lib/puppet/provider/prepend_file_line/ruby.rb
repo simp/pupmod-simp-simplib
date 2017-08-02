@@ -1,4 +1,7 @@
 Puppet::Type.type(:prepend_file_line).provide(:ruby) do
+  desc <<-EOM
+    Prepend a line to a file.
+  EOM
 
   def exists?
     File.readlines(resource[:path]).find do |line|

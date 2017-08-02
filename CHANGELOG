@@ -1,3 +1,7 @@
+* Sun Jul 23 2-17 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.4.2-0
+- Updated puppet-strings documentation
+- Updated CONTRIBUTING.md
+
 * Tue Jul 18 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.1-0
 - Fix ipv6_enabled fact, so that it is confined only to linux systems
 
@@ -8,7 +12,7 @@
 - A wrapper has been put around simp::knockout for backwards-compatibility
   in our code.
 - Update puppet requirement in metadata.json
-  
+
 * Sat Jun 10 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.0-0
 - Fix fullrun fact so it's confined to linux systems
 

@@ -1,10 +1,14 @@
 module Puppet::Parser::Functions
-  newfunction(:to_integer, :type => :rvalue, :arity => 1, :doc => <<-EOS
-    Converts the argument into an Integer.
+  newfunction(:to_integer, :type => :rvalue, :arity => 1, :doc => <<-EOS) do |arguments|
+    Converts the argument into an `Integer`.
 
-    Only works if the passed argument responds to the 'to_i' Ruby method.
+    Only works if the passed argument responds to the `to_i()` Ruby method.
+
+    @param input [Any]
+      The argument to convert into an `Integer`
+
+    @return [Integer]
     EOS
-  ) do |arguments|
 
     arg = arguments[0]
 

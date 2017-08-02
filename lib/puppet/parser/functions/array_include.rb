@@ -1,22 +1,23 @@
 module Puppet::Parser::Functions
-
   newfunction(:array_include, :type => :rvalue, :doc => <<-'ENDHEREDOC') do |args|
     Determine if the first passed array contains the contents of another array or string.
 
-    Example:
+    @example
 
-        $arr_x = [ 'foo', 'bar' ]
-        $arr_y = [ 'foo', 'baz', 'bar' ]
+      $arr_x = [ 'foo', 'bar' ]
+      $arr_y = [ 'foo', 'baz', 'bar' ]
 
-        if array_include($arr_x, $arr_y) {
-          notice('this will be printed')
-        }
-        if array_include($arr_x, 'bar') {
-          notice('this will be printed')
-        }
-        if array_include($arr_x, 'baz') {
-          notice('this will not be printed')
-        }
+      if array_include($arr_x, $arr_y) {
+        notice('this will be printed')
+      }
+      if array_include($arr_x, 'bar') {
+        notice('this will be printed')
+      }
+      if array_include($arr_x, 'baz') {
+        notice('this will not be printed')
+      }
+
+    @return [Boolean]
 
     ENDHEREDOC
 

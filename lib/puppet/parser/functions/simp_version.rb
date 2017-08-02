@@ -1,9 +1,9 @@
 module Puppet::Parser::Functions
-  newfunction(
-    :simp_version,
-    :type => :rvalue,
-    :doc => "Return the version of SIMP that this server is running."
-  ) do |args|
+  newfunction(:simp_version, :type => :rvalue, :doc => <<-EOM) do |args|
+    Return the version of SIMP that this server is running
+
+    @return [String]
+    EOM
 
     retval = "unknown\n"
 

@@ -1,4 +1,7 @@
 Puppet::Type.type(:script_umask).provide(:ruby) do
+  desc <<-EOM
+    Set the ``umask`` at the top of a shell script
+  EOM
 
   def umask
     # Just skip it all if the file doesn't exist.

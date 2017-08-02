@@ -39,8 +39,10 @@ Puppet::Type.newtype(:simp_file_line) do
   end
 
   newparam(:match) do
-    desc 'An optional regular expression to run against existing lines in the file;\n' +
-        'if a match is found, we replace that line rather than adding a new line.'
+    desc <<-EOF
+      An optional regular expression to run against existing lines in the file.
+      If a match is found, we replace that line rather than adding a new line.
+    EOF
   end
 
   newparam(:line) do
@@ -70,8 +72,10 @@ Puppet::Type.newtype(:simp_file_line) do
   end
 
   newparam(:deconflict) do
-    desc 'Do not execute this type if there is a file type that already manages the ' +
-         'content of the target file unless $replace == false'
+    desc <<-EOM
+      Do not execute this type if there is a file type that already manages the
+      content of the target file unless $replace == false
+    EOM
 
     newvalues(:true, :false)
     defaultto :false

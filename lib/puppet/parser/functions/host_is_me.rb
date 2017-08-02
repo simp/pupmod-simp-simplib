@@ -1,16 +1,14 @@
 module Puppet::Parser::Functions
-  # This function takes a whitespace delimited list of IP addresses and/or
-  # hosts and returns true if an interface on the client system, or the fqdn or
-  # short name of the host, is in that list.
+  newfunction( :host_is_me, :type => :rvalue, :doc => <<-EOM) do |args|
+    Detect if a local system identifier Hostname/IP address is contained in the
+    passed whitespace delimited list.
 
-  newfunction(
-    :host_is_me,
-    :type => :rvalue,
-    :doc => "Detect if a local system identifier Hostname/IP address is contained in
-             the passed whitespace delimited list. Whitespace and comma delimiters
-             and passed arrays are accepted. 127.0.0.1 and ::1 are never matched,
-             use 'localhost' or 'localhost6' for that if necessary."
-  ) do |args|
+    Whitespace and comma delimiters and passed `Arrays` are accepted.
+    `127.0.0.1` and `::1` are never matched, use `localhost` or
+    `localhost6` for that if necessary.
+
+    @return [Variant[String, Array]]
+    EOM
 
     if args == '!test!' then return true end
 

@@ -1,23 +1,21 @@
 module Puppet::Parser::Functions
-  newfunction(
-    :slice_array,
-    :type => :rvalue,
-    :doc  => "Split an array into an array of arrays that contain groupings of
-              'max_length' size. This is similar to 'each_slice' in newer
-              versions of Ruby.
+  newfunction(:slice_array, :type => :rvalue, :doc => <<-EOM) do |args|
+    Split an `Array` into an array of arrays that contain groupings of
+    `max_length` size. This is similar to `each_slice` in newer versions of
+    Ruby.
 
-              * Options *
+    @param to_slice [Array]
+      The array to slice. This will be flattened if necessary.
 
-              to_slice => The array to slice. This will be flattened if
-                          necessary.
+    @param max_length [Integer]
+      The maximum length of each slice.
 
-              max_length => The maximum length of each slice.
+    @param split_char [String[1,1]]
+      An optional character upon which to count sub-elements as multiples.
+      Only one per subelement is supported.
 
-              split_char => An optional character upon which to count
-                            sub-elements as multiples. Only one per subelement
-                            is supported."
-
-  ) do |args|
+    @return [Array[Array[Any]]]]
+    EOM
 
     # Variable Assignment
     to_slice = args[0]
@@ -25,15 +23,15 @@ module Puppet::Parser::Functions
     split_char = args[2]
 
     # Input Validation
-    if not to_slice then
+    unless to_slice
       raise Puppet::ParseError.new("You must pass an array to slice as the first argument.")
     end
 
-    if Array(to_slice).length == 0 then
+    if Array(to_slice).length == 0
       raise Puppet::ParseError.new("The array to slice must be of size > 0.")
     end
 
-    if not max_length or max_length.to_s !~ /^\d+$/ then
+    if !max_length || (max_length.to_s !~ /^\d+$/)
       raise Puppet::ParseError.new("You must pass an integer as the second argument. Got: '#{max_length}'")
     end
 
@@ -41,7 +39,7 @@ module Puppet::Parser::Functions
     max_length = max_length.to_i
     to_slice = Array(to_slice).flatten
 
-    if split_char then
+    if split_char
       cluster_locations = to_slice.collect{|x| x.to_s.include?(split_char)}
 
       to_slice = to_slice.map{|x| x.to_s.split(split_char)}.flatten
@@ -55,7 +53,7 @@ module Puppet::Parser::Functions
       retval << to_slice[(x * max_length)..((x * max_length) + max_length - 1)].compact
     end
 
-    if split_char then
+    if split_char
       i = 0
       retval.each do |arr|
         arr.each_with_index do |x,j|
