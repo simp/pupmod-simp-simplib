@@ -2,7 +2,7 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/73/badge)](https://bestpractices.coreinfrastructure.org/projects/73)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/simp/simplib.svg)](https://forge.puppetlabs.com/simp/simplib)
 [![Puppet Forge Downloads](https://img.shields.io/puppetforge/dt/simp/simplib.svg)](https://forge.puppetlabs.com/simp/simplib)
-[![Build Status](https://travis-ci.org/simp/simp-core.svg)](https://travis-ci.org/simp/simp-core)
+[![Build Status](https://travis-ci.org/simp/pupmod-simp-simplib.svg)](https://travis-ci.org/simp/pupmod-simp-simplib)
 
 #### Table of Contents
 1. [Overview](#this-is-a-simp-module)
@@ -45,13 +45,14 @@ Agents will need to enable `pluginsync`.
 
 Please see [reference](#reference) for usage.
 
-Full documentation can be found in the [module docs](docs/index.html)
+Full documentation can be found in the [module docs](https://simp.github.io/pupmod-simp-simplib)
 
 ## Reference
 
-A list of things provided by simplib is below. Please reference the `doc/`
-directory in the top level of the repo or the code itself for more detailed
-documentation.
+A list of things provided by simplib is below.
+
+Please reference the `doc/` directory in the top level of the repo or the code
+itself for more detailed documentation.
 
 ### Facts
 

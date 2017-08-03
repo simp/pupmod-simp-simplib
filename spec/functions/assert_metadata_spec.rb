@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'simplib::assert_metadata_os' do
+describe 'simplib::assert_metadata' do
   context 'on a supported OS' do
     facts = {
       :os => {
@@ -21,13 +21,13 @@ describe 'simplib::assert_metadata_os' do
     context 'with full version matching' do
       let(:facts) { facts }
 
-      it { is_expected.to run.with_params('stdlib', 'full') }
+      it { is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'full' } } } ) }
     end
 
     context 'with major version matching' do
       let(:facts) { facts }
 
-      it { is_expected.to run.with_params('stdlib', 'major') }
+      it { is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'major' } } } ) }
     end
   end
 
@@ -53,7 +53,7 @@ describe 'simplib::assert_metadata_os' do
 
         it {
           expect {
-            is_expected.to run.with_params('stdlib', 'full')
+            is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'full' } } } )
           }.to raise_error(/OS.*is not supported/)
         }
     end
@@ -81,7 +81,7 @@ describe 'simplib::assert_metadata_os' do
 
       it {
         expect {
-          is_expected.to run.with_params('stdlib', 'major')
+            is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'major' } } } )
         }.to raise_error(/OS.*is not supported/)
       }
     end
