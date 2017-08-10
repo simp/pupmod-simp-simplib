@@ -27,6 +27,7 @@ group :development do
   gem 'puppet-blacksmith'
   gem 'guard-rake'
   gem 'pry'
+  gem 'pry-byebug'
   gem 'pry-doc'
 
   # `listen` is a dependency of `guard`

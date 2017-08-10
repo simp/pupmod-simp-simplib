@@ -7,6 +7,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     EOM
 
+    function_simplib_deprecation(['inspect', 'inspect is deprecated, please use simplib::inspect'])
+
     if (args.size != 1)
       raise(Puppet::ParseError, "inspect(): Wrong number of arguments "+
         "given #{args.size} for 1")

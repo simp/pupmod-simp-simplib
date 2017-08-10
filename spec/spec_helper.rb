@@ -127,7 +127,6 @@ RSpec.configure do |c|
 
     # ensure the user running these tests has an accessible environmentpath
     Puppet[:environmentpath] = @spec_global_env_temp
-    $PASSGEN_testdir = @spec_global_env_temp
     Puppet[:user] = Etc.getpwuid(Process.uid).name
     Puppet[:group] = Etc.getgrgid(Process.gid).name
 

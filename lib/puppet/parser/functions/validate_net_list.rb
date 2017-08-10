@@ -30,6 +30,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_net_list', 'validate_net_list is deprecated, please use simplib::validate_net_list'])
+
     if ((args.length < 1) || (args.length > 2))
       raise Puppet::ParseError,("validate_net_list(): Must pass [net_list], (optional exclusion regex).")
     end

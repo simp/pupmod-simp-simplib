@@ -1,11 +1,28 @@
-* Thu Aug 03 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.4.2-0
+* Tue Aug 15 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.5.0-0
+- Add simplib-specific deprecation functions for both Puppet 3 functions
+  (simplib_deprecation()) and Puppet 4 functions (simplib::deprecation()).
+- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
+  simplib deprecation warning when the Puppet 3 versions as called:
+  - simplib::inspect() replaces deprecated inspect()
+  - simplib::ipaddresses() replaces deprecated ipaddresses()
+  - simplib::parse_hosts() replaces deprecated parse_hosts()
+  - simplib::passgen() replaces deprecated passgen()
+  - simplib::strip_ports() replaces deprecated strip_ports()
+  - simplib::to_integer() replaces deprecated to_integer()
+  - simplib::to_string() replaces deprecated to_string()
+  - simplib::validate_uri_list() replaces deprecated validate_uri_list()
+  - simplib::validate_net_list() replaces deprecated validate_net_list()
+  - simplib::validate_port() replaces deprecated validate_port()
+- Add single-line json output option to simplib::inspect()
+
+* Thu Aug 03 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.5.0-0
 - The fips_ciphers fact returns nil if the openssl binary is not available
 
-* Sun Jul 23 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.4.2-0
+* Sun Jul 23 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.5.0-0
 - Updated puppet-strings documentation
 - Updated CONTRIBUTING.md
 
-* Tue Jul 18 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.4.1-0
+* Tue Jul 18 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.5.0-0
 - Fix ipv6_enabled fact, so that it is confined only to linux systems
 
 * Tue Jun 13 2017 Nick Markowski <nmarkowski@keywcorp.com> - 3.4.0-0

@@ -10,6 +10,8 @@ module Puppet::Parser::Functions
     @return [String]
     EOS
 
+    function_simplib_deprecation(['to_string', 'to_string is deprecated, please use simplib::to_string'])
+
     arg = arguments[0]
 
     return arg if arg.is_a?(String)

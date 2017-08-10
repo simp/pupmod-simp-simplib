@@ -10,7 +10,7 @@ describe 'passgen function' do
       context "when set user 'testuser#{round}' to password 'test' and hash type == #{hash}" do
         let (:manifest) {
           <<-EOS
-          $password = passgen('testuser-#{hash}-#{round}', {'hash' => '#{hash}', 'password' => 'test', 'complexity' => 2, 'complex_only' => true})
+          $password = simplib::passgen('testuser-#{hash}-#{round}', {'hash' => '#{hash}', 'password' => 'test', 'complexity' => 2, 'complex_only' => true})
           notify { "$password": }
           user { "testuser#{round}":
             shell => "/bin/bash",

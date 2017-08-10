@@ -44,6 +44,8 @@ module Puppet::Parser::Functions
         require 'etc'
         require 'timeout'
 
+        function_simplib_deprecation(['passgen', 'passgen is deprecated, please use simplib::passgen'])
+
         class SymbolicFileMode
           require 'puppet/util/symbolic_file_mode'
           include Puppet::Util::SymbolicFileMode

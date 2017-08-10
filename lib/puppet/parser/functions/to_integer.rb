@@ -10,6 +10,8 @@ module Puppet::Parser::Functions
     @return [Integer]
     EOS
 
+    function_simplib_deprecation(['to_integer', 'to_integer is deprecated, please use simplib::to_integer'])
+
     arg = arguments[0]
 
     return arg if arg.is_a?(Integer)

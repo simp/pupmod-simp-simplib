@@ -18,6 +18,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     EOS
 
+    function_simplib_deprecation(['validate_port', 'validate_port is deprecated, please use simplib::validate_port'])
+
     unless args.length > 0 then
       raise(Puppet::ParseError, "validate_port(): Wrong number of args: #{args.length}; must be > 0")
     end
