@@ -3,7 +3,7 @@
 # Uses `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
 # as the destination directory.
 #
-# The minimum length password that this function will return is `6`
+# The minimum length password that this function will return is `8`
 # characters.
 #
 Puppet::Functions.create_function(:'simplib::passgen') do
