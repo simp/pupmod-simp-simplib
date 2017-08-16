@@ -2,7 +2,7 @@
 - Add simplib-specific deprecation functions for both Puppet 3 functions
   (simplib_deprecation()) and Puppet 4 functions (simplib::deprecation()).
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
-  simplib deprecation warning when the Puppet 3 versions as called:
+  simplib deprecation warning when the Puppet 3 versions is called:
   - simplib::inspect() replaces deprecated inspect()
   - simplib::ipaddresses() replaces deprecated ipaddresses()
   - simplib::parse_hosts() replaces deprecated parse_hosts()
