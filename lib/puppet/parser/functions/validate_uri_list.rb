@@ -15,6 +15,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_uri_list', 'validate_uri_list is deprecated, please use simplib::validate_uri_list'])
+
     uri_list = Array(args.shift)
     scheme_list = Array(args.shift)
 
@@ -25,7 +27,7 @@ module Puppet::Parser::Functions
 
         unless scheme_list.empty?
           unless scheme_list.include?(uri_obj.scheme)
-            raise Puppet::ParseError, ("validate_uri_list(): Scheme '#{uri_obj.scheme}' must be one of '#{uri_list.join(',')}'")
+            raise Puppet::ParseError, ("validate_uri_list(): Scheme '#{uri_obj.scheme}' must be one of '#{scheme_list.join(',')}'")
           end
         end
       rescue URI::InvalidURIError

@@ -19,6 +19,8 @@ module Puppet::Parser::Functions
     @return [Array[String]]
   EOM
 
+    function_simplib_deprecation(['strip_ports', 'strip_ports is deprecated, please use simplib::strip_ports'])
+
     raise Puppet::ParseError, "You must pass a list of hosts." if args.empty?
     Puppet::Parser::Functions.autoloader.loadall
 

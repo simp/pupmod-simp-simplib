@@ -1,47 +1,41 @@
-module Puppet::Parser::Functions
-  newfunction(:parse_hosts, :type => :rvalue, :doc  => <<-EOM) do |args|
-    Take an `Array` of items that may contain port numbers or protocols and
-    return the host information, ports, and protocols.
+# Convert an `Array` of items that may contain port numbers or protocols
+# into a structured `Hash` of host information.
+#
+# Works with Hostnames as well as IPv4 and IPv6 addresses.
+#
+# **NOTE:** IPv6 addresses will be returned normalized with square brackets
+# around them for clarity.
+#
+Puppet::Functions.create_function(:'simplib::parse_hosts') do
 
-    Works with Hostnames as well as IPv4 and IPv6 addresses.
+  # @param hosts Array of host entries, where each entry may contain
+  #   a protocol or both a protocol and port
+  # @return [Hash] Structured Hash of the host information
+  #
+  # @example Input with multiple host formats:
+  #
+  #   simplib::parse_hosts([
+  #     '1.2.3.4',
+  #     'http://1.2.3.4',
+  #     'https://1.2.3.4:443'
+  #   ])
+  #
+  #   Returns:
+  #
+  #   {
+  #     '1.2.3.4' => {
+  #       :ports     => ['443'],
+  #       :protocols => {
+  #         'http'  => [],
+  #         'https' => ['443']
+  #       }
+  #     }
+  #   }
+  dispatch :parse_hosts do
+    required_param 'Array[String[1],1]', :hosts
+  end
 
-    **NOTE:** IPv6 addresses will be returned normalized with square brackets
-    around them for clarity.
-
-    @example
-
-      parse_hosts([
-        '1.2.3.4',
-        'http://1.2.3.4',
-        'https://1.2.3.4:443'
-      ])
-
-      # Returns
-
-      {
-        '1.2.3.4' => {
-          :ports     => ['443'],
-          :protocols => {
-            'http'  => [],
-            'https' => ['443']
-          }
-        }
-      }
-
-    @return [Array[String]]
-    EOM
-
-    function_simplib_deprecation(['parse_hosts', 'parse_hosts is deprecated, please use simplib::parse_hosts'])
-
-    # Defaults
-    hosts = args.flatten
-
-    # Validation
-    raise Puppet::ParseError, "You must pass a list of hosts." if hosts.empty?
-
-    # Needed to use other functions inside of this one
-    Puppet::Parser::Functions.autoloader.loadall
-
+  def parse_hosts(hosts)
     # Parse!
     parsed_hosts = {}
     hosts.each do |host|
@@ -66,10 +60,10 @@ module Puppet::Parser::Functions
       end
 
       # Validate with the protocol stripped off
-      function_validate_net_list(Array(hostname))
+      call_function('simplib::validate_net_list', Array(hostname))
 
       hostname,port = PuppetX::SIMP::Simplib.split_port(hostname)
-      function_validate_port(Array(port)) if (port && !port.empty?)
+      call_function('simplib::validate_port', Array(port)) if (port && !port.empty?)
 
       # Build a unique list of parsed hosts.
       unless parsed_hosts.key?(hostname)

@@ -9,6 +9,8 @@ module Puppet::Parser::Functions
       @return [Array[String]]
     EOM
 
+    function_simplib_deprecation(['ipaddresses', 'ipaddresses is deprecated, please use simplib::ipaddresses'])
+
     only_remote = args[0]
 
     retval = []
