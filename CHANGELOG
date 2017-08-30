@@ -17,6 +17,13 @@
 * Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
+  - simplib::validate_array_member() replaces
+    deprecated validate_array_member()
+  - simplib::validate_bool() replaces deprecated validate_bool_simp()
+
+* Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
+  simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::nets2ddq() replaces deprecated nets2ddq().
   - simplib::validate_array_member() replaces
     deprecated validate_array_member()
