@@ -14,6 +14,8 @@ module Puppet::Parser::Functions
     @return [Variant[Array[String], String]]
     EOM
 
+    function_simplib_deprecation(['nets2ddq', 'nets2ddq is deprecated, please use simplib::nets2ddq'])
+
     require File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
 
     networks = Array(args.dup).flatten
