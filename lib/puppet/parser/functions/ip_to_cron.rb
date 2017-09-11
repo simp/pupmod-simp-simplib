@@ -23,6 +23,8 @@ module Puppet::Parser::Functions
     @return [Variant[Integer[0,59], Array[Integer[0,59], Integer[0,23]]]]
     ENDHEREDOC
 
+    function_simplib_deprecation(['ip_to_cron', 'ip_to_cron is deprecated, please use simplib::ip_to_cron'])
+
     Puppet::Parser::Functions.autoloader.loadall
     function_rand_cron([lookupvar('::ipaddress'),args[0],args[1]])
   end
