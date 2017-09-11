@@ -31,6 +31,10 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
   #   multiple hosts, when the number of hosts exceeds the `max_value`
   #   and the hosts have linearly-assigned IP addresses.
   #
+  #   When 'ip_mod' and the input string is not an IP address, for
+  #   backward compatibility,  the crc32 of the input string will
+  #   be used as the basis for the returned values.
+  #
   #   When 'crc32', the crc32 of the input string will be used as the
   #   basis for the returned values.
   #
@@ -49,18 +53,18 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
   # @example Generate one value for the `minute` cron interval using
   #   the 'sha256' algorithm
   #
-  #   rand_cron('sha256','myhost.test.local')
+  #   rand_cron('myhost.test.local','sha256')
   #
   # @example Generate 2 values for the `minute` cron interval using
   #   the 'sha256' algorithm applied to the numeric representation of
   #   an IP
   #
-  #   rand_cron('sha256','10.0.23.45')
+  #   rand_cron('10.0.23.45', 'sha256')
   #
   # @example Generate 2 values for the `hour` cron interval, using the
   #   'ip_mod' algorithm
   #
-  #   rand_cron('ip_mod', '10.0.6.78', 2, 23)
+  #   rand_cron('10.0.6.78', 'ip_mod', 2, 23)
   #
   dispatch :rand_cron do
     required_param 'String',            :modifier
@@ -90,8 +94,11 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
       end
 
       if ip_num.nil?
+        # fall back to digest computation for original modifier
         if algorithm == 'ip_mod'
-          fail("simplib::rand_cron: '#{modifier}' is not a valid IP address")
+          # crc32 calculation for backward compatibility
+          require 'zlib'
+          range_modifier = Zlib.crc32(modifier)
         else
           range_modifier = Digest::SHA256.hexdigest(modifier).hex
         end

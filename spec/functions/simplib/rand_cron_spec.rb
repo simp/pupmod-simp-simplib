@@ -22,6 +22,11 @@ describe 'simplib::rand_cron' do
     it { is_expected.to run.with_params('2001:0db8:85a3:0000:0000:8a2e:0370:7395','ip_mod').and_return([9]) }
   end
 
+  context "with an invalid IP address and 'ip_mod'" do
+    # matching legacy behavior, uses crc32 algorithm, instead
+    it { is_expected.to run.with_params('300.0.20.35','ip_mod').and_return([17]) }
+  end
+
   context "with 'crc32'" do
     it { is_expected.to run.with_params('myhost.test.local','crc32').and_return([32]) }
   end
@@ -34,7 +39,4 @@ describe 'simplib::rand_cron' do
     it { is_expected.to run.with_params('10.0.10.154','sha256',2,23).and_return([0,12]) }
   end
 
-  context "with an invalid IP address and 'ip_mod'" do
-    it { is_expected.to run.with_params('300.0.20.35','ip_mod').and_raise_error(/'300.0.20.35' is not a valid IP address/) }
-  end
 end
