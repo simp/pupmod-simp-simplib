@@ -73,44 +73,56 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
     optional_param 'Integer[1]',        :max_value
   end
 
-  # +param+: modifier Input string to be transformed to an Integer
-  # +param+: algorithm Algorithm to apply to transform input string into
+  def generate_crc32_number(input_string)
+    require 'zlib'
+    Zlib.crc32(input_string)
+  end
+
+  def generate_ip_mod_number(input_string)
+    require 'ipaddr'
+
+    ip_num = nil
+    begin
+     ip_num = IPAddr.new(input_string).to_i
+    rescue IPAddr::Error
+    end
+
+    num = nil
+    if ip_num.nil?
+      # crc32 calculation for backward compatibility
+      num = generate_crc32_number(input_string)
+    else
+      num = ip_num
+    end
+    num
+  end
+
+  def generate_sha256_number(input_string)
+    require 'ipaddr'
+    require 'digest'
+
+    ip_num = nil
+    begin
+     ip_num = IPAddr.new(input_string).to_i
+    rescue IPAddr::Error
+    end
+
+    num = nil
+    if ip_num.nil?
+      num = Digest::SHA256.hexdigest(input_string).hex
+    else
+      num = Digest::SHA256.hexdigest(ip_num.to_s).hex
+    end
+    num
+  end
+
+  # @param modifier Input string to be transformed to an Integer
+  # @param algorithm Algorithm to apply to transform input string into
   #   an Integer
   #
-  # +return+: Integer to be used as a basis for generated cron values
+  # @return Integer to be used as a basis for generated cron values
   def generate_numeric_modifier(modifier, algorithm)
-    range_modifier = nil
-    if algorithm == 'crc32'
-      require 'zlib'
-      range_modifier = Zlib.crc32(modifier)
-    else  # 'sha256' or 'ip_mod'
-      require 'ipaddr'
-      require 'digest'
-
-      ip_num = nil
-      begin
-        ip_num = IPAddr.new(modifier).to_i
-      rescue IPAddr::Error
-      end
-
-      if ip_num.nil?
-        # fall back to digest computation for original modifier
-        if algorithm == 'ip_mod'
-          # crc32 calculation for backward compatibility
-          require 'zlib'
-          range_modifier = Zlib.crc32(modifier)
-        else
-          range_modifier = Digest::SHA256.hexdigest(modifier).hex
-        end
-      else
-        if algorithm == 'ip_mod'
-          range_modifier = ip_num
-        else
-          range_modifier = Digest::SHA256.hexdigest(ip_num.to_s).hex
-        end
-      end
-    end
-    range_modifier
+    eval("generate_#{algorithm}_number(modifier)")
   end
 
   def rand_cron(modifier, algorithm, occurs = 1, max_value = 59)
