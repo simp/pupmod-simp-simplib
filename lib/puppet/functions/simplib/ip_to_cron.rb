@@ -4,7 +4,7 @@
 Puppet::Functions.create_function(:'simplib::ip_to_cron') do
 
   local_types do
-    type "IpToCronAlgorithm = Enum['ip_mod', 'rand']"
+    type "IpToCronAlgorithm = Enum['ip_mod', 'sha256']"
   end
 
   # @param occurs
@@ -22,7 +22,7 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   #   exceeds the `max_value` and the hosts have largely, linearly-
   #   assigned IP addresses.
   #
-  #   When 'rand', a random number generated using the IP number is the
+  #   When 'sha256', a random number generated using the IP number is the
   #   basis for the returned values.  This algorithm works well to create
   #   cron job intervals for multiple hosts, when the number of hosts
   #   is less than the `max_value` or the hosts do not have linearly-
@@ -39,9 +39,9 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   #   ip_to_cron()
   #
   # @example Generate 2 values for the `hour` cron interval, using the
-  #   'rand' algorithm and a provided IP address
+  #   'sha256' algorithm and a provided IP address
   #
-  #   ip_to_cron(2,23,'rand','10.0.23.45')
+  #   ip_to_cron(2,23,'sha256','10.0.23.45')
   #
 
   dispatch :ip_to_cron do
@@ -59,8 +59,7 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
       ipaddr = ip.dup
     end
 
-    alg = (algorithm == 'ip_mod') ? 'ip_mod' : 'sha256'
-    call_function('simplib::rand_cron', ipaddr, alg, occurs, max_value)
+    call_function('simplib::rand_cron', ipaddr, algorithm, occurs, max_value)
   end
 end
 
