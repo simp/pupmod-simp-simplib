@@ -98,22 +98,9 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
   end
 
   def generate_sha256_number(input_string)
-    require 'ipaddr'
     require 'digest'
 
-    ip_num = nil
-    begin
-     ip_num = IPAddr.new(input_string).to_i
-    rescue IPAddr::Error
-    end
-
-    num = nil
-    if ip_num.nil?
-      num = Digest::SHA256.hexdigest(input_string).hex
-    else
-      num = Digest::SHA256.hexdigest(ip_num.to_s).hex
-    end
-    num
+    Digest::SHA256.hexdigest(input_string).hex
   end
 
   # @param modifier Input string to be transformed to an Integer
