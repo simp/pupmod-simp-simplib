@@ -17,15 +17,15 @@ describe 'simplib::ip_to_cron' do
   end
 
   context 'occurs, max_value, and algorithm specified' do
-    it { is_expected.to run.with_params(2,23,'sha256').and_return([0,12]) }
+    it { is_expected.to run.with_params(2,23,'sha256').and_return([5,17]) }
   end
 
   context 'occurs, max_value, algorithm, and IPv4 specified' do
-    it { is_expected.to run.with_params(2,23,'sha256', '10.0.20.35').and_return([1,13]) }
+    it { is_expected.to run.with_params(2,23,'sha256', '10.0.20.35').and_return([4,16]) }
   end
 
   context 'occurs, max_value, algorithm, and IPv6 specified' do
-    it { is_expected.to run.with_params(2,23,'sha256','2001:0db8:85a3:0000:0000:8a2e:0370:7395').and_return([8,20]) }
+    it { is_expected.to run.with_params(2,23,'sha256','2001:0db8:85a3:0000:0000:8a2e:0370:7395').and_return([6,18]) }
   end
 
   context 'invalid ip specified' do
