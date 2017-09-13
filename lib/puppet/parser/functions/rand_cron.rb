@@ -34,7 +34,9 @@ module Puppet::Parser::Functions
     @return [Variant[Integer[0,59], Array[Integer[0,59], Integer[0,23]]]]
     ENDHEREDOC
 
+    function_simplib_deprecation(['rand_cron', 'rand_cron is deprecated, please use simplib::rand_cron'])
     modifier = Array(args[0]).flatten.first
+
     occurs   = (args[1] || 1).to_i
     scope    = (args[2] || 60).to_i
 

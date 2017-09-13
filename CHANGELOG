@@ -1,8 +1,21 @@
+* Mon Sep 11 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.5.0-0
+- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
+  simplib deprecation warning when the Puppet 3 versions are called:
+  - simplib::ip_to_cron() replaces deprecated ip_to_cron()
+  - simplib::rand_cron() replaces deprecated rand_cron()
+- Add algorithm options to simplib::ip_to_cron() and
+  simplib::rand_cron() to allow the user to select the transformation
+  algorithm, instead of defaulting to an IP number modulus, when the
+  entity to be transformed is an IP address.  The IP number modulus
+  algorithm produces undesirable clustering when used to randomize IP
+  addresses in a system for which the number of IPs to be transformed
+  is less than the range over which the randomization is requested.
+
 * Tue Aug 15 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.5.0-0
 - Add simplib-specific deprecation functions for both Puppet 3 functions
   (simplib_deprecation()) and Puppet 4 functions (simplib::deprecation()).
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
-  simplib deprecation warning when the Puppet 3 versions is called:
+  simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::inspect() replaces deprecated inspect()
   - simplib::ipaddresses() replaces deprecated ipaddresses()
   - simplib::parse_hosts() replaces deprecated parse_hosts()
