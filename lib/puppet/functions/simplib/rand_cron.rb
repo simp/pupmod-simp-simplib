@@ -14,13 +14,9 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
   # @param algorithm
   #   Randomization algorithm to apply to transform the input string.
   #
-  #   When 'sha256' and the input string is not an IP address, a random
-  #   number generated from the input string via sha256 is used as the
-  #   basis for the returned values.
-  #
-  #   When 'sha256' and the input string is an IP address, a random
-  #   number generated from the numeric IP via sh256 is used as the
-  #   basis for the returned values.  This algorithm works well to
+  #   When 'sha256', a random number generated from the input string
+  #   via sha256 is used as the basis for the returned values.
+  #   If the input string is an IP address, this algorithm works well to
   #   create cron job intervals for multiple hosts, when the number
   #   of hosts is less than the `max_value` or the hosts do not have
   #   linearly-assigned IP addresses.

@@ -22,11 +22,11 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   #   exceeds the `max_value` and the hosts have largely, linearly-
   #   assigned IP addresses.
   #
-  #   When 'sha256', a random number generated using the IP number is the
-  #   basis for the returned values.  This algorithm works well to create
-  #   cron job intervals for multiple hosts, when the number of hosts
-  #   is less than the `max_value` or the hosts do not have linearly-
-  #   assigned IP addresses.
+  #   When 'sha256', a random number generated using the IP address
+  #   string is the basis for the returned values.  This algorithm
+  #   works well to create cron job intervals for multiple hosts,
+  #   when the number of hosts is less than the `max_value` or the
+  #   hosts do not have linearly-assigned IP addresses.
   #
   # @param ip
   #   The IP address to use as the basis for the generated values.
