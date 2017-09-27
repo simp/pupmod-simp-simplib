@@ -1,3 +1,7 @@
+* Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
+- Add Puppet function `simplib::assert_metadata_os()`
+- Add data type `Simplib::Puppet::Metadata::OS_support`
+
 * Mon Sep 11 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.5.0-0
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
