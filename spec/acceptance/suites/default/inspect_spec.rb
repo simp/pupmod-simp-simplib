@@ -47,14 +47,13 @@ describe 'inspect function' do
       it 'should be able to log variables with a single deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
-        expected = <<EOM
-Warning: inspect is deprecated, please use simplib::inspect
-   (at /etc/puppetlabs/code/environments/production/modules/simplib/lib/puppet/parser/functions/simplib_deprecation.rb:21:in `block in <module:Functions>')
+        expected = %r|Warning: inspect is deprecated, please use simplib::inspect
+\s+\(at /etc/puppetlabs/code/environments/production/modules/simplib/lib/puppet/parser/functions/simplib_deprecation\.rb:\d+:in `block in <module:Functions>'\)
 Warning: Inspect: Type => 'String' Content => '"var1 value"'
 Warning: Inspect: Type => 'TrueClass' Content => 'true'
-Warning: Inspect: Type => 'Hash' Content => '{"a":"b"}'
-Warning: Inspect: Type => 'String' Content => '""'
-EOM
+Warning: Inspect: Type => 'Hash' Content => '\{"a":"b"\}'
+Warning: Inspect: Type => 'String' Content => '""'|
+
         expect(normalize(results.output)).to match(expected)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
