@@ -68,15 +68,6 @@ jobs:
       script:
         - bundle exec rake spec
 
-    - stage: acceptance
-      sudo: required
-      rvm: 2.1.9
-      services:
-        - docker
-      script:
-        - bundle exec rake beaker:suites[default,docker]
-      env: PUPPET_VERSION"~> 4.8.2"
-
     # This needs to be last since we have an acceptance test
     - stage: deploy
       rvm: 2.1.9
