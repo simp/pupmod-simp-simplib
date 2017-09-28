@@ -33,8 +33,11 @@ Facter.add("simplib_sysctl") do
       then
         module_value.strip!
 
-        if module_value =~ /^\d+$/
-          module_value = module_value.to_i
+        # These can be too big for facter to process as Integers
+        unless entry.start_with?('kernel.shm')
+          if module_value =~ /^\d+$/
+            module_value = module_value.to_i
+          end
         end
 
         retval[entry] = module_value
