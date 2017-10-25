@@ -1,3 +1,7 @@
+* Wed Oct 25 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+- Deprecate Puppet 3 validate_macaddresses()
+- Add Simplib::Macaddress custom type to replace validate_macaddresses()
+
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
   - shmall and shmmax were causing Facter and newer versions of Puppet to crash
