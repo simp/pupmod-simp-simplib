@@ -1,3 +1,8 @@
+* Thu Oct 26 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
+  simplib deprecation warning when the Puppet 3 versions are called:
+  - simplib::validate_re_array() replaces deprecated validate_re_array()
+
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
   - shmall and shmmax were causing Facter and newer versions of Puppet to crash
