@@ -1,3 +1,7 @@
+* Thu Oct 26 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+- Deprecate validate_umask(), advising the user to convert to the
+  Simplib::Umask data type 
+
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
   - shmall and shmmax were causing Facter and newer versions of Puppet to crash
