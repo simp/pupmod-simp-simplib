@@ -2,6 +2,8 @@
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::validate_re_array() replaces deprecated validate_re_array()
+- Deprecate validate_umask(), advising the user to convert to the
+  Simplib::Umask data type 
 
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
