@@ -25,6 +25,9 @@ module Puppet::Parser::Functions
 
     @return [Nil]
     ENDHEREDOC
+
+    function_simplib_deprecation(['validate_re_array', 'validate_re_array is deprecated, please use simplib::validate_re_array'])
+
     if (args.length < 2) or (args.length > 3) then
       raise Puppet::ParseError, ("validate_re_array(): wrong number of arguments (#{args.length}; must be 2 or 3)")
     end
