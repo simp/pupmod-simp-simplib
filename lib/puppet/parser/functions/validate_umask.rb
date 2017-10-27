@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_umask', 'validate_umask is deprecated, please use Simplib::Umask data type'])
+
     unless Array(args).length == 1
       raise Puppet::ParseError, ("validate_umask() takes exactly one argument")
     end
