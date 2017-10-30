@@ -13,6 +13,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_macaddresses', 'validate_macaddresses is deprecated, please use the Simplib::Macaddress custom type'])
+
     unless args.length > 0 then
       raise Puppet::ParseError, ("validate_macaddress(): wrong number of arguments (#{args.length}; must be > 0)")
     end
