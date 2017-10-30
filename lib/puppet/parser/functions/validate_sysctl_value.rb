@@ -29,6 +29,8 @@ module Puppet::Parser::Functions
     end
     # END: recognized value methods
 
+    function_simplib_deprecation(['validate_sysctl_value', 'validate_sysctl_value is deprecated, please use simplib::validate_sysctl_value'])
+
     # Need the 'validate_absolute_path' function from stdlib.
     Puppet::Parser::Functions.autoloader.loadall
 

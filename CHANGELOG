@@ -4,7 +4,10 @@
   - simplib::validate_re_array() replaces deprecated validate_re_array()
   - simplib::nets2cidr() replaces deprecated nets2cidr()
 - Deprecate validate_umask(), advising the user to convert to the
-  Simplib::Umask data type 
+  Simplib::Umask data type
+- Deprecate Puppet 3 validate_macaddresses()
+- Add Simplib::Macaddress custom type to replace validate_macaddresses()
+  - simplib::validate_sysctl_value() replaces deprecated validate_sysctl_value()
 
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
