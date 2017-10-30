@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'simplib::validate_sysctl_value' do
-  context 'with valid config' do
 
+  context 'with valid config' do
     it 'validates a kernel.core_pattern setting that is a filename' do
       is_expected.to run.with_params('kernel.core_pattern','/var/core/%u_%g_%p_%t_%h_%e.core')
     end
