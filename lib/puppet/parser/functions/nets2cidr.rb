@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
 
     require  File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
 
+    function_simplib_deprecation(['nets2cidr', 'nets2cidr is deprecated, please use simplib::nets2cidr'])
+
     networks = Array(args.dup).flatten
     retval = Array.new
 
