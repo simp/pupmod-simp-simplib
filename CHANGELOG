@@ -2,6 +2,7 @@
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::validate_re_array() replaces deprecated validate_re_array()
+  - simplib::nets2cidr() replaces deprecated nets2cidr()
 - Deprecate validate_umask(), advising the user to convert to the
   Simplib::Umask data type
 - Deprecate Puppet 3 validate_macaddresses()
