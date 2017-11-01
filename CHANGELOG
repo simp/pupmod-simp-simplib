@@ -1,4 +1,5 @@
 * Thu Oct 26 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+- Add Simplib::Macaddress data type
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::join_mount_opts() replaces deprected join_mount_opts()
@@ -7,8 +8,8 @@
   - simplib::validate_sysctl_value() replaces deprecated validate_sysctl_value()
 - Deprecate validate_umask(), advising the user to convert to the
   Simplib::Umask data type
-- Deprecate Puppet 3 validate_macaddresses()
-- Add Simplib::Macaddress custom type to replace validate_macaddresses()
+- Deprecate validate_macaddresses(), advising the user to convert
+  to the Simplib::Macaddress data type
 
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
