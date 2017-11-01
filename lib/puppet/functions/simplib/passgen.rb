@@ -22,6 +22,9 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #        * `0` => Use only Alphanumeric characters in your password (safest)
   #        * `1` => Add reasonably safe symbols
   #        * `2` => Printable ASCII
+  #   * `libkv` => `false`(*) or `true`
+  #        * `true`  => Use libkv to store passwords and hashes
+  #        * `false` => Use the Puppet :vardir to store passwords and hashes
   #   **private options:**
   #   * `password` => contains the string representation of the password to hash (used for testing)
   #   * `salt` => contains the string literal salt to use (used for testing)
@@ -63,6 +66,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       'sha256'  => '5',
       'sha512'  => '6'
     }
+    settings['libkv'] = call_function('simplib::lookup', 'simp_options::libkv', { 'default_value' => false})
 
     base_options = {
       'return_current' => false,
@@ -71,13 +75,15 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       'hash'           => false,
       'complexity'     => 0,
       'complex_only'   => false,
+      'libkv'          => settings['libkv']
     }
 
     options = build_options(base_options, modifier_hash, settings)
 
-    unless File.directory?(settings['keydir'])
+    # Don't build out the vardir if we're using libkv
+    unless (options['libkv'] || File.directory?(settings['keydir']))
       begin
-        FileUtils.mkdir_p(settings['keydir'],{:mode => 0750})
+        FileUtils.mkdir_p(settings['keydir'], {:mode => 0750})
         # This chown is applicable as long as it is applied
         # by puppet, not puppetserver.
         FileUtils.chown(settings['puppet_user'],
@@ -98,7 +104,9 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       passwd,salt = get_current_password(identifier, options, settings)
     end
 
-    lockdown_stored_password_perms(settings)
+    unless options['libkv']
+      lockdown_stored_password_perms(settings)
+    end
 
     # Return the hash, not the password
     if options['hash']
@@ -146,7 +154,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     if options['hash'] == true
       options['hash'] = 'sha256'
     end
-    if options['hash'] and !settings['crypt_map'].keys.include?(options['hash'])
+    if options['hash'] && !settings['crypt_map'].keys.include?(options['hash'])
       raise ArgumentError,
        "simplib::passgen: Error: '#{options['hash']}' is not a valid hash."
     end
@@ -182,69 +190,139 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #
   # Add an associated 'salt' file for returning crypted passwords.
   def get_current_password(identifier, options, settings)
-    # Open the file in append + read mode to prepare for what is to
-    # come.
-    tgt = File.new("#{settings['keydir']}/#{identifier}","a+")
-    tgt_hash = File.new("#{tgt.path}.salt","a+")
-
-    # These chowns are applicable as long as they are applied
-    # by puppet, not puppetserver.
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt.path)
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt_hash.path)
 
     passwd = ''
     salt = ''
 
-    # Create salt file if not there, no matter what, just in case we have an
-    # upgraded system.
-    if tgt_hash.stat.size.zero?
+    #
+    # libkv backend
+    #
+    if options['libkv'] == true
+      # default libkv path
+      password_path = "/passgen/#{identifier}/password"
+      hash_path = "/passgen/#{identifier}/hash"
+
+      # Salt/Hash
       if options.key?('salt')
         salt = options['salt']
       else
         salt = gen_salt
       end
-      tgt_hash.puts(salt)
-      tgt_hash.rewind
-    end
+      # Writing to libkv may take multiple attempts
+      success = false
+      (0..30).each do |round|
+        stored_hash = call_function("libkv::atomic_get", {"key" => hash_path})
+        if stored_hash['value'].nil?
+          # TODO: Not sure if previous value should be call_function("libkv::empty_value", {})
+          retval = call_function("libkv::atomic_put", { "key" => hash_path, "value" => salt, "previous" => stored_hash})
+        else
+          salt = stored_hash['value']
+          retval = true
+        end
+        if retval == true
+          success = true
+          break
+        end
+      end
+      if success == false
+        #put some warning here
+      end
 
-    if tgt.stat.size.zero?
+      # Password
       if options.key?('password')
         passwd = options['password']
       else
         passwd = gen_password(options)
       end
-      tgt.puts(passwd)
-    else
-      passwd = tgt.gets.chomp
-      salt = tgt_hash.gets.chomp
-
-      if !options['return_current'] and passwd.length != options['length']
-        tgt_last = File.new("#{tgt.path}.last","w+")
-        tgt_last.puts(passwd)
-        tgt_last.chmod(0640)
-        tgt_last.flush
-        tgt_last.close
-
-        tgt_hash_last = File.new("#{tgt_hash.path}.last","w+")
-        tgt_hash_last.puts(salt)
-        tgt_hash_last.chmod(0640)
-        tgt_hash_last.flush
-        tgt_hash_last.close
-
-        tgt.rewind
-        tgt.truncate(0)
-        passwd = gen_password(options)
-        salt = gen_salt
-
-        tgt.puts(passwd)
-        tgt_hash.puts(salt)
+      # Writing to libkv may take multiple attempts
+      success = false
+      (0..30).each do |round|
+        stored_pass = call_function("libkv::atomic_get", {"key" => password_path})
+        if stored_pass['value'].nil?
+          retval = call_function("libkv::atomic_put", { "key" => password_path, "value" => passwd, "previous" => stored_pass})
+        else
+          if !options['return_current'] && stored_pass['value'].length != options['length']
+            retval = call_function("libkv::atomic_put", { "key" => password_path, "value" => passwd, "previous" => stored_pass})
+          else
+            passwd = stored_pass['value']
+            retval = true
+          end
+        end
+        if retval == true
+          success = true
+          break
+        end
       end
+      if success == false
+        #put some warning here
+      end
+
+    #
+    # vardir backend
+    #
+    else
+      # Open the file in append + read mode to prepare for what is to
+      # come.
+      tgt = File.new("#{settings['keydir']}/#{identifier}","a+")
+      tgt_hash = File.new("#{tgt.path}.salt","a+")
+
+      # These chowns are applicable as long as they are applied
+      # by puppet, not puppetserver.
+      FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt.path)
+      FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt_hash.path)
+
+      # Create salt file if not there, no matter what, just in case we have an
+      # upgraded system.
+      if tgt_hash.stat.size.zero?
+        if options.key?('salt')
+          salt = options['salt']
+        else
+          salt = gen_salt
+        end
+        tgt_hash.puts(salt)
+        tgt_hash.rewind
+      end
+
+      if tgt.stat.size.zero?
+        if options.key?('password')
+          passwd = options['password']
+        else
+          passwd = gen_password(options)
+        end
+        tgt.puts(passwd)
+      else
+        passwd = tgt.gets.chomp
+        salt = tgt_hash.gets.chomp
+
+        if !options['return_current'] && passwd.length != options['length']
+          tgt_last = File.new("#{tgt.path}.last","w+")
+          tgt_last.puts(passwd)
+          tgt_last.chmod(0640)
+          tgt_last.flush
+          tgt_last.close
+
+          tgt_hash_last = File.new("#{tgt_hash.path}.last","w+")
+          tgt_hash_last.puts(salt)
+          tgt_hash_last.chmod(0640)
+          tgt_hash_last.flush
+          tgt_hash_last.close
+
+          tgt.rewind
+          tgt.truncate(0)
+          passwd = gen_password(options)
+          salt = gen_salt
+
+          tgt.puts(passwd)
+          tgt_hash.puts(salt)
+        end
+      end
+
+      tgt.chmod(0640)
+      tgt.flush
+      tgt.close
+
     end
-
-    tgt.chmod(0640)
-    tgt.flush
-    tgt.close
-
+    # Return the password and salt
     [passwd, salt]
   end
 

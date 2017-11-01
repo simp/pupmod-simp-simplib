@@ -406,9 +406,15 @@ Returns: `hash`
 
 #### **passgen**
 
-Generates a random password string for a passed identifier. Uses
-Puppet\[:environmentpath\]/\$environment/simp\_autofiles/gen\_passwd/ as the
-destination directory.
+
+**NOTE:** `passgen` is deprecated, use `simplib::passgen`
+
+Generates a random password string for a passed identifier.
+
+If `modifier_hash['libvk' => true]`, passwords and hashes will be stored using
+libkv.  Otherwise, files in 
+`Puppet\[:environmentpath\]/\$environment/simp\_autofiles/gen\_passwd/` will
+store the password and hash.
 
 ```
 The minimum length password that this function will return is 6
@@ -426,6 +432,9 @@ characters.
       - 'complexity' => 0(*), 1, 2
         * 0 => Use only Alphanumeric characters in your password (safest) 1 =>
         * Add reasonably safe symbols 2 => Printable ASCII
+      - `libkv` => `false`(*) or `true`
+        * `true`  => Use libkv to store passwords and hashes
+        * `false` => Use the Puppet :vardir to store passwords and hashes
 
     If no, or an invalid, second argument is provided then it will return the
     currently stored string.

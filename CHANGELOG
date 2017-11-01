@@ -1,3 +1,8 @@
+* Mon Dec 18 2017 Nick Markowski <nicholas.markowski@onyxpoint.com> - 3.11.0-0
+- Added libkv support to simplib::passegn
+- BUGFIX: passgen passwd.last and hash.last files were not being properly
+  chowned
+
 * Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
 - Added a 'login_defs' structured fact that returns a hash of all values in
   '/etc/login.defs' with a default 'uid_min' and 'gid_min'

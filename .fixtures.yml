@@ -1,6 +1,7 @@
 ---
 fixtures:
   repositories:
+    libkv: https://github.com/simp/pupmod-simp-libkv
     stdlib: https://github.com/simp/puppetlabs-stdlib
   symlinks:
     simplib: "#{source_dir}"

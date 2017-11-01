@@ -271,12 +271,14 @@ module Puppet::Parser::Functions
                 if !options['return_current'] and passwd.length != options['length'].to_i
                   tgt_last = File.new("#{tgt.path}.last","w+")
                   tgt_last.puts(passwd)
+                  FileUtils.chown(puppet_user,puppet_group,tgt_last)
                   tgt_last.chmod(0640)
                   tgt_last.flush
                   tgt_last.close
 
                   tgt_hash_last = File.new("#{tgt_hash.path}.last","w+")
                   tgt_hash_last.puts(salt)
+                  FileUtils.chown(puppet_user,puppet_group,tgt_hash_last)
                   tgt_hash_last.chmod(0640)
                   tgt_hash_last.flush
                   tgt_hash_last.close
