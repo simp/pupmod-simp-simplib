@@ -16,7 +16,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost'
       ]
-  
+
       is_expected.to run.with_params(input).and_return(expected_output)
     end
 
@@ -58,7 +58,7 @@ describe 'simplib::nets2ddq' do
       expected_output = []
       is_expected.to run.with_params(input_string).and_return(expected_output)
 
-      input_array = [] 
+      input_array = []
       expected_output = []
       is_expected.to run.with_params(input_array).and_return(expected_output)
     end

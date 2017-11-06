@@ -134,7 +134,7 @@ describe 'simplib::validate_deep_hash' do
     it 'rejects input having keys not found in reference hash' do
       input_extra_key = test_hash.dup
       input_extra_key['extra_key'] = 'extra value'
-      err_msg = "simplib::validate_deep_hash failed validation:\n" + 
+      err_msg = "simplib::validate_deep_hash failed validation:\n" +
         "  TOP-->extra_key not in reference hash"
       is_expected.to run.with_params(ref_hash, input_extra_key).and_raise_error(
         err_msg)
@@ -203,7 +203,7 @@ describe 'simplib::validate_deep_hash' do
     it 'rejects input having keys not found in reference hash' do
       input_extra_key = test_hash.dup
       input_extra_key['level1']['level2']['extra_key'] = 'extra value'
-      err_msg = "simplib::validate_deep_hash failed validation:\n" + 
+      err_msg = "simplib::validate_deep_hash failed validation:\n" +
         "  TOP-->level1-->level2-->extra_key not in reference hash"
       is_expected.to run.with_params(ref_hash, input_extra_key).and_raise_error(
         err_msg)

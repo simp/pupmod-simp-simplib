@@ -1,20 +1,4 @@
-* Wed Nov 15 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.1-0
-- Add Simplib::Macaddress data type
-- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
-  simplib deprecation warning when the Puppet 3 versions are called:
-  - simplib::join_mount_opts() replaces deprected join_mount_opts()
-  - simplib::nets2cidr() replaces deprecated nets2cidr()
-  - simplib::validate_re_array() replaces deprecated validate_re_array()
-  - simplib::validate_sysctl_value() replaces deprecated validate_sysctl_value()
-- Deprecate validate_umask(), advising the user to convert to the
-  Simplib::Umask data type
-- Deprecate validate_macaddresses(), advising the user to convert
-  to the Simplib::Macaddress data type
-
-* Mon Nov 06 2017 Jason Balicki <sakodak@gmail.com> - 3.7.1-0
-- Fixes split failure when "findmnt" does not exist on Linux
-
-* Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
+* Mon Nov 06 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.8.0-0
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
   simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::nets2ddq() replaces deprecated nets2ddq().
@@ -29,6 +13,20 @@
   -  simplib::validate_deep_hash replaced validate_deep_hash.
 - In simplib::validate_deep_hash, fixed validate_deep_hash bug in
   which unknown keys in the Hash to check were not detected.
+- Add Simplib::Macaddress data type
+- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
+  simplib deprecation warning when the Puppet 3 versions are called:
+  - simplib::join_mount_opts() replaces deprected join_mount_opts()
+  - simplib::nets2cidr() replaces deprecated nets2cidr()
+  - simplib::validate_re_array() replaces deprecated validate_re_array()
+  - simplib::validate_sysctl_value() replaces deprecated validate_sysctl_value()
+- Deprecate validate_umask(), advising the user to convert to the
+  Simplib::Umask data type
+- Deprecate validate_macaddresses(), advising the user to convert
+  to the Simplib::Macaddress data type
+
+* Mon Nov 06 2017 Jason Balicki <sakodak@gmail.com> - 3.8.0-0
+- Fixes split failure when "findmnt" does not exist on Linux
 
 * Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
 - Convert a subset of Puppet 3 functions to Puppet 4 and emit a
