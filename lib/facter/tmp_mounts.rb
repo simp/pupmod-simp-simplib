@@ -46,17 +46,22 @@ end
 # Check for bind mounts using findmnt since some systems (EL7) do not post the
 # 'bind' keyword into the mount options any longer.
 mount_list.keys.each do |mnt|
-  mnt_source = Facter::Util::Resolution.exec("findmnt #{mnt}").split("\n").last.split(/\s+/)[1]
+  findmnt_output = Facter::Util::Resolution.exec("findmnt #{mnt}")
+  # on RHEL 5 the command "findmnt" doesn't exist, if it doesn't exist
+  # then we just want to ignore this since there's nothing to do
+  if findmnt_output != nil
+    mnt_source = findmnt_output.split("\n").last.split(/\s+/)[1]
 
-  # We're a bind mount if this happens
-  if mnt_source.include?('[')
-    bind_source = mnt_source[/\[(.*)\]/,1] # Match contents in brackets, extract first match
+    # We're a bind mount if this happens
+    if mnt_source.include?('[')
+      bind_source = mnt_source[/\[(.*)\]/,1] # Match contents in brackets, extract first match
 
-    mount_list[mnt][:path] = bind_source
-    mount_list[mnt][:fstype] = 'none'
+      mount_list[mnt][:path] = bind_source
+      mount_list[mnt][:fstype] = 'none'
 
-    unless mount_list[mnt][:opts].split(',').include?('bind')
-      mount_list[mnt][:opts] = mount_list[mnt][:opts] + ',bind'
+      unless mount_list[mnt][:opts].split(',').include?('bind')
+        mount_list[mnt][:opts] = mount_list[mnt][:opts] + ',bind'
+      end
     end
   end
 end
