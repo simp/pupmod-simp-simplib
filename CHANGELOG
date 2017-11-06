@@ -28,29 +28,6 @@
 * Mon Nov 06 2017 Jason Balicki <sakodak@gmail.com> - 3.8.0-0
 - Fixes split failure when "findmnt" does not exist on Linux
 
-* Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
-- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
-  simplib deprecation warning when the Puppet 3 versions are called:
-  - simplib::validate_array_member() replaces
-    deprecated validate_array_member()
-  - simplib::validate_bool() replaces deprecated validate_bool_simp()
-
-* Fri Oct 24 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
-- Convert a subset of Puppet 3 functions to Puppet 4 and emit a
-  simplib deprecation warning when the Puppet 3 versions are called:
-  - simplib::nets2ddq() replaces deprecated nets2ddq().
-  - simplib::validate_array_member() replaces
-    deprecated validate_array_member()
-  - simplib::validate_between() replaces deprecated validate_between().
-    The new version fails validation, instead of returning false.
-    This behavior consistent with both how the method is used by SIMP
-    modules and the error behavior of all other simplib validate
-    functions.
-  - simplib::validate_bool() replaces deprecated validate_bool_simp()
-  -  simplib::validate_deep_hash replaced validate_deep_hash.
-- In simplib::validate_deep_hash, fixed validate_deep_hash bug in
-  which unknown keys in the Hash to check were not detected.
-
 * Tue Sep 26 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.6.0-0
 - Convert all 'sysctl' 'kernel.shm*' entries to Strings
   - shmall and shmmax were causing Facter and newer versions of Puppet to crash
