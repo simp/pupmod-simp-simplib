@@ -50,10 +50,19 @@ unit-test-ruby-2.3:
   script:
     - bundle install
     - bundle exec rake spec
-acceptance-test:
+
+acceptance-test-no-fips:
   stage: test
   tags:
     - beaker
   script:
     - bundle install --no-binstubs --path=vendor
-    - bundle exec rake acceptance
+    - bundle exec rake beaker:suites
+
+acceptance-test-fips:
+  stage: test
+  tags:
+    - beaker
+  script:
+    - bundle install --no-binstubs --path=vendor
+    - BEAKER_fips=yes bundle exec rake beaker:suites

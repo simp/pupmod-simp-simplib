@@ -16,7 +16,7 @@ describe 'to_integer function' do
         EOS
       }
 
-      it 'should return IP addresses and log a single deprecation warning' do
+      it 'should return an integer and log a single deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(/Notice: Type => Fixnum Content => 10/)
@@ -41,7 +41,7 @@ describe 'to_integer function' do
         EOS
       }
 
-      it 'should return IP addresses without logging a deprecation warning' do
+      it 'should return an integer without logging a deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(/Notice: Type => Fixnum Content => -1/)

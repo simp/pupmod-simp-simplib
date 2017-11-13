@@ -18,7 +18,7 @@ module Puppet::Parser::Functions
     key = arguments[0]
     message = arguments[1]
 
-    unless ENV['STDLIB_LOG_DEPRECATIONS'] == "false"
+    unless ENV['SIMPLIB_LOG_DEPRECATIONS'] == "false"
       Puppet.deprecation_warning(message, key)
     end
   end
