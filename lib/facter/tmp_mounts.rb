@@ -49,7 +49,7 @@ mount_list.keys.each do |mnt|
   findmnt_output = Facter::Util::Resolution.exec("findmnt #{mnt}")
   # on RHEL 5 the command "findmnt" doesn't exist, if it doesn't exist
   # then we just want to ignore this since there's nothing to do
-  if findmnt_output != nil
+  if findmnt_output
     mnt_source = findmnt_output.split("\n").last.split(/\s+/)[1]
 
     # We're a bind mount if this happens
