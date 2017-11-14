@@ -1,5 +1,3 @@
-* Mon Nov 06 2017 Jason Balicki <sakodak@gmail.com> - 3.7.2-0
-- Fixes split failure when "findmnt" does not exist on Linux
 * Mon Nov 06 2017 Jason Balicki <sakodak@gmail.com> - 3.7.1-0
 - Fixes split failure when "findmnt" does not exist on Linux
 * Thu Oct 26 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.7.0-0
