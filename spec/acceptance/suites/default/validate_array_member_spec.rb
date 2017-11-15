@@ -3,6 +3,17 @@ require 'spec_helper_acceptance'
 test_name 'validate_array_member function'
 
 describe 'validate_array_member function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
+  let(:opts_with_exit_1) do
+    {
+      :environment           => {'SIMPLIB_LOG_DEPRECATIONS' => 'true'},
+      :acceptable_exit_codes => [1]
+    }
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context 'when validate_array_member called' do
@@ -12,7 +23,7 @@ describe 'validate_array_member function' do
         $var1 = 'foo'
         validate_array_member($var1, ['foo', 'FOO'])
         EOS
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_array_member is deprecated, please use simplib::validate_array_member')
@@ -26,7 +37,7 @@ describe 'validate_array_member function' do
         $var1 = 'foo'
         validate_array_member($var1, ['bar', 'BAR'])
         EOS
-        results = apply_manifest_on(server, manifest, :acceptable_exit_codes => [1])
+        results = apply_manifest_on(server, manifest, opts_with_exit_1)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_array_member is deprecated, please use simplib::validate_array_member')
@@ -42,7 +53,7 @@ describe 'validate_array_member function' do
         $var1 = 'foo'
         simplib::validate_array_member($var1, ['foo', 'FOO'])
         EOS
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_array_member is deprecated, please use simplib::validate_array_member')
@@ -56,7 +67,7 @@ describe 'validate_array_member function' do
         $var1 = 'foo'
         simplib::validate_array_member($var1, ['bar', 'BAR'])
         EOS
-        results = apply_manifest_on(server, manifest, :acceptable_exit_codes => [1])
+        results = apply_manifest_on(server, manifest, opts_with_exit_1)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_array_member is deprecated, please use simplib::validate_array_member')

@@ -3,6 +3,10 @@ require 'spec_helper_acceptance'
 test_name 'ipaddresses function'
 
 describe 'ipaddresses function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context "when ipaddresses called with/without arguments" do
@@ -17,7 +21,7 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         all_ips_regex = %r{\["10.*","10.*","127.0.0.1"\]}
         expect(results.output).to match(all_ips_regex)
@@ -45,7 +49,7 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         # exact IP parsing already done in unit test
         all_ips_regex = %r{\["10.*","10.*","127.0.0.1"\]}

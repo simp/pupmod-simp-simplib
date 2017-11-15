@@ -26,9 +26,9 @@ Puppet::Functions.create_function(:'simplib::validate_between') do
   def validate_between(value, min_value, max_value)
     numeric_value = value.to_f
     unless numeric_value >= min_value and numeric_value <= max_value
-      # The original method was used in SIMP modules as if it raised an 
+      # The original method was used in SIMP modules as if it raised an
       # exception, so this implementation will work as expected.
-      err_msg = "simplib::validate_between: '#{value}' is not between" + 
+      err_msg = "simplib::validate_between: '#{value}' is not between" +
         " '#{min_value}' and '#{max_value}'"
       fail(err_msg)
     end

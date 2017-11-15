@@ -3,6 +3,10 @@ require 'spec_helper_acceptance'
 test_name 'to_string function'
 
 describe 'to_string function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context "when to_string called" do
@@ -17,7 +21,7 @@ describe 'to_string function' do
       }
 
       it 'should return a string and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         expect(results.output).to match(/Notice: Type => String Content => "10"/)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
@@ -42,7 +46,7 @@ describe 'to_string function' do
       }
 
       it 'should return a string without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         expect(results.output).to match(/Notice: Type => String Content => "-1"/)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)

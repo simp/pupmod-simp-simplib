@@ -3,6 +3,17 @@ require 'spec_helper_acceptance'
 test_name 'validate_between function'
 
 describe 'validate_between function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
+  let(:opts_with_exit_1) do
+    {
+      :environment           => {'SIMPLIB_LOG_DEPRECATIONS' => 'true'},
+      :acceptable_exit_codes => [1]
+    }
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context 'when validate_between called' do
@@ -12,7 +23,7 @@ describe 'validate_between function' do
         $var1 = 7
         validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_between is deprecated, please use simplib::validate_between')
@@ -26,7 +37,7 @@ describe 'validate_between function' do
         $var1 = 70
         validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest, :acceptable_exit_codes => [0])
+        results = apply_manifest_on(server, manifest, opts)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_between is deprecated, please use simplib::validate_between')
@@ -42,7 +53,7 @@ describe 'validate_between function' do
         $var1 = 7
         simplib::validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_between is deprecated, please use simplib::validate_between')
@@ -57,7 +68,7 @@ describe 'validate_between function' do
         $var1 = 70
         simplib::validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest, :acceptable_exit_codes => [1])
+        results = apply_manifest_on(server, manifest, opts_with_exit_1)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_between is deprecated, please use simplib::validate_between')
