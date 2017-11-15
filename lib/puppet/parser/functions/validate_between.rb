@@ -8,6 +8,9 @@ module Puppet::Parser::Functions
     @return [Boolean]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_between', 'validate_between is deprecated, please use simplib::validate_between'])
+
+
     args[0].to_s.between?(args[1].to_s, args[2].to_s)
   end
 

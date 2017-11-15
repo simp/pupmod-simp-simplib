@@ -269,35 +269,41 @@ describe 'simplib::passgen' do
           }
         end
 
-        it 'should parse as modular crypt' do
-          result = subject.execute('spectest', shared_options);
-          expect(parse_modular_crypt(result)).to_not eql(nil)
-        end
+        if File.exist?('/proc/sys/crypto/fips_enabled') && 
+            File.open('/proc/sys/crypto/fips_enabled', &:readline)[0].chr == '1' &&
+            hash_selection == 'md5'
+          puts 'Skipping md5, as not available on this FIPS-compliant server'
+        else
+          it 'should parse as modular crypt' do
+            result = subject.execute('spectest', shared_options);
+            expect(parse_modular_crypt(result)).to_not eql(nil)
+          end
 
-        it "should use #{object['code']} as the algorithm code" do
-          value = parse_modular_crypt(subject.execute('spectest', shared_options));
-          expect(value['algorithm_code']).to eql(object['code'])
-        end
+          it "should use #{object['code']} as the algorithm code" do
+            value = parse_modular_crypt(subject.execute('spectest', shared_options));
+            expect(value['algorithm_code']).to eql(object['code'])
+          end
 
-        it 'should contain a salt of complexity 0' do
-          value = parse_modular_crypt(subject.execute('spectest', shared_options));
-          expect(value['salt']).to match(/^(#{default_chars.join('|')})+$/)
-        end
+          it 'should contain a salt of complexity 0' do
+            value = parse_modular_crypt(subject.execute('spectest', shared_options));
+            expect(value['salt']).to match(/^(#{default_chars.join('|')})+$/)
+          end
 
-        it 'should contain a base64 hash' do
-          value = parse_modular_crypt(subject.execute('spectest', shared_options));
-          expect(value['hash_base64']).to match(/#{base64_regex}/)
-        end
+          it 'should contain a base64 hash' do
+            value = parse_modular_crypt(subject.execute('spectest', shared_options));
+            expect(value['hash_base64']).to match(/#{base64_regex}/)
+          end
 
-        it "should contain a valid #{hash_selection} hash after decoding" do
-          result = subject.execute('spectest', shared_options);
-          value = parse_modular_crypt(result);
-          expect(value['hash_bitlength']).to eql(object['bits'])
-        end
+          it "should contain a valid #{hash_selection} hash after decoding" do
+            result = subject.execute('spectest', shared_options);
+            value = parse_modular_crypt(result);
+            expect(value['hash_bitlength']).to eql(object['bits'])
+          end
 
-        it "should return exactly #{object['end_hash']} when salt and password are specified" do
-          result = subject.execute('spectest',specific_options)
-          expect(result).to eql(object['end_hash'])
+          it "should return exactly #{object['end_hash']} when salt and password are specified" do
+            result = subject.execute('spectest',specific_options)
+            expect(result).to eql(object['end_hash'])
+          end
         end
       end
     end

@@ -17,6 +17,8 @@ module Puppet::Parser::Functions
     @return [Boolean]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_array_member', 'validate_array_member is deprecated, please use simplib::validate_array_member'])
+
     unless args.length == 2 or args.length == 3
       raise Puppet::ParseError, ("validate_array_member(): expects two or three arguments. Got '#{args.length}'")
     end

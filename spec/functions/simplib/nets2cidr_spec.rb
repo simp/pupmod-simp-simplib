@@ -40,7 +40,7 @@ describe 'simplib::nets2cidr' do
 
     context 'multiple hostnames/networks/addresses' do
       let(:expected_output) do
-        [ 
+        [
           'myhost-test.local',
           '1.2.3.0/24',
           '2001:db8:85a3::8a2e:370:0/112'

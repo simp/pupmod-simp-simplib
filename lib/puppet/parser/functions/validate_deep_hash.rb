@@ -94,6 +94,8 @@ module Puppet::Parser::Functions
       return invalid
     end
 
+    function_simplib_deprecation(['validate_deep_hash', 'validate_deep_hash is deprecated, please use simplib::validate_deep_hash'])
+
     if args.length != 2 then
       raise Puppet::ParseError, ("validate_deep_hash(): wrong number of arguments (#{args.length}; must be 2)")
     end

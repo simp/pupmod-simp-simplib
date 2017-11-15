@@ -16,7 +16,7 @@ describe 'to_string function' do
         EOS
       }
 
-      it 'should return IP addresses and log a single deprecation warning' do
+      it 'should return a string and log a single deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(/Notice: Type => String Content => "10"/)
@@ -41,7 +41,7 @@ describe 'to_string function' do
         EOS
       }
 
-      it 'should return IP addresses without logging a deprecation warning' do
+      it 'should return a string without logging a deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(/Notice: Type => String Content => "-1"/)
