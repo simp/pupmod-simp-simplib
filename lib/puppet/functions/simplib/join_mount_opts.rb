@@ -7,7 +7,7 @@ Puppet::Functions.create_function(:'simplib::join_mount_opts') do
   #   `system_opts` when there are conflicts
   # @return [String] Merged options string in which `new_opts`
   #   mount options take precedence; options are comma delimited
-  # 
+  #
   dispatch :join_mount_opts do
     required_param 'Array[String]', :system_mount_opts
     required_param 'Array[String]', :new_mount_opts

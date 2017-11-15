@@ -3,6 +3,10 @@ require 'spec_helper_acceptance'
 test_name 'parse_hosts function'
 
 describe 'parse_hosts function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context "when parse_hosts called" do
@@ -15,7 +19,7 @@ describe 'parse_hosts function' do
       }
 
       it 'should tranform the host list and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         expected_content = %q({"1.2.3.4":{"ports":\["443"\],"protocols":{"https":\["443"\]}}})
         expect(results.output).to match(
@@ -40,7 +44,7 @@ describe 'parse_hosts function' do
       }
 
       it 'should transform the host list without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         expected_content = %q({"my.example.net":{"ports":\["700","900"\],"protocols":{}}})
         expect(results.output).to match(

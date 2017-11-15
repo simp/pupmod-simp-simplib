@@ -3,6 +3,10 @@ require 'spec_helper_acceptance'
 test_name 'to_integer function'
 
 describe 'to_integer function' do
+  let(:opts) do
+    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+  end
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     context "when to_integer called" do
@@ -17,7 +21,7 @@ describe 'to_integer function' do
       }
 
       it 'should return an integer and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest)
+        results = apply_manifest_on(server, manifest, opts)
 
         expect(results.output).to match(/Notice: Type => Fixnum Content => 10/)
         expect(results.output).to match(/Notice: Type => Fixnum Content => 2345/)

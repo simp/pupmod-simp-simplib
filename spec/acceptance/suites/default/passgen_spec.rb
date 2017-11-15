@@ -8,6 +8,7 @@ else
 end
 
 describe 'passgen function' do
+
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
     hash_algorithms.each do |hash|

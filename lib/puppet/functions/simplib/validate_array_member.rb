@@ -14,7 +14,7 @@ Puppet::Functions.create_function(:'simplib::validate_array_member') do
   #   supported modifier.
   # @return [Nil]
   # @raise RuntimeError if validation fails
-  #   
+  #
   # @example Validating single input
   #
   #   validate_array_member('foo',['foo','bar'])     # succeeds

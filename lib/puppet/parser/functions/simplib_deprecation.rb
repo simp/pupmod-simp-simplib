@@ -3,8 +3,8 @@ module Puppet::Parser::Functions
     Function to print deprecation warnings for 3.X functions.
     The first argument is the uniqueness key, which allows deduping of messages.
     The second argument is the message to be printed.
-    Messages can be suppressed if the SIMPLIB_LOG_DEPRECATIONS environment
-    variable is set to 'false'.
+    Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS environment
+    variable is set to 'true'.
     @return [Nil]
 
     @example
@@ -18,7 +18,7 @@ module Puppet::Parser::Functions
     key = arguments[0]
     message = arguments[1]
 
-    unless ENV['SIMPLIB_LOG_DEPRECATIONS'] == "false"
+    if ENV['SIMPLIB_LOG_DEPRECATIONS'] == "true"
       Puppet.deprecation_warning(message, key)
     end
   end
