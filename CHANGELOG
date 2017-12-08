@@ -1,3 +1,7 @@
+* Fri Dec 08 2017 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.9.0-0
+- Add data types Simplib::Domain and Simplib::Domainlist
+- Re-enabled unit-style data type spec tests for Puppet 4.10
+
 * Wed Nov 15 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.8.0-0
 - Disable simplib deprecation warnings by default
 
