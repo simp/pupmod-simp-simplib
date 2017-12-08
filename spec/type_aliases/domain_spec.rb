@@ -19,7 +19,7 @@ describe 'Simplib::Domain' do
 
     context 'TLDs may end with a trailing period' do
       it { is_expected.to allow_value('t.') }
-      it { is_expected.to allow_value('test.com.gg') }
+      it { is_expected.to allow_value('test.com.') }
     end
   end
 
@@ -44,5 +44,14 @@ describe 'Simplib::Domain' do
       it { is_expected.not_to allow_value('test.an-extremely-long-dns-label-that-is-just-over-63-characters-long.test') }
       it { is_expected.not_to allow_value('an-extremely-long-dns-label-that-is-just-over-63-characters-long.') }
     end
+  end
+
+  context 'with silly things' do
+    it { is_expected.not_to allow_value([]) }
+    it { is_expected.not_to allow_value('.') }
+    it { is_expected.not_to allow_value('' ) }
+    it { is_expected.not_to allow_value("test.c m") }
+    it { is_expected.not_to allow_value("test.com\n") }
+    it { is_expected.not_to allow_value(:undef) }
   end
 end

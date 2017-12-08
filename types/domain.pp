@@ -10,4 +10,4 @@
 #
 # RegEx developed and tested at http://rubular.com/r/4yZ7R8v42f
 #
-type Simplib::Domain = Pattern['^(?i-mx:(?=^.{1,253}$)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)$']
+type Simplib::Domain = Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']
