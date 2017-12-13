@@ -1,3 +1,7 @@
+* Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Added a 'login_defs' structured fact that returns a hash of all values in
+  '/etc/login.defs' with a default 'uid_min' and 'gid_min'
+
 * Fri Dec 08 2017 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.9.0-0
 - Add data types Simplib::Domain and Simplib::Domainlist
 - Re-enabled unit-style data type spec tests for Puppet 4.10
