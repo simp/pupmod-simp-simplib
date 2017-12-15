@@ -10,22 +10,35 @@ describe "custom fact login_defs" do
 
   context 'with a well formed /etc/login.defs' do
     let(:login_defs_content) { <<-EOM
+# I can haz comments!
 MAIL_DIR        /var/spool/mail
+
 PASS_MAX_DAYS   99999
 PASS_MIN_DAYS   0
+
 PASS_MIN_LEN    5
+
 PASS_WARN_AGE   7
+
 UID_MIN         1000
 UID_MAX         60000
+
 SYS_UID_MIN     201
 SYS_UID_MAX     999
+
 GID_MIN         1000
 GID_MAX         60000
+
 SYS_GID_MIN     201
 SYS_GID_MAX     999
+
 CREATE_HOME     yes
+
 UMASK           077
 USERGROUPS_ENAB yes
+    
+# Even inline comments!
+    # And indented comments
 ENCRYPT_METHOD  SHA512
 MD5_CRYPT_ENAB  no
       EOM
@@ -36,6 +49,11 @@ MD5_CRYPT_ENAB  no
       File.expects(:readable?).with('/etc/login.defs').returns(true)
       File.expects(:read).with('/etc/login.defs').returns(login_defs_content)
 
+      # This resets the stubbing code in Mocha to ensure that the code does not
+      # try to catch any other calls to the stubbed methods above.
+      #
+      # This is not documented well and is almost always what you want in
+      # Puppet testing
       File.stubs(:exist?).with(Not(equals('/etc/login.defs')))
       File.stubs(:readable?).with(Not(equals('/etc/login.defs')))
       File.stubs(:read).with(Not(equals('/etc/login.defs')))
@@ -73,10 +91,7 @@ MD5_CRYPT_ENAB  no
       File.stubs(:readable?).with(Not(equals('/etc/login.defs')))
       File.stubs(:read).with(Not(equals('/etc/login.defs')))
 
-      expect(Facter.fact('login_defs').value).to eq({
-        'uid_min' => 1000,
-        'gid_min' => 1000
-      })
+      expect(Facter.fact('login_defs').value).to eq({ })
     end
   end
 end

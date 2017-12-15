@@ -6,18 +6,8 @@ Facter.add('login_defs') do
   end
 
   setcode do
-    def read_login_defs
-      File.read('/etc/login.defs')
-    end
 
-    if ['RedHat','CentOS'].include?(Facter.value(:operatingsystem)) &&
-       Facter.value(:operatingsystemmajrelease) < '7'
-        id_min = 500
-    else
-      id_min = 1000
-    end
-
-    attribute_hash = read_login_defs.lines.
+    attribute_hash = File.read('/etc/login.defs').lines.
       delete_if{|x| x =~ /^\s*(#|$)/}.
       map{|x| x = x.split(/\s+/); x[0].downcase!; x}.
       to_h
@@ -35,12 +25,6 @@ Facter.add('login_defs') do
         attribute_hash[k] = false
       elsif v =~ /^\d+$/
         attribute_hash[k] = v.to_i
-      end
-    end
-
-    ['uid_min', 'gid_min'].each do |id_attr|
-      unless attribute_hash[id_attr]
-        attribute_hash[id_attr] = id_min
       end
     end
 
