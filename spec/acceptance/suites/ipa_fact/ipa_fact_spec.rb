@@ -33,6 +33,7 @@ describe 'ipa fact' do
     end
 
     context 'when IPA is installed and host has joined IPA domain' do
+      let(:ipa_domain) { "#{server.name.downcase}.example.com" }
       it 'ipa fact should contain domain and IPA server' do
         # ipa-server-install installs both the IPA server and client.
         # The fact uses the client env.
@@ -52,7 +53,7 @@ describe 'ipa fact' do
         on(server, 'ipactl status')
 
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(/Notice: Type => Hash Content => {"status":"joined","domain":"#{server.name.downcase}.example.com","server":"#{fqdn}"}/)
+        expect(results.output).to match(/Notice: Type => Hash Content => {"default_domain":"#{ipa_domain}","default_server":"#{fqdn}","status":"joined","domain":"#{ipa_domain}","server":"#{fqdn}"}/)
         results = on(server, 'puppet facts')
         expect(results.output).to match(/"ipa": {/)
       end
@@ -61,8 +62,9 @@ describe 'ipa fact' do
         # stop IPA server
         on(server, 'ipactl stop')
 
+        fqdn = on(server,'facter fqdn').output.strip
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(/Notice: Type => Hash Content => {"status":"unknown","domain":"","server":""}/)
+        expect(results.output).to match(/Notice: Type => Hash Content => {"default_domain":"#{ipa_domain}","default_server":"#{fqdn}","status":"unknown","domain":"","server":""}/)
         results = on(server, 'puppet facts')
         expect(results.output).to match(/"ipa": {/)
       end

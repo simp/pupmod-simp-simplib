@@ -1,6 +1,23 @@
 require 'spec_helper'
 
 describe "custom fact ipa" do
+  let (:default_conf) {
+    [
+      "host = client.example.com\n",
+      "basedn = dc=example,dc=com\n",
+      "realm = EXAMPLE.COM\n",
+      # In next 2 config lines, artificially prepend domain and IPA
+      # server with 'default.' so we can validate parsing.
+      "domain = default.example.com\n",
+      "xmlrpc_uri = https://default.ipaserver.example.com/ipa/xml\n",
+      "ldap_uri = ldapi://%2fvar%2frun%2fslapd-EXAMPLE-COM.socket\n",
+      "enable_ra = True\n",
+      "ra_plugin = dogtag\n",
+      "dogtag_version = 10\n",
+      "mode = production\n"
+    ]
+  }
+
   let (:host_info) { <<EOM
   Host name: client.example.com
   Principal name: host/client.example.com@EXAMPLE.COM
@@ -25,13 +42,17 @@ EOM
     it 'should return hash with joined status, IPA domain and IPA server' do
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
+#File.expects(:exist?).with('/home/enemsick/.rvm/gems/ruby-2.1.9/gems/byebug-9.0.6/bin/byebug').returns(true)
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa host-show client.example.com').returns(host_info)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("  domain: example.com\n")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'joined',
         'domain' => 'example.com',
         'server' => 'ipaserver.example.com'
@@ -72,9 +93,12 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns(nil)
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => nil,
         'server' => nil
@@ -85,10 +109,13 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       err_msg = "kinit: Cannot contact any KDC for realm 'EXAMPLE.COM' while getting initial credentials"
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns(err_msg)
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => nil,
         'server' => nil
@@ -101,11 +128,14 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns(nil)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("  domain: example.com")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => 'example.com',
         'server' => nil
@@ -116,11 +146,14 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("  domain: example.com")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => 'example.com',
         'server' => nil
@@ -131,12 +164,15 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa host-show client.example.com').returns(nil)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("  domain: example.com")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => 'example.com',
         'server' => nil
@@ -147,12 +183,15 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa host-show client.example.com').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("  domain: example.com")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => 'example.com',
         'server' => nil
@@ -165,12 +204,15 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa host-show client.example.com').returns(host_info)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns(nil)
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => nil,
         'server' => 'ipaserver.example.com'
@@ -181,12 +223,15 @@ EOM
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+      IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa host-show client.example.com').returns(host_info)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain').returns("\n")
 
       expect(Facter.fact('ipa').value).to eq({
+        'default_domain' => 'default.example.com',
+        'default_server' => 'default.ipaserver.example.com',
         'status' => 'unknown',
         'domain' => nil,
         'server' => 'ipaserver.example.com'

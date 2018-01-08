@@ -5,12 +5,19 @@
 #   - 'joined' when the host is able to pull both the domain and IPA
 #      server information from an IPA server
 #   - 'unknown' when the host is not able to pull both the domain
-#     and server information from an IPA server
+#     and server information from an IPA server.  This status can
+#     occur when connectivity to the IPA server is down or the
+#     host has been unprovisioned at the IPA server and thus is
+#     no longer joined to the configured IPA domain.
 # * domain: The IPA domain or nil, if the host is unable to pull the
 #   domain information from the IPA server
 # * server: The IPA server to which this host is connected or nil,
 #   if the host is unable to pull the server information from the
 #   IPA server
+# * default_domain:  The configured IPA domain from the domain setting
+#     in /etc/ipa/default.conf.
+# * default_server:  The nominal, configured IPA server extracted from
+#     the xmlrpc_uri setting in /etc/ipa/default.conf.
 #
 Facter.add(:ipa) do
   confine :kernel => 'Linux'
@@ -29,11 +36,26 @@ Facter.add(:ipa) do
   confine { File.exist?('/etc/ipa/default.conf') }
 
   setcode do
+    ipa_fact = {}
+    defaults = IO.readlines('/etc/ipa/default.conf')
+    defaults.each do |line|
+      domain_match = line.match(/^domain\s*=\s*(\S*)/)
+      if domain_match
+        ipa_fact['default_domain'] = domain_match[1]
+      end
+
+      server_match = line.match(/^xmlrpc_uri\s*=\s*http[s]?:\/\/(\S*)\/ipa\/xml/)
+      if server_match
+        ipa_fact['default_server'] = server_match[1]
+      end
+      break if ipa_fact['default_domain'] and ipa_fact['default_server']
+    end
+
     # Obtain host Kerberos token so we can use IPA API
     kinit_msg = Facter::Core::Execution.exec("#{kinit} -k 2>&1")
     if kinit_msg.nil? or !kinit_msg.strip.empty?
       # Only messages emitted are error messages
-      ipa_fact = { 'status' => 'unknown', 'domain' => nil, 'server' => nil }
+      ipa_fact.merge!({ 'status' => 'unknown', 'domain' => nil, 'server' => nil })
     else
       # Use IPA API to determine this host's IPA server
       #
@@ -63,7 +85,7 @@ Facter.add(:ipa) do
       end
       domain.strip! unless domain.nil?
       server.strip! unless server.nil?
-      ipa_fact = { 'status' => status, 'domain' => domain, 'server' => server }
+      ipa_fact.merge!({ 'status' => status, 'domain' => domain, 'server' => server })
     end
 
     ipa_fact
