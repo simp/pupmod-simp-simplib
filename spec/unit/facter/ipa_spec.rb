@@ -42,7 +42,6 @@ EOM
     it 'should return hash with joined status, IPA domain and IPA server' do
       Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
       Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-#File.expects(:exist?).with('/home/enemsick/.rvm/gems/ruby-2.1.9/gems/byebug-9.0.6/bin/byebug').returns(true)
       File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
       IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
       Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
