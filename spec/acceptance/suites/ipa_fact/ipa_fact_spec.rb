@@ -35,6 +35,11 @@ describe 'ipa fact' do
     context 'when IPA is installed and host has joined IPA domain' do
       let(:ipa_domain) { "#{server.name.downcase}.example.com" }
       it 'ipa fact should contain domain and IPA server' do
+        # IPA requires entropy, so use haveged service
+        on(server, 'puppet resource package epel-release ensure=present')
+        on(server, 'puppet resource package haveged ensure=present')
+        on(server, 'puppet resource service haveged ensure=running enable=true')
+
         # ipa-server-install installs both the IPA server and client.
         # The fact uses the client env.
         fqdn = on(server,'facter fqdn').output.strip
