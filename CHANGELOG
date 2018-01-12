@@ -1,4 +1,8 @@
-* Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+* Wed Jan 03 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.9.0-0
+- Add an 'ipa' fact that provides the IPA domain and server to which
+  a host is connected, when the host is joined to the IPA domain.
+
+* Wed Dec 13 2017 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.0-0
 - Added a 'login_defs' structured fact that returns a hash of all values in
   '/etc/login.defs' with a default 'uid_min' and 'gid_min'
 
