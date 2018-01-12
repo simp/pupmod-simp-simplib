@@ -73,11 +73,20 @@ itself for more detailed documentation.
   * **grub_version**         -  Return the grub version installed on the system
   * **init_systems**         -  Return a list of all init systems present on
    the system
+  * **ipa**                  -  Return a hash containing the IPA domain and
+   server to which a host is connected
   * **ipv6_enabled**         -  Return true if IPv6 is enabled and false if not
+  * **login_defs**           -  Return the contents of `/etc/login.defs` as a
+   hash with downcased keys
+  * **prelink**              -  Returns a hash containing prelink status
   * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
+  * **root_dir_uuid**        -  Return the UUID of the partition holding the
+   `/` directory
   * **runlevel**             -  Return the current system runlevel
   * **shmall**               -  Return the value of shmall from sysctl
-  * **puppet_settings**      -  Returns a hash of all Puppet settings on a node
+  * **simplib_sysctl**       -  Return hash of sysctl values that are relevant
+   to SIMP
+  * **simp_puppet_settings** -  Returns a hash of all Puppet settings on a node
   * **tmp_mounts**           -  This fact provides information about `/tmp`,
   `/var/tmp`, and `/dev/shm` should they be present on the system
   * **uid_min**              -  Return the minimum uid allowed
