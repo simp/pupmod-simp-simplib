@@ -1,28 +1,25 @@
 require 'spec_helper'
 
 describe "custom fact prelink" do
-  let (:sysconfig_prelink_enabled) {
-    [
-      "# Set this to no to disable prelinking altogether\n",
-      "PRELINKING=yes\n",
-      "PRELINK_OPTS=-mR\n"
-    ]
+  let (:sysconfig_prelink_enabled) { <<EOM
+# Set this to no to disable prelinking altogether
+PRELINKING=yes
+PRELINK_OPTS=-mR
+EOM
   }
 
-  let (:sysconfig_prelink_disabled) {
-    [
-      "# Set this to no to disable prelinking altogether\n",
-      "PRELINKING=no\n",
-      "PRELINK_OPTS=-mR\n"
-    ]
+  let (:sysconfig_prelink_disabled) { <<EOM
+# Set this to no to disable prelinking altogether
+PRELINKING=no
+PRELINK_OPTS=-mR
+EOM
   }
 
-  let (:sysconfig_prelink_unspecified) {
-    [
-      "# Set this to no to disable prelinking altogether\n",
-      "#PRELINKING=yes\n",
-      "PRELINK_OPTS=-mR\n"
-    ]
+  let (:sysconfig_prelink_unspecified) { <<EOM
+# Set this to no to disable prelinking altogether
+#PRELINKING=yes
+PRELINK_OPTS=-mR
+EOM
   }
 
   before(:each) do
@@ -36,7 +33,7 @@ describe "custom fact prelink" do
     it 'should return hash with enabled status' do
       Facter::Core::Execution.expects(:which).with('prelink').returns('/usr/sbin/prelink')
       File.expects(:exist?).with('/etc/sysconfig/prelink').returns(true)
-      IO.expects(:readlines).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_enabled)
+      File.expects(:read).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_enabled)
 
       expect(Facter.fact('prelink').value).to eq({ 'enabled' => true })
     end
@@ -46,7 +43,7 @@ describe "custom fact prelink" do
     it 'should return hash with disabled status' do
       Facter::Core::Execution.expects(:which).with('prelink').returns('/usr/sbin/prelink')
       File.expects(:exist?).with('/etc/sysconfig/prelink').returns(true)
-      IO.expects(:readlines).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_disabled)
+      File.expects(:read).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_disabled)
       expect(Facter.fact('prelink').value).to eq({ 'enabled' => false })
     end
   end
@@ -55,7 +52,7 @@ describe "custom fact prelink" do
     it 'should return hash with disabled status' do
       Facter::Core::Execution.expects(:which).with('prelink').returns('/usr/sbin/prelink')
       File.expects(:exist?).with('/etc/sysconfig/prelink').returns(true)
-      IO.expects(:readlines).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_unspecified)
+      File.expects(:read).with('/etc/sysconfig/prelink').returns(sysconfig_prelink_unspecified)
       expect(Facter.fact('prelink').value).to eq({ 'enabled' => false })
     end
   end

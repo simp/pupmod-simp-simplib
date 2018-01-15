@@ -16,15 +16,7 @@ Facter.add(:prelink) do
   setcode do
     prelink_enabled = false
     if File.exist?('/etc/sysconfig/prelink')
-      config = IO.readlines('/etc/sysconfig/prelink').delete_if do |line|
-        !line.match(/^\s*PRELINKING=/)
-      end
-      unless config.empty?
-        value = config.last.split('=')[1]
-        if  value and value.strip == 'yes'
-          prelink_enabled = true
-        end
-      end
+      prelink_enabled = !(File.read('/etc/sysconfig/prelink') =~ /^\s*PRELINKING=yes\s*$/).nil?
     end
 
     { 'enabled' => prelink_enabled }
