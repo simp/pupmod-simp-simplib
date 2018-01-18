@@ -12,6 +12,11 @@ describe 'ipa fact' do
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
+    # Skip EL6 if FIPS is enabled
+    # IPA server on EL6 doens't support EL6, only EL7.4+
+    # See https://www.freeipa.org/page/Releases/4.5.0#FIPS_140-2_Support
+    next if (ENV['BEAKER_fips'] && server.platform == 'el-6-x86_64')
+
     context 'when IPA is not installed' do
       it 'ipa fact should be nil' do
         results = apply_manifest_on(server, manifest)
