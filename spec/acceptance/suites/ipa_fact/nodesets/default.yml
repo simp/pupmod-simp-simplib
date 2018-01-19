@@ -8,7 +8,7 @@ HOSTS:
     hypervisor: vagrant
   el6:
     roles:
-      - server
+      - client
     masterless: true
     platform:   el-6-x86_64
     box:        centos/6

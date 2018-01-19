@@ -2,6 +2,17 @@ require 'spec_helper_acceptance'
 
 test_name 'ipa fact'
 
+# Logic to handle all of the cases where we *know* IPA works in FIPS mode
+def works_with_fips?(os, version)
+  if ['RedHat', 'CentOS'].include?(os)
+    if Gem::Version.new(version) >= Gem::Version.new('7.4')
+      return true
+    end
+  end
+
+  return false
+end
+
 describe 'ipa fact' do
   let (:manifest) {
     <<-EOS
@@ -12,10 +23,13 @@ describe 'ipa fact' do
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
-    # Skip EL6 if FIPS is enabled
-    # IPA server on EL6 doens't support EL6, only EL7.4+
+    # Skip any OS other than those that we know work with FIPS enabled
     # See https://www.freeipa.org/page/Releases/4.5.0#FIPS_140-2_Support
-    next if (ENV['BEAKER_fips'] && server.platform == 'el-6-x86_64')
+    fips_requested = (ENV['BEAKER_fips'] == 'yes' ? true : false)
+
+    if fips_requested
+      next unless works_with_fips?(fact_on(server, 'operatingsystem'), fact_on(server, 'operatingsystemrelease'))
+    end
 
     context 'when IPA is not installed' do
       it 'ipa fact should be nil' do
