@@ -1,7 +1,8 @@
 # _Description_
 #
 # Return a hash of IPA information:
-# * connectd: Boolean value based on whether or not an IPA server could be reached
+# * connected: Boolean value based on whether or not an IPA server
+#     could be reached
 #
 # * domain: The IPA domain for which this host is configured
 #
@@ -9,8 +10,10 @@
 #
 # * realm: The Kerberos realm for the host
 #
-# * tls_ca_cert: The location of the IPA server's TLS CA Certificate if the
-#     system is an IPA server
+# * basedn:  The base DN for the IPA Directory
+#
+# * tls_ca_cert: The location of the IPA server's TLS CA Certificate if
+#     the system is an IPA server
 #
 Facter.add(:ipa) do
   confine :kernel => 'Linux'
@@ -52,7 +55,7 @@ Facter.add(:ipa) do
     # Grab the necessary information from 'ipa env'
     ipa_response = Facter::Core::Execution.exec("#{ipa} env #{needed_keys.join(' ')}")
 
-    unless $?.success?
+    if ipa_response.strip.empty?
       # Obtain host Kerberos token so we can use IPA API
       kinit_msg = Facter::Core::Execution.exec("#{kinit} -k 2>&1")
       ipa_response = Facter::Core::Execution.exec("#{ipa} env #{needed_keys.join(' ')}")
@@ -61,9 +64,9 @@ Facter.add(:ipa) do
     if ipa_response.strip.empty?
       ipa_response = {}
     else
-      Facter::Core::Execution.exec("#{ipa} env --server host")
+      ipa_server_response = Facter::Core::Execution.exec("#{ipa} env --server host")
 
-      defaults['connected'] = $?.success?
+      defaults['connected'] = !ipa_server_response.strip.empty?
 
       ipa_response = ipa_response.lines.grep(/\S:\s*.+/).map(&:strip).
         map{ |x|

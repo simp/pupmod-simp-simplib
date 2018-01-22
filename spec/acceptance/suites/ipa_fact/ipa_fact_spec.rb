@@ -154,6 +154,24 @@ describe 'ipa fact' do
           expect(results['values']['ipa']['domain']).to eq ipa_domain
           expect(results['values']['ipa']['realm']).to eq ipa_realm
         end
+
+        it 'ipa fact should have unknown status when connection to IPA server is down' do
+          # stop IPA server
+          hosts_with_role(hosts, 'server').each do |server|
+            on(server, 'ipactl stop')
+          end
+
+          results = JSON.load(on(client, 'puppet facts').output)
+
+          expect(results['values']['ipa']).to_not be_nil
+          expect(results['values']['ipa']['connected']).to eq false
+        end
+
+        it 'should restart the IPA server for further tests' do
+          hosts_with_role(hosts, 'server').each do |server|
+            on(server, 'ipactl start')
+          end
+        end
       end
     end
   end

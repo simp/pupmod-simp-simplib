@@ -1,15 +1,23 @@
 require 'spec_helper'
 
 describe "custom fact ipa" do
+  let (:ipa_env_query) {
+    '/usr/bin/ipa env domain server realm basedn tls_ca_cert'
+  }
+
+  let (:ipa_env_server_query) {
+    '/usr/bin/ipa env --server host'
+  }
+
   let (:default_conf) {
     [
-      'host = client.example.com',
+      '#host = client.example.com',
+      'host=client.example.com',
       'basedn = dc=example,dc=com',
       'realm = EXAMPLE.COM',
-      # In next 2 config lines, artificially prepend domain and IPA
-      # server with 'default.' so we can validate parsing.
-      'domain = default.example.com',
-      'xmlrpc_uri = https://default.ipaserver.example.com/ipa/xml',
+      'domain = example.com',
+      'server = ipaserver.example.com',
+      'xmlrpc_uri = https://ipaserver.example.com/ipa/xml',
       'ldap_uri = ldapi://%2fvar%2frun%2fslapd-EXAMPLE-COM.socket',
       'enable_ra = True',
       'ra_plugin = dogtag',
@@ -23,8 +31,15 @@ describe "custom fact ipa" do
       '  domain: example.com',
       '  server: ipaserver.example.com',
       '  realm:  EXAMPLE.COM',
-      '  basedn: dc=example,dc=com'
+      '  basedn: dc=example,dc=com',
+      '-----------',
+      '4 variables',
+      '-----------'
     ].join("\n")
+  }
+
+  let (:ipa_server_env) {
+    'host: ipaserver.example.com'
   }
 
   before(:each) do
@@ -36,37 +51,52 @@ describe "custom fact ipa" do
 
   context 'host is joined to IPA domain' do
     context 'IPA server is available' do
-      it 'should return hash with joined status, IPA domain and IPA server' do
+      context 'kinit is not required' do
+        it 'should execute only ipa commands and report local env + connected status' do
+          Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
+          Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
+          File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+          File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
+          Facter::Core::Execution.expects(:exec).with(ipa_env_query).returns(ipa_env)
+          Facter::Core::Execution.expects(:exec).with(ipa_env_server_query).returns(ipa_server_env)
+          expect(Facter.fact('ipa').value).to eq({
+            'connected' => true,
+            'domain'    => 'example.com',
+            'server'    => 'ipaserver.example.com',
+            'realm'     => 'EXAMPLE.COM',
+            'basedn'    => 'dc=example,dc=com'
+          })
+        end
+      end
+
+      context 'kinit is required' do
+        it 'should execute kinit + ipa commands and return local env + connected status' do
+          Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
+          Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
+          File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
+          File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
+          Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
+          Facter::Core::Execution.expects(:exec).twice.with( ipa_env_query).returns('', ipa_env)
+          Facter::Core::Execution.expects(:exec).with(ipa_env_server_query).returns(ipa_server_env)
+          expect(Facter.fact('ipa').value).to eq({
+            'connected' => true,
+            'domain'    => 'example.com',
+            'server'    => 'ipaserver.example.com',
+            'realm'     => 'EXAMPLE.COM',
+            'basedn'    => 'dc=example,dc=com'
+          })
+        end
+      end
+    end
+
+    context 'IPA server is not available' do
+      it 'should return defaults from /etc/ipa/default.conf and disconnected status' do
         Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
         Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
         File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
         File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env --server host').returns("  host: ipaserver.example.com\n")
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain server realm basedn tls_ca_cert').returns(ipa_env)
-
-        expect(Facter.fact('ipa').value).to eq({
-          'connected' => true,
-          'domain'    => 'example.com',
-          'server'    => 'ipaserver.example.com',
-          'realm'     => 'EXAMPLE.COM',
-          'basedn'    => 'dc=example,dc=com'
-        })
-      end
-    end
-
-=begin
-    context 'IPA server is not available' do
-      it 'should return hash with joined status, IPA domain and IPA server' do
-        Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
-        Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-        File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
-        IO.expects(:readlines).with('/etc/ipa/default.conf').returns(default_conf)
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env --server host').returns('')
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain server realm basedn tls_ca_cert').returns(ipa_env)
-
+        Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('some error message')
+        Facter::Core::Execution.expects(:exec).twice.with(ipa_env_query).returns('')
         expect(Facter.fact('ipa').value).to eq({
           'connected' => false,
           'domain'    => 'example.com',
@@ -76,71 +106,5 @@ describe "custom fact ipa" do
         })
       end
     end
-=end
   end
-=begin
-  context 'kinit executable is not available' do
-    it 'should return nil' do
-      Facter::Core::Execution.expects(:which).with('kinit').returns(nil)
-      Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-
-      expect(Facter.fact('ipa').value).to be nil
-    end
-  end
-
-  context 'ipa executable is not available' do
-    it 'should return nil' do
-      Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
-      Facter::Core::Execution.expects(:which).with('ipa').returns(nil)
-
-      expect(Facter.fact('ipa').value).to be nil
-    end
-  end
-
-  context '/etc/ipa/default.conf is not available' do
-    it 'should return nil' do
-      Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
-      Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-      File.expects(:exist?).with('/etc/ipa/default.conf').returns(false)
-
-      expect(Facter.fact('ipa').value).to be nil
-    end
-
-    context 'the IPA server is available' do
-      Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
-      Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-      File.expects(:exist?).with('/etc/ipa/default.conf').returns(false)
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env --server host').returns("  host: ipaserver.example.com\n")
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain server realm basedn tls_ca_cert').returns(ipa_env)
-
-      expect(Facter.fact('ipa').value).to eq({
-        'connected' => true,
-        'domain'    => 'example.com',
-        'server'    => 'ipaserver.example.com',
-        'realm'     => 'EXAMPLE.COM',
-        'basedn'    => 'dc=example,dc=com'
-      })
-    end
-
-    context 'the IPA server is not available' do
-      Facter::Core::Execution.expects(:which).with('kinit').returns('/usr/bin/kinit')
-      Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
-      File.expects(:exist?).with('/etc/ipa/default.conf').returns(false)
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env host').returns("  host: client.example.com\n")
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env --server host').returns('')
-      Facter::Core::Execution.expects(:exec).with('/usr/bin/ipa env domain server realm basedn tls_ca_cert').returns(ipa_env)
-
-      expect(Facter.fact('ipa').value).to eq({
-        'connected' => false,
-        'domain'    => 'example.com',
-        'server'    => 'ipaserver.example.com',
-        'realm'     => 'EXAMPLE.COM',
-        'basedn'    => 'dc=example,dc=com'
-      })
-    end
-  end
-=end
 end
