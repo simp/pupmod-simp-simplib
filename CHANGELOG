@@ -1,3 +1,8 @@
+* Fri Jan 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.0-0
+- Updated the simplib::ldap::domain_to_dn function to allow users to choose
+  whether they want to upcase or downcase the LDAP attributes to work around
+  different system bugs
+
 * Mon Jan 15 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.9.0-0
 - Add a 'prelink' fact that indicates whether prelink has been enabled
 
