@@ -9,6 +9,7 @@ HOSTS:
     # IPA needs more resources than those used in a typical module acceptance test
     vagrant_memsize: 2048
     vagrant_cpus: 2
+
   el7-client:
     roles:
       - client
@@ -16,9 +17,11 @@ HOSTS:
     platform:   el-7-x86_64
     box:        centos/7
     hypervisor: vagrant
-  el6:
+
+  el6-client:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
     box:        centos/6

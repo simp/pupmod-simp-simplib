@@ -2,6 +2,14 @@ require 'spec_helper_acceptance'
 
 test_name 'ipa fact'
 
+def skip_fips(host)
+  if fips_enabled(host) && host.host_hash[:roles].include?('no_fips')
+    return true
+  else
+    return false
+  end
+end
+
 describe 'ipa fact' do
   let (:manifest) {
     <<-EOS
@@ -16,23 +24,32 @@ describe 'ipa fact' do
 
   hosts.each do |host|
     it 'should be running haveged for entropy' do
-      # IPA requires entropy, so use haveged service
-      on(host, 'puppet resource package epel-release ensure=present')
-      on(host, 'puppet resource package haveged ensure=present')
-      on(host, 'puppet resource service haveged ensure=running enable=true')
+      if skip_fips(host)
+        pending("#{host} does not work in FIPS mode")
+        expect(false).to eq true
 
-      # Install the IPA client on all hosts
-      on(host, 'puppet resource package ipa-client ensure=present')
+        next
+      else
+        # IPA requires entropy, so use haveged service
+        on(host, 'puppet resource package epel-release ensure=present')
+        on(host, 'puppet resource package haveged ensure=present')
+        on(host, 'puppet resource service haveged ensure=running enable=true')
 
-      # Admintools for EL6
-      on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
+        # Install the IPA client on all hosts
+        on(host, 'puppet resource package ipa-client ensure=present')
 
-      # Ensure that the hostname is set to the FQDN
-      on(host, "hostname #{fact_on(host, 'fqdn')}")
+        # Admintools for EL6
+        on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
+
+        # Ensure that the hostname is set to the FQDN
+        on(host, "hostname #{fact_on(host, 'fqdn')}")
+      end
     end
   end
 
   hosts_with_role(hosts, 'server').each do |server|
+    next if skip_fips(server)
+
     context 'when IPA is not installed' do
       it 'ipa fact should be nil' do
         results = apply_manifest_on(server, manifest)
@@ -107,6 +124,8 @@ describe 'ipa fact' do
   end
 
   hosts_with_role(hosts, 'client').each do |client|
+    next if skip_fips(client)
+
     context 'as an IPA client' do
 
       context 'prior to registration' do
