@@ -1,6 +1,6 @@
 # _Description_
 #
-# Return a hash of IPA information:
+# Return a hash of IPA information, when the host has joined an IPA domain:
 # * connected: Boolean value based on whether or not an IPA server
 #     could be reached
 #
@@ -14,6 +14,8 @@
 #
 # * tls_ca_cert: The location of the IPA server's TLS CA Certificate if
 #     the system is an IPA server
+#
+# Returns nil otherwise
 #
 Facter.add(:ipa) do
   confine :kernel => 'Linux'
