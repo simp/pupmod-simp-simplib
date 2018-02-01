@@ -15,6 +15,7 @@
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Facts](#facts)
     * [Functions](#functions)
+    * [Puppet 3 Functions](#puppet-3-functions)
     * [Types](#types)
     * [Data Types](#data-types)
 6. [Development - Guide for contributing to the module](#development)
@@ -112,7 +113,7 @@ itself for more detailed documentation.
 
 ### Functions
 
-- [assert\_metadata](#simplib::assert_metadata)
+- [simplib::assert\_metadata][simplib::assert_metadata]
 - [deprecation](#simplib::deprecation)
 - [filtered](#simplib::filtered)
 - [gen\_random\_password](#simplib::gen_random_password)
@@ -163,7 +164,7 @@ Options takes the form:
 
 *Type*: `nil`
 
-#### **simplib::deprecation
+#### **simplib::deprecation**
 
 Function to print deprecation warnings, logging a warning once
 for a given key.
@@ -171,7 +172,7 @@ for a given key.
 Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS
 environment variable is set to 'true'
 
-**Examples:**
+*Examples:*
 
 ```puppet
 deprecation('gnome::dconf::add','gnome::dconf::add is a shim for gnome::config::dconf and will be removed in a future version')
