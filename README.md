@@ -144,7 +144,7 @@ itself for more detailed documentation.
 - [validate\_uri\_list](#simplib::validate_uri_list)
 
 
-#### simplib::assert\_metadata {#sbassertmetadata}
+#### simplibassert_metadata
 
 Fails a compile if the client system is not compatible with the module's
 `meta_data.json`
@@ -165,7 +165,7 @@ Options takes the form:
 
 *Type*: `nil`
 
-#### **simplib::deprecation** {#simplibdeprecation}
+#### **simplibdeprecation** 
 
 Function to print deprecation warnings, logging a warning once
 for a given key.
