@@ -112,7 +112,7 @@ itself for more detailed documentation.
 
 ### Functions
 
-- [assert\_metadata](#simplib::assert_metadata)
+- [assert\_metadata](#simplib::assert\_metadata)
 - [deprecation](#simplib::deprecation)
 - [filtered](#simplib::filtered)
 - [gen\_random\_password](#simplib::gen_random_password)
