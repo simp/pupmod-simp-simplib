@@ -114,12 +114,12 @@ itself for more detailed documentation.
 ### Functions
 
 
-- [assert\_metadata](#assert\_metadata)
+- [assert\_metadata](#simplibassert_metadata)
 - [deprecation](#simplibdeprecation)
-- [filtered](#simplib\:\:filtered)
-- [gen\_random\_password](#simplib::gen_random_password)
-- [ip\_to\_cron](#simplib::ip_to_cron)
-- [ipaddresses](#simplib::ipaddresses)
+- [filtered](#simplibfiltered)
+- [gen\_random\_password](#simplibgen_random_password)
+- [ip\_to\_cron](#simplibip_to_cron)
+- [ipaddresses](#simplibipaddresses)
 - [join\_mount\_opts](#simplib::join_mount_opts)
 - [knockout](#simplib::knockout)
 - [ldap::domain\_to\_dn](#simplib::ldap::domain_to_dn)
