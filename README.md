@@ -114,7 +114,7 @@ itself for more detailed documentation.
 ### Functions
 
 
-- [assert\_metadata](#assert_metadata)
+- [assert\_metadata](#assert\_metadata)
 - [deprecation](#simplibdeprecation)
 - [filtered](#simplib\:\:filtered)
 - [gen\_random\_password](#simplib::gen_random_password)
