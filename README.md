@@ -144,7 +144,7 @@ itself for more detailed documentation.
 - [validate\_uri\_list](#simplib::validate_uri_list)
 
 
-#### simplib::assert_metadata
+#### simplib::assert\_metadata
 
 Fails a compile if the client system is not compatible with the module's
 `meta_data.json`
