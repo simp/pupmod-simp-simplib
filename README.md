@@ -114,9 +114,9 @@ itself for more detailed documentation.
 ### Functions
 
 
-- [assert\_metadata](#sbassertmetadata)
+- [assert\_metadata](#assert_metadata)
 - [deprecation](#simplibdeprecation)
-- [filtered](#simplib::filtered)
+- [filtered](#simplib\:\:filtered)
 - [gen\_random\_password](#simplib::gen_random_password)
 - [ip\_to\_cron](#simplib::ip_to_cron)
 - [ipaddresses](#simplib::ipaddresses)
@@ -144,7 +144,7 @@ itself for more detailed documentation.
 - [validate\_uri\_list](#simplib::validate_uri_list)
 
 
-#### simplibassert_metadata
+#### assert_metadata
 
 Fails a compile if the client system is not compatible with the module's
 `meta_data.json`
