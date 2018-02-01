@@ -112,7 +112,7 @@ itself for more detailed documentation.
 
 ### Functions
 
-- [assert\_metadata](#simplib::assert\_metadata)
+- [assert\_metadata](#simplib::assert_metadata)
 - [deprecation](#simplib::deprecation)
 - [filtered](#simplib::filtered)
 - [gen\_random\_password](#simplib::gen_random_password)
@@ -142,7 +142,7 @@ itself for more detailed documentation.
 - [validate\_uri\_list](#simplib::validate_uri_list)
 
 
-#### simplib::assert\_metadata
+#### **simplib::assert_metadata**
 
 Fails a compile if the client system is not compatible with the module's
 `meta_data.json`
@@ -163,7 +163,7 @@ Options takes the form:
 
 *Type*: `nil`
 
-#### simplib::deprecation
+#### **simplib::deprecation
 
 Function to print deprecation warnings, logging a warning once
 for a given key.
@@ -183,7 +183,7 @@ Returns: `hash`
 
 #### **simplib::filtered**
 
-#### **simplib::gen\_random\_password**
+#### **simplib::gen_random_password**
 
 
 #### **simplib::ipaddresses**
@@ -191,9 +191,9 @@ Returns: `hash`
 Return an array of all IP addresses known to be associated with the client. If
 an argument is passed, and is not false, then only return non-local addresses.
 
-**Type**: `array`
+*Type*: `array`
 
-#### simplib::ip\_to\_cron
+#### **simplib::ip_to_cron**
 
 Provides a "random" value to cron based on the passed integer value.
 Used to avoid starting a certain cron job at the same time on all
@@ -216,24 +216,24 @@ simplib::ip_to_cron(2,24) - returns an array of two values between 0..23
 
 Returns: `integer` or `array`
 
-#### simplib::join\_mount\_opts
+#### **simplib::join_mount_opts**
 
 Merge two sets of 'mount' options in a reasonable fashion. The second set will
 always override the first.
 
-**Type**: `string`
+*Type*: `string`
 
-#### simplib::knockout
+#### **simplib::knockout**
 
 Uses the knockout prefix of '--' to remove elements from an array.
 
 Arguments:
 * array (The array to work on)
 
-**Type**: `array`
+*Type*: `array`
 
 
-#### simplib::ldap::domain\_to\_dn
+#### **simplib::ldap::domain_to_dn**
 
 Takes a DNS domain name and converts it to an LDAP domain name.
 
@@ -241,27 +241,27 @@ Arguments:
 * domain (The dns domain name)
 * downcase_attributes (Whether or not to downcase the LDAP attributes)
 
-**Type**: `string`
+*Type*: `string`
 
-#### simplib::lookup
-
-
-#### simplib::mock\_data
+#### **simplib::lookup**
 
 
-#### simplib::nets2cidr
+#### **simplib::mock_data**
+
+
+#### **simplib::nets2cidr**
 
 Convert an array of networks into CIDR notation
 
-**Type**: `array`
+*Type*: `array`
 
-#### simplib::nets2ddq
+#### **simplib::nets2ddq**
 
 Convert an array of networks into dotted quad notation
 
-**Type**: `array`
+*Type*: `array`
 
-#### simplib::parse\_hosts
+#### **simplib::parse_hosts**
 
 Take an array of items that may contain port numbers or protocols and return
 the host information, ports, and protocols. Works with hostnames, IPv4, and
@@ -287,9 +287,9 @@ simplib::parse_hosts([ '1.2.3.4', '<http://1.2.3.4>', '<https://1.2.3.4:443>' ])
 
 -----------------
 
-**Type**: `hash`
+*Type*: `hash`
 
-#### simplib::passgen
+#### **simplib::passgen**
 
 Generates a random password string for a passed identifier. Uses
 Puppet\[:environmentpath\]/\$environment/simp\_autofiles/gen\_passwd/ as the
@@ -316,9 +316,9 @@ characters.
     currently stored string.
 ```
 
-**Type**: `string`
+*Type*: `string`
 
-#### simplib::rand\_cron
+#### **simplib::rand_cron**
 
 Transforms an input string to one or more interval values for `cron`.
 This can be used to avoid starting a certain cron job at the same
@@ -337,9 +337,9 @@ simplib::rand_cron(100,2)    - returns an array of two values between 0..59 base
 simplib::rand_cron(100,2,24) - returns an array of two values between 0..23 based on the value 100
 ```
 
-**Type**: Array[Integer]
+*Type*: Array[Integer]
 
-#### simplib::strip\_ports
+#### **simplib::strip_ports**
 
 Take an array of items that may contain port numbers and appropriately return
 the non-port portion. Works with hostnames, IPv4, and IPv6.
@@ -356,15 +356,15 @@ $bar contains: ['https://mysite.net','http://yoursite.net','theirsite.com']
 
 Returns: `array`
 
-#### simplib::to\_integer
+#### **simplib::to_integer**
 
 Converts the argument into an Integer.
 
-Only works if the passed argument responds to the 'to\_i' Ruby method.
+Only works if the passed argument responds to the 'to_i' Ruby method.
 
 Returns: `integer`
 
-#### simplib::to\_string
+#### **simplib::to_string**
 
 Converts the argument into a String.
 
@@ -373,7 +373,7 @@ Only works if the passed argument responds to the 'to\_s' Ruby method.
 Returns: `string`
 
 
-#### simplib::validate\_array\_member
+#### **simplib::validate_array_member**
 
 Validate that the first string (or array) passed is a member of the second
 array passed. An optional third argument of i can be passed, which ignores
@@ -392,7 +392,7 @@ validate_array_member('foo',['FOO','BAR'],'i') # => true
 
 Returns: `boolean`
 
-#### simplib::validate\_between
+#### **simplib::validate_between**
 
 Validate that the first value is between the second and third values
 numerically.
@@ -401,7 +401,7 @@ This is a pure Ruby comparison, not a human comparison.
 
 Returns: `boolean`
 
-#### simplib::validate\_bool
+#### **simplib::validate_bool**
 
 Validate that all passed values are either true or false. Abort catalog
 compilation if any value fails this check.
@@ -430,7 +430,7 @@ validate_bool($some_array)
 
 Returns: `boolean`
 
-#### simplib::validate\_deep\_hash
+#### **simplib::validate_deep_hash**
 
 Perform a deep validation on two passed hashes.
 
@@ -476,7 +476,7 @@ validated against. Unknown keys in the hash being compared will cause a
 
 Returns: `boolean`
 
-#### simplib::validate\_port
+#### **simplib::validate_port**
 
 Validates whether or not the passed argument is a valid port (i.e.  between
 1 - 65535).
@@ -501,7 +501,7 @@ validate_port('65536')
 
 Returns: `boolean`
 
-#### simplib::validate\_net\_list
+#### **simplib::validate_net_list**
 
 Validate that a passed list (Array or single String) of networks is filled
 with valid IP addresses or hostnames. Hostnames are checked per
@@ -536,7 +536,7 @@ validate_net_list($trusted_nets)
 
 Returns: `boolean`
 
-#### simplib::validate\_re\_array
+#### **simplib::validate_re_array**
 
 Perform simple validation of a string, or array of strings, against one or
 more regular expressions. The first argument of this function should be a
@@ -571,7 +571,7 @@ value does not match 2.7')
 
 Returns: `boolean`
 
-#### simplib::validate\_sysctl\_value
+#### **simplib::validate_sysctl_value****
 
 Validate that the passed value is correct for the passed sysctl key.
 
@@ -581,7 +581,7 @@ Example:
 
 Returns: `boolean`
 
-#### simplib::validate\_uri\_list
+#### **simplib::validate_uri_list**
 
 Usage: validate\_uri\_list(\[LIST\],\[\])
 
@@ -864,7 +864,7 @@ Detect if an IP address is contained in the passed whitespace delimited list.
 
 Returns: `boolean`
 
-#### **ip\_to\_cron**
+#### **ip\_to_cron**
 
 This function has been deprecated
 It has been replaced by simplib::ip\_to\_cron
@@ -890,7 +890,7 @@ ip_to_cron(2,24) - returns an array of two values between 0..23
 
 Returns: `integer` or `array`
 
-#### **join\_mount\_opts**
+#### **join_mount_opts**
 
 This function has been deprecated
 It has been replaced by simplib::join\_mount\_opts
