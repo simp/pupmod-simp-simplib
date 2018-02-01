@@ -142,7 +142,7 @@ itself for more detailed documentation.
 - [validate\_uri\_list](#simplib::validate_uri_list)
 
 
-#### assert\_metadata
+#### simplib::assert\_metadata
 
 Fails a compile if the client system is not compatible with the module's
 `meta_data.json`
@@ -163,7 +163,7 @@ Options takes the form:
 
 *Type*: `nil`
 
-#### **deprecation**
+#### simplib::deprecation
 
 Function to print deprecation warnings, logging a warning once
 for a given key.
@@ -181,19 +181,19 @@ deprecation('gnome::dconf::add','gnome::dconf::add is a shim for gnome::config::
 
 Returns: `hash`
 
-#### **filtered**
+#### **simplib::filtered**
 
-#### **gen\_random\_password**
+#### **simplib::gen\_random\_password**
 
 
-#### **ipaddresses**
+#### **simplib::ipaddresses**
 
 Return an array of all IP addresses known to be associated with the client. If
 an argument is passed, and is not false, then only return non-local addresses.
 
 **Type**: `array`
 
-#### **ip\_to\_cron**
+#### simplib::ip\_to\_cron
 
 Provides a "random" value to cron based on the passed integer value.
 Used to avoid starting a certain cron job at the same time on all
@@ -216,14 +216,14 @@ simplib::ip_to_cron(2,24) - returns an array of two values between 0..23
 
 Returns: `integer` or `array`
 
-#### **join\_mount\_opts**
+#### simplib::join\_mount\_opts
 
 Merge two sets of 'mount' options in a reasonable fashion. The second set will
 always override the first.
 
 **Type**: `string`
 
-#### knockout
+#### simplib::knockout
 
 Uses the knockout prefix of '--' to remove elements from an array.
 
@@ -233,7 +233,7 @@ Arguments:
 **Type**: `array`
 
 
-#### ldap::domain\_to\_dn
+#### simplib::ldap::domain\_to\_dn
 
 Takes a DNS domain name and converts it to an LDAP domain name.
 
@@ -243,25 +243,25 @@ Arguments:
 
 **Type**: `string`
 
-#### **lookup**
+#### simplib::lookup
 
 
-#### **mock\_data**
+#### simplib::mock\_data
 
 
-#### **nets2cidr**
+#### simplib::nets2cidr
 
 Convert an array of networks into CIDR notation
 
 **Type**: `array`
 
-#### **nets2ddq**
+#### simplib::nets2ddq
 
 Convert an array of networks into dotted quad notation
 
 **Type**: `array`
 
-#### **parse\_hosts**
+#### simplib::parse\_hosts
 
 Take an array of items that may contain port numbers or protocols and return
 the host information, ports, and protocols. Works with hostnames, IPv4, and
@@ -289,7 +289,7 @@ simplib::parse_hosts([ '1.2.3.4', '<http://1.2.3.4>', '<https://1.2.3.4:443>' ])
 
 **Type**: `hash`
 
-#### **passgen**
+#### simplib::passgen
 
 Generates a random password string for a passed identifier. Uses
 Puppet\[:environmentpath\]/\$environment/simp\_autofiles/gen\_passwd/ as the
@@ -318,7 +318,7 @@ characters.
 
 **Type**: `string`
 
-#### **rand\_cron**
+#### simplib::rand\_cron
 
 Transforms an input string to one or more interval values for `cron`.
 This can be used to avoid starting a certain cron job at the same
@@ -339,7 +339,7 @@ simplib::rand_cron(100,2,24) - returns an array of two values between 0..23 base
 
 **Type**: Array[Integer]
 
-#### **strip\_ports**
+#### simplib::strip\_ports
 
 Take an array of items that may contain port numbers and appropriately return
 the non-port portion. Works with hostnames, IPv4, and IPv6.
@@ -356,7 +356,7 @@ $bar contains: ['https://mysite.net','http://yoursite.net','theirsite.com']
 
 Returns: `array`
 
-#### **to\_integer**
+#### simplib::to\_integer
 
 Converts the argument into an Integer.
 
@@ -364,7 +364,7 @@ Only works if the passed argument responds to the 'to\_i' Ruby method.
 
 Returns: `integer`
 
-#### **to\_string**
+#### simplib::to\_string
 
 Converts the argument into a String.
 
@@ -373,7 +373,7 @@ Only works if the passed argument responds to the 'to\_s' Ruby method.
 Returns: `string`
 
 
-#### **validate\_array\_member**
+#### simplib::validate\_array\_member
 
 Validate that the first string (or array) passed is a member of the second
 array passed. An optional third argument of i can be passed, which ignores
@@ -392,7 +392,7 @@ validate_array_member('foo',['FOO','BAR'],'i') # => true
 
 Returns: `boolean`
 
-#### **validate\_between**
+#### simplib::validate\_between
 
 Validate that the first value is between the second and third values
 numerically.
@@ -401,7 +401,7 @@ This is a pure Ruby comparison, not a human comparison.
 
 Returns: `boolean`
 
-#### **validate\_bool**
+#### simplib::validate\_bool
 
 Validate that all passed values are either true or false. Abort catalog
 compilation if any value fails this check.
@@ -430,7 +430,7 @@ validate_bool($some_array)
 
 Returns: `boolean`
 
-#### **validate\_deep\_hash**
+#### simplib::validate\_deep\_hash
 
 Perform a deep validation on two passed hashes.
 
@@ -476,7 +476,7 @@ validated against. Unknown keys in the hash being compared will cause a
 
 Returns: `boolean`
 
-#### **validate\_port**
+#### simplib::validate\_port
 
 Validates whether or not the passed argument is a valid port (i.e.  between
 1 - 65535).
@@ -501,7 +501,7 @@ validate_port('65536')
 
 Returns: `boolean`
 
-#### **validate\_net\_list**
+#### simplib::validate\_net\_list
 
 Validate that a passed list (Array or single String) of networks is filled
 with valid IP addresses or hostnames. Hostnames are checked per
@@ -536,7 +536,7 @@ validate_net_list($trusted_nets)
 
 Returns: `boolean`
 
-#### **validate\_re\_array**
+#### simplib::validate\_re\_array
 
 Perform simple validation of a string, or array of strings, against one or
 more regular expressions. The first argument of this function should be a
@@ -571,7 +571,7 @@ value does not match 2.7')
 
 Returns: `boolean`
 
-#### **validate\_sysctl\_value**
+#### simplib::validate\_sysctl\_value
 
 Validate that the passed value is correct for the passed sysctl key.
 
@@ -581,7 +581,7 @@ Example:
 
 Returns: `boolean`
 
-#### **validate\_uri\_list**
+#### simplib::validate\_uri\_list
 
 Usage: validate\_uri\_list(\[LIST\],\[\])
 
