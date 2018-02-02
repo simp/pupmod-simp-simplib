@@ -192,6 +192,7 @@ environment variable is set to 'true'
 *Returns*: `nil`
 
 #### **simplib::filtered**
+
 Hiera v5 backend that takes a list of allowed hiera key names, and only
 returns results from the underlying backend function that match those keys.
 
@@ -485,6 +486,7 @@ time on all servers.
             in the ``minute`` or ``hour`` cron field
 
 #### **simplib::strip_ports**
+
 Extract list of unique hostnames and/or IP addresses from an `Array`
 of hosts, each of which may may contain protocols and/or port numbers
 
@@ -511,12 +513,14 @@ Only works if the passed argument responds to the 'to\_i' Ruby method.
 *Returns*: `integer`
 
 #### **simplib::to_string**
+
 Converts the argument into a String.
 Only works if the passed argument responds to the 'to\_s' Ruby method.
 
 *Returns*: `string`
 
 #### **simplib::validate_array_member**
+
 Validate that the first string (or array) passed is a member of the second
 array passed. An optional third argument of i can be passed, which ignores
 the case of the objects inside the array.
@@ -533,7 +537,7 @@ validate_array_member('foo',['FOO','BAR'])     # => false
 
 #Optional 'i' as third object, ignoring case of FOO and BAR#
 
-validate_array_member('foo',['FOO','BAR'],'i') # => true
+simplib::validate_array_member('foo',['FOO','BAR'],'i') # => true
 ```
 
 *Returns*: `Boolean` Whether or not the argument is an element of the
@@ -559,34 +563,30 @@ compilation if any value fails this check.
 Modified from the stdlib validate\_bool to handle the strings 'true' and
 'false'.
 
-The following values will pass:
-
 *Arguments*:
 * ``values_to_validate``   The value to validate.
 
 *Examples*:
 ```ruby
+# The following will pass
 $iamtrue = true
 
-validate_bool(true)
-validate_bool("false")
-validate_bool("true")
-validate_bool(true, 'true', false, $iamtrue)
-```
+simplib::validate_bool(true)
+simplib::validate_bool("false")
+simplib::validate_bool("true")
+simplib::validate_bool(true, 'true', false, $iamtrue)
 
-The following values will fail, causing compilation to abort:
+#The following values will fail, causing compilation to abort:
 
-```ruby
 $some_array = [ true ]
 
-validate_bool($some_array)
+simplib::validate_bool($some_array)
 ```
 
 *Returns*: `nil` Fails catalog compilation if it is not a Boolean'
 
 #### **simplib::validate_deep_hash**
 Perform a deep validation on two passed `Hashes`.
-
 The first hash is the one to validate against, and the second is the one being
 validated.
 
@@ -682,6 +682,7 @@ a colon `:` are allowed for hostnames and individual IP addresses.
 * ``net``         Single network to be validated.
 * ``str_match``  (Optional) A regex of `String` that should be ignored
               from the list. Omit the beginning and ending `/` delimiter.
+
 *Examples*:
 ```puppet
 #  Passing
@@ -790,6 +791,7 @@ NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
   PuppetX::SIMP::Simplib.hostname?('hostname.me.com:5454')
 
 ```
+
 *Returns*: `Boolean`
 
 #### **hostname?**
@@ -799,6 +801,7 @@ Returns false if is not comprised of ASCII letters (upper or lower case),
 digits, hypens (except at the beginning and end), and dots (except at
 beginning and end), optional pluss ':<number>' or '/<number>'
 NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
+
 *Examples*:
 ```ruby
   # Returns True
