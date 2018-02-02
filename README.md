@@ -767,10 +767,9 @@ simplib::validate_uri_list($uris,['ldap','ldaps'])
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
 
 ### Puppet Extensions
-- [hostname_only?](#hostname_only?)
+- [hostname_only?](#hostname_only)
 - [hostname?](#hostname)
--
-
+- [splitport](#splitport)
 
 #### **hostname_only?**
 Determine whether or not the passed value is a valid hostname.
