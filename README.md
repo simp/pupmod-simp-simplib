@@ -150,7 +150,7 @@ Fails a puppet catalog compile if the client system is not compatible
 with the module's `meta_data.json`
 
 *Arguments:*
-* ``module\_name``  module name
+* ``module_name``  module name
 * ``options``       (Optional) Behavior modifiers for the function)
 
 Options takes the form:
@@ -158,7 +158,7 @@ Options takes the form:
   os
     validate => Whether or not to validate the OS settings
     options
-      release\_match => Enum['none','full','major']
+      release_match => Enum['none','full','major']
         none  -> No match on minor release (default)
         full  -> Full release must match
         major -> Only the major release must match
@@ -208,8 +208,8 @@ Generates a random password string.
                      `0` => Use only Alphanumeric characters (safest)
                      `1` => Use Alphanumeric characters and reasonably safe symbols
                      `2` => Use any printable ASCII characters
-* ``complex\_only``    (Optional) Boolean - Use only the characters explicitly added by the complexity rules)
-* ``timeout\_seconds`` (Optional) Integer or Float - Maximum time allotted to generate
+* ``complex_only``    (Optional) Boolean - Use only the characters explicitly added by the complexity rules)
+* ``timeout_seconds`` (Optional) Integer or Float - Maximum time allotted to generate
                      the password; a value of 0 disables the timeout
 
 *Returns*: `String` Generated password
@@ -222,7 +222,7 @@ Return an array of all IP addresses known to be associated with the client. If
 an argument is passed, and is not false, then only return non-local addresses.
 
 *Arguments*:
-* only\_remote (Optional) Whether to exclude local addresses
+* only_remote (Optional) Whether to exclude local addresses
      from the return value.
 
 
@@ -238,7 +238,7 @@ time on all servers.ovides a "random" value to cron based on the passed integer 
 *Arguments*:
 * ``occurs``     (Optional) The occurrence within an interval, i.e.,
                 the number of values to be generated for the interval.
-* ``max\_value`` (Optional) The maximum value for the interval.  The values
+* ``max_value`` (Optional) The maximum value for the interval.  The values
                 generated will be in the inclusive range [0, max_value].
 * ``algorithm``  (Optional) When 'ip_mod', the modulus of the IP number is used as the basis
                 for the returned values.  This algorithm works well to create
@@ -274,8 +274,8 @@ Merge two sets of 'mount' options in a reasonable fashion. The second set will
 always override the first.
 
 *Arguments*:
-* ``system\_mount\_opts`` System mount options
-* ``new\_mount\_opts``    New mount options, which will override
+* ``system_mount_opts`` System mount options
+* ``new_mount_opts``    New mount options, which will override
                         `system_opts` when there are conflicts
 
 *Returns*: `String`
@@ -306,7 +306,7 @@ Takes a DNS domain name and converts it to an LDAP domain name.
 
 Arguments:
 * ``domain``               (Optional) The dns domain name, defaults to fact domain.
-* ``downcase\_attributes`` (Optional) Whether or not to downcase the LDAP attributes, false
+* ``downcase_attributes`` (Optional) Whether or not to downcase the LDAP attributes, false
 
 *Returns*: `String`
 
@@ -354,7 +354,7 @@ CIDR notation.
 Hostnames are passed through untouched.
 
 *Arguments*:
-* ``networks\_list``  List of 1 or more networks separated by spaces,
+* ``networks_list``  List of 1 or more networks separated by spaces,
                  commas, or semicolons
 
 *Returns* `Array[String]` Array of networks in CIDR notation
@@ -432,7 +432,7 @@ characters.
 
 *Arguments*:
 * ``identifier``      Unique `String` to identify the password usage.
-* ``modifier\_hash``  (Optional) may contain any of the following options:
+* ``modifier_hash``  (Optional) may contain any of the following options:
                     - 'last' => false(*) or true
                       * Return the last generated password
                     - 'length' => Integer
@@ -474,7 +474,7 @@ time on all servers.
 * ``modifier``    The input string to use as the basis for the generated values
 * ``algorithm``   Randomization algorithm to apply to transform the input string.
 * ``occurs``      (Optional) The occurrence within an interval
-* ``max\_value``  (Optional) The maximum value for the interval.
+* ``max_value``  (Optional) The maximum value for the interval.
 
 *Examples*:
 ```puppet
@@ -552,8 +552,8 @@ Deprecated:  You should be able to use type declarions instead of this.
 
 *Arguments*:
 * ``value``       Value to validate
-* ``min\_value``   Minimum value that is valid
-* ``max\_value``   Maximum value that is valid
+* ``min_value``   Minimum value that is valid
+* ``max_value``   Maximum value that is valid
 
 *Returns*: `nil`
 
@@ -567,7 +567,7 @@ Modified from the stdlib validate\_bool to handle the strings 'true' and
 The following values will pass:
 
 *Arguments*:
-* ``values\_to\_validate``   The value to validate.
+* ``values_to_validate``   The value to validate.
 
 *Examples*:
 ```ruby
@@ -609,7 +609,7 @@ support a to\_s() method.
 
 *Arguments*:
 * ``reference``   Reference Hash
-* ``to\_check``   Hash to validate.
+* ``to_check``   Hash to validate.
 
 *Examples*:
 ```puppet
@@ -657,7 +657,7 @@ Validates whether or not the passed argument is a valid port (i.e.  between
 1 - 65535).  It will work on strings ot integers.
 
 *Arguments*:
-* ``port\_args``  A port or array of ports.
+* ``port_args``  A port or array of ports.
 
 *Examples*:
 ```puppet
@@ -677,7 +677,7 @@ simplib::validate_port(65536)
 
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
 
-#### **simplib::validate\_net\_list**
+#### **simplib::validate_net_list**
 Validate that a passed list (`Array` or single `String`) of networks
 is filled with valid IP addresses, network addresses (CIDR notation),
 or hostnames. Hostnames are checked per RFC 1123. Ports appended with
@@ -685,7 +685,7 @@ a colon `:` are allowed for hostnames and individual IP addresses.
 
 *Arguments*:
 * ``net``         Single network to be validated.
-* ``str\_match``  (Optional) A regex of `String` that should be ignored
+* ``str_match``  (Optional) A regex of `String` that should be ignored
               from the list. Omit the beginning and ending `/` delimiter.
 *Examples*:
 ```puppet
@@ -711,7 +711,7 @@ a colon `:` are allowed for hostnames and individual IP addresses.
 
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
 
-#### **simplib::validate\_re\_array**
+#### **simplib::validate_re_array**
 Perform simple validation of a `String`, or `Array` of `Strings`,
 against one or more regular expressions.
 Derived from the Puppet Labs stdlib validate\_re.
@@ -720,7 +720,7 @@ Derived from the Puppet Labs stdlib validate\_re.
 * ``input``   String to be validated
 * ``regex``   Stringified regex expression (regex without the `//`
    delimiters)
-* ``err\_msg``  (Optional) error message to emit upon failure
+* ``err_msg``  (Optional) error message to emit upon failure
 
 *Examples*:
 ```puppet
@@ -757,7 +757,7 @@ parameter is not set.
 
 *Arguments*:
 * ``uri``          URI to be validated.
-* ``scheme\_list`` (Optional) List of schemes (protocol types) allowed for the URI.
+* ``scheme_list`` (Optional) List of schemes (protocol types) allowed for the URI.
 
 *Examples*:
 ```puppet
@@ -1220,8 +1220,8 @@ Returns: `string`
 
 This function has been deprecated
 
-Split an array into an array of arrays that contain groupings of 'max\_length'
-size. This is similar to 'each\_slice' in newer versions of Ruby.
+Split an array into an array of arrays that contain groupings of 'max_length'
+size. This is similar to 'each_slice' in newer versions of Ruby.
 
 ```ruby
   * Options *
