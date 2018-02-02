@@ -15,6 +15,7 @@
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Facts](#facts)
     * [Functions](#functions)
+    * [Puppet Extensions](#puppet-extensions)
     * [Puppet 3 Functions](#puppet-3-functions)
     * [Types](#types)
     * [Data Types](#data-types)
@@ -37,6 +38,7 @@ resources to Puppet:
   * Custom Types and Providers
   * Facts
   * Functions
+  * Puppet Extensions
   * Puppet 3 Functions (deprecated functions that will be removed in the near future)
 
 ## Setup
@@ -197,8 +199,8 @@ This allows hiera data to be delegated to end users in a multi-tenant
 environment without allowing them the ability to override every hiera data
 point (and potentially break systems)
 
-
 #### **simplib::gen_random_password**
+
 Generates a random password string.
 
 *Arguments*:
@@ -224,9 +226,7 @@ an argument is passed, and is not false, then only return non-local addresses.
 * ``only_remote`` (Optional) Whether to exclude local addresses
      from the return value.
 
-
 *Returns*: `Array`
-
 
 #### **simplib::ip_to_cron**
 
@@ -310,6 +310,7 @@ Arguments:
 *Returns*: `String`
 
 #### **simplib::lookup**
+
 A function for falling back to global scope variable lookups when the
 Puppet 4 ``lookup()`` function cannot find a value.
 
@@ -337,8 +338,8 @@ variable whether it is declared this way or via Hiera or some other back-end.
 
 *Returns*: `Any` The value that is found in the system for the passed
 
-
 #### **simplib::nets2cidr**
+
 Take an input list of networks and returns an equivalent `Array` in
 CIDR notation.
 Hostnames are passed through untouched.
@@ -350,6 +351,7 @@ Hostnames are passed through untouched.
 *Returns* `Array[String]` Array of networks in CIDR notation
 
 #### **simplib::nets2ddq**
+
 Tranforms a list of networks into an equivalent array in
 dotted quad notation.
 
@@ -378,6 +380,7 @@ IP addresses and hostnames are left untouched.
            or hostname
 
 #### **simplib::parse_hosts**
+
 Convert an `Array` of items that may contain port numbers or protocols
 into a structured `Hash` of host information.
 
@@ -399,7 +402,6 @@ around them for clarity.
     'https://1.2.3.4:443'
   ])
   #   Returns:
-  #
   #   {
   #     '1.2.3.4' => {
   #       :ports     => ['443'],
@@ -413,6 +415,7 @@ around them for clarity.
 *Returns*: `Hash` Structured Hash of the host information
 
 #### **simplib::passgen**
+
 Generates a random password string for a passed identifier. Returns
 the password or a hash of the password depending on arguments.  It also
 stores the password on the puppetserver using
@@ -763,12 +766,78 @@ simplib::validate_uri_list($uris,['ldap','ldaps'])
 
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
 
-### Puppet 3 Functions
+### Puppet Extensions
+- [hostname_only?](#hostname_only?)
+- [hostname?](#hostname)
+-
+
+
+#### **hostname_only?**
+Determine whether or not the passed value is a valid hostname.
+Returns false if is not comprised of ASCII letters (upper or lower case),
+digits, hypens (except at the beginning and end), and dots (except at
+beginning and end)
+NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
+
+*Examples*:
+```ruby
+  # Returns True
+  PuppetX::SIMP::Simplib.hostname?('hostname.me.com')
+
+  # Returns false
+  PuppetX::SIMP::Simplib.hostname?('-hostname.me.com')
+
+  # Returns false
+  PuppetX::SIMP::Simplib.hostname?('hostname.me.com:5454')
+
+```
+*Returns*: `Boolean`
+
+#### **hostname?**
+Determine whether or not the passed value is a valid hostname optionally
+postpended with ':<number>' or '/<number>'.
+Returns false if is not comprised of ASCII letters (upper or lower case),
+digits, hypens (except at the beginning and end), and dots (except at
+beginning and end), optional pluss ':<number>' or '/<number>'
+NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
+*Examples*:
+```ruby
+  # Returns True
+  PuppetX::SIMP::Simplib.hostname?('hostname.me.com')
+
+  # Returns false
+  PuppetX::SIMP::Simplib.hostname?('-hostname.me.com')
+
+  # Returns true
+  PuppetX::SIMP::Simplib.hostname?('hostname.me.com:5454')
+```
+
+*Returns*: `Boolean`
+
+#### **split_port**
+Return a host/port pair
+
+*Examples*:
+```ruby
+  PuppetX::SIMP::Simplib.split_port['myhost.name:5656']
+  #returns ['myhost.name','5656']
+
+  PuppetX::SIMP::Simplib.split_port['192.165.3.9/24']
+  #returns [nil, nil]
+
+  PuppetX::SIMP::Simplib.split_port['192.165.3.9']
+  #returns ['192.165.3.9',nil]
+```
+
+*Returns*: `Array[ hostname, port]`
+
+### Deprecated Puppet 3 Functions
 
 These functions have all been deprecated.  This is here for information purposes only.
 Use functions from the `Functions` section in new code.
-Many of them have been replaced by standard puppet functions or functionality in
-later versionis of puppet.
+Many of them have been replaced by standard puppet functions, data type functionality
+in puppet 4 and later versions.
+
 If there is a corresponding simplib function for versions of puppet later than
 version 3, it is noted in the comments.
 
