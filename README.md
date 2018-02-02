@@ -419,7 +419,7 @@ around them for clarity.
   #       }
   #     }
   #   }
-
+```
 *Returns*: `Hash` Structured Hash of the host information
 
 #### **simplib::passgen**
@@ -470,13 +470,13 @@ Transforms an input string to one or more interval values for `cron`.
 This can be used to avoid starting a certain cron job at the same
 time on all servers.
 
-Arguments:
+*Arguments*:
 * ``modifier``    The input string to use as the basis for the generated values
 * ``algorithm``   Randomization algorithm to apply to transform the input string.
 * ``occurs``      (Optional) The occurrence within an interval
 * ``max\_value``  (Optional) The maximum value for the interval.
 
-Example:
+*Examples*:
 ```puppet
    # Generate one value for the `minute` cron interval using using sha256
    simplib::rand_cron('myhost.test.local','sha256')
@@ -532,7 +532,6 @@ the case of the objects inside the array.
 * ``modifier`` (Optional) If 'i' ignores case.
 
 *Examples*:
-
 ```ruby
 validate_array_member('foo',['foo','bar'])     # => true
 validate_array_member('foo',['FOO','BAR'])     # => false
@@ -650,14 +649,12 @@ support a to\_s() method.
   to_check  => { 'foo' => 'abc' }
 
   simplib::validate_deep_hash(reference, to_check)
-
 ```
 *Returns*: `nil` Fails catalog compilation they do not match.
 
 #### **simplib::validate_port**
 Validates whether or not the passed argument is a valid port (i.e.  between
 1 - 65535).  It will work on strings ot integers.
-
 
 *Arguments*:
 * ``port\_args``  A port or array of ports.
@@ -671,13 +668,11 @@ $ports = [5555, 7777, 1, 65535]
 simplib::validate_port($port)
 simplib::validate_port($ports)
 simplib::validate_port($port, $ports)
-```
 
-The following values will not pass:
+# The following values will not pass:
 
-```puppet
-validate_port('0')
-validate_port(65536)
+simplib::validate_port('0')
+simplib::validate_port(65536)
 ```
 
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
@@ -696,7 +691,7 @@ a colon `:` are allowed for hostnames and individual IP addresses.
 ```puppet
 #  Passing
 
-  $trusted_nets = '10.10.10.0/24'
+   $trusted_nets = '10.10.10.0/24'
    simplib::validate_net_list($trusted_nets)
 
    $trusted_nets = '1.2.3.5:400'
