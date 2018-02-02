@@ -124,7 +124,6 @@ itself for more detailed documentation.
 - [knockout](#simplibknockout)
 - [ldap::domain\_to\_dn](#simplibldapdomain_to_dn)
 - [lookup](#simpliblookup)
-- [mock\_data](#simplibmock_data)
 - [nets2cidr](#simplibnets2cidr)
 - [nets2ddq](#simplibnets2ddq)
 - [parse\_hosts](#simplibparse_hosts)
@@ -222,7 +221,7 @@ Return an array of all IP addresses known to be associated with the client. If
 an argument is passed, and is not false, then only return non-local addresses.
 
 *Arguments*:
-* only_remote (Optional) Whether to exclude local addresses
+* ``only_remote`` (Optional) Whether to exclude local addresses
      from the return value.
 
 
@@ -339,15 +338,6 @@ variable whether it is declared this way or via Hiera or some other back-end.
 *Returns*: `Any` The value that is found in the system for the passed
 
 
-#### **simplib::mock_data**
-A mock data function
-
-*Arguments*:
-* ``options``
-* ``context``
-
-*Returns*: `Any`
-
 #### **simplib::nets2cidr**
 Take an input list of networks and returns an equivalent `Array` in
 CIDR notation.
@@ -423,12 +413,17 @@ around them for clarity.
 *Returns*: `Hash` Structured Hash of the host information
 
 #### **simplib::passgen**
-Generates a random password string for a passed identifier. Uses
+Generates a random password string for a passed identifier. Returns
+the password or a hash of the password depending on arguments.  It also
+stores the password on the puppetserver using
 Puppet\[:environmentpath\]/\$environment/simp\_autofiles/gen\_passwd/ as the
 destination directory.
 
 The minimum length password that this function will return is 6
 characters.
+
+If no, or an invalid, second argument is provided then it will return the
+    currently stored string.
 
 *Arguments*:
 * ``identifier``      Unique `String` to identify the password usage.
@@ -443,9 +438,6 @@ characters.
                       * 0 => Use only Alphanumeric characters in your password (safest) 1 =>
                       * Add reasonably safe symbols 2 => Printable ASCII
 
-    If no, or an invalid, second argument is provided then it will return the
-    currently stored string.
-```
 *Examples*:
 ```puppet
     #run pasgen for the firstime
@@ -1608,6 +1600,150 @@ Returns: `boolean`
 * **runlevel**
 * **script_umask**
 * **simp_file_line**
+
+#### **ftpusers**
+
+Adds all system users to the named file, preserving any other
+          entries currently in the file.
+
+*Examples*:
+```puppet
+    #This will add all users in /etc/passwd with uid < 500
+    # and nobody and jim to the file /etc/ftpusers'
+    #
+    ftpusers { '/etc/ftpusers':
+      min_id      => 500,
+      always_deny => ['nobody', 'jim'],
+      require     => File['/etc/ftpusers']
+    }
+
+```
+#### **init_ulimit**
+This type is for systems that do not support systemd.
+It will update the ``ulimit`` settings in init scripts.
+
+*Examples*:
+```puppet
+# Long Names
+
+    init_ulimit { 'rsyslog':
+      ensure     => 'present',
+      limit_type => 'both'
+      item       => 'max_open_files',
+      value      => 'unlimited'
+    }
+
+# Short Names
+
+    init_ulimit { 'rsyslog':
+      item       => 'n',
+      value      => 'unlimited'
+    }
+```
+
+####  **prepend_file_line**
+Type that can prepend whole a line to a file if it does not already contain it.
+
+*Example*:
+```puppet
+  file_prepend_line { 'sudo_rule':
+    path => '/etc/sudoers',
+    line => '%admin ALL=(ALL) ALL',
+  }
+```
+
+#### **reboot_notify**
+Notifies users when a system reboot is required.
+
+This type creates a file at $target the contents of which
+provide a summary of the reasons why the system requires a
+reboot.
+
+NOTE: This type will *only* register entries on refresh. Any
+other use of the type will not report the necessary reboot.
+
+A reboot notification will be printed at each puppet run until
+the system is successfully rebooted
+
+*Examples*:
+```puppet
+    reboot_notify { 'selinux':
+      reason    => 'A reboot is required to completely modify selinux state',
+      subscribe => Selinux_state['set_selinux_state']
+    }
+```
+#### **runlevel**
+Changes the system runlevel by re-evaluating the inittab or systemd link.
+
+*Examples*: 
+```puppet
+  # Set the current level and the default level to mulit-user
+
+  runlevel { '3': persist => true, }
+
+  # Set the current level to graphical
+
+  runlevel { 'graphical':
+    persist => false
+  }
+```
+#### **script_umask**
+Alters the umask settings in the passed file if a umask line exists.
+
+*Examples*:
+```puppet
+  script_umask { '/usr/local/myscript.sh':
+      umask => 077
+  }
+```
+
+####  **simp_file_line**
+Ensures that a given line is contained within a file.  The implementation
+matches the full line, including whitespace at the beginning and end.  If
+the line is not contained in the given file, Puppet will add the line to
+ensure the desired state.  Multiple resources may be declared to manage
+multiple lines in the same file.
+
+This is an enhancement to the stdlib file_line that allows for the
+following additional options:
+   * prepend     => [binary] Prepend the line instead of appending it if not
+                    using 'match'
+   * deconflict  => [binary] Do not execute if there is a file resource that
+                    already manipulates the content of the target file.
+
+*Examples*:
+```puppet
+
+   # This will add both lines to /etc/sudoers
+   simp_file_line { 'sudo_rule':
+     path => '/etc/sudoers',
+     line => '%sudo ALL=(ALL) ALL',
+   }
+   simp_file_line { 'sudo_rule_nopw':
+     path => '/etc/sudoers',
+     line => '%sudonopw ALL=(ALL) NOPASSWD: ALL',
+   }
+
+   # This will not add the line
+   file { '/tmp/myfile':
+     content => 'junk content',
+   }
+   simp_file_line { 'junk':
+     path => '/tmp/myfile',
+     line => 'What a beautiful day'
+   }
+
+   # This will  add the line
+   file { '/tmp/myfile':
+     content => 'junk content',
+     replace => false
+   }
+   simp_file_line { 'junk':
+     path => '/tmp/myfile',
+     line => 'What a beautiful day'
+   }
+
+```
 
 ### Data Types
 
