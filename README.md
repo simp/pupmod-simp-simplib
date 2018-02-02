@@ -150,8 +150,8 @@ Fails a puppet catalog compile if the client system is not compatible
 with the module's `meta_data.json`
 
 *Arguments:*
-* module\_name  module name
-* options       (Optional) Behavior modifiers for the function)
+* ``module\_name``  module name
+* ``options``       (Optional) Behavior modifiers for the function)
 
 Options takes the form:
   enable => If set to `false` disable all validation
@@ -178,8 +178,8 @@ Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS
 environment variable is set to 'true'
 
 *Arguments*:
-* key      Uniqueness key, which is used to dedupe of messages)
-* message  Message to be printed, file and line info
+* ``key``      Uniqueness key, which is used to dedupe of messages)
+* ``message``  Message to be printed, file and line info
            will be appended if available.)
 
 *Examples*:
@@ -203,13 +203,13 @@ point (and potentially break systems)
 Generates a random password string.
 
 *Arguments*:
-* length           (Optional) Integer - length of the string to return
-* complexity       (Optional) Integer -Specifies the types of characters to be used in the password)
+* ``length``           (Optional) Integer - length of the string to return
+* ``complexity``       (Optional) Integer -Specifies the types of characters to be used in the password)
                      `0` => Use only Alphanumeric characters (safest)
                      `1` => Use Alphanumeric characters and reasonably safe symbols
                      `2` => Use any printable ASCII characters
-* complex\_only    (Optional) Boolean - Use only the characters explicitly added by the complexity rules)
-* timeout\_seconds (Optional) Integer or Float - Maximum time allotted to generate
+* ``complex\_only``    (Optional) Boolean - Use only the characters explicitly added by the complexity rules)
+* ``timeout\_seconds`` (Optional) Integer or Float - Maximum time allotted to generate
                      the password; a value of 0 disables the timeout
 
 *Returns*: `String` Generated password
@@ -236,11 +236,11 @@ This can be used to avoid starting a certain cron job at the same
 time on all servers.ovides a "random" value to cron based on the passed integer value.
 
 *Arguments*:
-* occurs     (Optional) The occurrence within an interval, i.e.,
+* ``occurs``     (Optional) The occurrence within an interval, i.e.,
                 the number of values to be generated for the interval.
-* max\_value (Optional) The maximum value for the interval.  The values
+* ``max\_value`` (Optional) The maximum value for the interval.  The values
                 generated will be in the inclusive range [0, max_value].
-* algorithm  (Optional) When 'ip_mod', the modulus of the IP number is used as the basis
+* ``algorithm``  (Optional) When 'ip_mod', the modulus of the IP number is used as the basis
                 for the returned values.  This algorithm works well to create
                 cron job intervals for multiple hosts, when the number of hosts
                 exceeds the `max_value` and the hosts have largely, linearly-
@@ -250,7 +250,7 @@ time on all servers.ovides a "random" value to cron based on the passed integer 
                 works well to create cron job intervals for multiple hosts,
                 when the number of hosts is less than the `max_value` or the
                 hosts do not have linearly-assigned IP addresses.
-* ip         (Optional) The IP address to use as the basis for the generated values.
+* ``ip``         (Optional) The IP address to use as the basis for the generated values.
                  When `nil`, the 'ipaddress' fact (IPv4) is used.
 
 *Examples*:
@@ -274,8 +274,8 @@ Merge two sets of 'mount' options in a reasonable fashion. The second set will
 always override the first.
 
 *Arguments*:
-* system\_mount\_opts System mount options
-* new\_mount\_opts    New mount options, which will override
+* ``system\_mount\_opts`` System mount options
+* ``new\_mount\_opts``    New mount options, which will override
                         `system_opts` when there are conflicts
 
 *Returns*: `String`
@@ -285,7 +285,7 @@ always override the first.
 Uses the knockout prefix of '--' to remove elements from an array.
 
 *Arguments*:
-* array  The array to work on
+* ``array``  The array to work on
 
 *Examples*:
 ```puppet
@@ -305,8 +305,8 @@ Uses the knockout prefix of '--' to remove elements from an array.
 Takes a DNS domain name and converts it to an LDAP domain name.
 
 Arguments:
-* domain               (Optional) The dns domain name, defaults to fact domain.
-* downcase\_attributes (Optional) Whether or not to downcase the LDAP attributes, false
+* ``domain``               (Optional) The dns domain name, defaults to fact domain.
+* ``downcase\_attributes`` (Optional) Whether or not to downcase the LDAP attributes, false
 
 *Returns*: `String`
 
@@ -319,10 +319,10 @@ check the global scope first to see if the variable has been defined.
 
 This means that you can pre-declare a class and/or use an ENC and look up the
 variable whether it is declared this way or via Hiera or some other back-end.
-  # @param param The parameter that you wish to look up
+
 *Arguments*:
-* param     The parameter you wish to look up.
-* options   (Optional)Hash of options for regular ``lookup()``
+* ``param``     The parameter you wish to look up.
+* ``options``   (Optional)Hash of options for regular ``lookup()``
             This **must** follow the syntax rules for the
             Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
             No other formats are supported!
@@ -343,8 +343,8 @@ variable whether it is declared this way or via Hiera or some other back-end.
 A mock data function
 
 *Arguments*:
-* options
-* context
+* ``options``
+* ``context``
 
 *Returns*: `Any`
 
@@ -354,7 +354,7 @@ CIDR notation.
 Hostnames are passed through untouched.
 
 *Arguments*:
-* networks\_list  List of 1 or more networks separated by spaces,
+* ``networks\_list``  List of 1 or more networks separated by spaces,
                  commas, or semicolons
 
 *Returns* `Array[String]` Array of networks in CIDR notation
@@ -367,7 +367,7 @@ CIDR networks are converted to dotted quad notation networks.
 IP addresses and hostnames are left untouched.
 
 *Arguments*:
-* networks  The networks to convert
+* ``networks``  The networks to convert
 
 *Examples*:
 ```puppet
@@ -397,7 +397,7 @@ Works with Hostnames as well as IPv4 and IPv6 addresses.
 around them for clarity.
 
 *Arguments*:
-hosts   Array of host entries, where each entry may contain
+* ``hosts``   Array of host entries, where each entry may contain
         a protocol or both a protocol and port
 
 *Examples*:
@@ -431,8 +431,8 @@ The minimum length password that this function will return is 6
 characters.
 
 *Arguments*:
-* identifier      Unique `String` to identify the password usage.
-* modifier\_hash  (Optional) may contain any of the following options:
+* ``identifier``      Unique `String` to identify the password usage.
+* ``modifier\_hash``  (Optional) may contain any of the following options:
                     - 'last' => false(*) or true
                       * Return the last generated password
                     - 'length' => Integer
@@ -471,18 +471,18 @@ This can be used to avoid starting a certain cron job at the same
 time on all servers.
 
 Arguments:
-* modifier    The input string to use as the basis for the generated values
-* algorithm   Randomization algorithm to apply to transform the input string.
-* occurs      (Optional) The occurrence within an interval
-* max\_value  (Optional) The maximum value for the interval.
+* ``modifier``    The input string to use as the basis for the generated values
+* ``algorithm``   Randomization algorithm to apply to transform the input string.
+* ``occurs``      (Optional) The occurrence within an interval
+* ``max\_value``  (Optional) The maximum value for the interval.
 
 Example:
 ```puppet
    # Generate one value for the `minute` cron interval using using sha256
    simplib::rand_cron('myhost.test.local','sha256')
 
-  *Generate 2 values for the `hour` cron interval, using the
-  #   'ip_mod' algorithm
+  # Generate 2 values for the `hour` cron interval, using the
+  # 'ip_mod' algorithm
   simplib::rand_cron('10.0.6.78', 'ip_mod', 2, 23)
 ```
 
@@ -527,9 +527,9 @@ array passed. An optional third argument of i can be passed, which ignores
 the case of the objects inside the array.
 
 *Arguments*:
-* input    The element to find in the target array.
-* target   The array to search.
-* modifier (Optional) If 'i' ignores case.
+* ``input``    The element to find in the target array.
+* ``target``   The array to search.
+* ``modifier`` (Optional) If 'i' ignores case.
 
 *Examples*:
 
@@ -552,9 +552,9 @@ numerically, inclusively. Fail catalog compile if not.
 Deprecated:  You should be able to use type declarions instead of this.
 
 *Arguments*:
-* value       Value to validate
-* min\_value   Minimum value that is valid
-* max\_value   Maximum value that is valid
+* ``value``       Value to validate
+* ``min\_value``   Minimum value that is valid
+* ``max\_value``   Maximum value that is valid
 
 *Returns*: `nil`
 
@@ -568,7 +568,7 @@ Modified from the stdlib validate\_bool to handle the strings 'true' and
 The following values will pass:
 
 *Arguments*:
-* values\_to\_validate   The value to validate.
+* ``values\_to\_validate``   The value to validate.
 
 *Examples*:
 ```ruby
@@ -609,8 +609,8 @@ All values in the final leaves of the `Hash` being compared must
 support a to\_s() method.
 
 *Arguments*:
-* reference   Reference Hash
-* to\_check   Hash to validate.
+* ``reference``   Reference Hash
+* ``to\_check``   Hash to validate.
 
 *Examples*:
 ```puppet
@@ -660,7 +660,7 @@ Validates whether or not the passed argument is a valid port (i.e.  between
 
 
 *Arguments*:
-* port\_args  A port or array of ports.
+* ``port\_args``  A port or array of ports.
 
 *Examples*:
 ```puppet
@@ -689,8 +689,8 @@ or hostnames. Hostnames are checked per RFC 1123. Ports appended with
 a colon `:` are allowed for hostnames and individual IP addresses.
 
 *Arguments*:
-* net         Single network to be validated.
-* str\_match  (Optional) A regex of `String` that should be ignored
+* ``net``         Single network to be validated.
+* ``str\_match``  (Optional) A regex of `String` that should be ignored
               from the list. Omit the beginning and ending `/` delimiter.
 *Examples*:
 ```puppet
@@ -722,10 +722,10 @@ against one or more regular expressions.
 Derived from the Puppet Labs stdlib validate\_re.
 
 *Arguments*:
-* input   String to be validated
-* regex   Stringified regex expression (regex without the `//`
+* ``input``   String to be validated
+* ``regex``   Stringified regex expression (regex without the `//`
    delimiters)
-* err\_msg  (Optional) error message to emit upon failure
+* ``err\_msg``  (Optional) error message to emit upon failure
 
 *Examples*:
 ```puppet
@@ -749,8 +749,8 @@ Validate that the passed value is correct for the passed sysctl key.
 If a key is not know, simply returns that the value is valid.
 
 *Arguments*:
-* key    sysctl setting whose value is to be validated
-* value  Value to be validated
+* ``key``    sysctl setting whose value is to be validated
+* ``value``  Value to be validated
 
 *Returns*: `nil` Catalog compilation will fail if it does not pass.
 
@@ -761,8 +761,8 @@ Caution:  No scheme (protocol type) validation is done the scheme_list
 parameter is not set.
 
 *Arguments*:
-* uri          URI to be validated.
-* scheme\_list (Optional) List of schemes (protocol types) allowed for the URI.
+* ``uri``          URI to be validated.
+* ``scheme\_list`` (Optional) List of schemes (protocol types) allowed for the URI.
 
 *Examples*:
 ```puppet
