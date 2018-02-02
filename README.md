@@ -769,7 +769,7 @@ simplib::validate_uri_list($uris,['ldap','ldaps'])
 ### Puppet Extensions
 - [hostname_only?](#hostname_only)
 - [hostname?](#hostname)
-- [splitport](#splitport)
+- [split_port](#split_port)
 
 #### **hostname_only?**
 Determine whether or not the passed value is a valid hostname.
