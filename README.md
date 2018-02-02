@@ -1593,13 +1593,13 @@ Returns: `boolean`
 
 ### Types
 
-* **ftpusers**
-* **init_ulimit**
-* **prepend_file_line**
-* **reboot_notify**
-* **runlevel**
-* **script_umask**
-* **simp_file_line**
+* [**ftpusers**](#ftpusers)
+* [**init_ulimit**](#init_ulimit)
+* [**prepend_file_line**](#prepend_file_line)
+* [**reboot_notify**](#reboot_notify)
+* [**runlevel**](#runlevel)
+* [**script_umask**](#script_umask)
+* [**simp_file_line**](#simp_file_line)
 
 #### **ftpusers**
 
