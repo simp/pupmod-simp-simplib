@@ -13,6 +13,7 @@
     * [Beginning with simplib](#beginning-with-simplib)
 4. [Usage - Configuration options and additional functionality](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+    * [Stages](#stages)
     * [Facts](#facts)
     * [Functions](#functions)
     * [Puppet Extensions](#puppet-extensions)
@@ -67,7 +68,7 @@ itself for more detailed documentation.
 
 ### Stages
 
- simplib::stages are added to ensure that anyone using the stdlib stages was not
+ simplib::stages are added to ensure that anyone using the stdlib stages are not
  tripped up by any simp modules that may enable, or disable, various system,
  components; particularly ones that require a reboot.
 
