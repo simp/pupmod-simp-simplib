@@ -1,6 +1,9 @@
 # Validate that an single input is a member of another `Array` or an
-# `Array` input is a subset of another `Array`. The comparison
-# can optionally ignore the case of `String` elements.
+# `Array` input is a subset of another `Array`.
+#
+# * The comparison can optionally ignore the case of `String` elements.
+# * Terminates catalog compilation if validation fails.
+#
 Puppet::Functions.create_function(:'simplib::validate_array_member') do
 
   local_types do

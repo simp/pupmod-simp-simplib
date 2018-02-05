@@ -1,10 +1,14 @@
 # Converts the argument into an `Integer`.
-# Only works if the passed argument responds to the `to_i()` Ruby method.
+#
+# Terminates catalog compilation if the argument's class
+# does not respond to the `to_i()` Ruby method.
 #
 Puppet::Functions.create_function(:'simplib::to_integer') do
 
   # @param input The argument to convert into an `Integer`
   # @return [Integer] Converted input
+  # @raise 'RuntimeError' if ``input`` does not implement a ``to_i()``
+  #   method
   dispatch :to_integer do
     required_param 'Any', :input
   end

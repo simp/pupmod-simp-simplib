@@ -1,5 +1,8 @@
-#    Validate that the passed value is correct for the passed `sysctl` key.
-#    If a key is not known, assumes the value is valid.
+# Validate that the passed value is correct for the passed `sysctl` key.
+#
+# * If a key is not known, assumes the value is valid.
+# * Terminates catalog compilation if validation fails.
+#
 Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
 
   # @param key sysctl setting whose value is to be validated

@@ -1,16 +1,15 @@
 # Perform a deep validation on two passed `Hashes`.
 #
-# All keys must be defined in the reference `Hash` that is being
-# validated against.
+# * All keys must be defined in the reference `Hash` that is being
+#   validated against.
+# * Unknown keys in the `Hash` being compared will cause a failure in
+#   validation
+# * All values in the final leaves of the 'reference 'Hash' must
+#   be a String, Boolean, or nil.
+# * All values in the final leaves of the `Hash` being compared must
+#   support a to_s() method.
+# * Terminates catalog compilation if validation fails.
 #
-# Unknown keys in the `Hash` being compared will cause a failure in
-# validation
-#
-# All values in the final leaves of the 'reference 'Hash' must
-# be a String, Boolean, or nil.
-#
-# All values in the final leaves of the `Hash` being compared must
-# support a to_s() method.
 Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
 
   # @param reference Hash to validate against. Keys at all levels of
@@ -37,6 +36,7 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
   #
   # @param to_check Hash to be validated against the reference
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   #
   # @example Passing Examples
   #   reference = {

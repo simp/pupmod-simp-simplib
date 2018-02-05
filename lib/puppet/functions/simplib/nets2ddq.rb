@@ -1,9 +1,11 @@
 # Tranforms a list of networks into an equivalent array in
 # dotted quad notation.
 #
-# CIDR networks are converted to dotted quad notation networks.
-# IP addresses and hostnames are left untouched.
-
+# * CIDR networks are converted to dotted quad notation networks.
+#   IP addresses and hostnames are left untouched.
+# * Terminates catalog compilation if any input item is not a
+#   valid network or hostname.
+#
 Puppet::Functions.create_function(:'simplib::nets2ddq') do
 
   # @param networks The networks to convert

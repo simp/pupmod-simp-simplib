@@ -1,14 +1,19 @@
 # Validate that a passed list (`Array` or single `String`) of networks
 # is filled with valid IP addresses, network addresses (CIDR notation),
-# or hostnames. Hostnames are checked per RFC 1123. Ports appended with
-# a colon `:` are allowed for hostnames and individual IP addresses.
+# or hostnames.
+#
+# * Hostnames are checked per RFC 1123.
+# * Ports appended with # a colon `:` are allowed for hostnames and
+#   individual IP addresses.
+# * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_net_list') do
 
   # @param net Single network to be validated.
-  # @param str_match A regex of `String` that should be ignored
-  #   from the list. Omit the beginning and ending `/` delimiter.
+  # @param str_match Stringified regular expression (regex without
+  #   the `//` delimiters)
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   #
   # @example Passing
   #
@@ -35,9 +40,10 @@ Puppet::Functions.create_function(:'simplib::validate_net_list') do
   end
 
   # @param net_list `Array` of networks to be validated.
-  # @param str_match A regex of `String` that should be ignored
-  #   from the list. Omit the beginning and ending `/` delimiter.
+  # @param str_match Stringified regular expression (regex without
+  #   the `//` delimiters)
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   #
   # @example Passing
   #

@@ -1,17 +1,23 @@
 # Convert an `Array` of items that may contain port numbers or protocols
 # into a structured `Hash` of host information.
 #
-# Works with Hostnames as well as IPv4 and IPv6 addresses.
+# * Works with Hostnames as well as IPv4 and IPv6 addresses.
+# * IPv6 addresses will be returned normalized with square brackets
+#   around them for clarity.
+# * Terminates catalog compilation if
 #
-# **NOTE:** IPv6 addresses will be returned normalized with square brackets
-# around them for clarity.
+#     * A valid network or hostname cannot be extracted from all input items.
+#     * Any input item that contains a port specifies an invalid port.
 #
 Puppet::Functions.create_function(:'simplib::parse_hosts') do
 
   # @param hosts Array of host entries, where each entry may contain
   #   a protocol or both a protocol and port
   # @return [Hash] Structured Hash of the host information
-  #
+  # @raise RuntimeError if a valid network or hostname cannot be
+  #   extracted from all input items
+  # @raise RuntimeError if any input item that contains a port
+  #   specifies an invalid port
   # @example Input with multiple host formats:
   #
   #   simplib::parse_hosts([

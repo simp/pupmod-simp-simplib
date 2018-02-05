@@ -1,8 +1,9 @@
 # A function for falling back to global scope variable lookups when the
 # Puppet 4 ``lookup()`` function cannot find a value.
 #
-# While ``lookup()`` will stop at the back-end data sources, ``lookup()`` will
-# check the global scope first to see if the variable has been defined.
+# While ``lookup()`` will stop at the back-end data sources,
+# ``simplib::lookup()`` will check the global scope first to see if the
+# variable has been defined.
 #
 # This means that you can pre-declare a class and/or use an ENC and look up the
 # variable whether it is declared this way or via Hiera or some other back-end.

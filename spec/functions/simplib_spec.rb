@@ -119,6 +119,10 @@ describe 'PuppetX::SIMP::Simplib' do
       expect(PuppetX::SIMP::Simplib.split_port('')).to eq [nil, nil]
     end
 
+    it 'extracts hostname and port' do
+      expect(PuppetX::SIMP::Simplib.split_port('myhost.name:5656')).to eq ['myhost.name', '5656']
+    end
+
     it 'extracts IPv4 address and port' do
       expect(PuppetX::SIMP::Simplib.split_port('1.2.3.4:255')).to eq ['1.2.3.4', '255']
     end
