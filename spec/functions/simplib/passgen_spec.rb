@@ -311,6 +311,10 @@ describe 'simplib::passgen' do
 
   context 'misc errors' do
     it 'fails when keydir cannot be created' do
+      if ENV['USER'] == 'root' or ENV['HOME'] == '/root'
+        skip("Test can't be run as root")
+      end
+
       subject()
       vardir = Puppet[:vardir]
       autofiles_dir =  File.join(vardir, 'simp', 'environments', 'rp_env',
