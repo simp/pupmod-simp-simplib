@@ -1,5 +1,8 @@
 # Generates a random password string.
 #
+# Terminates catalog compilation if the password cannot be created
+# in the allotted time.
+#
 Puppet::Functions.create_function(:'simplib::gen_random_password') do
 
   # @param length Length of the new password.

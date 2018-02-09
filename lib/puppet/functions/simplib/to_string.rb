@@ -1,5 +1,4 @@
 # Converts the argument into a `String`.
-# Only works if the passed argument responds to the `to_s()` Ruby method.
 #
 Puppet::Functions.create_function(:'simplib::to_string') do
 
@@ -15,6 +14,8 @@ Puppet::Functions.create_function(:'simplib::to_string') do
     if input.respond_to?(:to_s)
       return input.to_s
     else
+      # Should not be able to get here with Puppet, especially since
+      # Ruby provides a `to_s()` method for all objects
       fail("simplib::to_string(): Object type '#{input.class}' cannot be converted to a String")
     end
   end

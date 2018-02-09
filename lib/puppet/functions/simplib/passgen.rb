@@ -1,10 +1,14 @@
-# Generates a random password string for a passed identifier.
+# Generates/retrieves a random password string or its hash for a
+# passed identifier.
 #
-# Uses `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
-# as the destination directory.
-#
-# The minimum length password that this function will return is `8`
-# characters.
+# * Uses `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
+#   as the destination directory for password storage.
+# * The minimum length password that this function will return is `8`
+#   characters.
+# * Terminates catalog compilation if the password storage directory
+#   cannot be created/accessed by the Puppet user, the password cannot
+#   be created in the allotted time, or files not owned by the Puppet
+#   user are present in the password storage directory.
 #
 Puppet::Functions.create_function(:'simplib::passgen') do
 
@@ -27,8 +31,9 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #   * `salt` => contains the string literal salt to use (used for testing)
   #   * `complex_only` => use only the characters explicitly added by the complexity rules (used for testing)
   #
-  # @return [String] Password specified. If no, or an invalid, second
-  #   argument is provided then it will return the currently stored `String`.
+  # @return [String] Password or password hash specified. If no
+  #   `modifier_hash` or an invalid `modifier_hash` is provided,
+  #   it will return the currently stored/generated password.
   #
   dispatch :passgen do
     required_param 'String[1]', :identifier

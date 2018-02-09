@@ -1,10 +1,10 @@
 # Return an `Array` of all IP addresses known to be associated with the
-# client.
+# client, optionally excluding local addresses.
 #
 Puppet::Functions.create_function('simplib::ipaddresses') do
 
   # @param only_remote Whether to exclude local addresses
-  #   from the return value.
+  #   from the return value (e.g., '127.0.0.1').
   #
   # @return [Array[String]] List of IP addresses for the client
   dispatch :ipaddresses do

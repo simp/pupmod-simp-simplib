@@ -1,13 +1,16 @@
 # Validate that a passed list (`Array` or single `String`) of URIs is
 # valid according to Ruby's URI parser.
-# Caution:  No scheme (protocol type) validation is done the scheme_list
-# parameter is not set.
+# 
+# * *Caution*:  No scheme (protocol type) validation is done if the
+#    `scheme_list` parameter is not set.
+# * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_uri_list') do
 
   # @param uri URI to be validated.
   # @param scheme_list List of schemes (protocol types) allowed for the URI.
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   # @example Passing
   #   $uri = 'http://foo.bar.baz:1234'
   #   simplib::validate_uri_list($uri)
@@ -23,6 +26,7 @@ Puppet::Functions.create_function(:'simplib::validate_uri_list') do
   # @param uri_list 1 or more URIs to be validated.
   # @param scheme_list List of schemes (protocol types) allowed for the URI.
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   # @example Passing
   #   $uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
   #   simplib::validate_uri_list($uris)

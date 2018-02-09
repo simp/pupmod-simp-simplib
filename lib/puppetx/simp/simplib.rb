@@ -18,10 +18,12 @@ module PuppetX
       end
 
       # Determine whether or not the passed value is a valid hostname.
+      #
       # Returns false if is not comprised of ASCII letters (upper or lower case),
       # digits, hypens (except at the beginning and end), and dots (except at
       # beginning and end)
-      # NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
+      #
+      # *NOTE*:  This returns true for an IPv4 address, as it conforms to RFC 1123.
       def self.hostname_only?(obj)
         # This regex shamelessly lifted from
         # http://stackoverflow.com/questions/106179/regular-expression-to-match-hostname-or-ip-address
@@ -38,12 +40,15 @@ module PuppetX
         !hname_regex.match(obj).nil?
       end
 
-      # Determine whether or not the passed value is a valid hostname optionally
-      # postpended with ':<number>' or '/<number>'.
+      # Determine whether or not the passed value is a valid hostname,
+      # optionally postpended with ':<number>' or '/<number>'.
+      #
       # Returns false if is not comprised of ASCII letters (upper or lower case),
       # digits, hypens (except at the beginning and end), and dots (except at
-      # beginning and end), optional pluss ':<number>' or '/<number>'
-      # NOTE:  This returns true for an IPv4 address, as it conforms to RFC 1123.
+      # beginning and end), excluding an optional, trailing ':<number>' or
+      # '/<number>'
+      #
+      # *NOTE*:  This returns true for an IPv4 address, as it conforms to RFC 1123.
       def self.hostname?(obj)
         # This regex shamelessly lifted from
         # http://stackoverflow.com/questions/106179/regular-expression-to-match-hostname-or-ip-address

@@ -20,6 +20,8 @@
 #             * full  -> Full release must match
 #             * major -> Only the major release must match
 #
+# @return [None]
+#
 function simplib::assert_metadata (
   String[1] $module_name,
   Optional[Struct[{

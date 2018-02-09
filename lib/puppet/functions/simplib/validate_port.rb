@@ -1,5 +1,9 @@
-# Validates whether or not the passed argument is a valid port
-# (i.e. between `1` - `65535`).
+# Validates whether each passed argument contains valid port(s).
+#
+# * Each element of each argument must, numerically, be in the
+#   range [1, 65535].
+# * Terminates catalog compilation if validation fails.
+#
 Puppet::Functions.create_function(:'simplib::validate_port') do
   local_types do
     type 'StringOrInteger = Variant[String[1],Integer]'
@@ -9,6 +13,7 @@ Puppet::Functions.create_function(:'simplib::validate_port') do
   # @param port_args Arguments each of which contain either an
   #   individual port or an array of ports.
   # @return [Nil]
+  # @raise RuntimeError if validation fails
   #
   # @example Passing
   #   $port = '10541'

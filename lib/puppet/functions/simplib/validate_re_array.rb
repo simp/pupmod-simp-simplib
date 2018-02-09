@@ -1,6 +1,9 @@
 # Perform simple validation of a `String`, or `Array` of `Strings`,
 # against one or more regular expressions.
-# Derived from the Puppet Labs stdlib validate_re.
+#
+# * Derived from the Puppet Labs stdlib validate_re.
+# * Terminates catalog compilation if validation fails.
+#
 Puppet::Functions.create_function(:'simplib::validate_re_array') do
 
   # @param input String to be validated

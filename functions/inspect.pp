@@ -9,7 +9,7 @@
 # @param output_type
 #   The format that you wish to use to display the output during the
 #   run. 'json' and 'yaml' result in multi-line message content.
-#   oneline_json' results in single-line message content.
+#   'oneline_json' results in single-line message content.
 #
 # @return [None]
 #

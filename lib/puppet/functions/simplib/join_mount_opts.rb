@@ -4,8 +4,8 @@ Puppet::Functions.create_function(:'simplib::join_mount_opts') do
 
   # @param system_mount_opts System mount options
   # @param new_mount_opts  New mount options, which will override
-  #   `system_opts` when there are conflicts
-  # @return [String] Merged options string in which `new_opts`
+  #   `system_mount_opts` when there are conflicts
+  # @return [String] Merged options string in which `new_mount_opts`
   #   mount options take precedence; options are comma delimited
   #
   dispatch :join_mount_opts do
