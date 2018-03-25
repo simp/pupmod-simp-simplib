@@ -1,20 +1,53 @@
 HOSTS:
-  el7:
-    roles:
-      - server
-    masterless: true
-    platform:   el-7-x86_64
-    box:        centos/7
-    hypervisor: vagrant
   el6:
     roles:
-      - server
-    masterless: true
+      - default
+      - master
+      - client
     platform:   el-6-x86_64
     box:        centos/6
     hypervisor: vagrant
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+  el7:
+    roles:
+      - client
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: vagrant
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+  oel6:
+    roles:
+      - client
+    platform:   el-6-x86_64
+    box:        elastic/oel-6-x86_64
+    hypervisor: vagrant
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+  oel7:
+    roles:
+      - client
+    platform:   el-7-x86_64
+    box:        elastic/oel-7-x86_64
+    hypervisor: vagrant
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+
 CONFIG:
   log_level: verbose
-  type:      aio
+  type: aio
   vagrant_memsize: 256
-  ## vb_gui: true
+  vagrant_cpus: 1

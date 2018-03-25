@@ -1,0 +1,15 @@
+HOSTS:
+  leap42:
+    roles:
+      - server
+      - default
+      - client
+    platform: sles-12-x86_64
+    box: M0ses/openSUSE-Leap-42.1-minimal
+    hypervisor: vagrant
+
+CONFIG:
+  log_level: verbose
+  synced_folder : disabled
+  type: aio
+  vagrant_memsize: 256

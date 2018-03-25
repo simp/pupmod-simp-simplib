@@ -4,17 +4,17 @@
 #
 Facter.add('uid_min') do
   setcode do
-    if File.readable?('/etc/login.defs') then
+    if File.readable?('/etc/login.defs')
       uid_min = File.open('/etc/login.defs').grep(/UID_MIN/)
-      if not uid_min.empty? then
+      unless uid_min.empty?
         uid_min = uid_min.first.to_s.chomp.split.last
       else
         uid_min = ''
       end
     end
 
-    if not uid_min or uid_min.empty? then
-      if ['RedHat','CentOS'].include?(Facter.value(:operatingsystem)) and
+    unless uid_min || uid_min.empty?
+      if ['RedHat','CentOS','OracleLinux','Scientific'].include?(Facter.value(:operatingsystem)) &&
          Facter.value(:operatingsystemmajrelease) < '7' then
           uid_min = '500'
       else

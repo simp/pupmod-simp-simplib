@@ -1,3 +1,7 @@
+* Tue May 22 2018 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.10.0-0
+- Add support for Puppet 5
+- Add support for Oracle Linux
+
 * Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.9.1-0
 - Add `simplib::hash_to_opts` which turns a hash into a string. Useful for
   generating commands.
@@ -23,6 +27,8 @@
 - Updated the simplib::ldap::domain_to_dn function to allow users to choose
   whether they want to upcase or downcase the LDAP attributes to work around
   different system bugs
+- Updated min_uid fact for OEL and Scientific Linux
+- Updated tests
 
 * Mon Jan 15 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.9.0-0
 - Add a 'prelink' fact that indicates whether prelink has been enabled
