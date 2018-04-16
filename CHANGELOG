@@ -1,3 +1,6 @@
+* Mon Apr 16 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.1-0
+- Improved error handling in `reboot_notify` and fixed a few small bugs
+
 * Fri Jan 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.0-0
 - Updated the simplib::ldap::domain_to_dn function to allow users to choose
   whether they want to upcase or downcase the LDAP attributes to work around
