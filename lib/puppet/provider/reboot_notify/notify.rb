@@ -11,7 +11,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     @records = {}
 
     begin
-      @records = PSON.parse(File.read(@target))
+      @records = JSON.parse(File.read(@target))
     rescue
       return false
     end
@@ -20,11 +20,15 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   end
 
   def create
-    File.open(@target,'w'){|fh| fh.puts(PSON.pretty_generate({}))}
+    begin
+      File.open(@target,'w'){|fh| fh.puts(JSON.pretty_generate({}))}
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not create '#{@target}': #{e}")
+    end
   end
 
   def destroy
-    File.unlink(@target)
+    File.unlink(@target) if File.exist?(@target)
   end
 
   def update
@@ -36,7 +40,11 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       :updated => Time.now.tv_sec
     }
 
-    File.open(@target,'w'){|fh| fh.puts(PSON.pretty_generate(@records))}
+    begin
+      File.open(@target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
+    end
   end
 
   def self.post_resource_eval
@@ -44,10 +52,18 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     # now out of scope.
     target = "#{Puppet[:vardir]}/reboot_notifications.json"
     records = {}
+    content = ''
+
     begin
-      records = PSON.parse(File.read(target))
-    rescue
-      Puppet.error("Could not parse file: #{target}")
+      content = File.read(target)
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not read file '#{target}': #{e}")
+    end
+
+    begin
+      records = JSON.parse(content)
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Invalid JSON in '#{target}': #{e}")
     end
 
     current_time = Time.now.tv_sec
@@ -57,18 +73,22 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       (current_time - v["updated"]) > Facter.value(:uptime_seconds)
     }
 
-    if not records.empty? then
+    unless records.empty?
       msg = ["System Reboot Required Because:"]
 
       records.each_pair do |k,v|
         # This is a fail safe for empty 'reasons'
-        records[k]['reason'] = 'modified' if ( records[k]['reason'].nil? or records[k]['reason'].empty? )
+        records[k]['reason'] = 'modified' if ( records[k]['reason'].nil? || records[k]['reason'].empty? )
         msg << ["  #{k} => #{v['reason']}"]
       end
 
       Puppet.notice(msg.join("\n"))
     end
 
-    File.open(target,'w'){|fh| fh.puts(PSON.pretty_generate(records))}
+    begin
+      File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(records))}
+    rescue
+      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
+    end
   end
 end
