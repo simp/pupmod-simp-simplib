@@ -132,13 +132,21 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
 
     let(:output) { JSON.parse(File.read(@target)) }
 
-    it { expect{provider.class.post_resource_eval}.to_not raise_error }
+    it { expect{ provider.class.post_resource_eval }.to_not raise_error }
+
+    context 'the target has invalid json' do
+      it 'should fail' do
+        File.open(@target, 'w'){|fh| fh.puts('{')}
+
+        expect{ provider.class.post_resource_eval }.to raise_error(/Invalid JSON in '#{@target}'/)
+      end
+    end
 
     context 'the target has been removed' do
       it do
         FileUtils.remove_dir(@tmpdir) if File.exist?(@tmpdir)
 
-        expect{ provider.class.post_resource_eval}.to raise_error(/Could not parse file: #{@target}/)
+        expect{ provider.class.post_resource_eval }.to raise_error(/Could not read file '#{@target}'/)
       end
     end
 

@@ -22,8 +22,8 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   def create
     begin
       File.open(@target,'w'){|fh| fh.puts(JSON.pretty_generate({}))}
-    rescue
-      raise(Puppet::Error, "reboot_notify: Could not create '#{@target}'")
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not create '#{@target}': #{e}")
     end
   end
 
@@ -41,9 +41,9 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     }
 
     begin
-      File.open(@target,'w'){|fh| fh.puts(JSON.pretty_generate(@records))}
-    rescue
-      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}'")
+      File.open(@target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
     end
   end
 
@@ -52,10 +52,18 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     # now out of scope.
     target = "#{Puppet[:vardir]}/reboot_notifications.json"
     records = {}
+    content = ''
+
     begin
-      records = JSON.parse(File.read(target))
-    rescue
-      raise(Puppet::Error, "Could not parse file: #{target}")
+      content = File.read(target)
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not read file '#{target}': #{e}")
+    end
+
+    begin
+      records = JSON.parse(content)
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Invalid JSON in '#{target}': #{e}")
     end
 
     current_time = Time.now.tv_sec
@@ -80,7 +88,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     begin
       File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(records))}
     rescue
-      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}' in post_resource_eval")
+      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
     end
   end
 end
