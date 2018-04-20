@@ -84,7 +84,7 @@ RSpec.configure do |c|
     :production => {
       #:fqdn           => 'production.rspec.test.localdomain',
       :path           => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
-      :concat_basedir => '/tmp'
+      :concat_basedir => '/tmp',
     }
   }
 
@@ -129,7 +129,6 @@ RSpec.configure do |c|
     Puppet[:environmentpath] = @spec_global_env_temp
     Puppet[:user] = Etc.getpwuid(Process.uid).name
     Puppet[:group] = Etc.getgrgid(Process.gid).name
-    Puppet[:digest_algorithm] = 'sha256'
 
     # sanitize hieradata
     if defined?(hieradata)
@@ -152,4 +151,9 @@ Dir.glob("#{RSpec.configuration.module_path}/*").each do |dir|
   rescue
     fail "ERROR: The module '#{dir}' is not installed. Tests cannot continue."
   end
+end
+
+if ENV['PUPPET_DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
 end
