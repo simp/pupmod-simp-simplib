@@ -4,6 +4,9 @@
 # @param log_level
 #   The Puppet log_level to use when generating output
 #
+#   * Set to ``debug`` if you wish to disable output unless you're running in
+#     debug mode.
+#
 class simplib::reboot_notify (
   Simplib::PuppetLogLevel $log_level = 'notice'
 ){

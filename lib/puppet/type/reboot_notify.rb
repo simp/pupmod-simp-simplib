@@ -42,6 +42,10 @@ Puppet::Type.newtype(:reboot_notify) do
 
     defaultto(:notice)
     newvalues(:alert, :crit, :debug, :notice, :emerg, :err, :info, :warning)
+
+    munge do |value|
+      value.to_s
+    end
   end
 
   newparam(:control_only, :boolean => true, :parent => Puppet::Parameter::Boolean) do
@@ -55,13 +59,15 @@ Puppet::Type.newtype(:reboot_notify) do
   end
 
   validate do
-    existing_resource = catalog.resources.find { |res| (res.type == self.type) && res[:control_only] }
+    if self[:control_only]
+      existing_resource = catalog.resources.find { |res| (res.type == self.type) && res[:control_only] }
 
-    if existing_resource
-      err = ["You can only have one #{self.type} resource with :control_only set to 'true'"]
-      err << "Conflicting resource found in file '#{existing_resource.file}' on line '#{existing_resource.line}'"
+      if existing_resource
+        err = ["You can only have one #{self.type} resource with :control_only set to 'true'"]
+        err << "Conflicting resource found in file '#{existing_resource.file}' on line '#{existing_resource.line}'"
 
-      raise(Puppet::Error, err.join("\n"))
+        raise(Puppet::Error, err.join("\n"))
+      end
     end
   end
 

@@ -21,18 +21,33 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     begin
       require 'deep_merge'
 
-      @records = self.class.default_control_metadata.deep_merge(
-        JSON.parse(File.read(@target))
+      @records = JSON.parse(File.read(@target)).deep_merge(
+        self.class.default_control_metadata
       )
+
     rescue => e
       Puppet.debug("reboot_notify: #exists? => #{e}")
       return false
     end
 
-    return File.exist?(@target)
+    retval = false
+    if @resource[:control_only]
+      if @records['reboot_control_metadata']
+        if @records['reboot_control_metadata']['log_level'] == @resource[:log_level]
+          retval = true
+        end
+      end
+    else
+      retval = @records[@resource[:name]] &&
+      (@records[@resource[:name]]['reason'] == @resource[:reason])
+    end
+
+    return retval
   end
 
   def create
+    add_record
+
     begin
       File.open(@target,'w'){|fh| fh.puts(JSON.pretty_generate(@records))}
     rescue => e
@@ -45,17 +60,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   end
 
   def update
-    if @resource[:log_level]
-      @records['reboot_control_metadata']['log_level'] = @resource[:log_level]
-    end
-
-    unless @resource[:control_only]
-      # Add your record
-      @records[@resource[:name]] = {
-        :reason  => @resource[:reason],
-        :updated => Time.now.tv_sec
-      }
-    end
+    add_record
 
     begin
       File.open(@target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
@@ -120,9 +125,23 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     end
 
     begin
-      File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(records))}
+      reboot_control_hash = { 'reboot_control_metadata' => reboot_control_metadata }
+      File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(reboot_control_hash.merge(records)))}
     rescue
       raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
+    end
+  end
+
+  private
+
+  def add_record
+    if @resource[:control_only]
+      @records['reboot_control_metadata']['log_level'] = @resource[:log_level]
+    else
+      @records[@resource[:name]] = {
+        :reason => @resource[:reason],
+        :updated => Time.now.tv_sec
+      }
     end
   end
 end
