@@ -1,12 +1,13 @@
 * Mon Apr 16 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.1-0
-- Adds two parameters :log_level and :control_only to the 'reboot_notify'
-  custom type.
+- The following changes allow users to disable reboot notify messages
+  - Adds two parameters :log_level and :control_only to the 'reboot_notify'
+    custom type.
     * :log_level    => Set the Puppet log level of the generated message
     * :control_only => Indicate that this entry should not be added to
                        the generated file
-- Added a `Simplib::PuppetLogLevel` Data Type
-- Added a 'reboot_control_metadata' section to the on-system record file
-- Added a `simplib::reboot_notify` class to allow for ease of global
+  - Added a `Simplib::PuppetLogLevel` Data Type
+  - Added a 'reboot_control_metadata' section to the on-system record file
+  - Added a `simplib::reboot_notify` class to allow for ease of global
   metadata manipulation.
 - Fixed file paths that were not Windows compatible
 - Improved error handling in `reboot_notify` and fixed a few small bugs
