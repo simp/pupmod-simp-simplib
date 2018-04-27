@@ -23,7 +23,7 @@ describe reboot_notify_type do
 
     it 'should accept a log_level parameter' do
       resource = reboot_notify_type.new :name => 'foo', :log_level => 'warning'
-      expect(resource[:log_level]).to eq(:warning)
+      expect(resource[:log_level]).to eq('warning')
     end
 
     it 'should accept a control_only parameter' do

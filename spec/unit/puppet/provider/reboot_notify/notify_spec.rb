@@ -51,12 +51,20 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   end
 
   context '#create' do
-    it 'should create a valid, but empty JSON file' do
-      expect{ provider.create }.to_not raise_error
+    it 'should create a valid JSON file' do
+      content = nil
+
+      expect{
+        provider.create
+        content = JSON.parse(File.read(@target))
+      }.to_not raise_error
 
       expect(
-        JSON.parse(File.read(@target))
-      ).to eq({'reboot_control_metadata' => { 'log_level' => 'notice' }})
+        content['reboot_control_metadata']
+      ).to eq({ 'log_level' => 'notice' })
+
+      expect( content['Foo'] ).to_not be_nil
+      expect( content['Foo']['reason'] ).to eq('Bar')
     end
 
     context 'the target directory does not exist' do
