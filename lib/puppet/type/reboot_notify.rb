@@ -33,21 +33,6 @@ Puppet::Type.newtype(:reboot_notify) do
     defaultto('modified')
   end
 
-  newparam(:log_level) do
-    desc <<-EOM
-    Set the message log level for notifications
-
-    If this is set in *any* instance then it takes effect for *all* instances!
-    EOM
-
-    defaultto(:notice)
-    newvalues(:alert, :crit, :debug, :notice, :emerg, :err, :info, :warning)
-
-    munge do |value|
-      value.to_s
-    end
-  end
-
   newparam(:control_only, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc <<-EOM
     This resource is only for control and should not add an item to the notification list
@@ -56,6 +41,21 @@ Puppet::Type.newtype(:reboot_notify) do
     EOM
 
     defaultto(:false)
+  end
+
+  newparam(:log_level) do
+    desc <<-EOM
+    Set the message log level for notifications
+
+    This is only active with :control_only set to `true`
+    EOM
+
+    defaultto(:notice)
+    newvalues(:alert, :crit, :debug, :notice, :emerg, :err, :info, :warning)
+
+    munge do |value|
+      value.to_s
+    end
   end
 
   validate do

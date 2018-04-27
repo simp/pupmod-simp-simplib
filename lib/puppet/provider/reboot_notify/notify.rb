@@ -1,6 +1,19 @@
 Puppet::Type.type(:reboot_notify).provide(:notify) do
   desc 'Management of the reboot notification metadata file.'
 
+  # Simple accessor for common data
+  def self.target
+    File.join(Puppet[:vardir], 'reboot_notifications.json')
+  end
+
+  # Instance syntactic sugar
+   def target
+     self.class.target
+   end
+
+  # The default control metadata if none other is specified
+  #
+  # Used in both class and instance methods
   def self.default_control_metadata
     return {
       'reboot_control_metadata' => {
@@ -12,8 +25,6 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   def initialize(*args)
     super(*args)
 
-    @target = File.join(Puppet[:vardir], 'reboot_notifications.json')
-
     @records = self.class.default_control_metadata
   end
 
@@ -21,58 +32,61 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     begin
       require 'deep_merge'
 
-      @records = JSON.parse(File.read(@target)).deep_merge(
-        self.class.default_control_metadata
-      )
+      @records = JSON.parse(File.read(target))
+
+      if @resource[:control_only]
+        @records = @records.deep_merge( self.class.default_control_metadata )
+      end
 
     rescue => e
+      # Cheap and easy way to ensure that the file gets created and/or fixed if
+      # there is something wrong with it.
+
       Puppet.debug("reboot_notify: #exists? => #{e}")
       return false
     end
 
-    retval = false
     if @resource[:control_only]
-      if @records['reboot_control_metadata']
-        if @records['reboot_control_metadata']['log_level'] == @resource[:log_level]
-          retval = true
-        end
-      end
-    else
-      retval = @records[@resource[:name]] &&
-      (@records[@resource[:name]]['reason'] == @resource[:reason])
+      # If this is the control resource, the control components need to match
+      #
+      # We *may* want to split this out into a separate type in the future
+
+      return @records['reboot_control_metadata']['log_level'] == @resource[:log_level]
     end
 
-    return retval
+    return true
   end
 
   def create
     add_record
 
     begin
-      File.open(@target,'w'){|fh| fh.puts(JSON.pretty_generate(@records))}
+      File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(@records))}
     rescue => e
-      raise(Puppet::Error, "reboot_notify: Could not create '#{@target}': #{e}")
+      raise(Puppet::Error, "reboot_notify: Could not create '#{target}': #{e}")
     end
   end
 
   def destroy
-    File.unlink(@target) if File.exist?(@target)
+    # This resource is all or nothing so it doesn't make sense to cherry pick
+    # items out of the results
+
+    File.unlink(target) if File.exist?(target)
   end
 
   def update
     add_record
 
     begin
-      File.open(@target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
+      File.open(target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
     rescue => e
-      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
+      raise(Puppet::Error, "reboot_notify: Could not update '#{target}': #{e}")
     end
   end
 
+  # This happens after *all* resources of this type have executed but, being a
+  # class method, cannot access any items in the instance methods.
   def self.post_resource_eval
-    # Have to repeat this here because everything in the provider is
-    # now out of scope.
-    target = File.join(Puppet[:vardir], 'reboot_notifications.json')
     records = {}
     content = ''
 
@@ -90,6 +104,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
 
     current_time = Time.now.tv_sec
 
+    # Need to pull this out of the data structure
     if records['reboot_control_metadata']
       reboot_control_metadata = records.delete('reboot_control_metadata')
     else
@@ -100,6 +115,9 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     records.delete_if{|k,v|
       next unless v['updated']
 
+      # If the number of seconds between the time that the record was written
+      # and the current time is greater than the system uptime then we should
+      # remove the record
       (current_time - v['updated']) > Facter.value(:uptime_seconds)
     }
 
@@ -128,7 +146,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       reboot_control_hash = { 'reboot_control_metadata' => reboot_control_metadata }
       File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(reboot_control_hash.merge(records)))}
     rescue
-      raise(Puppet::Error, "reboot_notify: Could not update '#{@target}': #{e}")
+      raise(Puppet::Error, "reboot_notify: Could not update '#{target}': #{e}")
     end
   end
 
