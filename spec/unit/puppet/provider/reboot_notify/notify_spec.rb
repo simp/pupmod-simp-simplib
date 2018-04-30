@@ -12,6 +12,9 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   }
 
   before(:each) do
+    @catalog = Puppet::Resource::Catalog.new
+    Puppet::Type::Reboot_notify.any_instance.stubs(:catalog).returns(@catalog)
+
     @tmpdir = Dir.mktmpdir('rspec_reboot_notify')
     @target = File.join(@tmpdir, 'reboot_notifications.json')
     Puppet.stubs(:[]).with(:vardir).returns @tmpdir
@@ -34,13 +37,13 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
       end
 
       it 'is invalid' do
-        File.open(@target, 'w'){|fh| fh.puts("{")}
+        File.open(@target, 'w'){|fh| fh.puts('{')}
 
         expect(provider.exists?).to be_falsey
       end
 
       it 'is json' do
-        File.open(@target, 'w'){|fh| fh.puts("{}")}
+        File.open(@target, 'w'){|fh| fh.puts('{}')}
 
         expect(provider.exists?).to be_truthy
       end
@@ -48,10 +51,20 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   end
 
   context '#create' do
-    it 'should create a valid, but empty JSON file' do
-      expect{ provider.create }.to_not raise_error
+    it 'should create a valid JSON file' do
+      content = nil
 
-      expect(JSON.parse(File.read(@target))).to eq({})
+      expect{
+        provider.create
+        content = JSON.parse(File.read(@target))
+      }.to_not raise_error
+
+      expect(
+        content['reboot_control_metadata']
+      ).to eq({ 'log_level' => 'notice' })
+
+      expect( content['Foo'] ).to_not be_nil
+      expect( content['Foo']['reason'] ).to eq('Bar')
     end
 
     context 'the target directory does not exist' do
@@ -122,6 +135,52 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
         expect{ provider.update}.to raise_error(/Could not update.*#{@target}/)
       end
     end
+
+    context 'control_only is set' do
+      let(:resource) {
+        Puppet::Type.type(:reboot_notify).new(
+          name: 'Foo',
+          reason: 'Bar',
+          control_only: true
+        )
+      }
+
+      it do
+        expect{ provider.update }.to_not raise_error
+        expect(
+          JSON.parse(File.read(@target))
+        ).to eq({'reboot_control_metadata' => { 'log_level' => 'notice' }})
+      end
+
+      [:alert, :crit, :debug, :notice, :emerg, :err, :info, :warning].each do |log_level|
+        context "log_level is #{log_level}" do
+          let(:resource) {
+            Puppet::Type.type(:reboot_notify).new(
+              name: 'Foo',
+              reason: 'Bar',
+              control_only: true,
+              log_level: log_level.to_s
+            )
+          }
+
+          it do
+            # This should always be prevented by the Type but is here in case
+            # of a regression in Puppet or a bad update to the type.
+            Puppet.expects(:warning).with(
+              regexp_matches(/Invalid log_level:/)
+            ).never
+            Puppet.expects(log_level).with(
+              regexp_matches(/System Reboot Required Because:/)
+            ).at_most_once
+
+            expect{ provider.update }.to_not raise_error
+            expect(
+              JSON.parse(File.read(@target))
+            ).to eq({'reboot_control_metadata' => { 'log_level' => log_level.to_s }})
+          end
+        end
+      end
+    end
   end
 
   context '#self.post_resource_eval' do
@@ -132,7 +191,13 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
 
     let(:output) { JSON.parse(File.read(@target)) }
 
-    it { expect{ provider.class.post_resource_eval }.to_not raise_error }
+    it do
+      Puppet.expects(:notice).with(
+        regexp_matches(/System Reboot Required Because:/)
+      ).at_most_once
+
+      expect{ provider.class.post_resource_eval }.to_not raise_error
+    end
 
     context 'the target has invalid json' do
       it 'should fail' do
@@ -172,6 +237,28 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
         expect(updates.keys).to_not include('ToDelete')
         expect(updates.keys).to include('ToKeep')
         expect(updates['ToKeep']).to eq(data['ToKeep'])
+      end
+    end
+
+    context 'log_level is set' do
+      let(:resource) {
+        Puppet::Type.type(:reboot_notify).new(
+          name: 'Foo',
+          reason: 'Bar',
+          log_level: 'debug'
+        )
+      }
+
+      it do
+        expect{ provider.update }.to_not raise_error
+        Puppet.expects(:debug).with(
+          regexp_matches(/System Reboot Required Because:/)
+        ).at_most_once
+        expect{ provider.class.post_resource_eval}.to_not raise_error
+
+        content = JSON.parse(File.read(@target))
+
+        expect(content.keys).to include('Foo')
       end
     end
   end
