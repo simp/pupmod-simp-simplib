@@ -74,9 +74,10 @@ describe 'reboot_notify' do
           apply_manifest_on(host, manifest, :catch_changes => true)
         end
 
-        it 'should be idempotent after reboot' do
+        it 'should not display notifications after reboot' do
           host.reboot
-          apply_manifest_on(host, manifest, :catch_changes => true)
+          result = apply_manifest_on(host, manifest).stdout
+          expect(result).to_not match(/System Reboot Required Because:/)
         end
 
         it 'should remain idempotent' do
