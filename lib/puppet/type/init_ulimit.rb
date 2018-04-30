@@ -90,10 +90,10 @@ Puppet::Type.newtype(:init_ulimit) do
   def self.title_patterns
     [
       [
-        /^(\|?)(.*)$/,
+        /^(.+?)\|?(.+)$/,
         [
-         [:item, lambda{|x| x}],
-         [:target, lambda{|x| x}]
+         [:item],
+         [:target]
         ]
       ]
     ]
@@ -148,7 +148,7 @@ Puppet::Type.newtype(:init_ulimit) do
 
     validate do |value|
       unless $init_ulimit_opt_map.keys.include?(value.downcase)
-        raise(Puppet::Error, "'item' must be one of '#{$init_ulimit_opt_map.keys.join(', ')}")
+        raise(Puppet::Error, "'item' must be one of '#{$init_ulimit_opt_map.keys.join(', ')}, got #{value}")
       end
     end
   end

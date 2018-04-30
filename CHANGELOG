@@ -1,4 +1,6 @@
-* Mon Apr 16 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.1-0
+* Mon Apr 30 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.1-0
+- Made the `init_ulimit` custom type safe for `puppet generate types`
+- Fixed a typo in the composite namevar for `init_ulimit`
 - The following changes allow users to disable reboot notify messages
   - Adds two parameters :log_level and :control_only to the 'reboot_notify'
     custom type.
