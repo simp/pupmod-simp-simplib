@@ -1,3 +1,8 @@
+* Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.9.1-0
+- Add `simplib::hash_to_opts` which turns a hash into a string with each key
+  prefixed with '--' and connected to each value with '=', useful for generating
+  commands
+
 * Mon Apr 30 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.9.1-0
 - Made the `init_ulimit` custom type safe for `puppet generate types`
 - Fixed a typo in the composite namevar for `init_ulimit`
