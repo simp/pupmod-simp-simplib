@@ -14,7 +14,7 @@ stages:
 # version requirements, even if they match these defaults.
 image: 'ruby:2.1'
 variables:
-  PUPPET_VERSION: '~> 4.8.0' # Should be the oldest supported version.
+  PUPPET_VERSION: '~> 4.7.0' # Should be the oldest supported version.
   BUNDLER_VERSION: '' # Default to the latest version; unset if defined by the runner.
   BUNDLE_CACHE_ALL: 'true'
   BUNDLE_PATH: 'vendor'
@@ -89,10 +89,11 @@ cache:
 # ----------------------------------------------------------------------
 # Version Matrix
 #
-# Selections are based on the component version combinations included with
-# currently supported releases of SIMP and Puppet Enterprise.
+# The testing matrix considers component versions shipped with supported relases
+# of SIMP and Puppet Enterprise (PE).
 #
 # For more information see:
+#  * TODO: Add SIMP support lifecycle policy link once it exists.
 #  * https://puppet.com/docs/pe/latest/overview/component_versions_in_recent_pe_releases.html
 #  * https://puppet.com/misc/puppet-enterprise-lifecycle
 #
