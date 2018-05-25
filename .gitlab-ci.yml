@@ -23,6 +23,7 @@ variables:
   BUNDLE_WITHOUT: 'development system_tests'
   GEM_HOME: '${CI_PROJECT_DIR}/vendor/ruby' # Isolate the Ruby Gems environment
   GEM_PATH: '$GEM_HOME'
+  GEM_SPEC: 'vendor/specs'
   MODULE_NAME: "$(ruby -r json -e 'JSON.load(File.read('metadata.json'))['name']')"
   MODULE_VERSION: "$(ruby -r json -e 'JSON.load(File.read('metadata.json'))['version']')"
 
@@ -37,7 +38,7 @@ before_script:
 cache:
   key: '$CI_PROJECT_PATH_SLUG'
   paths:
-    - 'vendor/ruby'
+    - 'vendor'
 
 #=======================================================================
 # Anchors
