@@ -1,5 +1,4 @@
 ---
-
 #=======================================================================
 # Global stuff
 stages:
@@ -14,7 +13,8 @@ stages:
 # version requirements, even if they match these defaults.
 image: 'ruby:2.1'
 variables:
-  PUPPET_VERSION: '~> 4.7.0' # Should be the oldest supported version.
+  PUPPET_VERSION: '~> 4.7.0'
+  FACTER_VERSION: '~> 3.0'
   BUNDLER_VERSION: '' # Default to the latest version; unset if defined by the runner.
   BUNDLE_CACHE_ALL: 'true'
   BUNDLE_PATH: 'vendor'
@@ -35,6 +35,8 @@ before_script:
   - 'gem install bundler --no-document $BUNDLER_VERSION_ARGS'
   - 'bundle check || bundle install'
 
+# NOTE: Per-job overrides do not deep-merge and must duplicate all keys.
+#       See: https://gitlab.com/gitlab-org/gitlab-runner/issues/2838
 cache:
   key: '$CI_PROJECT_PATH_SLUG'
   paths:
@@ -50,6 +52,9 @@ cache:
     - 'bundle exec rake syntax'
     - 'bundle exec rake lint'
   cache:
+    key: '$CI_PROJECT_PATH_SLUG'
+    paths:
+      - 'vendor'
     policy: 'pull'
   dependencies: []
   artifacts:
@@ -66,6 +71,9 @@ cache:
   script:
     - 'bundle exec rake spec'
   cache:
+    key: '$CI_PROJECT_PATH_SLUG'
+    paths:
+      - 'vendor'
     policy: 'pull'
   dependencies: []
   artifacts:
@@ -79,6 +87,9 @@ cache:
   variables:
     BUNDLE_WITHOUT: 'development'
   cache:
+    key: '$CI_PROJECT_PATH_SLUG'
+    paths:
+      - 'vendor'
     policy: 'pull'
   dependencies: []
   artifacts:
@@ -113,32 +124,46 @@ cache:
 #
 
 .pe_2016_4: &pe_2016_4
+  image: 'ruby:2.1'
   variables:
     PUPPET_VERSION: '~> 4.7.0'
+    FACTER_VERSION: '~> 3.4.1'
 
 .simp_6_0: &simp_6_0
+  image: 'ruby:2.1'
   variables:
     PUPPET_VERSION: '~> 4.8.1'
+    FACTER_VERSION: '~> 3.5.1'
 
 .simp_6_1: &simp_6_1
+  image: 'ruby:2.1'
   variables:
     PUPPET_VERSION: '~> 4.10.8'
+    FACTER_VERSION: '~> 3.6.10'
 
 .pe_2017_3: &pe_2017_3
+  image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.3.2'
+    FACTER_VERSION: '~> 3.9.2'
 
 .pe_2018_1: &pe_2018_1
+  image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.5.1'
+    FACTER_VERSION: '~> 3.11.1'
 
 .pup4_latest: &pup4_latest
+  image: 'ruby:2.1'
   variables:
     PUPPET_VERSION: '~> 4.0'
+    FACTER_VERSION: '~> 3.0'
 
 .pup5_latest: &pup5_latest
+  image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.0'
+    FACTER_VERSION: '~> 3.9'
 
 
 #=======================================================================
@@ -175,12 +200,10 @@ tag_check:
 pup4_latest-lint:
   <<: *lint_base
   <<: *pup4_latest
-  image: 'ruby:2.1'
 
 pup5_latest-lint:
   <<: *lint_base
   <<: *pup5_latest
-  image: 'ruby:2.4'
 
 
 #=======================================================================
@@ -190,37 +213,34 @@ pup5_latest-lint:
 pup4_7-unit:
   <<: *unit_base
   <<: *pe_2016_4
-  image: 'ruby:2.1'
 
 pup4_8-unit:
   <<: *unit_base
   <<: *simp_6_0
-  image: 'ruby:2.1'
 
 pup4_10-unit:
   <<: *unit_base
   <<: *simp_6_1
-  image: 'ruby:2.1'
 
 pup5_3-unit:
   <<: *unit_base
   <<: *pe_2017_3
-  image: 'ruby:2.4'
 
 pup5_5-unit:
   <<: *unit_base
   <<: *pe_2018_1
-  image: 'ruby:2.4'
 
 # Use this special job to test all the latest stuff and update the cache.
 pup5_latest-unit:
   <<: *unit_base
   <<: *pup5_latest
-  image: 'ruby:2.4'
   script:
     - 'bundle update'
     - 'bundle exec rake spec'
   cache:
+    key: '$CI_PROJECT_PATH_SLUG'
+    paths:
+      - 'vendor'
     policy: 'pull-push'
 
 
@@ -234,13 +254,13 @@ pup5_latest-unit:
 
 # ----------------------------------------------------------------------
 # Puppet 4.8 for SIMP 6.0 and PE 2016.5
-el-pup4_8-default:
+pup4_8-default:
   <<: *acceptance_base
   <<: *simp_6_0
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup4_8-default-fips:
+pup4_8-default-fips:
   <<: *acceptance_base
   <<: *simp_6_0
   variables:
@@ -248,13 +268,13 @@ el-pup4_8-default-fips:
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup4_8-prelink_fact:
+pup4_8-prelink_fact:
   <<: *acceptance_base
   <<: *simp_6_0
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup4_8-prelink_fact-fips:
+pup4_8-prelink_fact-fips:
   <<: *acceptance_base
   <<: *simp_6_0
   variables:
@@ -262,7 +282,7 @@ el-pup4_8-prelink_fact-fips:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup4_8-ipa_fact:
+pup4_8-ipa_fact:
   <<: *acceptance_base
   <<: *simp_6_0
   script:
@@ -270,13 +290,13 @@ el-pup4_8-ipa_fact:
 
 # ----------------------------------------------------------------------
 # Puppet 4.10 for SIMP 6.1, PE 2016.4 LTS, and PE 2017.2
-el-pup4_10-default:
+pup4_10-default:
   <<: *acceptance_base
   <<: *simp_6_1
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup4_10-default-fips:
+pup4_10-default-fips:
   <<: *acceptance_base
   <<: *simp_6_1
   variables:
@@ -284,13 +304,13 @@ el-pup4_10-default-fips:
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup4_10-prelink_fact:
+pup4_10-prelink_fact:
   <<: *acceptance_base
   <<: *simp_6_1
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup4_10-prelink_fact-fips:
+pup4_10-prelink_fact-fips:
   <<: *acceptance_base
   <<: *simp_6_1
   variables:
@@ -298,7 +318,7 @@ el-pup4_10-prelink_fact-fips:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup4_10-ipa_fact:
+pup4_10-ipa_fact:
   <<: *acceptance_base
   <<: *simp_6_1
   script:
@@ -306,13 +326,13 @@ el-pup4_10-ipa_fact:
 
 # ----------------------------------------------------------------------
 # Puppet 5.5 for PE 2018.1 LTS
-el-pup5_5-default:
+pup5_5-default:
   <<: *acceptance_base
   <<: *pe_2018_1
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup5_5-default-fips:
+pup5_5-default-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
   variables:
@@ -320,13 +340,13 @@ el-pup5_5-default-fips:
   script:
     - 'bundle exec rake beaker:suites[default]'
 
-el-pup5_5-prelink_fact:
+pup5_5-prelink_fact:
   <<: *acceptance_base
   <<: *pe_2018_1
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup5_5-prelink_fact-fips:
+pup5_5-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
   variables:
@@ -334,7 +354,7 @@ el-pup5_5-prelink_fact-fips:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
-el-pup5_5-ipa_fact:
+pup5_5-ipa_fact:
   <<: *acceptance_base
   <<: *pe_2018_1
   script:
