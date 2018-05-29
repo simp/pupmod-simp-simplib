@@ -70,4 +70,12 @@ describe 'simplib::hash_to_opts' do
         .and_return(result) }
     end
   end
+
+  context 'with array_style set to repeat' do
+    params = { 'key' => ['yes',true,1] }
+    opts   = { 'array_style' => 'repeat' }
+    result = '--key=yes --key=true --key=1'
+    it { is_expected.to run.with_params(params,opts) \
+        .and_return(result) }
+  end
 end
