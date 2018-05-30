@@ -15,9 +15,9 @@
 # @param opts Options hash. It only takes 3 keys, none of them required:
 #   * ``connector``: String that joins each key and value pair. Defaults to '='
 #   * ``prefix``: String that prefixes each key value pair. Defaults to '--'
-#   * ``array_delimiter``: When a value is an array, the string that is used to
+#   * ``delimiter``: When a value is an array, the string that is used to
 #     deliminate each item. Defaults to ','
-#   * ``array_style``: Whether to return array values as a deliminated string,
+#   * ``repeat``: Whether to return array values as a deliminated string,
 #     or by repeating the option with each unique value
 #
 # @return [String]
@@ -25,24 +25,24 @@
 function simplib::hash_to_opts (
   Hash[String,Variant[Array,String,Numeric,Boolean,Undef]] $input,
   Struct[{
-    Optional[connector]       => String[1],
-    Optional[prefix]          => String[1],
-    Optional[array_style]     => Enum['comma','repeat'],
-    Optional[array_delimiter] => String[1],
+    Optional[connector] => String[1],
+    Optional[prefix]    => String[1],
+    Optional[repeat]    => Enum['comma','repeat'],
+    Optional[delimiter] => String[1],
   }] $opts = {}
 ) {
-  $connector       = pick($opts['connector'],       '=')
-  $prefix          = pick($opts['prefix'],          '--')
-  $array_style     = pick($opts['array_style'],     'comma')
-  $array_delimiter = pick($opts['array_delimiter'], ',')
+  $connector = pick($opts['connector'], '=')
+  $prefix    = pick($opts['prefix'],    '--')
+  $repeat    = pick($opts['repeat'],    'comma')
+  $delimiter = pick($opts['delimiter'], ',')
 
   $out = $input.map |$key, $val| {
     case $val {
       default: { "${prefix}${key}${connector}${String($val).shellquote}" }
       Undef:   { "${prefix}${key}" }
       Array:   {
-        case $array_style {
-          'comma':  { "${prefix}${key}${connector}${val.join($array_delimiter).shellquote}" }
+        case $repeat {
+          'comma':  { "${prefix}${key}${connector}${val.join($delimiter).shellquote}" }
           'repeat': { $val.prefix("${prefix}${key}${connector}").shellquote }
         }
       }

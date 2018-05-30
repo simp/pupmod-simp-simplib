@@ -59,7 +59,7 @@ describe 'simplib::hash_to_opts' do
       opts = {
         'connector' => ' ',
         'prefix'    => '-',
-        'array_delimiter' => ':'
+        'delimiter' => ':'
       }
       result = params[:result] \
         .gsub(/=/,' ')
@@ -71,9 +71,9 @@ describe 'simplib::hash_to_opts' do
     end
   end
 
-  context 'with array_style set to repeat' do
+  context 'with repeat set to repeat' do
     params = { 'key' => ['yes',true,1] }
-    opts   = { 'array_style' => 'repeat' }
+    opts   = { 'repeat' => 'repeat' }
     result = '--key=yes --key=true --key=1'
     it { is_expected.to run.with_params(params,opts) \
         .and_return(result) }
