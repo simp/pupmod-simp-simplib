@@ -1,4 +1,4 @@
-* Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.9.1-0
+* Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.10.0-0
 - Add `simplib::hash_to_opts` which turns a hash into a string. Useful for
   generating commands.
 
