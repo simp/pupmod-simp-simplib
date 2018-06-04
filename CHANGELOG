@@ -1,3 +1,9 @@
+* Fri Jun 01 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Add a 'simplib::install' defined type that allows users to provide a Hash of
+  packages to install along with a Hash of defaults to apply to those packages
+  and override each package configuration if necessary.
+  - This was originally created by Nick Miller <nick.miller@onyxpoint.com>
+
 * Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.10.0-0
 - Add `simplib::hash_to_opts` which turns a hash into a string. Useful for
   generating commands.
