@@ -6,14 +6,15 @@ Facter.add('cmdline') do
   setcode do
     retval = {}
     begin
-      File.read('/proc/cmdline').chomp.split.each{
-        |x| i,j = x.split('=');
+      File.read('/proc/cmdline').chomp.split.each do |x|
+        i,j = x.split('=')
+
         if retval.has_key?(i)
-          retval[i] = [retval[i] , j].flatten()
+          retval[i] = [retval[i], j].flatten()
         else
           retval[i] = j
         end
-      }
+      end
     rescue => details
       Facter.warn("Could not gather data from /proc/cmdline: #{details.message}")
     end
