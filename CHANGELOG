@@ -1,3 +1,7 @@
+* Thu Jun 14 2018 dforste <dforste@users.noreply.github.com> - 3.10.0-0
+- Fixed bug in cmdline face where duplicate parameters would be ignored
+  - Duplicate parameters now turn the value of the parameter into an array
+
 * Fri Jun 01 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
 - Add a 'simplib::install' defined type that allows users to provide a Hash of
   packages to install along with a Hash of defaults to apply to those packages
