@@ -1,4 +1,4 @@
-* Thu Jun 14 2018 dforste <dforste@users.noreply.github.com> - 3.10.0
+* Thu Jun 14 2018 dforste <dforste@users.noreply.github.com> - 3.10.0-0
 - Fixed bug in cmdline face where duplicate parameters would be ignored
   - Duplicate parameters now turn the value of the parameter into an array
 
