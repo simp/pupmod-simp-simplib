@@ -1,3 +1,7 @@
+* Tue Jun 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Fixed an issue in the 'runlevel' provider where the actual runlevel would not
+  be changed at execution time
+
 * Thu Jun 14 2018 dforste <dforste@users.noreply.github.com> - 3.10.0-0
 - Fixed bug in cmdline face where duplicate parameters would be ignored
   - Duplicate parameters now turn the value of the parameter into an array
