@@ -1,4 +1,6 @@
 * Tue Jun 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Added a function `module_exist` that will return whether or not a module
+  exists in the current environment.
 - Fixed an issue in the 'runlevel' provider where the actual runlevel would not
   be changed at execution time
 
