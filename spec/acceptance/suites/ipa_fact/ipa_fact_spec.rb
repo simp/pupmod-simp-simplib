@@ -19,8 +19,8 @@ describe 'ipa fact' do
   }
 
   admin_password = '@dm1n=P@ssw0r!'
-  ipa_domain = 'test.case'
-  ipa_realm = ipa_domain.upcase
+  ipa_domain     = fact_on(hosts.first, 'domain')
+  ipa_realm      = ipa_domain.upcase
 
   hosts.each do |host|
     it 'should be running haveged for entropy' do
@@ -42,7 +42,18 @@ describe 'ipa fact' do
         on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
 
         # Ensure that the hostname is set to the FQDN
-        on(host, "hostname #{fact_on(host, 'fqdn')}")
+        hostname = "#{host.name}.#{ipa_domain}"
+        if host.host_hash['platform'] =~ /el-7/
+          on(host, "hostnamectl set-hostname #{hostname}")
+        else
+          on(host, "hostname #{hostname}")
+          create_remote_file(host, '/etc/hostname', "#{hostname}\n")
+          on(host, "sed -i '/HOSTNAME/d' /etc/sysconfig/network")
+          on(host, "echo HOSTNAME=#{hostname} >> /etc/sysconfig/network")
+        end
+
+        # DBus may need to be restarted after updating, and a reboot is the only way
+        host.reboot
       end
     end
   end
@@ -55,7 +66,7 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = JSON.load(on(server, 'puppet facts', :silent => true).output)
 
         expect(results['values']['ipa']).to be_nil
       end
@@ -68,14 +79,13 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = JSON.load(on(server, 'puppet facts', :silent => true).output)
 
         expect(results['values']['ipa']).to be_nil
       end
     end
 
     context 'when IPA is installed and host has joined IPA domain' do
-      let(:ipa_domain) { "#{server.name.downcase}.example.com" }
       it 'ipa fact should contain domain and IPA server' do
         # ipa-server-install installs both the IPA server and client.
         # The fact uses the client env.
@@ -98,7 +108,7 @@ describe 'ipa fact' do
         # We only care about this data
         expect(apply_manifest_on(server, manifest).output).to match(/Hash Content => {"/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = JSON.load(on(server, 'puppet facts', :silent => true).output)
 
         expect(results['values']['ipa']).to_not be_nil
         expect(results['values']['ipa']['connected']).to eq true
@@ -111,7 +121,7 @@ describe 'ipa fact' do
         # stop IPA server
         on(server, 'ipactl stop')
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = JSON.load(on(server, 'puppet facts', :silent => true).output)
 
         expect(results['values']['ipa']).to_not be_nil
         expect(results['values']['ipa']['connected']).to eq false
@@ -130,7 +140,7 @@ describe 'ipa fact' do
 
       context 'prior to registration' do
         it 'should not have an IPA fact' do
-          results = JSON.load(on(client, 'puppet facts').output)
+          results = JSON.load(on(client, 'puppet facts', :silent => true).output)
 
           expect(results['values']['ipa']).to be_nil
         end
@@ -165,7 +175,7 @@ describe 'ipa fact' do
         end
 
         it 'should have the IPA fact populated' do
-          results = JSON.load(on(client, 'puppet facts').output)
+          results = JSON.load(on(client, 'puppet facts', :silent => true).output)
 
           expect(results['values']['ipa']).to_not be_nil
           expect(results['values']['ipa']['connected']).to eq true
@@ -180,7 +190,7 @@ describe 'ipa fact' do
             on(server, 'ipactl stop')
           end
 
-          results = JSON.load(on(client, 'puppet facts').output)
+          results = JSON.load(on(client, 'puppet facts', :silent => true).output)
 
           expect(results['values']['ipa']).to_not be_nil
           expect(results['values']['ipa']['connected']).to eq false
