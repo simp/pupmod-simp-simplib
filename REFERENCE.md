@@ -47,6 +47,7 @@
 * [`rand_cron`](#rand_cron): Provides a 'random' value to `cron` based on the passed `Integer` value.  Used to avoid starting a certain `cron` job at the same time on all
 * [`simp_version`](#simp_version): Return the version of SIMP that this server is running
 * [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
+* [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.  Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS envi
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
@@ -1261,6 +1262,51 @@ Behavior modifiers for the function
           * none  -> No match on minor release (default)
           * full  -> Full release must match
           * major -> Only the major release must match
+
+### simplib::assert_optional_dependency
+
+Type: Ruby 4.x API
+
+Fails a compile if the system does not contain a correct version of the
+required module in the current environment.
+
+Provides a message about exactly which version of the module is required.
+
+#### `simplib::assert_optional_dependency(String[1] $source_module, Optional[String[1]] $target_module, Optional[String[1]] $dependency_tree)`
+
+Fails a compile if the system does not contain a correct version of the
+required module in the current environment.
+
+Provides a message about exactly which version of the module is required.
+
+Returns: `None`
+
+##### `source_module`
+
+Data type: `String[1]`
+
+The name of the module containing the dependency information (usually the
+module that this function is being called from)
+
+##### `target_module`
+
+Data type: `Optional[String[1]]`
+
+The target module to check. If not specified, all optional dependencies
+in the tree will be checked.
+
+* This may optionally be the full module name with the author in
+  `author/module` form which allows for different logic paths that can use
+  multiple vendor modules
+
+##### `dependency_tree`
+
+Data type: `Optional[String[1]]`
+
+The root of the dependency tree in the module's `metadata.json` that
+contains the optional dependencies.
+
+* Nested levels should be separated by colons (`:`)
 
 ### simplib::deprecation
 
