@@ -42,7 +42,18 @@ describe 'ipa fact' do
         on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
 
         # Ensure that the hostname is set to the FQDN
-        on(host, "hostname #{fact_on(host, 'fqdn')}")
+        hostname = fact_on(host, 'fqdn')
+        if host.host_hash['platform'] =~ /el-7/
+          on(host, "hostnamectl set-hostname #{hostname}")
+        else
+          on(host, "hostname #{hostname}")
+          create_remote_file(host, '/etc/hostname', "#{hostname}\n")
+          on(host, "sed -i '/HOSTNAME/d' /etc/sysconfig/network")
+          on(host, "echo HOSTNAME=#{hostname} >> /etc/sysconfig/network")
+        end
+
+        # DBus may need to be restarted after updating, and a reboot is the only way
+        host.reboot
       end
     end
   end

@@ -1,8 +1,24 @@
-* Tue May 22 2018 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.10.0-0
+* Tue Jul 18 2018 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.10.1-0
 - Add support for Puppet 5
 - Add support for Oracle Linux
 
-* Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.9.1-0
+* Tue Jun 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Added a function `module_exist` that will return whether or not a module
+  exists in the current environment.
+- Fixed an issue in the 'runlevel' provider where the actual runlevel would not
+  be changed at execution time
+
+* Thu Jun 14 2018 dforste <dforste@users.noreply.github.com> - 3.10.0-0
+- Fixed bug in cmdline face where duplicate parameters would be ignored
+  - Duplicate parameters now turn the value of the parameter into an array
+
+* Fri Jun 01 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
+- Add a 'simplib::install' defined type that allows users to provide a Hash of
+  packages to install along with a Hash of defaults to apply to those packages
+  and override each package configuration if necessary.
+  - This was originally created by Nick Miller <nick.miller@onyxpoint.com>
+
+* Thu May 03 2018 Nick Miller <nick.miller@onyxpoint.com> - 3.10.0-0
 - Add `simplib::hash_to_opts` which turns a hash into a string. Useful for
   generating commands.
 

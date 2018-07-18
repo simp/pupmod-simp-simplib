@@ -29,16 +29,35 @@ Puppet::Type.newtype(:runlevel) do
     end
   end
 
+  def runlevel_xlat(value)
+    case value
+      when 'rescue' then '1'
+      when 'multi-user' then '3'
+      when 'graphical' then '5'
+      else value
+    end
+  end
+
   newparam(:name, :namevar => true) do
     desc 'The target runlevel of the system'
     newvalues(/^[1-5]$/, 'rescue', 'multi-user', 'graphical')
 
     munge do |value|
-      case value
-        when 'rescue' then '1'
-        when 'multi-user' then '3'
-        when 'graphical' then '5'
-        else value
+      @resource.runlevel_xlat(value)
+    end
+  end
+
+  newproperty(:level) do
+    desc 'The target runlevel of the system. Defaults to what is specified in :name'
+    newvalues(/^[1-5]$/, 'rescue', 'multi-user', 'graphical', 'default')
+
+    defaultto 'default'
+
+    munge do |value|
+      if value == 'default'
+        @resource[:name]
+      else
+        @resource.runlevel_xlat(value)
       end
     end
   end
