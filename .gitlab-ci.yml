@@ -145,12 +145,14 @@ cache:
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.3.2'
+    PUPPET_BEAKER_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.9.2'
 
 .pe_2018_1: &pe_2018_1
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.5.1'
+    PUPPET_BEAKER_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.11.1'
 
 .pup4_latest: &pup4_latest
@@ -163,6 +165,7 @@ cache:
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.0'
+    PUPPET_BEAKER_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.9'
 
 
@@ -304,6 +307,20 @@ pup4_10-default-fips:
   script:
     - 'bundle exec rake beaker:suites[default]'
 
+pup4_10-default-oel:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  script:
+    - 'bundle exec rake beaker:suites[default,oel]'
+
+pup4_10-default-oel-fips:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[default,oel]'
+
 pup4_10-prelink_fact:
   <<: *acceptance_base
   <<: *simp_6_1
@@ -318,11 +335,47 @@ pup4_10-prelink_fact-fips:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
+pup4_10-prelink_fact-oel:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  script:
+    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+
+pup4_10-prelink_fact-oel-fips:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+
 pup4_10-ipa_fact:
   <<: *acceptance_base
   <<: *simp_6_1
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
+
+pup4_10-ipa_fact-fips:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact]'
+
+pup4_10-ipa_fact-oel:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+
+pup4_10-ipa_fact-oel-fips:
+  <<: *acceptance_base
+  <<: *simp_6_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
 # ----------------------------------------------------------------------
 # Puppet 5.5 for PE 2018.1 LTS
@@ -340,6 +393,20 @@ pup5_5-default-fips:
   script:
     - 'bundle exec rake beaker:suites[default]'
 
+pup5_5-default-oel:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  script:
+    - 'bundle exec rake beaker:suites[default,oel]'
+
+pup5_5-default-oel-fips:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[default,oel]'
+
 pup5_5-prelink_fact:
   <<: *acceptance_base
   <<: *pe_2018_1
@@ -354,11 +421,47 @@ pup5_5-prelink_fact-fips:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
+pup5_5-prelink_fact-oel:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  script:
+    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+
+pup5_5-prelink_fact-oel-fips:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+
 pup5_5-ipa_fact:
   <<: *acceptance_base
   <<: *pe_2018_1
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
+
+pup5_5-ipa_fact-fips:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact]'
+
+pup5_5-ipa_fact-oel:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+
+pup5_5-ipa_fact-oel-fips:
+  <<: *acceptance_base
+  <<: *pe_2018_1
+  variables:
+    BEAKER_fips: 'yes'
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
 
 #=======================================================================
