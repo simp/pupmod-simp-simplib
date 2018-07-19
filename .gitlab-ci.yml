@@ -97,6 +97,13 @@ cache:
     paths:
       - 'Gemfile.lock'
 
+# To avoid running a prohibitive number of tests every commit,
+# don't set this env var in your gitlab instance
+.only_with_SIMP_FULL_MATRIX: &only_with_SIMP_FULL_MATRIX
+  only:
+    variables:
+      - $SIMP_FULL_MATRIX
+
 # ----------------------------------------------------------------------
 # Version Matrix
 #
@@ -260,12 +267,14 @@ pup5_latest-unit:
 pup4_8-default:
   <<: *acceptance_base
   <<: *simp_6_0
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[default]'
 
 pup4_8-default-fips:
   <<: *acceptance_base
   <<: *simp_6_0
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -274,12 +283,14 @@ pup4_8-default-fips:
 pup4_8-prelink_fact:
   <<: *acceptance_base
   <<: *simp_6_0
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
 pup4_8-prelink_fact-fips:
   <<: *acceptance_base
   <<: *simp_6_0
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -288,6 +299,7 @@ pup4_8-prelink_fact-fips:
 pup4_8-ipa_fact:
   <<: *acceptance_base
   <<: *simp_6_0
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
 
@@ -302,6 +314,7 @@ pup4_10-default:
 pup4_10-default-fips:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -310,12 +323,14 @@ pup4_10-default-fips:
 pup4_10-default-oel:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
 pup4_10-default-oel-fips:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -330,6 +345,7 @@ pup4_10-prelink_fact:
 pup4_10-prelink_fact-fips:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -338,12 +354,14 @@ pup4_10-prelink_fact-fips:
 pup4_10-prelink_fact-oel:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
 pup4_10-prelink_fact-oel-fips:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -358,6 +376,7 @@ pup4_10-ipa_fact:
 pup4_10-ipa_fact-oel:
   <<: *acceptance_base
   <<: *simp_6_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
@@ -372,6 +391,7 @@ pup5_5-default:
 pup5_5-default-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -380,12 +400,14 @@ pup5_5-default-fips:
 pup5_5-default-oel:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
 pup5_5-default-oel-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -400,6 +422,7 @@ pup5_5-prelink_fact:
 pup5_5-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -408,12 +431,14 @@ pup5_5-prelink_fact-fips:
 pup5_5-prelink_fact-oel:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
 pup5_5-prelink_fact-oel-fips:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -428,6 +453,7 @@ pup5_5-ipa_fact:
 pup5_5-ipa_fact-oel:
   <<: *acceptance_base
   <<: *pe_2018_1
+  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
