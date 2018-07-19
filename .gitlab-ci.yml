@@ -355,25 +355,9 @@ pup4_10-ipa_fact:
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
 
-pup4_10-ipa_fact-fips:
-  <<: *acceptance_base
-  <<: *simp_6_1
-  variables:
-    BEAKER_fips: 'yes'
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact]'
-
 pup4_10-ipa_fact-oel:
   <<: *acceptance_base
   <<: *simp_6_1
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
-
-pup4_10-ipa_fact-oel-fips:
-  <<: *acceptance_base
-  <<: *simp_6_1
-  variables:
-    BEAKER_fips: 'yes'
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
@@ -441,28 +425,11 @@ pup5_5-ipa_fact:
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
 
-pup5_5-ipa_fact-fips:
-  <<: *acceptance_base
-  <<: *pe_2018_1
-  variables:
-    BEAKER_fips: 'yes'
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact]'
-
 pup5_5-ipa_fact-oel:
   <<: *acceptance_base
   <<: *pe_2018_1
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
-
-pup5_5-ipa_fact-oel-fips:
-  <<: *acceptance_base
-  <<: *pe_2018_1
-  variables:
-    BEAKER_fips: 'yes'
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
-
 
 #=======================================================================
 # Deployment Jobs
