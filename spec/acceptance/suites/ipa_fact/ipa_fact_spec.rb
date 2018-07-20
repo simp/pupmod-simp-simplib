@@ -75,6 +75,7 @@ describe 'ipa fact' do
     context 'when IPA is installed, but host has not yet joined IPA domain' do
       it 'ipa fact should be nil because /etc/ipa/default.conf does not exist' do
         install_package(server, 'ipa-server')
+        server.reboot # WORKAROUND: https://bugzilla.redhat.com/show_bug.cgi?id=1504688
 
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)

@@ -1,3 +1,7 @@
+* Wed Jul 18 2018 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.10.1-0
+- Add support for Puppet 5
+- Add support for Oracle Linux
+
 * Tue Jun 19 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.0-0
 - Added a function `module_exist` that will return whether or not a module
   exists in the current environment.
@@ -39,6 +43,8 @@
 - Updated the simplib::ldap::domain_to_dn function to allow users to choose
   whether they want to upcase or downcase the LDAP attributes to work around
   different system bugs
+- Updated min_uid fact for OEL and Scientific Linux
+- Updated tests
 
 * Mon Jan 15 2018 Liz Nemsick <lnemsick.simp@gmail.com> - 3.9.0-0
 - Add a 'prelink' fact that indicates whether prelink has been enabled

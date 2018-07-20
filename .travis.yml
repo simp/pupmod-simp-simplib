@@ -29,6 +29,7 @@ jobs:
     - stage: check
       rvm: 2.4.1
       script:
+        - bundle exec danger || true # FIXME: Danger needs an account
         - bundle exec rake check:dot_underscore
         - bundle exec rake check:test_file
         - bundle exec rake lint
