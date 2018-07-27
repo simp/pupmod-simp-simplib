@@ -11,11 +11,19 @@ Puppet::Type.type(:runlevel).provide(:systemd) do
   end
 
   def level=(should)
-    return execute([command(:systemctl),'isolate',init2systemd(@resource[:name])])
+    require 'timeout'
+
+    begin
+      Timeout::timeout(@resource[:transition_timeout]) do
+        execute([command(:systemctl),'isolate',init2systemd(@resource[:name])])
+      end
+    rescue Timeout::Error
+      raise(Puppet::Error, "Could not transition to runlevel #{@resource[:name]} within #{@resource[:transition_timeout]} seconds")
+    end
   end
 
   def persist
-    if execute([command(:systemctl),'get-default']).strip == init2systemd(@resource[:name]) then
+    if execute([command(:systemctl),'get-default']).strip == init2systemd(@resource[:name])
       return :true
     else
       return :false
@@ -31,13 +39,13 @@ Puppet::Type.type(:runlevel).provide(:systemd) do
   def init2systemd(input)
     runlevel = input
 
-    if input == '5' then
+    if input == '5'
       runlevel = 'graphical.target'
-    elsif input == '1' then
+    elsif input == '1'
       runlevel = 'rescue.target'
-    elsif input =~ /^\d+$/ then
+    elsif input =~ /^\d+$/
       runlevel = 'multi-user.target'
-    elsif input !~ /.*\.target/ then
+    elsif input !~ /.*\.target/
       runlevel = "#{input}.target"
     end
 

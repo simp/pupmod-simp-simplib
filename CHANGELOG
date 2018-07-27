@@ -1,3 +1,8 @@
+* Fri Jul 27 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.10.2-0
+- Added timeout for changing runlevels based on issues discovered in the field
+- Fixed bugs in the EL6 runlevel persistence where, in some cases, the runlevel
+  line might not get written to /etc/inittab
+
 * Wed Jul 18 2018 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.10.1-0
 - Add support for Puppet 5
 - Add support for Oracle Linux

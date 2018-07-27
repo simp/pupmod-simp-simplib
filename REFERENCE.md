@@ -486,6 +486,14 @@ namevar
 
 The target runlevel of the system
 
+##### `transition_timeout`
+
+Valid values: /^\d+$/
+
+How many seconds to wait for a runlevel switch before failing
+
+Default value: 60
+
 ### script_umask
 
 Alters the umask settings in the passed file.

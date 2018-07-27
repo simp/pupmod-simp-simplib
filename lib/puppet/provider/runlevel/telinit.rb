@@ -10,19 +10,27 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
   end
 
   def level=(should)
-    execute([command(:telinit),@resource[:name]])
+    require 'timeout'
+
+    begin
+      Timeout::timeout(@resource[:transition_timeout]) do
+        execute([command(:telinit), @resource[:name]])
+      end
+    rescue Timeout::Error
+      raise(Puppet::Error, "Could not transition to runlevel #{@resource[:name]} within #{@resource[:transition_timeout]} seconds")
+    end
   end
 
   def persist
     retval = :false
 
-    if @resource[:persist] == :true then
+    if @resource[:persist] == :true
       inittab = File.open('/etc/inittab', 'r')
       inittab.each_line do |line|
-        if line =~ /^\s*id/ then
+        if line =~ /^\s*id/
           # We have the initdefault line
           current_value = line.split(':').at(1)
-          if current_value.eql?(@resource[:name]) then
+          if current_value.eql?(@resource[:name])
             retval = :true
           end
         end
@@ -37,16 +45,28 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
     # Essentially do the same as the read, but save contents to new file
     newfile = String.new
     inittab = File.open('/etc/inittab', 'r')
+
+    found_line = false
+
     inittab.each_line do |line|
-      if line =~ /^\s*id/ then
+      if line =~ /^\s*id/
         # We've found the default line, so rewrite
+        found_line = true
         newfile << "id:#{@resource[:name]}:initdefault:nil\n"
       else
         # Just add this line as is
         newfile << line
       end
     end
+
+    unless found_line
+      newfile << "id:#{@resource[:name]}:initdefault:nil\n"
+    end
+
     inittab.close
+
+    fh = IO.open(IO.sysopen('/tmp/foo','w'))
+    fh.puts(newfile)
 
     inittab = File.open('/etc/inittab', 'w')
     inittab.write(newfile)
