@@ -65,9 +65,6 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
 
     inittab.close
 
-    fh = IO.open(IO.sysopen('/tmp/foo','w'))
-    fh.puts(newfile)
-
     inittab = File.open('/etc/inittab', 'w')
     inittab.write(newfile)
     inittab.close
