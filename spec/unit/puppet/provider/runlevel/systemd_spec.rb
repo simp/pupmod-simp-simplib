@@ -13,6 +13,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
     Puppet::Type::Runlevel.any_instance.stubs(:catalog).returns(@catalog)
 
     described_class.stubs(:command).with(:systemctl).returns('/usr/bin/systemctl')
+    described_class.stubs(:command).with(:pgrep).returns('/bin/pgrep')
     Facter.stubs(:value).with(:kernel).returns('Linux')
   end
 
@@ -27,7 +28,18 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
   context '#level=' do
     context 'with a normal transition' do
       it 'should succeed' do
+        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'systemctl isolate'}]).returns("\n")
         provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target'])
+
+        provider.level=(resource[:level])
+      end
+    end
+
+    context 'with a systemctl isolation already running' do
+      it 'should emit a warning' do
+        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'systemctl isolate'}]).returns("1234\n")
+        #provider.expects(Puppet).to receive(:warning).with('System currently attempting to transition runlevels, will not respawn')
+        Puppet.expects(:warning)
 
         provider.level=(resource[:level])
       end
@@ -35,6 +47,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context 'with a timeout' do
       it 'should raise an exception' do
+        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'systemctl isolate'}]).returns("\n")
         provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target']).raises(Timeout::Error)
 
         expect { provider.level=(resource[:level]) }.to raise_error(/Could not transition to runlevel/)
