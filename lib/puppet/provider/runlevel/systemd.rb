@@ -13,7 +13,10 @@ Puppet::Type.type(:runlevel).provide(:systemd) do
   end
 
   def level=(should)
-    if execute([command(:pgrep),'-f',%('#{File.basename(command(:systemctl))} isolate')]).strip.empty?
+    systemctl_path = File.dirname(command(:systemctl))
+    systemctl_cmd = File.basename(command(:systemctl))
+
+    if execute([command(:pgrep),'-f',%('^(#{systemctl_path}/)?#{systemctl_cmd}[[:space:]]+isolate')]).strip.empty?
       require 'timeout'
 
       begin
