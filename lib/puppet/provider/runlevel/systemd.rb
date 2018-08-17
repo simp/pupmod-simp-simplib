@@ -18,7 +18,7 @@ Puppet::Type.type(:runlevel).provide(:systemd) do
 
     # The `execute` method calls `Kernel.exec()` and that cannot accept quotes
     # around strings in arguments for some reason.
-    if execute([command(:pgrep),'-f', %(^(#{systemctl_path}/)?#{systemctl_cmd}[[:space:]]+isolate)]).strip.empty?
+    if execute([command(:pgrep),'-f', %(^(#{systemctl_path}/)?#{systemctl_cmd}[[:space:]]+isolate)], :failonfail => false).strip.empty?
       return should == is
     else
       Puppet.warning('System currently attempting to transition runlevels, will not respawn')

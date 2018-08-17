@@ -29,7 +29,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
     context 'with a normal transition' do
       context 'when in sync' do
         it 'should run without a warning' do
-          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("\n")
+          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("\n")
           Puppet.expects(:warning).never
 
           expect(provider.level_insync?('5','5')).to be true
@@ -38,7 +38,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
       context 'when out of sync' do
         it 'should run without a warning' do
-          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("\n")
+          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("\n")
           Puppet.expects(:warning).never
 
           expect(provider.level_insync?('3','5')).to be false
@@ -48,7 +48,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context 'with a systemctl isolation already running' do
       it 'should emit a warning' do
-        provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("1234 systemctl isolate multi-user.target\n")
+        provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("1234 systemctl isolate multi-user.target\n")
         Puppet.expects(:warning)
 
         expect(provider.level_insync?('5','3')).to be true
