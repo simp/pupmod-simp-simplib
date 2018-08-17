@@ -47,6 +47,17 @@ Puppet::Type.newtype(:runlevel) do
     end
   end
 
+  newparam(:transition_timeout) do
+    desc 'How many seconds to wait for a runlevel switch before failing'
+    newvalues(/^\d+$/)
+
+    defaultto 60
+
+    munge do |value|
+      "#{value}".to_i
+    end
+  end
+
   newproperty(:level) do
     desc 'The target runlevel of the system. Defaults to what is specified in :name'
     newvalues(/^[1-5]$/, 'rescue', 'multi-user', 'graphical', 'default')
@@ -59,6 +70,10 @@ Puppet::Type.newtype(:runlevel) do
       else
         @resource.runlevel_xlat(value)
       end
+    end
+
+    def insync?(is)
+      provider.level_insync?(should, is)
     end
   end
 
