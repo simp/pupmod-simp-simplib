@@ -25,20 +25,41 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
     end
   end
 
-  context '#level=' do
+  context '#level_insync?' do
     context 'with a normal transition' do
-      it 'should succeed' do
-        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'^(/usr/bin/)?systemctl[[:space:]]+isolate'}]).returns("\n")
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target'])
+      context 'when in sync' do
+        it 'should run without a warning' do
+          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("\n")
+          Puppet.expects(:warning).never
 
-        provider.level=(resource[:level])
+          expect(provider.level_insync?('5','5')).to be true
+        end
+      end
+
+      context 'when out of sync' do
+        it 'should run without a warning' do
+          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("\n")
+          Puppet.expects(:warning).never
+
+          expect(provider.level_insync?('3','5')).to be false
+        end
       end
     end
 
     context 'with a systemctl isolation already running' do
       it 'should emit a warning' do
-        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'^(/usr/bin/)?systemctl[[:space:]]+isolate'}]).returns("1234 systemctl isolate multi-user.target\n")
+        provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}]).returns("1234 systemctl isolate multi-user.target\n")
         Puppet.expects(:warning)
+
+        expect(provider.level_insync?('5','3')).to be true
+      end
+    end
+  end
+
+  context '#level=' do
+    context 'with a normal transition' do
+      it 'should succeed' do
+        provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target'])
 
         provider.level=(resource[:level])
       end
@@ -46,7 +67,6 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context 'with a timeout' do
       it 'should raise an exception' do
-        provider.expects(:execute).with(['/bin/pgrep', '-f', %{'^(/usr/bin/)?systemctl[[:space:]]+isolate'}]).returns("\n")
         provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target']).raises(Timeout::Error)
 
         expect { provider.level=(resource[:level]) }.to raise_error(/Could not transition to runlevel/)

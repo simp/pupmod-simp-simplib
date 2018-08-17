@@ -71,6 +71,10 @@ Puppet::Type.newtype(:runlevel) do
         @resource.runlevel_xlat(value)
       end
     end
+
+    def insync?(is)
+      provider.level_insync?(should, is)
+    end
   end
 
   newproperty(:persist) do

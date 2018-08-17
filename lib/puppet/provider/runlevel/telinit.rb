@@ -9,6 +9,10 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
     Facter.value(:runlevel)
   end
 
+  def level_insync?(should, is)
+    return should == is
+  end
+
   def level=(should)
     require 'timeout'
 
