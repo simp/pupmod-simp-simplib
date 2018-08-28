@@ -82,8 +82,8 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
       _module_author = nil
     end
 
-    unless call_function('module_exist', _module_name)
-      return "no module '#{_module_name}' found"
+    unless call_function('simplib::module_exist', _module_name)
+      return "optional dependency '#{_module_name}' not found"
     end
 
     if module_dependency
@@ -152,6 +152,8 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
           result = check_dependency(tgt, target_dependency)
 
           raise_error(result, current_environment) if result
+        else
+          raise_error(%(module '#{target_module}' not found in metadata.json for '#{source_module}'), current_environment)
         end
       else
         results = []
