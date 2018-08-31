@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe 'simplib::deprecation' do
   context 'with SIMPLIB_LOG_DEPRECATIONS environment variable = "true" ' do
+    before :each do
+      ENV['SIMPLIB_LOG_DEPRECATIONS'] = nil
+    end
+
     it 'should display a single warning' do
       ENV['SIMPLIB_LOG_DEPRECATIONS'] = 'true'
       Puppet.expects(:warning).with(includes('test_func is deprecated'))
