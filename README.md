@@ -107,6 +107,7 @@ itself for more detailed documentation.
 ### Functions
 
 - [simplib::assert\_metadata](#simplibassert_metadata)
+- [simplib::assert\_optional\_dependency](#simplibassert_optional_dependency)
 - [simplib::deprecation](#simplibdeprecation)
 - [simplib::filtered](#simplibfiltered)
 - [simplib::gen\_random\_password](#simplibgen_random_password)
@@ -168,6 +169,52 @@ with the module's `metadata.json`
 
 ```puppet
     simplib::assert_metadata('mymodule')
+```
+
+#### simplib::assert\_optional\_dependency
+
+Fails a puppet catalog compile if the client system is not compatible
+with a set of dependencies as specified in an optional dependency Hash
+
+*Arguments*:
+
+* ``source_module`` The module for which you are checking the dependencies
+* ``target_module`` (Optional) The target dependency to check. If not
+  specified, all modules will be checked
+* ``dependency_tree`` (Optional) A colon (`:`) separated path that specifies
+  the keys for the target dependency Hash
+
+  * Defaults to { 'simp' => 'optional_dependencies' => [{}] }
+
+*Returns*: `nil`
+
+*Example*:
+```json
+    {
+      "name": "my-module",
+      "version": "1.2.3",
+      "simp":
+        "optional_dependencies": [
+          {
+            "name": "simp/foo",
+            "version_requirement": ">= 3.4.5 < 6.7.8"
+          }
+        ]
+     }
+```
+
+```puppet
+    # Check the current module for all specified dependencies
+    simplib::assert_optional_dependency($module_name)
+
+    # Check the current module for the 'foo' dependency
+    simplib::assert_optional_dependency($module_name, 'foo')
+
+    # Check the current module for the 'foo' dependency by a specific author
+    simplib::assert_optional_dependency($module_name, 'simp/foo')
+
+    # Check the { 'my' => 'deps' => [{}] } dependency target in the current module metadata
+    simplib::assert_optional_dependency($module_name, 'simp/foo', 'my:deps')
 ```
 
 #### **simplib::deprecation**
