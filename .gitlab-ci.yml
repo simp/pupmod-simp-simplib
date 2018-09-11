@@ -152,14 +152,14 @@ cache:
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.3.2'
-    PUPPET_BEAKER_COLLECTION: 'puppet5'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.9.2'
 
 .pe_2018_1: &pe_2018_1
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.5.1'
-    PUPPET_BEAKER_COLLECTION: 'puppet5'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.11.1'
 
 .pup4_latest: &pup4_latest
@@ -172,7 +172,7 @@ cache:
   image: 'ruby:2.4'
   variables:
     PUPPET_VERSION: '~> 5.0'
-    PUPPET_BEAKER_COLLECTION: 'puppet5'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
     FACTER_VERSION: '~> 3.9'
 
 
