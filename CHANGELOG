@@ -1,3 +1,7 @@
+* Wed Sep 26 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.11.1-0
+- Fixed a bug in the `puppet_settings` fact where settings from all sections
+  were interpolated using settings (like `$vardir`) from the `[main]` section.
+
 * Wed Aug 01 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.11.0-0
 - Added a function `assert_optional_dependency` that allows users to fail if
   expected functionality is not present in the current environment's module
