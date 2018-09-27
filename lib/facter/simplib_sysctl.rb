@@ -5,6 +5,8 @@
 # We don't grab the entire output due to the sheer size of it
 #
 Facter.add("simplib_sysctl") do
+  confine { Facter::Core::Execution.which('sysctl') }
+
   setcode do
     relevant_entries = [
       'crypto.fips_enabled',
@@ -28,11 +30,11 @@ Facter.add("simplib_sysctl") do
       # Facter.*.exec.
       #
       # For now we test around the issue by checking the output if $? is nil:
-      if !module_value.nil? && (($?.nil? && module_value) ||
-          (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?))
+      if ($?.nil? && module_value) ||
+          (!$?.nil? && $?.exitstatus.zero? && module_value && !module_value.strip.empty?)
       then
         module_value.strip!
-        
+
         # These can be too big for facter to process as Integers
         unless entry.start_with?('kernel.shm')
           if module_value =~ /^\d+$/
