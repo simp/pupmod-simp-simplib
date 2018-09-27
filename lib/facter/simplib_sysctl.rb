@@ -28,7 +28,7 @@ Facter.add("simplib_sysctl") do
       # Facter.*.exec.
       #
       # For now we test around the issue by checking the output if $? is nil:
-      if !module_value.nil? |&& (($?.nil? && module_value) ||
+      if !module_value.nil? && (($?.nil? && module_value) ||
           (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?))
       then
         module_value.strip!
