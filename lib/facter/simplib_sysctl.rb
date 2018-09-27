@@ -31,7 +31,9 @@ Facter.add("simplib_sysctl") do
       if ($?.nil? && module_value) ||
           (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?)
       then
-        module_value.strip!
+        unless module_value.nil?
+          module_value.strip!
+        end
 
         # These can be too big for facter to process as Integers
         unless entry.start_with?('kernel.shm')
