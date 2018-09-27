@@ -28,13 +28,11 @@ Facter.add("simplib_sysctl") do
       # Facter.*.exec.
       #
       # For now we test around the issue by checking the output if $? is nil:
-      if ($?.nil? && module_value) ||
-          (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?)
+      if !module_value.nil? |&& (($?.nil? && module_value) ||
+          (!$?.nil? && $?.exitstatus.zero? && !module_value.strip.empty?))
       then
-        unless module_value.nil?
-          module_value.strip!
-        end
-
+        module_value.strip!
+        
         # These can be too big for facter to process as Integers
         unless entry.start_with?('kernel.shm')
           if module_value =~ /^\d+$/
