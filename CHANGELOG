@@ -1,4 +1,4 @@
-* Wed Sep 26 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.11.1-0
+* Wed Sep 26 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.11.0-0
 - Fixed a bug in the `puppet_settings` fact where settings from all sections
   were interpolated using settings (like `$vardir`) from the `[main]` section.
 
