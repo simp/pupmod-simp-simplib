@@ -1,3 +1,10 @@
+* Fri Sep 28 2018 Daniel Henninger <daniel@vorpalcloud.org> - 3.11.1-0
+- Fixed bug where uid_min would throw errors under operating systems
+  without /etc/login.defs.
+- Fixed bug where simplib_sysctl would throw an undefined method error
+  on non-Linux OS's.  (both those with sysctl (MacOS X) and without (Windows))
+- Both patches of which were improved by Trevor Vaughan <tvaughan@onyxpoint.com>.
+
 * Wed Sep 26 2018 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.11.0-0
 - Fixed a bug in the `puppet_settings` fact where settings from all sections
   were interpolated using settings (like `$vardir`) from the `[main]` section.
