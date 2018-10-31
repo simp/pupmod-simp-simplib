@@ -144,6 +144,18 @@ pup5_latest-unit:
 
 # Acceptance tests
 # ==============================================================================
+default-docker:
+  stage: acceptance
+  tags:
+    - docker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '~> 4.10.4'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites
+
 default-puppet4:
   stage: acceptance
   tags:
@@ -154,7 +166,7 @@ default-puppet4:
     PUPPET_VERSION: '~> 4.10.4'
   script:
     - bundle exec rake spec_clean
-    - bundle exec rake beaker:suites[default]
+    - bundle exec rake beaker:suites
 
 default-puppet4-fips:
   stage: acceptance
@@ -168,7 +180,7 @@ default-puppet4-fips:
     BEAKER_fips: 'yes'
   script:
     - bundle exec rake spec_clean
-    - bundle exec rake beaker:suites[default]
+    - bundle exec rake beaker:suites
 default-puppet5:
   stage: acceptance
   tags:
@@ -180,7 +192,7 @@ default-puppet5:
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
     - bundle exec rake spec_clean
-    - bundle exec rake beaker:suites[default]
+    - bundle exec rake beaker:suites
 
 default-puppet5-fips:
   stage: acceptance
@@ -194,7 +206,21 @@ default-puppet5-fips:
     BEAKER_fips: 'yes'
   script:
     - bundle exec rake spec_clean
-    - bundle exec rake beaker:suites[default]
+    - bundle exec rake beaker:suites
+
+default-puppet6:
+  stage: acceptance
+  allow_failure: true
+  tags:
+    - beaker
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '~> 6.0'
+    BEAKER_PUPPET_COLLECTION: 'puppet6'
+  script:
+    - bundle exec rake spec_clean
+    - bundle exec rake beaker:suites
 
 default-oel-puppet5:
   stage: acceptance
@@ -215,7 +241,6 @@ default-oel-puppet5-fips:
     - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
-  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     PUPPET_VERSION: '~> 5.5'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
@@ -225,17 +250,23 @@ default-oel-puppet5-fips:
     - bundle exec rake beaker:suites[default,oel]
 
 pup5_5-ipa_fact:
-  <<: *acceptance_base
-  <<: *pe_2018_1
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '~> 5.5'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
 
 pup5_5-ipa_fact-oel:
-  <<: *acceptance_base
-  <<: *pe_2018_1
-  <<: *only_with_SIMP_FULL_MATRIX
+  <<: *cache_bundler
+  <<: *setup_bundler_env
+  variables:
+    PUPPET_VERSION: '~> 5.5'
+    BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+
 
 #=======================================================================
 # Deployment Jobs
