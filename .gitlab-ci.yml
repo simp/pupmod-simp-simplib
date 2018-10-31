@@ -154,7 +154,7 @@ default-docker:
     PUPPET_VERSION: '~> 4.10.4'
   script:
     - bundle exec rake spec_clean
-    - bundle exec rake beaker:suites
+    - bundle exec rake beaker:suites[default,docker]
 
 default-puppet4:
   stage: acceptance
@@ -258,16 +258,6 @@ pup5_5-ipa_fact:
     BEAKER_PUPPET_COLLECTION: 'puppet5'
   script:
     - 'bundle exec rake beaker:suites[ipa_fact]'
-
-pup5_5-ipa_fact-oel:
-  stage: acceptance
-  <<: *cache_bundler
-  <<: *setup_bundler_env
-  variables:
-    PUPPET_VERSION: '~> 5.5'
-    BEAKER_PUPPET_COLLECTION: 'puppet5'
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
 
 #=======================================================================
