@@ -250,6 +250,7 @@ default-oel-puppet5-fips:
     - bundle exec rake beaker:suites[default,oel]
 
 pup5_5-ipa_fact:
+  stage: acceptance
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
@@ -259,6 +260,7 @@ pup5_5-ipa_fact:
     - 'bundle exec rake beaker:suites[ipa_fact]'
 
 pup5_5-ipa_fact-oel:
+  stage: acceptance
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
