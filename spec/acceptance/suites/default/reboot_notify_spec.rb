@@ -75,9 +75,13 @@ describe 'reboot_notify' do
         end
 
         it 'should not display notifications after reboot' do
-          host.reboot
-          result = apply_manifest_on(host, manifest).stdout
-          expect(result).to_not match(/System Reboot Required Because:/)
+          if host[:hypervisor] == 'docker'
+            skip 'Reboot notification clearing does not work in Docker'
+          else
+            host.reboot
+            result = apply_manifest_on(host, manifest).stdout
+            expect(result).to_not match(/System Reboot Required Because:/)
+          end
         end
 
         it 'should remain idempotent' do
