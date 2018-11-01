@@ -4,11 +4,37 @@ test_name 'ipaddresses function'
 
 describe 'ipaddresses function' do
   let(:opts) do
-    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
+    {:environment => {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
   end
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
+    let(:all_ips) do
+      ifaces = fact_on(server, 'interfaces').split(',').map(&:strip)
+
+      ipaddresses = []
+
+      ifaces.each do |iface|
+        ipaddress = fact_on(server, "ipaddress_#{iface}")
+
+        if ipaddress && !ipaddress.strip.empty?
+          ipaddresses << ipaddress
+        end
+      end
+
+      ipaddresses
+    end
+
+    let(:remote_ips) do
+      retval = all_ips.dup
+
+      retval.delete_if do |ip|
+        ip =~ /^127\./
+      end
+
+      retval
+    end
+
     context "when ipaddresses called with/without arguments" do
       let (:manifest) {
         <<-EOS
@@ -21,19 +47,15 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest, opts).output.lines.map(&:strip)
 
-        all_ips_regex = %r{\["10.*","10.*","127.0.0.1"\]}
-        expect(results.output).to match(all_ips_regex)
+        ip_matches = all_ips.map do |ip|
+          results.grep(Regexp.new(Regexp.escape(ip)))
+        end.flatten.compact
 
-        remote_ips_regex = %r{\["10.*","10.*"\]}
-        expect(results.output).to match(remote_ips_regex)
+        expect(ip_matches).to_not be_empty
 
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('ipaddresses is deprecated, please use simplib::ipaddresses')
-        end
-
-        expect(deprecation_lines.size).to eq 1
+        expect(results.grep(/ipaddresses is deprecated, please use simplib::ipaddresses/).size).to eq 1
       end
     end
 
@@ -49,20 +71,16 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
 
-        # exact IP parsing already done in unit test
-        all_ips_regex = %r{\["10.*","10.*","127.0.0.1"\]}
-        expect(results.output).to match(all_ips_regex)
+        results = apply_manifest_on(server, manifest, opts).output.lines.map(&:strip)
 
-        remote_ips_regex = %r{\["10.*","10.*"\]}
-        expect(results.output).to match(remote_ips_regex)
+        ip_matches = all_ips.map do |ip|
+          results.grep(Regexp.new(Regexp.escape(ip)))
+        end.flatten.compact
 
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('ipaddresses is deprecated, please use simplib::ipaddresses')
-        end
+        expect(ip_matches).to_not be_empty
 
-        expect(deprecation_lines.size).to eq 0
+        expect(results.grep(/ipaddresses is deprecated, please use simplib::ipaddresses/)).to be_empty
       end
     end
   end

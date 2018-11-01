@@ -147,11 +147,11 @@ pup5_latest-unit:
 default-docker:
   stage: acceptance
   tags:
-    - docker
+    - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
-    PUPPET_VERSION: '~> 4.10.4'
+    PUPPET_VERSION: '~> 5.5'
   script:
     - bundle exec rake spec_clean
     - bundle exec rake beaker:suites[default,docker]
@@ -251,6 +251,8 @@ default-oel-puppet5-fips:
 
 pup5_5-ipa_fact:
   stage: acceptance
+  tags:
+    - beaker
   <<: *cache_bundler
   <<: *setup_bundler_env
   variables:
