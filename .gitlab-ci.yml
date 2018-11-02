@@ -89,7 +89,7 @@ variables:
 .pup_5_3: &pup_5_3
   image: 'ruby:2.4'
   variables:
-    PUPPET_VERSION: '~> 5.3.8'
+    PUPPET_VERSION: '~> 5.3.0'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
     MATRIX_RUBY_VERSION: '2.4'
 
