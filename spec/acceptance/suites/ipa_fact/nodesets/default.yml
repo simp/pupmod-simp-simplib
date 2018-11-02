@@ -29,6 +29,7 @@ HOSTS:
   client-el6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
     box:        centos/6
@@ -41,9 +42,10 @@ HOSTS:
   client-oel6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
-    box:        elastic/oel-6-x86_64
+    box:        onyxpoint/oel-6-x86_64
     hypervisor: vagrant
     yum_repos:
       epel:
@@ -55,7 +57,7 @@ HOSTS:
       - client
     masterless: true
     platform:   el-7-x86_64
-    box:        elastic/oel-7-x86_64
+    box:        onyxpoint/oel-7-x86_64
     hypervisor: vagrant
     yum_repos:
       epel:
