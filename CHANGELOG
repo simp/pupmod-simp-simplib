@@ -1,3 +1,12 @@
+* Wed Oct 31 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.11.1-0
+- Fix reboot_notify tests
+- Ensure that reboot_notify updates resources based on a modified 'reason'
+- Fix the ipaddresses tests
+- Add better confinement on boot_dir_uuid
+- Add a docker nodeset
+- Add test for catching facter errors
+- Bumped the minimum version of Puppet to 4.10.4
+
 * Fri Sep 28 2018 Daniel Henninger <daniel@vorpalcloud.org> - 3.11.1-0
 - Fixed bug where uid_min would throw errors under operating systems
   without /etc/login.defs.

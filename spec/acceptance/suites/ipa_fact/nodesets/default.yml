@@ -36,6 +36,7 @@ HOSTS:
   client-el6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
     box:        centos/6
@@ -48,10 +49,12 @@ HOSTS:
   client-oel6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
     box:        onyxpoint/oel-6-x86_64
     hypervisor: <%= hypervisor %>
+
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
@@ -64,6 +67,7 @@ HOSTS:
     platform:   el-7-x86_64
     box:        onyxpoint/oel-7-x86_64
     hypervisor: <%= hypervisor %>
+
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
