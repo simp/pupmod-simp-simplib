@@ -202,7 +202,7 @@ pup6-unit:
 
 pup4.10:
   <<: *acceptance_base
-  <<: *only_with_SIMP_FULL_MATRIX
+  <<: *pup_4_10
   script:
     - 'bundle exec rake beaker:suites[default]'
 
@@ -218,7 +218,6 @@ pup4.10-fips:
 pup4.10-prelink_fact:
   <<: *acceptance_base
   <<: *pup_4_10
-  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[prelink_fact]'
 
@@ -247,7 +246,6 @@ pup5.5.7:
 pup5.5.7-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -262,7 +260,6 @@ pup5.5.7-prelink_fact:
 pup5.5.7-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  <<: *only_with_SIMP_FULL_MATRIX
   variables:
     BEAKER_fips: 'yes'
   script:
@@ -277,7 +274,6 @@ pup5.5.7-ipa_fact:
 pup5.5.7-oel:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
@@ -293,7 +289,6 @@ pup5.5.7-oel-fips:
 pup5.5.7-oel-prelink_fact:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
