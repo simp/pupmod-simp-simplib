@@ -38,6 +38,7 @@ addons:
 
 before_install:
   - rm -f Gemfile.lock
+  - gem update --system
 
 global:
   - STRICT_VARIABLES=yes
@@ -97,12 +98,14 @@ jobs:
         - bundle exec rake spec
 
     - stage: deploy
-      rvm: 2.4.1
+      rvm: 2.4.4
+      if: 'fork = false AND tag = true'
       script:
         - true
       before_deploy:
         - "export PUPMOD_METADATA_VERSION=`ruby -r json -e \"puts JSON.parse(File.read('metadata.json')).fetch('version')\"`"
         - '[[ $TRAVIS_TAG =~ ^simp-${PUPMOD_METADATA_VERSION}$|^${PUPMOD_METADATA_VERSION}$ ]]'
+
       deploy:
         - provider: releases
           api_key:

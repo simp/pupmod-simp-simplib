@@ -1,0 +1,39 @@
+HOSTS:
+  el7-docker:
+    roles:
+      - default
+      - server
+    platform: el-7-x86_64
+    hypervisor: docker
+    image: centos:7
+    docker_cmd: '/usr/sbin/init'
+    docker_preserve_image: true
+    docker_image_commands:
+      # Puppet Deps
+      - 'yum install -y ntpdate rsync openssl'
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/352C64E5.txt
+
+  el6-docker:
+    roles:
+      - server
+    platform: el-6-x86_64
+    hypervisor: docker
+    image: centos:6
+    #docker_cmd: '/usr/sbin/init'
+    docker_preserve_image: true
+    docker_image_commands:
+      # Puppet Deps
+      - 'yum install -y ntpdate rsync openssl'
+    yum_repos:
+      epel:
+        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
+        gpgkeys:
+          - https://getfedora.org/static/0608B895.txt
+
+CONFIG:
+  log_level: verbose
+  type:      aio

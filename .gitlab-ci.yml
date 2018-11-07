@@ -216,8 +216,8 @@ pup4.10-fips:
 pup4.10-prelink_fact:
   <<: *acceptance_base
   <<: *pup_4_10
-  script:
-    - 'bundle exec rake beaker:suites[prelink_fact]'
+   script:
+    - 'BEAKER_fipes=yes bundle exec rake beaker:suites[prelink_fact]'
 
 pup4.10-prelink_fact-fips:
   <<: *acceptance_base
@@ -280,7 +280,7 @@ pup5.5.7-oel-prelink_fact:
   <<: *acceptance_base
   <<: *pup_5_5_7
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+    - 'bundle exec rake beaker:suites'
 
 pup5.5.7-oel-prelink_fact-fips:
   <<: *acceptance_base
