@@ -280,7 +280,7 @@ pup5.5.7-oel-prelink_fact:
   <<: *acceptance_base
   <<: *pup_5_5_7
   script:
-    - 'bundle exec rake beaker:suites'
+    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
 pup5.5.7-oel-prelink_fact-fips:
   <<: *acceptance_base
