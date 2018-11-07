@@ -210,10 +210,8 @@ pup4.10-fips:
   <<: *acceptance_base
   <<: *pup_4_10
   <<: *only_with_SIMP_FULL_MATRIX
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[default]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
 
 pup4.10-prelink_fact:
   <<: *acceptance_base
@@ -225,10 +223,8 @@ pup4.10-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_4_10
   <<: *only_with_SIMP_FULL_MATRIX
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact]'
+    - 'BEAKER_fipes=yes bundle exec rake beaker:suites[prelink_fact]'
 
 pup4.10-ipa_fact:
   <<: *acceptance_base
@@ -246,10 +242,8 @@ pup5.5.7:
 pup5.5.7-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[default]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
 
 pup5.5.7-prelink_fact:
   <<: *acceptance_base
@@ -260,10 +254,8 @@ pup5.5.7-prelink_fact:
 pup5.5.7-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact]'
 
 pup5.5.7-ipa_fact:
   <<: *acceptance_base
@@ -281,10 +273,8 @@ pup5.5.7-oel-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
   <<: *only_with_SIMP_FULL_MATRIX
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[default,oel]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
 pup5.5.7-oel-prelink_fact:
   <<: *acceptance_base
@@ -296,14 +286,12 @@ pup5.5.7-oel-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_5_5_7
   <<: *only_with_SIMP_FULL_MATRIX
-  variables:
-    BEAKER_fips: 'yes'
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact,oel]'
 
 pup5.5.7-oel-ipa_fact:
-  <<: *pup_5_5_7
   <<: *acceptance_base
+  <<: *pup_5_5_7
   <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
