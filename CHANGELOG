@@ -1,6 +1,6 @@
 * Wed Oct 31 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.11.1-0
 - Fix reboot_notify tests
-- Ensure that reboot_notify upates resources based on a modified 'reason'
+- Ensure that reboot_notify updates resources based on a modified 'reason'
 - Fix the ipaddresses tests
 - Add better confinement on boot_dir_uuid
 - Add a docker nodeset
