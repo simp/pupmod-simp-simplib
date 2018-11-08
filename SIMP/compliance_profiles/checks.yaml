@@ -1,0 +1,29 @@
+---
+version: 2.0.0
+checks:
+  oval:com.puppet.forge.simp.simplib.daemon_umask:
+    settings:
+      parameter: simplib::daemon_umask
+      value: '0027'
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:AC-2: true
+      nist_800_53_rev4:AC-2:4: true
+      nist_800_53_rev4:AC-6: true
+    identifiers:
+      nist_800_53_rev4:
+      - AC-2
+      - AC-2:4
+      - AC-6
+  oval:com.puppet.forge.simp.simplib.disable_hosts_equiv:
+    settings:
+      parameter: simplib::disable_hosts_equiv
+      value: true
+    type: puppet-class-parameter
+    controls:
+      nist_800_53_rev4:CM-6: true
+      nist_800_53_rev4:SC-8: true
+    identifiers:
+      nist_800_53_rev4:
+      - CM-6
+      - SC-8

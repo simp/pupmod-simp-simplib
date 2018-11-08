@@ -10,7 +10,6 @@
 # PE 2019.0     6.0      2.5.1  2019-08-31^^^
 #
 # *** = Modules created for SIMP 6.3+ are not required to support Puppet < 5.5
-# ^^^ = SIMP doesn't support 6 yet; tests are info-only and allowed to fail
 ---
 stages:
   - 'sanity'
@@ -78,13 +77,11 @@ variables:
     MATRIX_RUBY_VERSION: '2.4'
 
 .pup_6: &pup_6
-  allow_failure: true
   image: 'ruby:2.5'
   variables:
     PUPPET_VERSION: '~> 6.0'
     BEAKER_PUPPET_COLLECTION: 'puppet6'
     MATRIX_RUBY_VERSION: '2.5'
-
 
 # Testing Environments
 #-----------------------------------------------------------------------
@@ -163,65 +160,38 @@ pup6-unit:
 # Acceptance tests
 # ==============================================================================
 pup5.5.10:
-  <<: *acceptance_base
   <<: *pup_5_5_10
+  <<: *acceptance_base
   script:
-    - 'bundle exec rake beaker:suites[default]'
+    - 'bundle exec rake beaker:suites'
 
 pup5.5.10-fips:
-  <<: *acceptance_base
   <<: *pup_5_5_10
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
-
-pup5.5.10-prelink_fact:
   <<: *acceptance_base
-  <<: *pup_5_5_10
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact]'
-
-pup5.5.10-prelink_fact-fips:
-  <<: *acceptance_base
-  <<: *pup_5_5_10
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact]'
-
-pup5.5.10-ipa_fact:
-  <<: *acceptance_base
-  <<: *pup_5_5_10
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites'
 
 pup5.5.10-oel:
-  <<: *acceptance_base
   <<: *pup_5_5_10
+  <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
 pup5.5.10-oel-fips:
-  <<: *acceptance_base
   <<: *pup_5_5_10
+  <<: *acceptance_base
   <<: *only_with_SIMP_FULL_MATRIX
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
-pup5.5.10-oel-prelink_fact:
+pup6:
+  <<: *pup_6
   <<: *acceptance_base
-  <<: *pup_5_5_10
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
+    - 'bundle exec rake beaker:suites'
 
-pup5.5.10-oel-prelink_fact-fips:
+pup6-fips:
+  <<: *pup_6
   <<: *acceptance_base
-  <<: *pup_5_5_10
-  <<: *only_with_SIMP_FULL_MATRIX
   script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact,oel]'
-
-# The default node set for the ipa_fact suite includes OEL servers
-#pup5.5.10-oel-ipa_fact:
-#  <<: *acceptance_base
-#  <<: *pup_5_5_10
-#  <<: *only_with_SIMP_FULL_MATRIX
-#  script:
-#    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites'
