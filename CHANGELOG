@@ -1,3 +1,7 @@
+* Fri Dec 14 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.12.0-0
+- Add support for fs.inotify.max_user_watches to
+  simplib::validate_sysctl_value()
+
 * Wed Oct 31 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.11.1-0
 - Fix reboot_notify tests
 - Ensure that reboot_notify updates resources based on a modified 'reason'
