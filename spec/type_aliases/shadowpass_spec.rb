@@ -13,7 +13,7 @@ describe 'Simplib::ShadowPass' do
     it { is_expected.to allow_value('$1$0nIBDEfm$QNNyqbDS5ZkwScfmvI37z.') }
   end
 
-  context 'with invalid MAC addresses' do
+  context 'with invalid entries' do
     it { is_expected.not_to allow_value('*$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1') }
     it { is_expected.not_to allow_value('$6$') }
     it { is_expected.not_to allow_value('mycleartextpassword') }
