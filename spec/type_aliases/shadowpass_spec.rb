@@ -8,8 +8,6 @@ describe 'Simplib::ShadowPass' do
     it { is_expected.to allow_value('!!i$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1') }
     it { is_expected.to allow_value('$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1') }
     it { is_expected.to allow_value('$5$4E8kXNLiykgBk$NviJTE3NgOvqoF0hXlhFbbYknIpTZqqVqihav8ZM2h9') }
-    it { is_expected.to allow_value('$sha1$07$6a6d7befbdb6cbdf9fbce9f3a16858fa01ed670f') }
-    it { is_expected.to allow_value('$md5$07$N9D4NHOiICuHB7nzBi0ZX0') }
     it { is_expected.to allow_value('$3$$0480cf9c8755c691c629f6595c2e7238') }
     it { is_expected.to allow_value('$2a$07$ybS56Js6xCcu5SxFwa2NsODRF109WEitIY52THiZh.eFdfQg8ovNe') }
     it { is_expected.to allow_value('$2y$10$RT.Z68QWbhbg5.TOba4gGOBEvj6anWfvPBaU3F1HMHTSz5g75Vrme') }
