@@ -41,10 +41,12 @@ function simplib::hash_to_opts (
       default: { "${prefix}${key}${connector}${String($val).shellquote}" }
       Undef:   { "${prefix}${key}" }
       Array:   {
+        # lint:ignore:case_without_default
         case $repeat {
           'comma':  { "${prefix}${key}${connector}${val.join($delimiter).shellquote}" }
           'repeat': { $val.prefix("${prefix}${key}${connector}").shellquote }
         }
+        # lint:endignore
       }
     }
   }
