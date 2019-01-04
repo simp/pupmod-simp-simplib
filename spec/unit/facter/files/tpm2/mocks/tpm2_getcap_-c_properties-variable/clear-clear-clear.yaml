@@ -1,0 +1,36 @@
+TPM_PT_PERSISTENT:
+  ownerAuthSet:              clear
+  endorsementAuthSet:        clear
+  lockoutAuthSet:            clear
+  reserved1:                 clear
+  disableClear:              clear
+  inLockout:                 clear
+  tpmGeneratedEPS:           set
+  reserved2:                 clear
+TPM_PT_STARTUP_CLEAR:
+  phEnable:                  set
+  shEnable:                  set
+  ehEnable:                  set
+  phEnableNV:                set
+  reserved1:                 clear
+  orderly:                   set
+TPM_PT_HR_NV_INDEX:          0x00000000
+TPM_PT_HR_LOADED:            0x00000000
+TPM_PT_HR_LOADED_AVAIL:      0x00000003
+TPM_PT_HR_ACTIVE:            0x00000000
+TPM_PT_HR_ACTIVE_AVAIL:      0x00000040
+TPM_PT_HR_TRANSIENT_AVAIL:   0x00000003
+TPM_PT_HR_PERSISTENT:        0x00000000
+TPM_PT_HR_PERSISTENT_AVAIL:  0x00000006
+TPM_PT_NV_COUNTERS:          0x00000000
+TPM_PT_NV_COUNTERS_AVAIL:    0x00000019
+TPM_PT_ALGORITHM_SET:        0xffffffff
+TPM_PT_LOADED_CURVES:        0x00000003
+TPM_PT_LOCKOUT_COUNTER:      0x00000000
+TPM_PT_MAX_AUTH_FAIL:        0x00000003
+TPM_PT_LOCKOUT_INTERVAL:     0x000003e8
+TPM_PT_LOCKOUT_RECOVERY:     0x000003e8
+TPM_PT_NV_WRITE_RECOVERY:    0x00000000
+TPM_PT_AUDIT_COUNTER_0:      0x00000000
+TPM_PT_AUDIT_COUNTER_1:      0x00000000
+

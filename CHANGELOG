@@ -1,3 +1,9 @@
+* Fri Jan 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.12.0-0
+- Add has_tpm and tpm facts originally found in the simp/tpm module
+- Add tpm2 fact originally found in the simp/tpm2 module
+- Add tpm_1_2_enabled and tpm_2_0_enabled facts developed for the
+  simp/hirs_provisioner module
+
 * Fri Dec 14 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.12.0-0
 - Add support for fs.inotify.max_user_watches to
   simplib::validate_sysctl_value()
