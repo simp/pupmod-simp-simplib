@@ -2286,6 +2286,11 @@ and validation across the SIMP code base.
         * ``PC1``
         * ``PE``
 
+* ``Simplib::ShadowPass``
+    * Valid options for the password field of /etc/shadow to include
+      locked passwords, unestablished passwords, and hashed passwords
+      using MD5, Blowfish, SHA256, or SHA512 algorithms.
+
 * ``Simplib::Syslog::CFacility``
     * A syslog log facility, in the form expected by ``syslog(3)``.
       Examples:

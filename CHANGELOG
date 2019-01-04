@@ -1,3 +1,6 @@
+* Fri Jan 04 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 3.12.1-0
+- Add Simplib::ShadowPass custom data type
+
 * Fri Dec 14 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.12.0-0
 - Add support for fs.inotify.max_user_watches to
   simplib::validate_sysctl_value()
