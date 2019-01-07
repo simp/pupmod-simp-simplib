@@ -12,7 +12,7 @@ describe 'tpm2', :type => :fact do
 
   let(:mocks_dir) { File.join(File.dirname(__FILE__), 'files', 'tpm2', 'mocks') }
 
-  context 'when a hardware TPM is installed' do
+  context 'when the hardware TPM is TPM 1.2' do
     it 'should return nil' do
       Facter.stubs(:value).with(:has_tpm).returns true
       Facter.stubs(:value).with(:tpm).returns({ :tpm1_hash => :values })
@@ -24,12 +24,23 @@ describe 'tpm2', :type => :fact do
     end
   end
 
+  context 'when tpm2-tools is not installed' do
+    it 'should return nil' do
+      Facter.stubs(:value).with(:has_tpm).returns true
+      Facter.stubs(:value).with(:tpm).returns nil
+      File.stubs(:executable?).with("#{@l_bin}/tpm2_pcrlist").returns false
+      File.stubs(:executable?).with("#{@u_bin}/tpm2_pcrlist").returns true
+
+      expect(Facter.fact(:tpm2).value).to eq nil
+    end
+  end
+
   context 'The hardware TPM is TPM 2.0' do
     it 'should return a fact' do
       Facter.stubs(:value).with(:has_tpm).returns true
-      Facter.stubs(:value).with(:tpm).returns( nil )
-      File.stubs(:executable?).with("#{@l_bin}/tpm2_pcrlist").returns(false)
-      File.stubs(:executable?).with("#{@u_bin}/tpm2_pcrlist").returns( true )
+      Facter.stubs(:value).with(:tpm).returns nil
+      File.stubs(:executable?).with("#{@l_bin}/tpm2_pcrlist").returns false
+      File.stubs(:executable?).with("#{@u_bin}/tpm2_pcrlist").returns true
       Facter.stubs(:value).with(:has_tpm).returns true
       Facter::Core::Execution.stubs(:execute).with("#{@u_bin}/tpm2_getcap -c properties-fixed").returns(
         File.read(File.join(mocks_dir, 'tpm2_getcap_-c_properties-fixed/nuvoton-ncpt6xx-fbfc85e.yaml'))

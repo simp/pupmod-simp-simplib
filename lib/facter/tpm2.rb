@@ -49,8 +49,14 @@ Facter.add( :tpm2 ) do
   # doesn't execute confine blocks for absent facts.)
   confine do
     value = Facter.value(:tpm)
-    Facter.debug 'tpm2 confine'
+    Facter.debug 'tpm2 confine on tpm fact'
     value.nil?
+  end
+
+  confine do
+    require 'facter/tpm2/util'
+    Facter.debug 'tpm2 confine on tpm2-tools'
+    !Facter::TPM2::Util.tpm2_tools_prefix.nil?
   end
 
   setcode do
