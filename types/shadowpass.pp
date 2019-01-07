@@ -17,7 +17,6 @@ type Simplib::ShadowPass = Variant[
   Simplib::Libcrypt::MD5_Sun,
   Simplib::Libcrypt::MD5_FreeBSD,
   Simplib::Libcrypt::NTHASH,
-  Simplib::Libcrypt::BSDIExtendedDES,
   Simplib::Libcrypt::Bcrypt,
   Simplib::Libcrypt::Scrypt,
   Simplib::Libcrypt::Yescrypt
