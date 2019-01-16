@@ -57,6 +57,12 @@ describe 'simplib::assert_metadata' do
           }.to raise_error(/OS.*is not supported/)
         }
     end
+
+    context 'when disabled' do
+      let(:facts) { facts }
+
+      it { is_expected.to run.with_params('stdlib', { 'enable' => false, 'os' => { 'options' => { 'release_match' => 'full' } } } ) }
+    end
   end
 
   context 'on a supported OS with an unsupported major version' do
