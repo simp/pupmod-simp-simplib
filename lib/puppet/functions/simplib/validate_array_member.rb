@@ -16,7 +16,7 @@ Puppet::Functions.create_function(:'simplib::validate_array_member') do
   #   operation.  Currently, 'i', string case invariance is the only
   #   supported modifier.
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Validating single input
   #

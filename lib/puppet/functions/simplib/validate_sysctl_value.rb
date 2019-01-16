@@ -8,7 +8,7 @@ Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
   # @param key sysctl setting whose value is to be validated
   # @param value Value to be validated
   # @return [Nil]
-  # @raise RuntimeError upon validation failure
+  # @raise [RuntimeError] upon validation failure
   # @example Passing validation
   #   validate_sysctl_value('kernel.core_pattern','/var/core/%u_%g_%p_%t_%h_%e.core')
 

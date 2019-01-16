@@ -13,7 +13,7 @@ Puppet::Functions.create_function(:'simplib::validate_net_list') do
   # @param str_match Stringified regular expression (regex without
   #   the `//` delimiters)
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #
@@ -43,7 +43,7 @@ Puppet::Functions.create_function(:'simplib::validate_net_list') do
   # @param str_match Stringified regular expression (regex without
   #   the `//` delimiters)
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #

@@ -22,19 +22,73 @@ if !ENV.key?( 'TRUSTED_NODE_DATA' )
   ENV['TRUSTED_NODE_DATA']='yes'
 end
 
-default_hiera_config =<<-EOM
+# This can be used from inside your spec tests to load custom hieradata within
+# any context.
+#
+# Example:
+#
+# describe 'some::class' do
+#   context 'with version 10' do
+#     let(:hieradata){ "#{class_name}_v10" }
+#     ...
+#   end
+# end
+#
+# Then, create a YAML file at spec/fixtures/hieradata/some__class_v10.yaml.
+#
+# You can also create a YAML file that is named the same as your test
+# description with all colons and spaces changed to underscores.
+#
+# Hiera will use this file as it's base of information stacked on top of
+# 'default.yaml' and <module_name>.yaml per the defaults below.
+#
+# Note: Any colons (:) are replaced with underscores (_) in the class name.
+def hiera_config_template(hiera_version=5)
+  if hiera_version == 3
+    hiera_template_content = <<-EOM
 ---
 :backends:
   - "rspec"
   - "yaml"
 :yaml:
-  :datadir: "stub"
+  :datadir: "<%= hiera_datadir %>"
 :hierarchy:
-  - "%{custom_hiera}"
-  - "%{spec_title}"
+<% if custom_hieradata -%>
+  - "<%= custom_hieradata %>"
+<% end -%>
+<% if spec_title -%>
+  - "<%= spec_title %>"
+<% end -%>
   - "%{module_name}"
   - "default"
 EOM
+  else
+    hiera_template_content = <<-EOM
+---
+version: 5
+hierarchy:
+  - name: SIMP Compliance Engine
+    lookup_key: compliance_markup::enforcement
+<% if custom_hieradata -%>
+  - name: Custom Test Hieradata
+    path: "<%= custom_hieradata %>.yaml"
+<% end -%>
+<% if spec_title -%>
+  - name: <%= spec_title %>
+    path: "<%= spec_title %>.yaml"
+<% end -%>
+  - name: <%= module_name %>
+    path: "<%= module_name %>.yaml"
+  - name: Common
+    path: default.yaml
+defaults:
+  data_hash: yaml_data
+  datadir: "<%= hiera_datadir %>"
+EOM
+  end
+
+  return hiera_template_content
+end
 
 # This can be used from inside your spec tests to set the testable environment.
 # You can use this to stub out an ENC.
@@ -50,33 +104,11 @@ def set_environment(environment = :production)
   RSpec.configure { |c| c.default_facts['environment'] = environment.to_s }
 end
 
-# This can be used from inside your spec tests to load custom hieradata within
-# any context.
-#
-# Example:
-#
-# describe 'some::class' do
-#   context 'with version 10' do
-#     let(:hieradata){ "#{class_name}_v10" }
-#     ...
-#   end
-# end
-#
-# Then, create a YAML file at spec/fixtures/hieradata/some__class_v10.yaml.
-#
-# Hiera will use this file as it's base of information stacked on top of
-# 'default.yaml' and <module_name>.yaml per the defaults above.
-#
-# Note: Any colons (:) are replaced with underscores (_) in the class name.
-def set_hieradata(hieradata)
-  RSpec.configure { |c| c.default_facts['custom_hiera'] = hieradata }
-end
-
-if not File.directory?(File.join(fixture_path,'hieradata')) then
+unless File.directory?(File.join(fixture_path,'hieradata'))
   FileUtils.mkdir_p(File.join(fixture_path,'hieradata'))
 end
 
-if not File.directory?(File.join(fixture_path,'modules',module_name)) then
+unless File.directory?(File.join(fixture_path,'modules',module_name))
   FileUtils.mkdir_p(File.join(fixture_path,'modules',module_name))
 end
 
@@ -86,7 +118,7 @@ RSpec.configure do |c|
     :production => {
       #:fqdn           => 'production.rspec.test.localdomain',
       :path           => '/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin',
-      :concat_basedir => '/tmp',
+      :concat_basedir => '/tmp'
     }
   }
 
@@ -110,15 +142,6 @@ RSpec.configure do |c|
     c.backtrace_clean_patterns = backtrace_exclusion_patterns
   end
 
-  c.before(:all) do
-    data = YAML.load(default_hiera_config)
-    data[:yaml][:datadir] = File.join(fixture_path, 'hieradata')
-
-    File.open(c.hiera_config, 'w') do |f|
-      f.write data.to_yaml
-    end
-  end
-
   c.before(:each) do
     @spec_global_env_temp = Dir.mktmpdir('simpspec')
 
@@ -132,17 +155,38 @@ RSpec.configure do |c|
     Puppet[:user] = Etc.getpwuid(Process.uid).name
     Puppet[:group] = Etc.getgrgid(Process.gid).name
 
+    hiera_datadir = File.dirname(c.hiera_config)
+
     # sanitize hieradata
     if defined?(hieradata)
-      set_hieradata(hieradata.gsub(':','_'))
+      custom_hieradata = hieradata.gsub(/(:|\s)/,'_')
     elsif defined?(class_name)
-      set_hieradata(class_name.gsub(':','_'))
+      custom_hieradata = class_name.gsub(/(:|\s)/,'_')
+    end
+
+    unless File.exist?(File.join(hiera_datadir, "#{custom_hieradata}.yaml"))
+      custom_hieradata = nil
+    end
+
+    if self.class.description && !self.class.description.empty?
+      spec_title = self.class.description.gsub(/(:|\s)/,'_')
+
+      unless File.exist?(File.join(hiera_datadir, "#{spec_title}.yaml"))
+        spec_title = nil
+      end
+    end
+
+    hiera_version ||= 5
+    data = YAML.load(ERB.new(hiera_config_template(hiera_version.to_i), nil, '-').result(binding))
+
+    File.open(c.hiera_config, 'w') do |f|
+      f.write data.to_yaml
     end
   end
 
   c.after(:each) do
     # clean up the mocked environmentpath
-    FileUtils.rm_rf(@spec_global_env_temp)
+    FileUtils.rm_rf(@spec_global_env_temp) if File.exist?(@spec_global_env_temp)
     @spec_global_env_temp = nil
   end
 end

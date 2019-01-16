@@ -10,7 +10,7 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
 
   # @param networks The networks to convert
   # @return [Array[String]] Converted input
-  # @raise RuntimeError if any input item is not a valid network
+  # @raise [RuntimeError] if any input item is not a valid network
   #   or hostname
   #
   # @example Convert Array input
@@ -34,7 +34,7 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
   # @param networks_string String containing the list of networks to
   #   convert; list elements are separated by spaces, commas or semicolons.
   # @return [Array[String]] Converted input
-  # @raise RuntimeError if any input item is not a valid network
+  # @raise [RuntimeError] if any input item is not a valid network
   #   or hostname
   #
   # @example Convert String input

@@ -13,7 +13,7 @@ Puppet::Functions.create_function(:'simplib::validate_port') do
   # @param port_args Arguments each of which contain either an
   #   individual port or an array of ports.
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   $port = '10541'
