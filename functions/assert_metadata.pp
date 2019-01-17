@@ -25,7 +25,8 @@
 function simplib::assert_metadata (
   String[1] $module_name,
   Optional[Struct[{
-    os => Optional[Struct[{
+    enable => Optional[Boolean],
+    os     => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
