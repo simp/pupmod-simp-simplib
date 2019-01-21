@@ -131,7 +131,7 @@ Puppet::Functions.create_function(:'simplib::dlookup') do
     retval = call_function('simplib::lookup', target_param, options)
 
     # Fall back to the global lookup for this option
-    if options['default_value'] && retval == options['default_value']
+    if retval == options['default_value']
       retval = dlookup(define_id, param, options)
     end
 
