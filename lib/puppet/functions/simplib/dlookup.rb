@@ -23,6 +23,9 @@
 #   defined type that is ever called. For example, this may be useful for
 #   setting cipher suites to a modified global default to meet company policy.
 #
+#   This follows the general Puppet nomenclature for class lookups since you
+#   cannot have a class and defined type of the same name.
+#
 #   Function Call:
 #
 #   ```ruby
@@ -37,7 +40,7 @@
 #
 #   ```yaml
 #   ---
-#   Define[mydef::global]::ssl_version: 'TLS1.2'
+#   mydef::global::ssl_version: 'TLS1.2'
 #   ```
 #
 # @example Specific Instance Options
@@ -68,7 +71,7 @@
 #   resource will have its `ssl_version` set to `TLS1.2`. All others will have
 #   their version set to `SSLv3`.
 #
-
+#
 # @author Trevor Vaughan <tvaughan@onyxpoint.com>
 Puppet::Functions.create_function(:'simplib::dlookup') do
   # @param define_id
@@ -93,7 +96,7 @@ Puppet::Functions.create_function(:'simplib::dlookup') do
   end
 
   # @param define_id
-  # The literal unique identifier of the defined type resource ('mydef::global'
+  # The literal unique identifier of the defined type resource ('mydef::specific'
   # in the examples)
   #
   # @param param The parameter that you wish to look up
@@ -117,7 +120,7 @@ Puppet::Functions.create_function(:'simplib::dlookup') do
   end
 
   def dlookup(define_id, param, options)
-    target_param = "Define[#{define_id}]::#{param}"
+    target_param = "#{define_id}::#{param}"
 
     return call_function('simplib::lookup', target_param, options )
   end

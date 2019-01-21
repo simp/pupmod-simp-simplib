@@ -186,7 +186,7 @@ RSpec.configure do |c|
 
   c.after(:each) do
     # clean up the mocked environmentpath
-    FileUtils.rm_rf(@spec_global_env_temp) if File.exist?(@spec_global_env_temp)
+    FileUtils.rm_rf(@spec_global_env_temp)
     @spec_global_env_temp = nil
   end
 end
