@@ -12,10 +12,7 @@
 # appropriately but was split out in case the underlying syntax needs to
 # change in the future.
 #
-# There are two ways to call this method and, in both cases, to prevent
-# conflicts with class parameters, the keys in Hiera have been modified to
-# completely avoid items that are allowed Puppet Class names but to also mirror
-# common Puppet nomenclature for working with existing resources.
+# There are two ways to call this method as shown in the following examples.
 #
 # @example Global Options
 #
