@@ -10,14 +10,28 @@ describe 'simplib::stages', type: :class do
       notify { "$title says": message => $attribute }
     }
 
+    define mydef::othertest (
+      $attribute = simplib::dlookup('mydef::test', 'attribute', { 'default_value' => 'lucille2' })
+    ){
+      notify { "other $title says": message => $attribute }
+    }
+
     mydef::test { 'gob': }
     mydef::test { 'tobias': }
     mydef::test { 'michael': attribute => 'bananastand' }
+
+    mydef::othertest { 'gob': }
+    mydef::othertest { 'tobias': }
+    mydef::othertest { 'michael': attribute => 'bananastand' }
   )}
 
   let(:gob){catalogue.resource('Mydef::Test[gob]')}
   let(:tobias){catalogue.resource('Mydef::Test[tobias]')}
   let(:michael){catalogue.resource('Mydef::Test[michael]')}
+
+  let(:gob_other){catalogue.resource('Mydef::Othertest[gob]')}
+  let(:tobias_other){catalogue.resource('Mydef::Othertest[tobias]')}
+  let(:michael_other){catalogue.resource('Mydef::Othertest[michael]')}
 
   it { is_expected.to compile.with_all_deps }
 
@@ -25,6 +39,9 @@ describe 'simplib::stages', type: :class do
     it { expect(gob[:attribute]).to eq('lucille2') }
     it { expect(tobias[:attribute]).to eq('lucille2') }
     it { expect(michael[:attribute]).to eq('bananastand') }
+    it { expect(gob_other[:attribute]).to eq('lucille2') }
+    it { expect(tobias_other[:attribute]).to eq('lucille2') }
+    it { expect(michael_other[:attribute]).to eq('bananastand') }
   end
 
   context 'overrides' do
@@ -37,12 +54,15 @@ describe 'simplib::stages', type: :class do
 
     context 'with global overrides' do
       it { expect(gob[:attribute]).to eq('illusions') }
+      it { expect(gob_other[:attribute]).to eq('illusions') }
+      it { expect(tobias_other[:attribute]).to eq('illusions') }
     end
     context 'with specific overrides' do
       it { expect(tobias[:attribute]).to eq('blueman') }
     end
     context 'with a static value' do
       it { expect(michael[:attribute]).to eq('bananastand') }
+      it { expect(michael_other[:attribute]).to eq('bananastand') }
     end
   end
 end
