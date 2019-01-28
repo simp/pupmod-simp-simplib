@@ -1,0 +1,8 @@
+---
+mydef::test::attribute: illusions
+Mydef::Test[tobias]::attribute: blueman
+
+mydef::othertest::attribute: illusions
+# this will not be used because mydef::othertest does not use the form
+# of dlookup that supports this
+Mydef::Othertest[tobias]::attribute: blueman

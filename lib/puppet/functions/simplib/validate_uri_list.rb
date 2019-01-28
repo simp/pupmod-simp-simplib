@@ -10,7 +10,7 @@ Puppet::Functions.create_function(:'simplib::validate_uri_list') do
   # @param uri URI to be validated.
   # @param scheme_list List of schemes (protocol types) allowed for the URI.
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   # @example Passing
   #   $uri = 'http://foo.bar.baz:1234'
   #   simplib::validate_uri_list($uri)
@@ -26,7 +26,7 @@ Puppet::Functions.create_function(:'simplib::validate_uri_list') do
   # @param uri_list 1 or more URIs to be validated.
   # @param scheme_list List of schemes (protocol types) allowed for the URI.
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   # @example Passing
   #   $uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
   #   simplib::validate_uri_list($uris)

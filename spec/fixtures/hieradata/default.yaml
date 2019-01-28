@@ -1,4 +1,4 @@
 ---
-rsync::server : 'rsync.bar.baz'
-rsync::timeout : '1'
-yum::server : 'yum.bar.baz'
+rsync::server: 'rsync.bar.baz'
+rsync::timeout: '1'
+yum::server: 'yum.bar.baz'

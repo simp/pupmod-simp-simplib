@@ -9,7 +9,7 @@ Puppet::Functions.create_function(:'simplib::validate_between') do
   # @param min_value Minimum value that is valid
   # @param max_value Maximum value that is valid
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   simplib::validate_between('-1', -3, 0)

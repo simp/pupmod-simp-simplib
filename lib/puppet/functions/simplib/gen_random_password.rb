@@ -19,7 +19,7 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
   #
   # @return [String] Generated password
   #
-  # @raise RuntimeError if password cannot be created within allotted time
+  # @raise [RuntimeError] if password cannot be created within allotted time
   dispatch :gen_random_password do
     required_param 'Integer[8]',                   :length
     optional_param 'Integer[0,2]',                 :complexity
