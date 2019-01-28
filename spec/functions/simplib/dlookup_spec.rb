@@ -34,10 +34,6 @@ describe 'simplib::stages', type: :class do
     }}
 
     let(:hieradata){ 'simplib_dlookup_overrides' }
-    let(:hiera_data){{
-      'Define[mydef::test]::attribute' => 'illusions',
-      'foo::bar' => 'baz'
-    }}
 
     context 'with global overrides' do
       it { expect(gob[:attribute]).to eq('illusions') }
