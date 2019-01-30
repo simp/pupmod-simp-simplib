@@ -1,4 +1,4 @@
-* Wed Jan 30 2019 Jason Hane - 3.12.0-0
+* Wed Jan 30 2019 Jason Hane <hanej@users.noreply.github.com> - 3.12.0-0
 - Add a timeout to the `ipa` fact to prevent hangs during fact collection
 
 * Fri Jan 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.12.0-0
