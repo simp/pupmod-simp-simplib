@@ -1,6 +1,14 @@
 require 'spec_helper'
 
 describe "custom fact ipa" do
+  let (:ipa_query_options) {
+    {:timeout => 30}
+  }
+
+  let (:kinit_query_options) {
+    {:timeout => 10}
+  }
+
   let (:ipa_env_query) {
     '/usr/bin/ipa env domain server realm basedn tls_ca_cert'
   }
@@ -57,8 +65,8 @@ describe "custom fact ipa" do
           Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
           File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
           File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
-          Facter::Core::Execution.expects(:exec).with(ipa_env_query).returns(ipa_env)
-          Facter::Core::Execution.expects(:exec).with(ipa_env_server_query).returns(ipa_server_env)
+          Facter::Core::Execution.expects(:execute).with(ipa_env_query, ipa_query_options).returns(ipa_env)
+          Facter::Core::Execution.expects(:execute).with(ipa_env_server_query, ipa_query_options).returns(ipa_server_env)
           expect(Facter.fact('ipa').value).to eq({
             'connected' => true,
             'domain'    => 'example.com',
@@ -75,9 +83,9 @@ describe "custom fact ipa" do
           Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
           File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
           File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
-          Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('')
-          Facter::Core::Execution.expects(:exec).twice.with( ipa_env_query).returns('', ipa_env)
-          Facter::Core::Execution.expects(:exec).with(ipa_env_server_query).returns(ipa_server_env)
+          Facter::Core::Execution.expects(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).returns('')
+          Facter::Core::Execution.expects(:execute).twice.with( ipa_env_query, ipa_query_options).returns('', ipa_env)
+          Facter::Core::Execution.expects(:execute).with(ipa_env_server_query, ipa_query_options).returns(ipa_server_env)
           expect(Facter.fact('ipa').value).to eq({
             'connected' => true,
             'domain'    => 'example.com',
@@ -95,8 +103,8 @@ describe "custom fact ipa" do
         Facter::Core::Execution.expects(:which).with('ipa').returns('/usr/bin/ipa')
         File.expects(:exist?).with('/etc/ipa/default.conf').returns(true)
         File.expects(:read).with('/etc/ipa/default.conf').returns(default_conf)
-        Facter::Core::Execution.expects(:exec).with('/usr/bin/kinit -k 2>&1').returns('some error message')
-        Facter::Core::Execution.expects(:exec).twice.with(ipa_env_query).returns('')
+        Facter::Core::Execution.expects(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).returns('some error message')
+        Facter::Core::Execution.expects(:execute).twice.with(ipa_env_query, ipa_query_options).returns('')
         expect(Facter.fact('ipa').value).to eq({
           'connected' => false,
           'domain'    => 'example.com',
