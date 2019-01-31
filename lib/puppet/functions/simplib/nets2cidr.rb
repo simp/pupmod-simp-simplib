@@ -10,7 +10,7 @@ Puppet::Functions.create_function(:'simplib::nets2cidr') do
   # @param network_list List of 1 or more networks separated by spaces,
   #   commas, or semicolons
   # @return [Array[String]] Array of networks in CIDR notation
-  # @raise RuntimeError if any input item is not a valid network
+  # @raise [RuntimeError] if any input item is not a valid network
   #   or hostname
   #
   # @example Convert space-separated network string
@@ -26,7 +26,7 @@ Puppet::Functions.create_function(:'simplib::nets2cidr') do
 
   # @param networks Array of networks
   # @return [Array[String]] Array of networks in CIDR notation
-  # @raise RuntimeError if any input item is not a valid network
+  # @raise [RuntimeError] if any input item is not a valid network
   #   or hostname
   #
   # @example Convert array of networks

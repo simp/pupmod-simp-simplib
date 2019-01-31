@@ -7,7 +7,7 @@ Puppet::Functions.create_function(:'simplib::to_integer') do
 
   # @param input The argument to convert into an `Integer`
   # @return [Integer] Converted input
-  # @raise 'RuntimeError' if ``input`` does not implement a ``to_i()``
+  # @raise [RuntimeError] if ``input`` does not implement a ``to_i()``
   #   method
   dispatch :to_integer do
     required_param 'Any', :input

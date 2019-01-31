@@ -25,7 +25,8 @@
 function simplib::assert_metadata (
   String[1] $module_name,
   Optional[Struct[{
-    os => Optional[Struct[{
+    enable => Optional[Boolean],
+    os     => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -70,10 +71,6 @@ function simplib::assert_metadata (
         $metadata['operatingsystem_support'].each |Simplib::Puppet::Metadata::OS_support $os_info| {
           if $os_info['operatingsystem'] == $facts['os']['name'] {
             case $_options['os']['options']['release_match'] {
-              'none': {
-                $result = true
-              }
-
               'full': {
                 if !($facts['os']['release']['full'] in $os_info['operatingsystemrelease']) {
                   fail("OS '${facts['os']['name']}' version '${facts['os']['release']['full']}' is not supported by '${module_name}'")
@@ -87,6 +84,9 @@ function simplib::assert_metadata (
                 if !($facts['os']['release']['major'] in $_os_major_releases) {
                   fail("OS '${facts['os']['name']}' version '${facts['os']['release']['major']}' is not supported by '${module_name}'")
                 }
+              }
+              default: {
+                $result = true
               }
             }
           }

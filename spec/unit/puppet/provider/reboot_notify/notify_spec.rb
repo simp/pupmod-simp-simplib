@@ -42,10 +42,62 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
         expect(provider.exists?).to be_falsey
       end
 
-      it 'is json' do
+      it 'is empty json' do
         File.open(@target, 'w'){|fh| fh.puts('{}')}
 
         expect(provider.exists?).to be_truthy
+      end
+
+      it 'only contains metadata' do
+        File.open(@target, 'w') do |fh|
+          fh.puts <<-EOM
+          {
+            "reboot_control_metadata": {
+              "log_level": "notice"
+            }
+          }
+          EOM
+        end
+
+        expect(provider.exists?).to be_truthy
+      end
+
+      context 'has a matching record' do
+        it 'is in sync' do
+          File.open(@target, 'w') do |fh|
+            fh.puts <<-EOM
+            {
+              "reboot_control_metadata": {
+                "log_level": "notice"
+              },
+              "Foo": {
+                "reason": "Bar",
+                "updated": "0000000"
+              }
+            }
+            EOM
+          end
+
+          expect(provider.exists?).to be_truthy
+        end
+
+        it 'is out of sync' do
+          File.open(@target, 'w') do |fh|
+            fh.puts <<-EOM
+            {
+              "reboot_control_metadata": {
+                "log_level": "notice"
+              },
+              "Foo": {
+                "reason": "Nope",
+                "updated": "0000000"
+              }
+            }
+            EOM
+          end
+
+          expect(provider.exists?).to be_falsey
+        end
       end
     end
   end

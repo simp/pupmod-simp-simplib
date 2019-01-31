@@ -49,6 +49,7 @@
 * [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.  Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS envi
+* [`simplib::dlookup`](#simplibdlookup): 
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplibhash_to_opts): Turn a hash into a options string, for use in a shell command
@@ -60,7 +61,7 @@
 * [`simplib::ldap::domain_to_dn`](#simplibldapdomain_to_dn): Generates a LDAP Base DN from a domain
 * [`simplib::lookup`](#simpliblookup): A function for falling back to global scope variable lookups when the Puppet 4 ``lookup()`` function cannot find a value.  While ``lookup()``
 * [`simplib::mock_data`](#simplibmock_data): A mock data function
-* [`simplib::module_exist`](#simplibmodule_exist): Determines if a module exists in the current environment
+* [`simplib::module_exist`](#simplibmodule_exist): Determines if a module exists in the current environment  If passed with an author, such as `simp/simplib` or `simp-simplib`, will return whe
 * [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
 * [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * CIDR networks are converted to dotted quad notation network
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
@@ -1341,6 +1342,76 @@ Data type: `String`
 Message to be printed, to which file and line
 information will be appended, if available.
 
+### simplib::dlookup
+
+Type: Ruby 4.x API
+
+The simplib::dlookup function.
+
+#### `simplib::dlookup(String[1] $define_id, String[1] $param, Optional[Any] $options)`
+
+The literal unique identifier of the defined type resource ('mydef::global'
+in the examples)
+
+Returns: `Any` The discovered data from Hiera
+
+##### `define_id`
+
+Data type: `String[1]`
+
+
+
+##### `param`
+
+Data type: `String[1]`
+
+The parameter that you wish to look up
+
+##### `options`
+
+Data type: `Optional[Any]`
+
+Hash of options for regular ``lookup()``
+
+* This **must** follow the syntax rules for the
+Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
+* No other formats are supported!
+
+#### `simplib::dlookup(String[1] $define_id, String[1] $param, String[1] $resource_title, Optional[Any] $options)`
+
+The literal unique identifier of the defined type resource ('mydef::global'
+in the examples)
+
+Returns: `Any` The discovered data from Hiera
+
+##### `define_id`
+
+Data type: `String[1]`
+
+
+
+##### `param`
+
+Data type: `String[1]`
+
+The parameter that you wish to look up
+
+##### `resource_title`
+
+Data type: `String[1]`
+
+The $title of the resource
+
+##### `options`
+
+Data type: `Optional[Any]`
+
+Hash of options for regular ``lookup()``
+
+* This **must** follow the syntax rules for the
+Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
+* No other formats are supported!
+
 ### simplib::filtered
 
 Type: Ruby 4.x API
@@ -1413,7 +1484,7 @@ in the allotted time.
 Returns: `String` Generated password
 
 Raises:
-* `RuntimeError` if password cannot be created within allotted time
+* `if` password cannot be created within allotted time
 
 ##### `length`
 
@@ -1783,9 +1854,15 @@ Type: Ruby 4.x API
 
 Determines if a module exists in the current environment
 
+If passed with an author, such as `simp/simplib` or `simp-simplib`, will
+return whether or not that *specific* module exists.
+
 #### `simplib::module_exist(String[1] $module_name)`
 
 Determines if a module exists in the current environment
+
+If passed with an author, such as `simp/simplib` or `simp-simplib`, will
+return whether or not that *specific* module exists.
 
 Returns: `Boolean` Whether or not the module exists in the current environment
 
@@ -1899,8 +1976,8 @@ into a structured `Hash` of host information.
 Returns: `Hash` Structured Hash of the host information
 
 Raises:
-* `RuntimeError` if a valid network or hostname cannot be extracted from all input items
-* `RuntimeError` if any input item that contains a port specifies an invalid port
+* `if` a valid network or hostname cannot be extracted from all input items
+* `if` any input item that contains a port specifies an invalid port
 
 ##### `hosts`
 
@@ -2059,7 +2136,7 @@ Terminates catalog compilation if
 Returns: `Array[String]` Non-port portion of hostnames
 
 Raises:
-* `RuntimeError` if any input item that contains a port specifies an invalid port
+* `if` any input item that contains a port specifies an invalid port
 
 ##### `hosts`
 
@@ -2084,6 +2161,9 @@ Terminates catalog compilation if the argument's class
 does not respond to the `to_i()` Ruby method.
 
 Returns: `Integer` Converted input
+
+Raises:
+* `if` ``input`` does not implement a ``to_i()`` method
 
 ##### `input`
 
@@ -2130,7 +2210,7 @@ Validate that an single input is a member of another `Array` or an
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` if validation fails
+* `if` validation fails
 
 ##### `input`
 
@@ -2171,7 +2251,7 @@ Terminates catalog compilation if validation fails.
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` if validation fails
+* `if` validation fails
 
 ##### `value`
 
@@ -2210,7 +2290,7 @@ Terminates catalog compilation if validation fails.
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` if validation fails
+* `if` validation fails
 
 ##### `*values_to_validate`
 
@@ -2251,7 +2331,7 @@ Perform a deep validation on two passed `Hashes`.
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` if validation fails
+* `if` validation fails
 
 ##### `reference`
 
@@ -2357,7 +2437,7 @@ Validates whether each passed argument contains valid port(s).
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` if validation fails
+* `if` validation fails
 
 ##### `*port_args`
 
@@ -2485,7 +2565,7 @@ Validate that the passed value is correct for the passed `sysctl` key.
 * If a key is not known, assumes the value is valid.
 * Terminates catalog compilation if validation fails.
 
-#### `simplib::validate_sysctl_value(String $key, String $value)`
+#### `simplib::validate_sysctl_value(String $key, NotUndef $value)`
 
 Validate that the passed value is correct for the passed `sysctl` key.
 
@@ -2495,7 +2575,7 @@ Validate that the passed value is correct for the passed `sysctl` key.
 Returns: `Nil`
 
 Raises:
-* `RuntimeError` upon validation failure
+* `upon` validation failure
 
 ##### `key`
 
@@ -2505,7 +2585,7 @@ sysctl setting whose value is to be validated
 
 ##### `value`
 
-Data type: `String`
+Data type: `NotUndef`
 
 Value to be validated
 

@@ -1,3 +1,25 @@
+* Fri Jan 18 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.12.0-0
+- Add support for fs.inotify.max_user_watches to
+  simplib::validate_sysctl_value()
+- Fix bug in simplib::assert_metadata where it could not be disabled
+  - Thanks to Adam Hagen for filing the proposed patch in JIRA
+- Add a 'defined type' lookup capability, `simplib::dlookup` that provides a
+  consistent method for retrieving defined type parameters from Hiera in an
+  opt-in manner.
+- Fixed various YARD documentation issues
+
+* Fri Jan 04 2019 Adam Yohrling <adam.yohrling@onyxpoint.com> - 3.12.0-0
+- Add Simplib::ShadowPass custom data type
+
+* Wed Oct 31 2018 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.11.1-0
+- Fix reboot_notify tests
+- Ensure that reboot_notify updates resources based on a modified 'reason'
+- Fix the ipaddresses tests
+- Add better confinement on boot_dir_uuid
+- Add a docker nodeset
+- Add test for catching facter errors
+- Bumped the minimum version of Puppet to 4.10.4
+
 * Fri Sep 28 2018 Daniel Henninger <daniel@vorpalcloud.org> - 3.11.1-0
 - Fixed bug where uid_min would throw errors under operating systems
   without /etc/login.defs.

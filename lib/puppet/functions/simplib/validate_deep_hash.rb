@@ -36,7 +36,7 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
   #
   # @param to_check Hash to be validated against the reference
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing Examples
   #   reference = {

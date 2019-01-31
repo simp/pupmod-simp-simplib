@@ -1,15 +1,30 @@
 # The testing matrix considers ruby/puppet versions supported by SIMP and PE:
+#
+# https://puppet.com/docs/pe/2018.1/component_versions_in_recent_pe_releases.html
+# https://puppet.com/misc/puppet-enterprise-lifecycle
+# https://puppet.com/docs/pe/2018.1/overview/getting_support_for_pe.html
 # ------------------------------------------------------------------------------
-#  release    pup   ruby      eol
-# PE 2016.4   4.7   2.1.9  TBD (LTS)
-# PE 2016.5   4.8   2.1.9  2017-10-31
-# SIMP6.0.0   4.8   2.1.9  TBD
-# PE 2017.1   4.9   2.1.9  2017-10-31
-# PE 2017.2   4.10  2.1.9  TBD
+# Release       Puppet   Ruby   EOL
+# SIMP 6.2      4.10     2.1.9  TBD
+# PE 2016.4     4.10     2.1.9  2018-12-31 (LTS)
+# PE 2017.3     5.3      2.4.4  2018-12-31
+# SIMP 6.3      5.5      2.4.4  TBD***
+# PE 2018.1     5.5      2.4.4  2020-05 (LTS)***
+# PE 2019.0     6.0      2.5.1  2019-08-31^^^
+#
+# *** = Modules created for SIMP 6.3+ are not required to support Puppet < 5.5
+# ^^^ = SIMP doesn't support 6 yet; tests are info-only and allowed to fail
+
 ---
 language: ruby
 cache: bundler
 sudo: false
+
+stages:
+  - check
+  - spec
+  - name: deploy
+    if: 'tag IS present'
 
 bundler_args: --without development system_tests --path .vendor
 
@@ -23,59 +38,73 @@ addons:
 
 before_install:
   - rm -f Gemfile.lock
+  - gem install -v '~> 1.16' bundler
+
+global:
+  - STRICT_VARIABLES=yes
 
 jobs:
+  allow_failures:
+    - name: 'Latest Puppet 6.x (allowed to fail)'
+
   include:
     - stage: check
-      rvm: 2.4.1
+      name: 'Syntax, style, and validation checks'
+      rvm: 2.4.4
+      env: PUPPET_VERSION="~> 5"
       script:
-        - bundle exec danger || true # FIXME: Danger needs an account
         - bundle exec rake check:dot_underscore
         - bundle exec rake check:test_file
-        - bundle exec rake lint
-        - bundle exec rake metadata_lint
         - bundle exec rake pkg:check_version
+        - bundle exec rake metadata_lint
         - bundle exec rake pkg:compare_latest_tag
         - bundle exec rake pkg:create_tag_changelog
+        - bundle exec rake lint
         - bundle exec puppet module build
 
     - stage: spec
-      rvm: 2.4.1
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 5.0"
+      name: 'Puppet 4.10 (SIMP 6.2, PE 2016.4)'
+      rvm: 2.1.9
+      env: PUPPET_VERSION="~> 4.10.0"
       script:
         - bundle exec rake spec
 
     - stage: spec
-      rvm: 2.1.9
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.10.0"
+      name: 'Puppet 5.3 (PE 2017.3)'
+      rvm: 2.4.4
+      env: PUPPET_VERSION="~> 5.3.0"
       script:
         - bundle exec rake spec
 
     - stage: spec
-      rvm: 2.1.9
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.9.2"
+      rvm: 2.4.4
+      name: 'Puppet 5.5 (SIMP 6.3, PE 2018.1)'
+      env: PUPPET_VERSION="~> 5.5.0"
       script:
         - bundle exec rake spec
 
     - stage: spec
-      rvm: 2.1.9
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.8.2"
+      name: 'Latest Puppet 5.x'
+      rvm: 2.4.4
+      env: PUPPET_VERSION="~> 5.0"
       script:
         - bundle exec rake spec
 
     - stage: spec
-      rvm: 2.1.9
-      env: STRICT_VARIABLES=yes TRUSTED_NODE_DATA=yes PUPPET_VERSION="~> 4.7.0"
+      name: 'Latest Puppet 6.x (allowed to fail)'
+      rvm: 2.5.1
+      env: PUPPET_VERSION="~> 6.0"
       script:
         - bundle exec rake spec
 
     - stage: deploy
-      rvm: 2.4.1
+      rvm: 2.4.4
       script:
         - true
       before_deploy:
         - "export PUPMOD_METADATA_VERSION=`ruby -r json -e \"puts JSON.parse(File.read('metadata.json')).fetch('version')\"`"
         - '[[ $TRAVIS_TAG =~ ^simp-${PUPMOD_METADATA_VERSION}$|^${PUPMOD_METADATA_VERSION}$ ]]'
+
       deploy:
         - provider: releases
           api_key:
@@ -90,5 +119,4 @@ jobs:
             secure: "famEX4O8TJM5Ch2miBoLVK3sZW4HhqsDyz+lL5J2WfZV++M4TcISlbLuKlcW/lo605WdoQcJCPunW1svT/eP4MEfz3rSOjGlmNeF4dgGSCM9oQ2xAXzAWBvII6mpleWrXIVwNv4n7eiQ+5lOCoA+7gddfszRwD7a0yiamBkL/c7Ne/ZUHWZUW3Er+SWggLhmc94ZTwDtf7SDFTKBp6DYB2RlYVo1u7iFWzq6PFAuKIF/5O4r3SyOHx9bFKbsQGVOsS5MfcgmUF3NgJFt5oUhCPMIohIKa9+69tbrs00aJDGJ/wk49pabSNu4GVBtJm+j70eQwDBJiBpDtZp/Kjath/edAkW95Cy7zSql9BFGuX6RohzJ0pdjgAb31PpQ3+4ZhqxwReEzH/EjDXj6tezRrBFvCQNZiaTChNND+nsl8RqPmaP8FGU4jh3PS7TAx6Vvimd8ZFUXrfPIv6xk12NOT9jjNiWKOL/SgJNQLmXR+Kqol/h5Yz0dR1zlzdz5i/Px7HpyxZDzV01He6VVcwcBDia1+F8vvj/4sG0mPQ4VLvWqZv4tyhFaX17GtSrGZQEcK9LYkgmjAmdit3gSnHxYCrFv8IVarRNGhhUCp/kFssvpZToE0INWWQCqzGIef35tZ/bafAdNjGPfP6O0JoThEWEXg+P3JVyMmn48t10D3CQ="
           on:
             tags: true
-            rvm: 2.4.1
             condition: '($SKIP_FORGE_PUBLISH != true)'

@@ -54,11 +54,18 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       return @records['reboot_control_metadata']['log_level'] == @resource[:log_level]
     end
 
+    if @records[@resource[:name]]
+      return @records[@resource[:name]]['reason'] == @resource[:reason]
+    end
+
+    # This is OK, we only want this provider to add records if the file is not
+    # there or if the resource is hit with a refresh since reboot notifications
+    # always happen because of some event.
     return true
   end
 
   def create
-    add_record
+    update_record
 
     begin
       File.open(target,'w'){|fh| fh.puts(JSON.pretty_generate(@records))}
@@ -75,7 +82,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   end
 
   def update
-    add_record
+    update_record
 
     begin
       File.open(target,'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
@@ -152,7 +159,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
 
   private
 
-  def add_record
+  def update_record
     if @resource[:control_only]
       @records['reboot_control_metadata']['log_level'] = @resource[:log_level]
     else

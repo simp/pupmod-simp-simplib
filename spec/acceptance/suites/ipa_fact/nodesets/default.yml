@@ -1,3 +1,10 @@
+<%
+  if ENV['BEAKER_HYPERVISOR']
+    hypervisor = ENV['BEAKER_HYPERVISOR']
+  else
+    hypervisor = 'vagrant'
+  end
+-%>
 HOSTS:
   server-el7:
     roles:
@@ -6,7 +13,7 @@ HOSTS:
     masterless: true
     platform: el-7-x86_64
     box: centos/7
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
     vagrant_memsize: 2048
     vagrant_cpus: 2
     yum_repos:
@@ -20,7 +27,7 @@ HOSTS:
     masterless: true
     platform: el-7-x86_64
     box: centos/7
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
@@ -29,10 +36,11 @@ HOSTS:
   client-el6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
     box:        centos/6
-    hypervisor: vagrant
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
@@ -41,10 +49,11 @@ HOSTS:
   client-oel6:
     roles:
       - client
+      - no_fips
     masterless: true
     platform:   el-6-x86_64
-    box:        elastic/oel-6-x86_64
-    hypervisor: vagrant
+    box:        onyxpoint/oel-6-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
@@ -55,8 +64,8 @@ HOSTS:
       - client
     masterless: true
     platform:   el-7-x86_64
-    box:        elastic/oel-7-x86_64
-    hypervisor: vagrant
+    box:        onyxpoint/oel-7-x86_64
+    hypervisor: <%= hypervisor %>
     yum_repos:
       epel:
         mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
@@ -68,3 +77,6 @@ CONFIG:
   type: aio
   vagrant_memsize: 256
   vagrant_cpus: 1
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
+<% end -%>
