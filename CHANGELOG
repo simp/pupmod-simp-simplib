@@ -1,3 +1,6 @@
+* Mon Feb 11 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.12.1-0
+- Fix simplib::ipaddresses signature
+
 * Wed Jan 30 2019 Jason Hane <hanej@users.noreply.github.com> - 3.12.0-0
 - Add a timeout to the `ipa` fact to prevent hangs during fact collection
 
