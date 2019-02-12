@@ -14,9 +14,9 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
   # @param hosts Array of host entries, where each entry may contain
   #   a protocol or both a protocol and port
   # @return [Hash] Structured Hash of the host information
-  # @raise RuntimeError if a valid network or hostname cannot be
+  # @raise [RuntimeError] if a valid network or hostname cannot be
   #   extracted from all input items
-  # @raise RuntimeError if any input item that contains a port
+  # @raise [RuntimeError] if any input item that contains a port
   #   specifies an invalid port
   # @example Input with multiple host formats:
   #

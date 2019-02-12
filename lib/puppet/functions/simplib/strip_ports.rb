@@ -11,7 +11,7 @@ Puppet::Functions.create_function(:'simplib::strip_ports') do
   # @param hosts List of hosts which may contain protocols and port numbers.
   #
   # @return [Array[String]] Non-port portion of hostnames
-  # @raise RuntimeError if any input item that contains a port
+  # @raise [RuntimeError] if any input item that contains a port
   #   specifies an invalid port
   #
   # @example

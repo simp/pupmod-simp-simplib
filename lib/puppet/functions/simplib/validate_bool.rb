@@ -7,7 +7,7 @@ Puppet::Functions.create_function(:'simplib::validate_bool') do
 
   # @param values_to_validate One or more values to validate
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   # @example Passing validation
   #
   #     $iamtrue = true

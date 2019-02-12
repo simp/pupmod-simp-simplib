@@ -12,7 +12,7 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
   #
   # @param err_msg Optional error message to emit upon failure
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   simplib::validate_re_array('one', '^one$')
@@ -35,7 +35,7 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
   #
   # @param err_msg Optional error message to emit upon failure
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   simplib::validate_re_array('one', [ '^one', '^two' ])
@@ -59,7 +59,7 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
   #
   # @param err_msg Optional error message to emit upon failure
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   simplib::validate_re_array(['one-a', 'one-b'], [ '^one', '^two' ])
@@ -82,7 +82,7 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
   #    regexes without the `//` delimiters)
   # @param err_msg Optional error message to emit upon failure
   # @return [Nil]
-  # @raise RuntimeError if validation fails
+  # @raise [RuntimeError] if validation fails
   #
   # @example Passing
   #   simplib::validate_re_array(['one-a', 'one-b'], [ '^one', '^two' ])

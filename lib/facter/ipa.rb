@@ -47,6 +47,9 @@ Facter.add(:ipa) do
         x.size < 2
       }.flatten
 
+    ipa_timeout = 30
+    kinit_timeout = 10
+
     defaults = Hash[*file_defaults]
 
     defaults.delete_if { |k,v| !needed_keys.include?(k) }
@@ -55,18 +58,18 @@ Facter.add(:ipa) do
     defaults['connected'] = false
 
     # Grab the necessary information from 'ipa env'
-    ipa_response = Facter::Core::Execution.exec("#{ipa} env #{needed_keys.join(' ')}")
+    ipa_response = Facter::Core::Execution.execute("#{ipa} env #{needed_keys.join(' ')}", options = {:timeout => ipa_timeout})
 
     if ipa_response.strip.empty?
       # Obtain host Kerberos token so we can use IPA API
-      kinit_msg = Facter::Core::Execution.exec("#{kinit} -k 2>&1")
-      ipa_response = Facter::Core::Execution.exec("#{ipa} env #{needed_keys.join(' ')}")
+      kinit_msg = Facter::Core::Execution.execute("#{kinit} -k 2>&1", options = {:timeout => kinit_timeout})
+      ipa_response = Facter::Core::Execution.execute("#{ipa} env #{needed_keys.join(' ')}", options = {:timeout => ipa_timeout})
     end
 
     if ipa_response.strip.empty?
       ipa_response = {}
     else
-      ipa_server_response = Facter::Core::Execution.exec("#{ipa} env --server host")
+      ipa_server_response = Facter::Core::Execution.execute("#{ipa} env --server host", options = {:timeout => ipa_timeout})
 
       defaults['connected'] = !ipa_server_response.strip.empty?
 
