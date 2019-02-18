@@ -202,14 +202,14 @@ pup4.10-prelink_fact:
   <<: *acceptance_base
   <<: *pup_4_10
   script:
-    - 'BEAKER_fipes=yes bundle exec rake beaker:suites[prelink_fact]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact]'
 
 pup4.10-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_4_10
   <<: *only_with_SIMP_FULL_MATRIX
   script:
-    - 'BEAKER_fipes=yes bundle exec rake beaker:suites[prelink_fact]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact]'
 
 pup4.10-ipa_fact:
   <<: *acceptance_base
