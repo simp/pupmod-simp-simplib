@@ -49,10 +49,11 @@
 * [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.  Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS envi
-* [`simplib::dlookup`](#simplibdlookup): 
+* [`simplib::dlookup`](#simplibdlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplibhash_to_opts): Turn a hash into a options string, for use in a shell command
+* [`simplib::in_bolt`](#simplibin_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
 * [`simplib::inspect`](#simplibinspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
 * [`simplib::ip_to_cron`](#simplibip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
 * [`simplib::ipaddresses`](#simplibipaddresses): Return an `Array` of all IP addresses known to be associated with the client, optionally excluding local addresses.
@@ -1219,7 +1220,8 @@ Fails a compile if the client system is not compatible with the module's
 `metadata.json`
 
 #### `simplib::assert_metadata(String[1] $module_name, Optional[Struct[{
-    os => Optional[Struct[{
+    enable => Optional[Boolean],
+    os     => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -1241,7 +1243,8 @@ The name of the module that should be checked
 ##### `options`
 
 Data type: `Optional[Struct[{
-    os => Optional[Struct[{
+    enable => Optional[Boolean],
+    os     => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -1346,7 +1349,21 @@ information will be appended, if available.
 
 Type: Ruby 4.x API
 
-The simplib::dlookup function.
+A function for performing lookups targeted at ease of use with defined types.
+
+Quite often you need to override something in an existing defined type and,
+presently, you have to do this by creating a resource collector and
+potentially ending up with unintended side-effects.
+
+This function introduces the capability to consistently opt-in to a lookup
+syntax for overriding all parameters of a given defined type or parameters on
+a specific instance of a defined type.
+
+This calls `simplib::lookup` under the hood after formatting the parameters
+appropriately but was split out in case the underlying syntax needs to
+change in the future.
+
+There are two ways to call this method as shown in the following examples.
 
 #### `simplib::dlookup(String[1] $define_id, String[1] $param, Optional[Any] $options)`
 
@@ -1379,7 +1396,7 @@ Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
 
 #### `simplib::dlookup(String[1] $define_id, String[1] $param, String[1] $resource_title, Optional[Any] $options)`
 
-The literal unique identifier of the defined type resource ('mydef::global'
+The literal unique identifier of the defined type resource ('mydef::specific'
 in the examples)
 
 Returns: `Any` The discovered data from Hiera
@@ -1554,6 +1571,26 @@ Options hash. It only takes 3 keys, none of them required:
   deliminate each item. Defaults to ','
 * ``repeat``: Whether to return array values as a deliminated string,
   or by repeating the option with each unique value
+
+### simplib::in_bolt
+
+Type: Puppet Language
+
+Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.
+
+Presently, this function is extremely basic. However, this check was placed
+here to allow us to update the check in the future without needing to modify
+more than one module or hunt down code.
+
+#### `simplib::in_bolt()`
+
+Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.
+
+Presently, this function is extremely basic. However, this check was placed
+here to allow us to update the check in the future without needing to modify
+more than one module or hunt down code.
+
+Returns: `Boolean`
 
 ### simplib::inspect
 
