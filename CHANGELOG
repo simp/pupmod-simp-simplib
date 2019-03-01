@@ -1,4 +1,4 @@
-* Mon Mar 01 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.13.0-0
+* Fri Mar 01 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.13.0-0
 - Add a `simplib::in_bolt` function to detect if the current run is happening
   during a Bolt run.
 - Updated REFERENCE.md
