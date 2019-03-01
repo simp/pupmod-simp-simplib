@@ -1,4 +1,9 @@
-* Mon Feb 11 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.12.1-0
+* Mon Mar 01 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.13.0-0
+- Add a `simplib::in_bolt` function to detect if the current run is happening
+  during a Bolt run.
+- Updated REFERENCE.md
+
+* Mon Feb 11 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.13.0-0
 - Fix simplib::ipaddresses signature
 
 * Wed Jan 30 2019 Jason Hane <hanej@users.noreply.github.com> - 3.12.0-0
