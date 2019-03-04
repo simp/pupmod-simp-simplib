@@ -2133,6 +2133,71 @@ following additional options:
 The following Puppet 4 compatible Data Types have been added for convenience
 and validation across the SIMP code base.
 
+* ``Simplib::Cron::Hour``
+    * Valid Cron Hour parameter. Examples:
+        * ``12``
+        * ``*``
+        * ``*/5``
+        * ``/3``
+        * ``2/14``
+        * ``12-23``
+        * ``12,14-16,23``
+
+* ``Simplib::Cron::Minute``
+    * Valid Cron Minute parameter. Examples:
+        * ``12``
+        * ``*``
+        * ``*/5``
+        * ``/3``
+        * ``2/14``
+        * ``12-23``
+        * ``12,14-16,23``
+
+* ``Simplib::Cron::Month``
+    * Valid Cron Month parameter. Examples:
+        * ``12``
+        * ``*``
+        * ``*/5``
+        * ``/3``
+        * ``2/8``
+        * ``2-8``
+        * ``2,4-6,12``
+        * ``JAN``
+        * ``jan``
+        * ``MAR,JUN,AUG,SEP,OCT``
+
+* ``Simplib::Cron::MonthDay``
+    * Valid Cron MonthDay parameter. Examples:
+        * ``12``
+        * ``*``
+        * ``?``
+        * ``*/5``
+        * ``/3``
+        * ``2/8``
+        * ``2-8``
+        * ``2,4-6,12,31``
+        * ``L``
+        * ``LW``
+        * ``W``
+        * ``19W``
+
+* ``Simplib::Cron::WeekDay``
+    * Valid Cron WeekDay parameter. Examples:
+        * ``0``
+        * ``7`` #Sunday can be either 0 or 7
+        * ``TUE``
+        * ``tue``
+        * ``?``
+        * ``*``
+        * ``*/5``
+        * ``/3``
+        * ``2/3``
+        * ``2-5``
+        * ``2,4-6``
+        * ``L``
+        * ``5#2``
+        * ``FRI#4``
+
 * ``Simplib::Domain``
     * Valid DNS domain names (RFC 3696, Section 2). Examples:
         * ``example.com``
