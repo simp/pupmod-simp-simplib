@@ -12,8 +12,8 @@ describe 'Simplib::Cron::Hour' do
   context 'with invalid parameters' do
     it { is_expected.not_to allow_value('one')}
     it { is_expected.not_to allow_value('-2')}
+    it { is_expected.not_to allow_value('')}
     it { is_expected.not_to allow_value('24')}
-    it { is_expected.not_to allow_value('%')}
     it { is_expected.not_to allow_value('13/*')}
     it { is_expected.not_to allow_value('13-/15')}
   end

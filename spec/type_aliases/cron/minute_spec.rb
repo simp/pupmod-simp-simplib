@@ -13,7 +13,7 @@ describe 'Simplib::Cron::Minute' do
     it { is_expected.not_to allow_value('one')}
     it { is_expected.not_to allow_value('-2')}
     it { is_expected.not_to allow_value('60')}
-    it { is_expected.not_to allow_value('%')}
+    it { is_expected.not_to allow_value('')}
     it { is_expected.not_to allow_value('23/*')}
     it { is_expected.not_to allow_value('23-/25')}
   end
