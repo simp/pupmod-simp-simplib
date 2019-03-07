@@ -12,9 +12,8 @@ describe 'Simplib::Cron::WeekDay' do
     it { is_expected.to allow_value('SUN,mon,wed,TUE')}
     it { is_expected.to allow_value('*')}
     it { is_expected.to allow_value('*/5')}
-    it { is_expected.to allow_value('/3')}
-    it { is_expected.to allow_value('2/5')}
-    it { is_expected.to allow_value('1,4-5,2/6')}
+    it { is_expected.to allow_value('0-6/2')}
+    it { is_expected.to allow_value('1,4-5')}
   end
   context 'with invalid parameters' do
     it { is_expected.not_to allow_value('SUNDAY')}
@@ -22,10 +21,12 @@ describe 'Simplib::Cron::WeekDay' do
     it { is_expected.not_to allow_value('TUE-FRI')}
     it { is_expected.not_to allow_value('TUE-5')}
     it { is_expected.not_to allow_value('TUE/3')}
+    it { is_expected.not_to allow_value('/3')}
     it { is_expected.not_to allow_value('-2')}
     it { is_expected.not_to allow_value('9')}
     it { is_expected.not_to allow_value('')}
     it { is_expected.not_to allow_value('3/*')}
+    it { is_expected.not_to allow_value('3/5')}
     it { is_expected.not_to allow_value('3-/5')}
   end
 end
