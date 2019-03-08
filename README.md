@@ -2447,7 +2447,7 @@ and validation across the SIMP code base.
 
 ## Development
 
-Please read our [Contribution Guide](http://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 If you find any issues, they can be submitted to our
 [JIRA](https://simp-project.atlassian.net).
