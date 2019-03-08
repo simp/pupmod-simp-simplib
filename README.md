@@ -2133,70 +2133,70 @@ following additional options:
 The following Puppet 4 compatible Data Types have been added for convenience
 and validation across the SIMP code base.
 
+* ``Simplib::CronHour``
+    * Valid single or list of cron::hour
+
 * ``Simplib::Cron::Hour``
     * Valid Cron Hour parameter. Examples:
         * ``12``
+        * ``'12'``
         * ``*``
         * ``*/5``
-        * ``/3``
-        * ``2/14``
-        * ``12-23``
-        * ``12,14-16,23``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::CronMinute``
+    * Valid single or list of cron::minute
 
 * ``Simplib::Cron::Minute``
     * Valid Cron Minute parameter. Examples:
         * ``12``
-        * ``*``
-        * ``*/5``
-        * ``/3``
-        * ``2/14``
-        * ``12-23``
-        * ``12,14-16,23``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::CronMonth``
+    * Valid single or list of cron::month
 
 * ``Simplib::Cron::Month``
     * Valid Cron Month parameter. Examples:
         * ``12``
-        * ``*``
-        * ``*/5``
-        * ``/3``
-        * ``2/8``
-        * ``2-8``
-        * ``2,4-6,12``
-        * ``JAN``
-        * ``jan``
-        * ``MAR,JUN,AUG,SEP,OCT``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'2-8'``
+        * ``'JAN'``
+        * ``'jan'``
+        * ``'2-12/2'``
+
+* ``Simplib::CronMonthDay``
+    * Valid single or list of cron::monthday
 
 * ``Simplib::Cron::MonthDay``
     * Valid Cron MonthDay parameter. Examples:
         * ``12``
-        * ``*``
-        * ``?``
-        * ``*/5``
-        * ``/3``
-        * ``2/8``
-        * ``2-8``
-        * ``2,4-6,12,31``
-        * ``L``
-        * ``LW``
-        * ``W``
-        * ``19W``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::CronWeekDay``
+    * Valid single or list of cron::weekday
 
 * ``Simplib::Cron::WeekDay``
     * Valid Cron WeekDay parameter. Examples:
         * ``0``
         * ``7`` #Sunday can be either 0 or 7
-        * ``TUE``
-        * ``tue``
-        * ``?``
-        * ``*``
-        * ``*/5``
-        * ``/3``
-        * ``2/3``
-        * ``2-5``
-        * ``2,4-6``
-        * ``L``
-        * ``5#2``
-        * ``FRI#4``
+        * ``'2'``
+        * ``'TUE'``
+        * ``'tue'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'2-6/2'``
+        * ``'2-5'``
 
 * ``Simplib::Domain``
     * Valid DNS domain names (RFC 3696, Section 2). Examples:
