@@ -9,7 +9,7 @@ describe 'Simplib::CronMonth' do
     it { is_expected.to allow_value('DEC')}
     it { is_expected.to allow_value(['DEC'])}
     it { is_expected.to allow_value('2-3')}
-    it { is_expected.to allow_value(['10-11','DEC','jan','1-6/2',3,5,'9'])}
+    it { is_expected.to allow_value(['10-11','DEC','1-6/2',3,5,'9'])}
     it { is_expected.to allow_value('*')}
     it { is_expected.to allow_value('*/5')}
     it { is_expected.to allow_value('1-12/2')}
