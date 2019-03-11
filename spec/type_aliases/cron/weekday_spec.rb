@@ -7,6 +7,7 @@ describe 'Simplib::Cron::WeekDay' do
     it { is_expected.to allow_value('2')}
     it { is_expected.to allow_value('7')}  #Sunday can be 0 or 7
     it { is_expected.to allow_value('SUN')}
+    it { is_expected.to allow_value('sun')}
     it { is_expected.to allow_value('*')}
     it { is_expected.to allow_value('*/5')}
     it { is_expected.to allow_value('0-4')}

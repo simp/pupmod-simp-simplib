@@ -5,6 +5,7 @@ describe 'Simplib::Cron::Month' do
     it { is_expected.to allow_value('2')}
     it { is_expected.to allow_value(2)}
     it { is_expected.to allow_value('JAN')}
+    it { is_expected.to allow_value('jan')}
     it { is_expected.to allow_value('*')}
     it { is_expected.to allow_value('*/5')}
     it { is_expected.to allow_value('2-10')}
