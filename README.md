@@ -2133,6 +2133,71 @@ following additional options:
 The following Puppet 4 compatible Data Types have been added for convenience
 and validation across the SIMP code base.
 
+* ``Simplib::Cron::Hour``
+    * Valid list of Simplib::Cron::Hour
+
+* ``Simplib::Cron::Hour_entry``
+    * Valid Cron Hour parameter. Examples:
+        * ``12``
+        * ``'12'``
+        * ``*``
+        * ``*/5``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::Cron::Minute``
+    * Valid list of Simplib::Cron::Minute
+
+* ``Simplib::Cron::Minute_entry``
+    * Valid Cron Minute parameter. Examples:
+        * ``12``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::Cron::Month``
+    * Valid list of Simplib::Cron::Month
+
+* ``Simplib::Cron::Month_entry``
+    * Valid Cron Month parameter. Examples:
+        * ``12``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'2-8'``
+        * ``'JAN'``
+        * ``'jan'``
+        * ``'2-12/2'``
+
+* ``Simplib::Cron::MonthDay``
+    * Valid list of Simplib::Cron::MonthDay
+
+* ``Simplib::Cron::MonthDay_entry``
+    * Valid Cron MonthDay parameter. Examples:
+        * ``12``
+        * ``'12'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'12-23'``
+        * ``'12-23/2'``
+
+* ``Simplib::Cron::WeekDay``
+    * Valid list of Simplib::Cron::WeekDay
+
+* ``Simplib::Cron::WeekDay_entry``
+    * Valid Cron WeekDay parameter. Examples:
+        * ``0``
+        * ``7`` #Sunday can be either 0 or 7
+        * ``'2'``
+        * ``'TUE'``
+        * ``'tue'``
+        * ``'*'``
+        * ``'*/5'``
+        * ``'2-6/2'``
+        * ``'2-5'``
+
 * ``Simplib::Domain``
     * Valid DNS domain names (RFC 3696, Section 2). Examples:
         * ``example.com``
@@ -2382,7 +2447,7 @@ and validation across the SIMP code base.
 
 ## Development
 
-Please read our [Contribution Guide](http://simp.readthedocs.io/en/stable/contributors_guide/index.html).
+Please read our [Contribution Guide](https://simp.readthedocs.io/en/stable/contributors_guide/index.html).
 
 If you find any issues, they can be submitted to our
 [JIRA](https://simp-project.atlassian.net).
