@@ -2133,10 +2133,10 @@ following additional options:
 The following Puppet 4 compatible Data Types have been added for convenience
 and validation across the SIMP code base.
 
-* ``Simplib::Cron::HourArray``
+* ``Simplib::Cron::Hour``
     * Valid list of Simplib::Cron::Hour
 
-* ``Simplib::Cron::Hour``
+* ``Simplib::Cron::Hour_solo``
     * Valid Cron Hour parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2145,10 +2145,10 @@ and validation across the SIMP code base.
         * ``'12-23'``
         * ``'12-23/2'``
 
-* ``Simplib::Cron::MinuteArray``
+* ``Simplib::Cron::Minute``
     * Valid list of Simplib::Cron::Minute
 
-* ``Simplib::Cron::Minute``
+* ``Simplib::Cron::Minute_solo``
     * Valid Cron Minute parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2157,10 +2157,10 @@ and validation across the SIMP code base.
         * ``'12-23'``
         * ``'12-23/2'``
 
-* ``Simplib::Cron::MonthArray``
+* ``Simplib::Cron::Month``
     * Valid list of Simplib::Cron::Month
 
-* ``Simplib::Cron::Month``
+* ``Simplib::Cron::Month_solo``
     * Valid Cron Month parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2171,10 +2171,10 @@ and validation across the SIMP code base.
         * ``'jan'``
         * ``'2-12/2'``
 
-* ``Simplib::Cron::MonthDayArray``
+* ``Simplib::Cron::MonthDay``
     * Valid list of Simplib::Cron::MonthDay
 
-* ``Simplib::Cron::MonthDay``
+* ``Simplib::Cron::MonthDay_solo``
     * Valid Cron MonthDay parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2183,10 +2183,10 @@ and validation across the SIMP code base.
         * ``'12-23'``
         * ``'12-23/2'``
 
-* ``Simplib::Cron::WeekDayArray``
+* ``Simplib::Cron::WeekDay``
     * Valid list of Simplib::Cron::WeekDay
 
-* ``Simplib::Cron::WeekDay``
+* ``Simplib::Cron::WeekDay_solo``
     * Valid Cron WeekDay parameter. Examples:
         * ``0``
         * ``7`` #Sunday can be either 0 or 7
