@@ -2136,7 +2136,7 @@ and validation across the SIMP code base.
 * ``Simplib::Cron::Hour``
     * Valid list of Simplib::Cron::Hour
 
-* ``Simplib::Cron::Hour_solo``
+* ``Simplib::Cron::Hour_entry``
     * Valid Cron Hour parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2148,7 +2148,7 @@ and validation across the SIMP code base.
 * ``Simplib::Cron::Minute``
     * Valid list of Simplib::Cron::Minute
 
-* ``Simplib::Cron::Minute_solo``
+* ``Simplib::Cron::Minute_entry``
     * Valid Cron Minute parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2160,7 +2160,7 @@ and validation across the SIMP code base.
 * ``Simplib::Cron::Month``
     * Valid list of Simplib::Cron::Month
 
-* ``Simplib::Cron::Month_solo``
+* ``Simplib::Cron::Month_entry``
     * Valid Cron Month parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2174,7 +2174,7 @@ and validation across the SIMP code base.
 * ``Simplib::Cron::MonthDay``
     * Valid list of Simplib::Cron::MonthDay
 
-* ``Simplib::Cron::MonthDay_solo``
+* ``Simplib::Cron::MonthDay_entry``
     * Valid Cron MonthDay parameter. Examples:
         * ``12``
         * ``'12'``
@@ -2186,7 +2186,7 @@ and validation across the SIMP code base.
 * ``Simplib::Cron::WeekDay``
     * Valid list of Simplib::Cron::WeekDay
 
-* ``Simplib::Cron::WeekDay_solo``
+* ``Simplib::Cron::WeekDay_entry``
     * Valid Cron WeekDay parameter. Examples:
         * ``0``
         * ``7`` #Sunday can be either 0 or 7

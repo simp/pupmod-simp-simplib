@@ -1,5 +1,5 @@
-* Fri Mar 08 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.14.0-0
-- Add `Simplib::Cron::####_solo` set of datatypes for each of: minute, hour, month, 
+* Tue Mar 12 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.14.0-0
+- Add `Simplib::Cron::####_entry` set of datatypes for each of: minute, hour, month, 
   monthday, and weekday.
 - Add `Simplib::Cron::####` datatype for single|list of each cron datatype
 - Updated README.md

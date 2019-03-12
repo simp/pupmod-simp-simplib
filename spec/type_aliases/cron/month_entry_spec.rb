@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Simplib::Cron::Month_solo' do
+describe 'Simplib::Cron::Month_entry' do
   context 'with valid parameters' do
     it { is_expected.to allow_value( '2' ) }
     it { is_expected.to allow_value( 2 ) }

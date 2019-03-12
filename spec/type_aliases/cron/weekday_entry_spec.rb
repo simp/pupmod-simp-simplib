@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Simplib::Cron::WeekDay_solo' do
+describe 'Simplib::Cron::WeekDay_entry' do
   context 'with valid parameters' do
     it { is_expected.to allow_value( '0' ) }
     it { is_expected.to allow_value( 2 ) }
