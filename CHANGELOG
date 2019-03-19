@@ -1,3 +1,7 @@
+* Tue Mar 19 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.14.1-0
+- Fixed bug in Simplib::Cron::Weekday type alias in which a numeric
+  value of 0 was not allowed.
+
 * Tue Mar 12 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.14.0-0
 - Add `Simplib::Cron::####_entry` set of datatypes for each of: minute, hour, month, 
   monthday, and weekday.
