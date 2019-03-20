@@ -2,10 +2,12 @@ require 'spec_helper'
 
 describe 'Simplib::Cron::WeekDay_entry' do
   context 'with valid parameters' do
+    it { is_expected.to allow_value( 0 ) }
     it { is_expected.to allow_value( '0' ) }
     it { is_expected.to allow_value( 2 ) }
     it { is_expected.to allow_value( '2' ) }
     it { is_expected.to allow_value( '7' ) }  #Sunday can be 0 or 7
+    it { is_expected.to allow_value( 7 ) }  #Sunday can be 0 or 7
     it { is_expected.to allow_value( 'SUN' ) }
     it { is_expected.to allow_value( 'sun' ) }
     it { is_expected.to allow_value( '*' ) }
