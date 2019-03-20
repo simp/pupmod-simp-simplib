@@ -1,7 +1,8 @@
 * Tue Mar 19 2019 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.14.2-0
 - Removed simplib's `deep_merge()` 3.x function that conflicts with stdlib's
   fully-equivalent `deep_merge()` function.  
-  - Has no impact on uses of `deep_merge`.  
+  - Has no impact on uses of `deep_merge` (hence a bug fix not a major version
+    change).
   - Eliminates 'Illegal method definition' errors caused by the conflict,
     when using Puppet 6.
 
