@@ -1,9 +1,9 @@
 * Tue Mar 19 2019 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.14.2-0
-- Removed simplib's `deep_merge()` 3.x function
-  - NOTE: This is a bugfix and not a breaking change; simplib depends on
-    stdlib, which has long since provided a compatible `deep_merge()` function
-    in the same (global/Puppet 3.x) namespace, but with a superior
-    implementation.  For more details, see SIMP-6259.
+- Removed simplib's `deep_merge()` 3.x function that conflicts with stdlib's
+  fully-equivalent `deep_merge()` function.  
+  - Has no impact on uses of `deep_merge`.  
+  - Eliminates 'Illegal method definition' errors caused by the conflict,
+    when using Puppet 6.
 
 * Tue Mar 19 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.14.1-0
 - Fixed bug in Simplib::Cron::Weekday type alias in which a numeric
