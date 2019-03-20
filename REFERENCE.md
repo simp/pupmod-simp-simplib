@@ -28,7 +28,6 @@
 * [`array_size`](#array_size): Returns the number of elements in an `Array`. If a `String` is passed,   simply returns `1`.  This is in contrast to the Puppet Labs `stdlib`
 * [`array_union`](#array_union): Return the union of two `Arrays`.
 * [`bracketize`](#bracketize): Add brackets to IP addresses and `Arrays` of IP addresses based on the rules for bracketing IPv6 addresses.  Ignore anything that does not lo
-* [`deep_merge`](#deep_merge): Perform a deep merge on two passed `Hashes`.  This code is shamelessly stolen from the guts of `ActiveSupport::CoreExtensions::Hash::DeepMerg
 * [`generate_reboot_msg`](#generate_reboot_msg): Generate a reboot message from a passed `Hash`.  Requires a `Hash` of the following form:  ``ruby {   'id'  => 'reason',   'id2' => 'reason2'
 * [`get_ports`](#get_ports): Take an `Array` of items that may contain `port` numbers and appropriately return the `port` portion. Works with hostnames, IPv4, and IPv6.
 * [`h2n`](#h2n): Takes a single `hostname` and returns the associated IP address if it can determine it.  If it cannot be determined, simply returns the passe
@@ -667,26 +666,6 @@ rules for bracketing IPv6 addresses.
 Ignore anything that does not look like an IPv6 address.
 
 Returns: `Variant[String, Array[String]]`
-
-### deep_merge
-
-Type: Ruby 3.x API
-
-Perform a deep merge on two passed `Hashes`.
-
-This code is shamelessly stolen from the guts of
-`ActiveSupport::CoreExtensions::Hash::DeepMerge` and munged together with
-the Puppet Labs `stdlib` `merge()` function.
-
-#### `deep_merge()`
-
-Perform a deep merge on two passed `Hashes`.
-
-This code is shamelessly stolen from the guts of
-`ActiveSupport::CoreExtensions::Hash::DeepMerge` and munged together with
-the Puppet Labs `stdlib` `merge()` function.
-
-Returns: `Hash`
 
 ### generate_reboot_msg
 
