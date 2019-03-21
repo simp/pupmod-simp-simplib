@@ -5,6 +5,8 @@ module Puppet::Parser::Functions
     @return [String]
     EOM
 
+    function_simplib_deprecation(['simp_version', 'simp_version is deprecated, please use simplib::simp_version'])
+
     retval = "unknown\n"
 
     begin
