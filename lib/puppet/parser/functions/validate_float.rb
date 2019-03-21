@@ -5,6 +5,8 @@ module Puppet::Parser::Functions
     @return [Nil]
     EOS
 
+    function_simplib_deprecation(['validate_float', 'validate_float is deprecated and will be removed in a future release'])
+
     if (args.size != 1)
       raise(Puppet::ParseError, "is_float(): Wrong number of args "+
         "given #{args.size} for 1")

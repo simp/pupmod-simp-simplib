@@ -10,6 +10,8 @@ module Puppet::Parser::Functions
 
     require 'resolv'
 
+    function_simplib_deprecation(['h2n', 'h2n is deprecated and will be removed in a future release'])
+
     to_find = args.first.to_s
     retval = to_find
 

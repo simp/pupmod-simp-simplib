@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
     @return [Array[String]]
     EOM
 
+    function_simplib_deprecation(['get_ports', 'get_ports is deprecated and will be removed in a future release'])
+
     raise Puppet::ParseError, "You must pass a list of hosts." if args.empty?
     Puppet::Parser::Functions.autoloader.loadall
 

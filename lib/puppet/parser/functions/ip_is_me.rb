@@ -13,6 +13,8 @@ module Puppet::Parser::Functions
     )
     require 'ipaddr'
 
+    function_simplib_deprecation(['ip_is_me', 'ip_is_me is deprecated and will be removed in a future release'])
+
     if args.class.eql?(Array) then
       f_args = args.dup
     else

@@ -1,9 +1,24 @@
-* Wed Mar 20 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.14.2-0
+* Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
+- Deprecated Puppet 3 functions that are not used by any SIMP
+  modules.  The functions will be removed in a future release,
+  unless SIMP receives requests from users to convert them to
+  namespaced Puppet 4.x functions.
+  - array_union
+  - generate_reboot_msg
+  - get_ports
+  - h2n
+  - ip_is_me
+  - localuser
+  - mapval
+  - validate_array_of_hashes
+  - validate_float
+
+* Wed Mar 20 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
 - Remove Puppet 3 validate_integer function that conflicts with the
   same-named Puppet 3 function provided by puppetlab-stdlib.  This
   conflict causes compilation failures with Puppet 6.
 
-* Tue Mar 19 2019 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.14.2-0
+* Tue Mar 19 2019 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.15.0-0
 - Removed simplib's `deep_merge()` 3.x function that conflicts with stdlib's
   fully-equivalent `deep_merge()` function.  
   - Has no impact on uses of `deep_merge` (hence a bug fix not a major version
