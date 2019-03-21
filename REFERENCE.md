@@ -91,7 +91,6 @@
 * [`validate_bool_simp`](#validate_bool_simp): Validate that all passed values are either `true` or `false`.  Abort catalog compilation if any value fails this check.  Modified from the st
 * [`validate_deep_hash`](#validate_deep_hash): Perform a deep validation on two passed `Hashes`.  The first `Hash` is the one to validate against, and the second is the one being validated
 * [`validate_float`](#validate_float): Validates whether or not the passed argument is a float
-* [`validate_integer`](#validate_integer): Validates that the passed argument is an `Integer`.
 * [`validate_macaddress`](#validate_macaddress): Validate that all passed values are valid MAC addresses.
 * [`validate_net_list`](#validate_net_list): Validate that a passed list (`Array` or single `String`) of networks is filled with valid IP addresses or hostnames. Hostnames are checked pe
 * [`validate_port`](#validate_port): Validates whether or not the passed argument is a valid port (i.e. between `1` - `65535`).
@@ -2925,18 +2924,6 @@ Validates whether or not the passed argument is a float
 #### `validate_float()`
 
 Validates whether or not the passed argument is a float
-
-Returns: `N` N
-
-### validate_integer
-
-Type: Ruby 3.x API
-
-Validates that the passed argument is an `Integer`.
-
-#### `validate_integer()`
-
-Validates that the passed argument is an `Integer`.
 
 Returns: `N` N
 

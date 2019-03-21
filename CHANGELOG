@@ -3,6 +3,14 @@
   simplib deprecation warning when the Puppet 3 versions are called:
   - simplib::host_is_me() replaces deprecated host_is_me().
 
+* Wed Mar 20 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
+- Remove Puppet 3 validate_integer function that conflicts with the
+  same-named Puppet 3 function provided by puppetlab-stdlib.
+  - Has no impact on uses of `validate_integer` (hence a bug fix not a major
+    version change).
+  - Eliminates 'Illegal method definition' errors caused by the conflict,
+    when using Puppet 6.
+
 * Tue Mar 19 2019 Chris Tessmer <chris.tessmer@onyxpoint.com> - 3.15.0-0
 - Removed simplib's `deep_merge()` 3.x function that conflicts with stdlib's
   fully-equivalent `deep_merge()` function.
