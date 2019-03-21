@@ -1,4 +1,4 @@
-# Return an `Array` of all IP addresses known to be associated with the
+# Return an `Array` of all IPv4 addresses known to be associated with the
 # client, optionally excluding local addresses.
 #
 Puppet::Functions.create_function(:'simplib::ipaddresses') do
