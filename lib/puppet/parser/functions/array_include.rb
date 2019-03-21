@@ -21,6 +21,8 @@ module Puppet::Parser::Functions
 
     ENDHEREDOC
 
+    function_simplib_deprecation(['array_include', "array_include is deprecated, please use stdlib's member"])
+
     unless args.length == 2
       raise Puppet::ParseError, ("array_include(): wrong number of arguments (#{args.length}; must be 2)")
     end
