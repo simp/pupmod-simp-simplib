@@ -1,4 +1,11 @@
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
+- Deprecated simplib Puppet 3 functions for which corresponding,
+  though not identically behaving, Puppet builtins or stdlib
+  functions exist.  The functions will be removed in a future
+  release, unless SIMP receives requests from users to convert
+  them to namespaced Puppet 4.x functions.
+  - array_include() can often be replaced with stdlib member()
+  - array_size() can often be replaced with the Puppet builtin length()
 - Deprecated Puppet 3 functions that are not used by any SIMP
   modules.  The functions will be removed in a future release,
   unless SIMP receives requests from users to convert them to
