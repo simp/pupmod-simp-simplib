@@ -52,10 +52,11 @@
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplibhash_to_opts): Turn a hash into a options string, for use in a shell command
+* [`simplib::host_is_me`](#simplibhost_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of  hostnames and/o
 * [`simplib::in_bolt`](#simplibin_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
 * [`simplib::inspect`](#simplibinspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
 * [`simplib::ip_to_cron`](#simplibip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
-* [`simplib::ipaddresses`](#simplibipaddresses): Return an `Array` of all IP addresses known to be associated with the client, optionally excluding local addresses.
+* [`simplib::ipaddresses`](#simplibipaddresses): Return an `Array` of all IPv4 addresses known to be associated with the client, optionally excluding local addresses.
 * [`simplib::join_mount_opts`](#simplibjoin_mount_opts): Merge two sets of `mount` options in a reasonable fashion, giving precedence to the second set.
 * [`simplib::knockout`](#simplibknockout): uses the knockout prefix of '--' to remove elements from an array.
 * [`simplib::ldap::domain_to_dn`](#simplibldapdomain_to_dn): Generates a LDAP Base DN from a domain
@@ -1551,6 +1552,42 @@ Options hash. It only takes 3 keys, none of them required:
 * ``repeat``: Whether to return array values as a deliminated string,
   or by repeating the option with each unique value
 
+### simplib::host_is_me
+
+Type: Ruby 4.x API
+
+Detect if a local system identifier hostname/IPv4 address matches
+a specified hostname/IPv4 address or an entry in a list of 
+hostnames and/or IPv4 addresses
+
+#### `simplib::host_is_me(Simplib::Host $host)`
+
+The simplib::host_is_me function.
+
+Returns: `Boolean` true if a local system hostname/IPv4 address matches
+the specified host
+
+##### `host`
+
+Data type: `Simplib::Host`
+
+Hostname/IPv4 address to compare against;
+`127.0.0.1` is never matched, use `localhost` instead
+
+#### `simplib::host_is_me(Array[Simplib::Host] $hosts)`
+
+The simplib::host_is_me function.
+
+Returns: `Boolean` true if a local system hostname/IPv4 address matches
+any of the specified hosts
+
+##### `hosts`
+
+Data type: `Array[Simplib::Host]`
+
+Array of Hostnames and/or IPv4 addresses to compare
+against; `127.0.0.1` is never matched, use `localhost` instead
+
 ### simplib::in_bolt
 
 Type: Puppet Language
@@ -1681,12 +1718,12 @@ When `nil`, the 'ipaddress' fact (IPv4) is used.
 
 Type: Ruby 4.x API
 
-Return an `Array` of all IP addresses known to be associated with the
+Return an `Array` of all IPv4 addresses known to be associated with the
 client, optionally excluding local addresses.
 
 #### `simplib::ipaddresses(Optional[Boolean] $only_remote)`
 
-Return an `Array` of all IP addresses known to be associated with the
+Return an `Array` of all IPv4 addresses known to be associated with the
 client, optionally excluding local addresses.
 
 Returns: `Array[String]` List of IP addresses for the client

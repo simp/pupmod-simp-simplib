@@ -10,6 +10,8 @@ module Puppet::Parser::Functions
     @return [Variant[String, Array]]
     EOM
 
+    function_simplib_deprecation(['host_is_me', 'host_is_me is deprecated, please use simplib::host_is_me'])
+
     if args == '!test!' then return true end
 
     retval = false
