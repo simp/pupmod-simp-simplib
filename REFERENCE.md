@@ -68,6 +68,7 @@
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
 * [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Uses `Puppet.settings[:vardir]/simp/environments/$enviro
 * [`simplib::rand_cron`](#simplibrand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
+* [`simplib::simp_version`](#simplibsimp_version): Return the version of SIMP that this server is running or "unknown\n"
 * [`simplib::strip_ports`](#simplibstrip_ports): Extract list of unique hostnames and/or IP addresses from an `Array` of hosts, each of which may may contain protocols and/or port numbers  T
 * [`simplib::to_integer`](#simplibto_integer): Converts the argument into an `Integer`.  Terminates catalog compilation if the argument's class does not respond to the `to_i()` Ruby method
 * [`simplib::to_string`](#simplibto_string): Converts the argument into a `String`.
@@ -2162,6 +2163,27 @@ Data type: `Optional[Integer[1]]`
 The maximum value for the interval.  The values generated will
 be in the inclusive range [0, max_value]. Defaults to `60` for
 use in the `minute` cron field.
+
+### simplib::simp_version
+
+Type: Ruby 4.x API
+
+Return the version of SIMP that this server is running or "unknown\n"
+
+#### `simplib::simp_version(Optional[Boolean] $strip_whitespace)`
+
+Return the version of SIMP that this server is running or "unknown\n"
+
+Returns: `String` Version string if the version can be detected;
+"unknown\n" otherwise
+
+##### `strip_whitespace`
+
+Data type: `Optional[Boolean]`
+
+Whether to strip whitespace from the
+version string.  Without stripping, the string may end with
+a "\n"
 
 ### simplib::strip_ports
 
