@@ -9,7 +9,7 @@ module Puppet::Parser::Functions
     @return [Integer]
     ENDHEREDOC
 
-    function_simplib_deprecation(['array_size', "array_size is deprecated, please use builtin length"])
+    function_simplib_deprecation(['array_size', "array_size is deprecated, please use builtin 'length()'"])
 
     unless args.length == 1
       raise Puppet::ParseError, ("array_size(): Exactly one argument must be passed.")
