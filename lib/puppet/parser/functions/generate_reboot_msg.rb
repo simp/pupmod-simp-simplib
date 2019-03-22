@@ -23,6 +23,8 @@ module Puppet::Parser::Functions
     @return [String]
     ENDHEREDOC
 
+    function_simplib_deprecation(['generate_reboot_msg', 'generate_reboot_msg is deprecated and will be removed in a future release'])
+
     input_hash = input_hash.shift
 
     raise(Puppet::ParseError,"Error: input to generate_reboot() must be a Hash, got '#{input_hash.class}'") unless input_hash.is_a?(Hash)

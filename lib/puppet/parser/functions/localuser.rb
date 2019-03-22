@@ -42,6 +42,9 @@ module Puppet::Parser::Functions
 
     @return [String]
     ENDHEREDOC
+
+    function_simplib_deprecation(['localuser', 'localuser is deprecated and will be removed in a future release'])
+
     filename = args[0]
     hostname = args[1]
     retval = []

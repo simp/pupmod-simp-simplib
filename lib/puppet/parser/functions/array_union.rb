@@ -15,6 +15,8 @@ module Puppet::Parser::Functions
     @return [Array]
     ENDHEREDOC
 
+    function_simplib_deprecation(['array_union', 'array_union is deprecated and will be removed in a future release'])
+
     unless args.length == 2
       raise Puppet::ParseError, ("array_union(): wrong number of arguments (#{args.length}; must be 2)")
     end

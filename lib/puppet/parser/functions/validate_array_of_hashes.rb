@@ -12,6 +12,8 @@ module Puppet::Parser::Functions
     @return [Boolean]
     ENDHEREDOC
 
+    function_simplib_deprecation(['validate_array_of_hashes', 'validate_array_of_hashes is deprecated and will be removed in a future release'])
+
     unless args.length == 1
       raise Puppet::ParseError, ("validate_array_of_hashes(): expects exactly one argument. Got '#{args.length}'")
     end
