@@ -16,6 +16,8 @@ module Puppet::Parser::Functions
     @return [String]
     EOM
 
+    function_simplib_deprecation(['mapval', 'mapval is deprecated and will be removed in a future release'])
+
     regex = args[0]
     filename = args[1]
     retval = ''
