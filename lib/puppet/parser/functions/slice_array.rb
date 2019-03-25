@@ -17,6 +17,8 @@ module Puppet::Parser::Functions
     @return [Array[Array[Any]]]]
     EOM
 
+    function_simplib_deprecation(['slice_array', "slice_array is deprecated, please use builtin 'slice()'"])
+
     # Variable Assignment
     to_slice = args[0]
     max_length = args[1]
