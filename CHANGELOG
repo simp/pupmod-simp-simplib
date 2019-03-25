@@ -10,6 +10,7 @@
   them to namespaced Puppet 4.x functions.
   - array_include() can often be replaced with stdlib member()
   - array_size() can often be replaced with the Puppet builtin length()
+  - slice_array() can often be replace with the Puppet builtin slice()
 - Deprecated Puppet 3 functions that are not used by any SIMP
   modules.  The functions will be removed in a future release,
   unless SIMP receives requests from users to convert them to
