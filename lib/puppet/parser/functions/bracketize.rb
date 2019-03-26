@@ -8,7 +8,7 @@ module Puppet::Parser::Functions
     @return [Variant[String, Array[String]]]
     ENDHEREDOC
 
-function_simplib_deprecation(['bracketize', 'bracketize is deprecated'])
+function_simplib_deprecation(['bracketize', 'bracketize is deprecated and will be removed in a future release'])
 
     ipaddr = Array(ipaddr).flatten
     toret = ipaddr.map { |x|
