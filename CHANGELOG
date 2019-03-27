@@ -2,7 +2,7 @@
 - Convert bracketize Puppet 3 function to simplib::bracketize Puppet 4
   function and emit a simplib deprecation warning when bracketize is
   called.
-- Added capability for simplib::bracketize to accept strings
+- Added capability for simplib::bracketize to accept a string
   delimited by: comma, space, and/or semi-colon
 
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
