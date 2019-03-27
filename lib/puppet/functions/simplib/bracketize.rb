@@ -24,7 +24,7 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
     required_param 'Array[String]', :ip_arr
   end
 
-  # @param ipaddr_string The string of ipv6 to bracketize (comma, space, and/or semi-colon seperated)
+  # @param ipaddr_string The string of IPv6 addresses to bracketize (comma, space, and/or semi-colon separated)
   # @return [Variant[String, Array[String]]] converted input
   #
   # @example Bracketize ipaddr_string input
