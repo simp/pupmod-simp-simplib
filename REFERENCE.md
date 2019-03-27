@@ -47,6 +47,7 @@
 * [`simp_version`](#simp_version): Return the version of SIMP that this server is running
 * [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
+* [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
 * [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.  Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS envi
 * [`simplib::dlookup`](#simplibdlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
@@ -1291,6 +1292,41 @@ The root of the dependency tree in the module's `metadata.json` that
 contains the optional dependencies.
 
 * Nested levels should be separated by colons (`:`)
+
+### simplib::bracketize
+
+Type: Ruby 4.x API
+
+Add brackets to strings of IPv6 addresses and `Arrays`
+of IPv6 addresses based on the rules for bracketing
+IPv6 addresses.
+
+Ignores anything that does not look like an IPv6 address
+and return those entries untouched.
+
+#### `simplib::bracketize(Array[String] $ip_arr)`
+
+The simplib::bracketize function.
+
+Returns: `Variant[String, Array[String]]` converted input
+
+##### `ip_arr`
+
+Data type: `Array[String]`
+
+The array of ipv6 to bracketize
+
+#### `simplib::bracketize(String $ipaddr_string)`
+
+The simplib::bracketize function.
+
+Returns: `Variant[String, Array[String]]` converted input
+
+##### `ipaddr_string`
+
+Data type: `String`
+
+The string of IPv6 addresses to bracketize (comma, space, and/or semi-colon separated)
 
 ### simplib::deprecation
 
