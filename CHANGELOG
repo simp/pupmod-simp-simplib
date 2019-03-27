@@ -1,6 +1,7 @@
 * Fri Mar 22 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.0-0
-- Marked bracketize puppet 3 function as deprecated.
-- Created bracketize function, and spec test
+- Convert bracketize Puppet 3 function to simplib::bracketize Puppet 4
+  function and emit a simplib deprecation warning when bracketize is
+  called.
 
 * Thu Mar 21 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.0-0
 - Deprecated simplib Puppet 3 functions for which corresponding,
