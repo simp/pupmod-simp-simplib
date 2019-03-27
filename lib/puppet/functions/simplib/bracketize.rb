@@ -7,7 +7,7 @@
 #
 Puppet::Functions.create_function(:'simplib::bracketize') do
 
-  # @param ip_arr The array of ipv6 to bracketize
+  # @param ip_arr The array of IPv6 addresses to bracketize
   # @return [Variant[String, Array[String]]] converted input
   #
   # @example Bracketize ip_arr input
