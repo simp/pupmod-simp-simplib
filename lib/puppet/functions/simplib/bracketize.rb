@@ -7,10 +7,10 @@
 #
 Puppet::Functions.create_function(:'simplib::bracketize') do
 
-  # @param ipArr The array of ipv6 to bracketize
+  # @param ip_arr The array of ipv6 to bracketize
   # @return [Variant[String, Array[String]]] converted input
   #
-  # @example Bracketize ipArr input
+  # @example Bracketize ip_arr input
   #
   #   $foo = [ '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
   #            '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' ]
@@ -21,7 +21,7 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
   #                   '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24' ]
   #
   dispatch :bracketize do
-    required_param 'Array[String]', :ipArr
+    required_param 'Array[String]', :ip_arr
   end
 
   # @param ipaddr_string The string of ipv6 to bracketize (comma, space, and/or semi-colon seperated)
@@ -42,13 +42,13 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
   end
 
   def bracketize_string_input(ipaddr_string)
-    ipArr = ipaddr_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
-    bracketize(ipArr)
+    ip_arr = ipaddr_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
+    bracketize(ip_arr)
   end
 
-  def bracketize(ipArr)
+  def bracketize(ip_arr)
     require 'ipaddr'
-    ipaddr = Array(ipArr).flatten
+    ipaddr = Array(ip_arr).flatten
     retval = Array.new
     ipaddr.each do |x|
       begin
