@@ -1,15 +1,16 @@
-# Add brackets to IP addresses and `Arrays` of IP
-# addresses based on the rules for bracketing
+# Add brackets to strings of IPv6 addresses and `Arrays`
+# of IPv6 addresses based on the rules for bracketing
 # IPv6 addresses.
 #
-# Ignore anything that does not look like an IPv6 address.
+# Ignores anything that does not look like an IPv6 address
+# and return those entries untouched.
 #
 Puppet::Functions.create_function(:'simplib::bracketize') do
 
-  # @param ipv6 The ipv6 to bracketize
+  # @param ipArr The array of ipv6 to bracketize
   # @return [Variant[String, Array[String]]] converted input
   #
-  # @example Bracketize ipv6 input
+  # @example Bracketize ipArr input
   #
   #   $foo = [ '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
   #            '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' ]
@@ -20,21 +21,34 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
   #                   '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24' ]
   #
   dispatch :bracketize do
-    required_param 'Array[String]', :ipaddr
+    required_param 'Array[String]', :ipArr
   end
 
+  # @param ipaddr_string The string of ipv6 to bracketize (comma, space, and/or semi-colon seperated)
+  # @return [Variant[String, Array[String]]] converted input
+  #
+  # @example Bracketize ipaddr_string input
+  #
+  #   $foo = '2001:0db8:85a3:0000:0000:8a2e:0370:7334,2001:0db8:85a3:0000:0000:8a2e:0370:7334/24 3456:0db8:85a3:0000:0000:8a2e:0370:7334'
+  #
+  #   $bar = simplib::bracketize($foo)
+  #
+  #   $bar contains:[ '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+  #                   '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
+  #                   '[3456:0db8:85a3:0000:0000:8a2e:0370:7334]' ]
+  #
   dispatch :bracketize_string_input do
     required_param 'String', :ipaddr_string
   end
 
   def bracketize_string_input(ipaddr_string)
-    ipaddr = ipaddr_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
-    bracketize(ipaddr)
+    ipArr = ipaddr_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
+    bracketize(ipArr)
   end
 
-  def bracketize(ipaddr)
+  def bracketize(ipArr)
     require 'ipaddr'
-    ipaddr = Array(ipaddr).flatten
+    ipaddr = Array(ipArr).flatten
     retval = Array.new
     ipaddr.each do |x|
       begin
