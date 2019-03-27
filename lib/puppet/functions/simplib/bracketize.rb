@@ -65,6 +65,8 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
           y = x.split('/')
           y[0] = "[#{y[0]}]"
           retval << y.join('/')
+        else
+         retval << x
         end
       else
         retval << x
