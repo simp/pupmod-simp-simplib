@@ -18,14 +18,18 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
   #   $foo = [ '10.0.1.0/24',
   #            '10.0.2.0/255.255.255.0',
   #            '10.0.3.25',
-  #            'myhost' ]
+  #            'myhost',
+  #            '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+  #            '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
   #
   #   $bar = simplib::nets2ddq($foo)
   #
   #   $bar contains:[ '10.0.1.0/255.255.255.0',
   #                   '10.0.2.0/255.255.255.0',
   #                   '10.0.3.25',
-  #                   'myhost' ]
+  #                   'myhost',
+  #                   '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+  #                   '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
   #
   dispatch :nets2ddq do
     required_param 'Array', :networks
@@ -39,14 +43,16 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
   #
   # @example Convert String input
   #
-  #   $foo = '10.0.1.0/24 10.0.2.0/255.255.255.0 10.0.3.25 myhost'
+  #   $foo = '10.0.1.0/24 10.0.2.0/255.255.255.0 10.0.3.25 myhost 2001:0db8:85a3:0000:0000:8a2e:0370:7334 2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
   #
   #   $bar = simplib::nets2ddq($foo)
   #
   #   $bar contains:[ '10.0.1.0/255.255.255.0',
   #                   '10.0.2.0/255.255.255.0',
   #                   '10.0.3.25',
-  #                   'myhost' ]
+  #                   'myhost',
+  #                   '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+  #                   '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
   #
   dispatch :nets2ddq_string_input do
     required_param 'String', :networks_string
@@ -73,8 +79,11 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
         fail("simplib::nets2ddq(): '#{lnet}' is not a valid network.")
       end
 
+      # Just add it without touching if it is an ipv6 addr
+      if ipaddr.ipv6?()
+        retval << lnet
       # Just add it if it doesn't have a specified netmask.
-      if lnet =~ /\// then
+      elsif lnet =~ /\//
         retval << "#{ipaddr.to_s}/#{ipaddr.inspect.split('/').last.chop}"
       else
         retval << lnet
