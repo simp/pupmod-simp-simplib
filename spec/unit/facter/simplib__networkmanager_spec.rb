@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'simplib_networkmanager' do
+describe 'simplib__networkmanager' do
 
   before :each do
     Facter.clear
@@ -18,7 +18,7 @@ describe 'simplib_networkmanager' do
     let(:connections){ :failed }
 
     it 'returns "enabled" = false' do
-      expect(Facter.fact('simplib_networkmanager').value).to eq({'enabled' => false})
+      expect(Facter.fact('simplib__networkmanager').value).to eq({'enabled' => false})
     end
   end
 
@@ -71,7 +71,7 @@ Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
     }}
 
     it 'is enabled' do
-      expect(Facter.fact('simplib_networkmanager').value).to eq(expected)
+      expect(Facter.fact('simplib__networkmanager').value).to eq(expected)
     end
   end
 end

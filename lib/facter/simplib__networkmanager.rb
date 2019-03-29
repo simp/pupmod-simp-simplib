@@ -1,4 +1,4 @@
-Facter.add(:simplib_networkmanager) do
+Facter.add(:simplib__networkmanager) do
   confine :kernel => 'Linux'
 
   @nmcli_cmd = Facter::Util::Resolution.which('nmcli')
