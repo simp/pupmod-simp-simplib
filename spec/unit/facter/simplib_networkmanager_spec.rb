@@ -38,8 +38,8 @@ WWAN:enabled
 
     let(:connections){
       <<-EOM
-eth0:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
-virbr0:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
+Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
+Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
       EOM
     }
 
@@ -58,14 +58,14 @@ virbr0:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
       },
       'connection' => {
         'eth0'   => {
-          'uuid'   => 'b961cb37-ae05-4c67-98b0-432465fe03c2',
-          'type'   => '802-3-ethernet',
-          'device' => 'eth0'
+          'uuid' => 'b961cb37-ae05-4c67-98b0-432465fe03c2',
+          'type' => '802-3-ethernet',
+          'name' => 'Eth Dev'
         },
         'virbr0' => {
-          'uuid'   => '0c190f3f-262b-4585-a7de-2a146896ea86',
-          'type'   => 'bridge',
-          'device' => 'virbr0'
+          'uuid' => '0c190f3f-262b-4585-a7de-2a146896ea86',
+          'type' => 'bridge',
+          'name' => 'Bridge Dev'
         }
       }
     }}
