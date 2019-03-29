@@ -1,8 +1,8 @@
 # Tranforms a list of networks into an equivalent array in
 # dotted quad notation.
 #
-# * CIDR networks are converted to dotted quad notation networks.
-#   IP addresses and hostnames are left untouched.
+# * IPv4 CIDR networks are converted to dotted quad notation networks.
+#   All other IP addresses and hostnames are left untouched.
 # * Terminates catalog compilation if any input item is not a
 #   valid network or hostname.
 #
