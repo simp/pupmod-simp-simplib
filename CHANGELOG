@@ -1,6 +1,10 @@
 * Fri Apr 05 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.0-0
 - Re-enable simplib deprecation warnings by default
 
+* Mon Apr 01 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.15.0-0
+- Added a 'simplib_networkmanager' fact to provide useful information about the
+  state of NetworkManager components.
+
 * Fri Mar 29 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.0-0
 - Fixed a bug in simplib::nets2ddq where it would incorrectly try to
   expand an IPv6 CIDR.  It now passes IPv6 addresses through untouched.
