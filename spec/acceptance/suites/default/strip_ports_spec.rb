@@ -3,9 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'strip_ports function'
 
 describe 'strip_ports function' do
-  let(:opts) do
-    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
-  end
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
@@ -19,7 +16,7 @@ describe 'strip_ports function' do
       }
 
       it 'should tranform the host list and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(
           %r(Notice: Type => Array Content => \["1.2.3.4"\])
@@ -43,7 +40,7 @@ describe 'strip_ports function' do
       }
 
       it 'should transform the host list without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         expect(results.output).to match(
           %r(Notice: Type => Array Content => \["my.example.net"\])

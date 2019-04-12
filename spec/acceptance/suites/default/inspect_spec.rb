@@ -27,9 +27,6 @@ def normalize(puppet_log)
 end
 
 describe 'inspect function' do
-  let(:opts) do
-    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
-  end
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
@@ -49,7 +46,7 @@ describe 'inspect function' do
       }
 
       it 'should be able to log variables with a single deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         expected = %r|Warning: inspect is deprecated, please use simplib::inspect
 \s+\(at /etc/puppetlabs/code/environments/production/modules/simplib/lib/puppet/parser/functions/simplib_deprecation\.rb:\d+:in `block in <module:Functions>'\)
@@ -84,7 +81,7 @@ Warning: Inspect: Type => 'String' Content => '""'|
       }
 
       it 'should be log variables without any deprecation warnings' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         output = results.output
 

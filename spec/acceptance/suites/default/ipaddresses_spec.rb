@@ -3,9 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'ipaddresses function'
 
 describe 'ipaddresses function' do
-  let(:opts) do
-    {:environment => {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
-  end
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
@@ -47,7 +44,7 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts).output.lines.map(&:strip)
+        results = apply_manifest_on(server, manifest).output.lines.map(&:strip)
 
         ip_matches = all_ips.map do |ip|
           results.grep(Regexp.new(Regexp.escape(ip)))
@@ -71,8 +68,7 @@ describe 'ipaddresses function' do
       }
 
       it 'should return IP addresses without logging a deprecation warning' do
-
-        results = apply_manifest_on(server, manifest, opts).output.lines.map(&:strip)
+        results = apply_manifest_on(server, manifest).output.lines.map(&:strip)
 
         ip_matches = all_ips.map do |ip|
           results.grep(Regexp.new(Regexp.escape(ip)))
