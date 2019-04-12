@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "custom fact implib__sshd_config" do
+describe "custom fact simplib__sshd_config" do
 
   before(:each) do
     Facter.clear

@@ -3,9 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'nets2ddq function'
 
 describe 'nets2ddq function' do
-  let(:opts) do
-    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
-  end
 
   servers = hosts_with_role(hosts, 'server')
   servers.each do |server|
@@ -20,7 +17,7 @@ describe 'nets2ddq function' do
       }
 
       it 'should return a converted array and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         expected_regex = %r{\["10.0.1.0\/255.255.255.0","10.0.2.0\/255.255.255.0","10.0.3.25","myhost"\]}
         expect(results.output).to match(expected_regex)
@@ -44,7 +41,7 @@ describe 'nets2ddq function' do
       }
 
       it 'should return a converted array without logging a deprecation warning' do
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         expected_regex = %r{\["10.0.1.0\/255.255.255.0","10.0.2.0\/255.255.255.0","10.0.3.25","myhost"\]}
         expect(results.output).to match(expected_regex)
