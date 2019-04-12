@@ -1,3 +1,6 @@
+* Fri Apr 12 2019 Michael Morrone <michael.morrone@onyxpoint.com> - 3.15.0-0
+- Added `simplib__sshd_config` fact to check the contents of sshd_config file
+
 * Fri Mar 29 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.0-0
 - Fixed a bug in simplib::nets2ddq where it would incorrectly try to
   expand an IPv6 CIDR.  It now passes IPv6 addresses through untouched.
