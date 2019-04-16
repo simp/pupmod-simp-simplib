@@ -45,7 +45,7 @@ end
 # Note: Any colons (:) are replaced with underscores (_) in the class name.
 def hiera_config_template(hiera_version=5)
   if hiera_version == 3
-    hiera_template_content = <<-EOM
+    <<-EOM
 ---
 :backends:
   - "rspec"
@@ -63,7 +63,7 @@ def hiera_config_template(hiera_version=5)
   - "default"
 EOM
   else
-    hiera_template_content = <<-EOM
+    <<-EOM
 ---
 version: 5
 hierarchy:
@@ -86,8 +86,6 @@ defaults:
   datadir: "<%= hiera_datadir %>"
 EOM
   end
-
-  return hiera_template_content
 end
 
 # This can be used from inside your spec tests to set the testable environment.
