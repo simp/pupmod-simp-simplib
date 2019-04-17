@@ -1,9 +1,6 @@
 # Function to print deprecation warnings, logging a warning once
 # for a given key.
 #
-# Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS
-# environment variable is set to 'true'
-#
 Puppet::Functions.create_function(:'simplib::deprecation') do
 
   # @param key Uniqueness key, which is used to dedupe messages.
@@ -32,8 +29,6 @@ Puppet::Functions.create_function(:'simplib::deprecation') do
       message = "#{message} at #{file}:#{line}"
     end
 
-    if ENV['SIMPLIB_LOG_DEPRECATIONS'] == 'true'
-      Puppet.deprecation_warning(message, key)
-    end
+    Puppet.deprecation_warning(message, key)
   end
 end

@@ -3,13 +3,8 @@ require 'spec_helper_acceptance'
 test_name 'validate_deep_hash function'
 
 describe 'validate_deep_hash function' do
-  let(:opts) do
-    {:environment=> {'SIMPLIB_LOG_DEPRECATIONS' => 'true'}}
-  end
-
   let(:opts_with_exit_1) do
     {
-      :environment           => {'SIMPLIB_LOG_DEPRECATIONS' => 'true'},
       :acceptable_exit_codes => [1]
     }
   end
@@ -23,7 +18,7 @@ describe 'validate_deep_hash function' do
         $var1 = { 'server' => 'foo.bar.com' }
         validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
         EOS
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
@@ -53,7 +48,7 @@ describe 'validate_deep_hash function' do
         $var1 = { 'server' => 'foo.bar.com' }
         simplib::validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
         EOS
-        results = apply_manifest_on(server, manifest, opts)
+        results = apply_manifest_on(server, manifest)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
