@@ -1,3 +1,6 @@
+* Tue Apr 23 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.1-0
+- Updated .travis.yml, .gitlab-ci.yml, .ruby-version
+
 * Fri Apr 05 2019 Joseph Sharkey <shark.bruhaha@gmail.com> - 3.15.0-0
 - Re-enable simplib deprecation warnings by default
 
