@@ -7,18 +7,74 @@ Facter.add('simplib__sshd_config') do
 
   setcode do
 
-    # Currently only checking for AuthorizedKeysFile but leaving flexible for future additions
-    # Read contents of /etc/ssh/sshd_config 
-    sshd_config = File.read('/etc/ssh/sshd_config')
+    # Items that we wish to pull from the configuration
+    #
+    # Format:
+    #   Key => Default Value
+    selected_settings = {
+      'AuthorizedKeysFile' => '.ssh/authorized_keys'
+    }
 
-    #Find desired parameter
-    match_result = sshd_config.match(/^AuthorizedKeysFile\s+(\S+)/)
+    sshd = Facter::Util::Resolution.which('sshd')
+    if sshd
+      full_version = Facter::Core::Execution.execute("#{sshd} --help 2>&1", :on_fail => :failed)
 
-    # Set default location if not found otherwise use matchresult
-    authorizedkeysfile =  match_result.nil? ? '.ssh/authorized_keys':match_result[1]
+      unless full_version == :failed
+        sshd_config ||= {}
 
-    attribute_hash = { 'authorizedkeysfile' => authorizedkeysfile }
+        full_version = full_version.lines.grep(/^\s*OpenSSH_\d/).first
 
-    attribute_hash
+        if full_version
+          sshd_config['version'] = full_version.split(/,|\s/).first.split('_').last
+          sshd_config['full_version'] = full_version
+        end
+      end
+    end
+
+    sshd_disk_config = File.read('/etc/ssh/sshd_config')
+
+    match_section = nil
+    sshd_disk_config.lines do |line|
+      line.strip!
+
+      next if line.empty?
+      next if line[0].chr == '#'
+
+      if config_parts = line.match(/^(?:(?<key>.+?))\s+(?<value>.+)\s*$/)
+        if config_parts[:key] == 'Match'
+          match_section = line
+          next
+        end
+
+        next unless selected_settings.keys.include?(config_parts[:key])
+
+        if match_section
+          sshd_config ||= {}
+          sshd_config[match_section] ||= {}
+
+          if sshd_config[match_section][config_parts[:key]]
+            sshd_config[match_section][config_parts[:key]] = Array(sshd_config[match_section][config_parts[:key]])
+            sshd_config[match_section][config_parts[:key]] << config_parts[:value]
+          else
+            sshd_config[match_section][config_parts[:key]] = config_parts[:value]
+          end
+        else
+          sshd_config ||= {}
+
+          if sshd_config[config_parts[:key]]
+            sshd_config[config_parts[:key]] = Array(sshd_config[config_parts[:key]])
+            sshd_config[config_parts[:key]] << config_parts[:value]
+          else
+            sshd_config[config_parts[:key]] = config_parts[:value]
+          end
+        end
+      end
+    end
+
+    if sshd_config
+      # Add in any defaults that we missed
+      # This should *not* be a deep_merge!
+      selected_settings.merge(sshd_config)
+    end
   end
 end
