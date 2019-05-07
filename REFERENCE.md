@@ -48,7 +48,7 @@
 * [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
-* [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.  Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS envi
+* [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.
 * [`simplib::dlookup`](#simplibdlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
 * [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
@@ -65,7 +65,7 @@
 * [`simplib::mock_data`](#simplibmock_data): A mock data function
 * [`simplib::module_exist`](#simplibmodule_exist): Determines if a module exists in the current environment  If passed with an author, such as `simp/simplib` or `simp-simplib`, will return whe
 * [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
-* [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * CIDR networks are converted to dotted quad notation network
+* [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
 * [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Uses `Puppet.settings[:vardir]/simp/environments/$enviro
 * [`simplib::rand_cron`](#simplibrand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
@@ -613,11 +613,51 @@ Type: Ruby 3.x API
 
 Determine if the first passed array contains the contents of another array or string.
 
+#### Examples
+
+##### 
+
+```puppet
+
+$arr_x = [ 'foo', 'bar' ]
+$arr_y = [ 'foo', 'baz', 'bar' ]
+
+if array_include($arr_x, $arr_y) {
+  notice('this will be printed')
+}
+if array_include($arr_x, 'bar') {
+  notice('this will be printed')
+}
+if array_include($arr_x, 'baz') {
+  notice('this will not be printed')
+}
+```
+
 #### `array_include()`
 
 Determine if the first passed array contains the contents of another array or string.
 
 Returns: `Boolean`
+
+##### Examples
+
+###### 
+
+```puppet
+
+$arr_x = [ 'foo', 'bar' ]
+$arr_y = [ 'foo', 'baz', 'bar' ]
+
+if array_include($arr_x, $arr_y) {
+  notice('this will be printed')
+}
+if array_include($arr_x, 'bar') {
+  notice('this will be printed')
+}
+if array_include($arr_x, 'baz') {
+  notice('this will not be printed')
+}
+```
 
 ### array_size
 
@@ -645,11 +685,41 @@ Type: Ruby 3.x API
 
 Return the union of two `Arrays`.
 
+#### Examples
+
+##### 
+
+```puppet
+
+$arr_x = ['1','2']
+$arr_y = ['2','3','4']
+
+$res = array_union($arr_x, $arr_y)
+
+$res contains:
+  ['1','2','3','4']
+```
+
 #### `array_union()`
 
 Return the union of two `Arrays`.
 
 Returns: `Array`
+
+##### Examples
+
+###### 
+
+```puppet
+
+$arr_x = ['1','2']
+$arr_y = ['2','3','4']
+
+$res = array_union($arr_x, $arr_y)
+
+$res contains:
+  ['1','2','3','4']
+```
 
 ### bracketize
 
@@ -725,6 +795,16 @@ Take an `Array` of items that may contain `port` numbers and
 appropriately return the `port` portion. Works with hostnames, IPv4,
 and IPv6.
 
+#### Examples
+
+##### 
+
+```puppet
+$foo = ['https://mysite.net:8443','http://yoursite.net:8081']
+$bar = strip_ports($foo)
+$bar contains: ['8443','8081']
+```
+
 #### `get_ports()`
 
 Take an `Array` of items that may contain `port` numbers and
@@ -732,6 +812,16 @@ appropriately return the `port` portion. Works with hostnames, IPv4,
 and IPv6.
 
 Returns: `Array[Strin` Array[Strin
+
+##### Examples
+
+###### 
+
+```puppet
+$foo = ['https://mysite.net:8443','http://yoursite.net:8081']
+$bar = strip_ports($foo)
+$bar contains: ['8443','8081']
+```
 
 ### h2n
 
@@ -821,6 +911,17 @@ Pulled from: http://projects.puppetlabs.com/projects/puppet/wiki/Cron_Patterns/8
   * Author: ohadlevy@gmail.com
   * License: None
 
+#### Examples
+
+##### 
+
+```puppet
+
+ip_to_cron()     - returns one value between 0..59
+ip_to_cron(2)    - returns an array of two values between 0..59
+ip_to_cron(2,24) - returns an array of two values between 0..23
+```
+
 #### `ip_to_cron()`
 
 Provides a "random" value to `cron` based on the passed `Integer` value.
@@ -838,6 +939,17 @@ Pulled from: http://projects.puppetlabs.com/projects/puppet/wiki/Cron_Patterns/8
   * License: None
 
 Returns: `Variant[Integer[0,59], Array[Integer[0,59], Integer[0,23]]]`
+
+##### Examples
+
+###### 
+
+```puppet
+
+ip_to_cron()     - returns one value between 0..59
+ip_to_cron(2)    - returns an array of two values between 0..59
+ip_to_cron(2,24) - returns an array of two values between 0..23
+```
 
 ### ipaddresses
 
@@ -910,6 +1022,15 @@ formats are allowed:
   * *.<domain>,<username>
   * fqdn,<username>
 
+#### Examples
+
+##### Password Line syntax
+
+```puppet
+
+[+-!]<fqdn-regex>,<username>,<uid>,<gid>,[<homedir>],<password>
+```
+
 #### `localuser(Stdlib::Absolutepath $filename, Any $hostname)`
 
 Pull a pre-set password from a password list and return an `array` of
@@ -944,6 +1065,15 @@ formats are allowed:
   * fqdn,<username>
 
 Returns: `String`
+
+##### Examples
+
+###### Password Line syntax
+
+```puppet
+
+[+-!]<fqdn-regex>,<username>,<uid>,<gid>,[<homedir>],<password>
+```
 
 ##### `filename`
 
@@ -1050,6 +1180,31 @@ Works with Hostnames as well as IPv4 and IPv6 addresses.
 **NOTE:** IPv6 addresses will be returned normalized with square brackets
 around them for clarity.
 
+#### Examples
+
+##### 
+
+```puppet
+
+parse_hosts([
+  '1.2.3.4',
+  'http://1.2.3.4',
+  'https://1.2.3.4:443'
+])
+
+# Returns
+
+{
+  '1.2.3.4' => {
+    :ports     => ['443'],
+    :protocols => {
+      'http'  => [],
+      'https' => ['443']
+    }
+  }
+}
+```
+
 #### `parse_hosts()`
 
 Take an `Array` of items that may contain port numbers or protocols and
@@ -1061,6 +1216,31 @@ Works with Hostnames as well as IPv4 and IPv6 addresses.
 around them for clarity.
 
 Returns: `Array[Strin` Array[Strin
+
+##### Examples
+
+###### 
+
+```puppet
+
+parse_hosts([
+  '1.2.3.4',
+  'http://1.2.3.4',
+  'https://1.2.3.4:443'
+])
+
+# Returns
+
+{
+  '1.2.3.4' => {
+    :ports     => ['443'],
+    :protocols => {
+      'http'  => [],
+      'https' => ['443']
+    }
+  }
+}
+```
 
 ### passgen
 
@@ -1144,6 +1324,17 @@ Based on: http://projects.puppetlabs.com/projects/puppet/wiki/Cron_Patterns/8/di
   * Author: ohadlevy@gmail.com
   * License: None Posted
 
+#### Examples
+
+##### 
+
+```puppet
+
+int_to_cron('100')    - returns one value between 0..59 based on the value 100
+int_to_cron(100,2)    - returns an array of two values between 0..59 based on the value 100
+int_to_cron(100,2,24) - returns an array of two values between 0..23 based on the value 100
+```
+
 #### `rand_cron(String $modifier, Integer $occurs, Integer $scope)`
 
 Provides a 'random' value to `cron` based on the passed `Integer` value.
@@ -1162,6 +1353,17 @@ Based on: http://projects.puppetlabs.com/projects/puppet/wiki/Cron_Patterns/8/di
   * License: None Posted
 
 Returns: `Variant[Integer[0,59], Array[Integer[0,59], Integer[0,23]]]`
+
+##### Examples
+
+###### 
+
+```puppet
+
+int_to_cron('100')    - returns one value between 0..59 based on the value 100
+int_to_cron(100,2)    - returns an array of two values between 0..59 based on the value 100
+int_to_cron(100,2,24) - returns an array of two values between 0..23 based on the value 100
+```
 
 ##### `modifier`
 
@@ -1257,6 +1459,36 @@ required module in the current environment.
 
 Provides a message about exactly which version of the module is required.
 
+#### Examples
+
+##### Check for the 'puppet/foo' optional dependency
+
+```puppet
+
+### metadata.json ###
+"simp": {
+  "optional_dependencies" [
+    {
+      "name": "puppet/foo",
+      "version_requirement": ">= 1.2.3 < 4.5.6"
+    }
+  ]
+}
+
+### myclass.pp ###
+# Check all dependencies
+simplib::assert_optional_dependency($module_name)
+
+# Check the module 'foo'
+simplib::assert_optional_dependency($module_name, 'foo')
+
+# Check the module 'foo' by author 'puppet'
+simplib::assert_optional_dependency($module_name, 'puppet/foo')
+
+# Check an alternate dependency target
+simplib::assert_optional_dependency($module_name, 'puppet/foo', 'my:deps')
+```
+
 #### `simplib::assert_optional_dependency(String[1] $source_module, Optional[String[1]] $target_module, Optional[String[1]] $dependency_tree)`
 
 Fails a compile if the system does not contain a correct version of the
@@ -1265,6 +1497,36 @@ required module in the current environment.
 Provides a message about exactly which version of the module is required.
 
 Returns: `None`
+
+##### Examples
+
+###### Check for the 'puppet/foo' optional dependency
+
+```puppet
+
+### metadata.json ###
+"simp": {
+  "optional_dependencies" [
+    {
+      "name": "puppet/foo",
+      "version_requirement": ">= 1.2.3 < 4.5.6"
+    }
+  ]
+}
+
+### myclass.pp ###
+# Check all dependencies
+simplib::assert_optional_dependency($module_name)
+
+# Check the module 'foo'
+simplib::assert_optional_dependency($module_name, 'foo')
+
+# Check the module 'foo' by author 'puppet'
+simplib::assert_optional_dependency($module_name, 'puppet/foo')
+
+# Check an alternate dependency target
+simplib::assert_optional_dependency($module_name, 'puppet/foo', 'my:deps')
+```
 
 ##### `source_module`
 
@@ -1310,17 +1572,47 @@ The simplib::bracketize function.
 
 Returns: `Variant[String, Array[String]]` converted input
 
+##### Examples
+
+###### Bracketize ip_arr input
+
+```puppet
+
+$foo = [ '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+         '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' ]
+
+$bar = simplib::bracketize($foo)
+
+$bar contains:[ '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+                '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24' ]
+```
+
 ##### `ip_arr`
 
 Data type: `Array[String]`
 
-The array of ipv6 to bracketize
+The array of IPv6 addresses to bracketize
 
 #### `simplib::bracketize(String $ipaddr_string)`
 
 The simplib::bracketize function.
 
 Returns: `Variant[String, Array[String]]` converted input
+
+##### Examples
+
+###### Bracketize ipaddr_string input
+
+```puppet
+
+$foo = '2001:0db8:85a3:0000:0000:8a2e:0370:7334,2001:0db8:85a3:0000:0000:8a2e:0370:7334/24 3456:0db8:85a3:0000:0000:8a2e:0370:7334'
+
+$bar = simplib::bracketize($foo)
+
+$bar contains:[ '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+                '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
+                '[3456:0db8:85a3:0000:0000:8a2e:0370:7334]' ]
+```
 
 ##### `ipaddr_string`
 
@@ -1335,18 +1627,44 @@ Type: Ruby 4.x API
 Function to print deprecation warnings, logging a warning once
 for a given key.
 
-Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS
-environment variable is set to 'true'
+#### Examples
+
+##### Emit a warning about a function that will be removed
+
+```puppet
+
+simplib::deprecation('simplib::foo', 'simplib::foo is deprecated and will be removed in a future version')
+```
+
+##### Emit a Warning about function that has been replaced
+
+```puppet
+
+simplib::deprecation('simplib::foo', 'simplib::foo is deprecated.  Please use simplib::foo2 instead')
+```
 
 #### `simplib::deprecation(String $key, String $message)`
 
 Function to print deprecation warnings, logging a warning once
 for a given key.
 
-Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS
-environment variable is set to 'true'
-
 Returns: `Nil`
+
+##### Examples
+
+###### Emit a warning about a function that will be removed
+
+```puppet
+
+simplib::deprecation('simplib::foo', 'simplib::foo is deprecated and will be removed in a future version')
+```
+
+###### Emit a Warning about function that has been replaced
+
+```puppet
+
+simplib::deprecation('simplib::foo', 'simplib::foo is deprecated.  Please use simplib::foo2 instead')
+```
 
 ##### `key`
 
@@ -1380,6 +1698,68 @@ appropriately but was split out in case the underlying syntax needs to
 change in the future.
 
 There are two ways to call this method as shown in the following examples.
+
+#### Examples
+
+##### Global Options
+
+```puppet
+
+In this case, you want to set a parameter on *every* instance of your
+defined type that is ever called. For example, this may be useful for
+setting cipher suites to a modified global default to meet company policy.
+
+This follows the general Puppet nomenclature for class lookups since you
+cannot have a class and defined type of the same name.
+
+Function Call:
+
+```ruby
+define mydef::global (
+  $ssl_version = simplib::dlookup('mydef::global', 'ssl_version', { 'default_value' => 'SSLv3' })
+) { ... }
+
+mydef::global { 'test': }
+```
+
+Example Hieradata:
+
+```yaml
+---
+mydef::global::ssl_version: 'TLS1.2'
+```
+```
+
+##### Specific Instance Options
+
+```puppet
+
+In this case, you want to focus on a specific named instance of a defined
+type resource and change only that parameter. If the specific instance
+cannot be found, it will fall back to a global lookup for the parameter
+as in the first example.
+
+Function Call:
+
+```ruby
+define mydef::specific (
+  $ssl_version = simplib::dlookup('mydef::specific', 'ssl_version', $title, { 'default_value' => 'SSLv3' })
+) { ... }
+
+mydef::specific{ 'test': }
+```
+
+Example Hieradata:
+
+```yaml
+---
+"Mydef::Specific[test]::ssl_version": 'TLS1.2'
+```
+
+Note that, in this case, only the `test` instance of the `mydef::specific`
+resource will have its `ssl_version` set to `TLS1.2`. All others will have
+their version set to `SSLv3`.
+```
 
 #### `simplib::dlookup(String[1] $define_id, String[1] $param, Optional[Any] $options)`
 
@@ -1455,6 +1835,36 @@ returns results from the underlying backend function that match those keys.
 This allows hiera data to be delegated to end users in a multi-tenant
 environment without allowing them the ability to override every hiera data
 point (and potentially break systems)
+
+#### Examples
+
+##### Enabling the Backend
+
+```puppet
+---
+version: 5 # Specific version of hiera we are using, required for v4 and v5
+defaults:  # Used for any hierarchy level that omits these keys.
+  datadir: "data"         # This path is relative to hiera.yaml's directory.
+  data_hash: "yaml_data"  # Use the built-in YAML backend.
+hierarchy: # Each hierarchy consists of multiple levels
+  - name: "OSFamily"
+    path: "osfamily/%{facts.osfamily}.yaml"
+  - name: "datamodules"
+    data_hash: simplib::filtered
+    datadir: "delegated-data"
+    paths:
+      - "%{facts.sitename}/osfamily/%{facts.osfamily}.yaml"
+      - "%{facts.sitename}/os/%{facts.operatingsystem}.yaml"
+      - "%{facts.sitename}/host/%{facts.fqdn}.yaml"
+      - "%{facts.sitename}/common.yaml"
+    options:
+      function: yaml_data
+    filter:
+      - profiles::ntp::servers
+      - profiles::.*
+  - name: "Common"
+    path: "common.yaml"
+```
 
 #### `simplib::filtered(Hash $options, Puppet::LookupContext $context)`
 
@@ -1553,6 +1963,32 @@ Type: Puppet Language
 
 Turn a hash into a options string, for use in a shell command
 
+#### Examples
+
+##### simplib::hash_to_opts({'key' => 'value'})
+
+```puppet
+returns ``--key=value``
+```
+
+##### simplib::hash_to_opts({'key' => ['lo',7,false]})
+
+```puppet
+returns ``--key=lo,7,false``
+```
+
+##### simplib::hash_to_opts({'key' => Undef })
+
+```puppet
+returns ```--key``
+```
+
+##### simplib::hash_to_opts({'f' => '/tmp/file'}, {'connector' => ' ', 'prefix' => '-'})
+
+```puppet
+returns ``-f /tmp/file``
+```
+
 #### `simplib::hash_to_opts(Hash[String,Variant[Array,String,Numeric,Boolean,Undef]] $input, Struct[{
     Optional[connector] => String[1],
     Optional[prefix]    => String[1],
@@ -1563,6 +1999,32 @@ Turn a hash into a options string, for use in a shell command
 Turn a hash into a options string, for use in a shell command
 
 Returns: `String`
+
+##### Examples
+
+###### simplib::hash_to_opts({'key' => 'value'})
+
+```puppet
+returns ``--key=value``
+```
+
+###### simplib::hash_to_opts({'key' => ['lo',7,false]})
+
+```puppet
+returns ``--key=lo,7,false``
+```
+
+###### simplib::hash_to_opts({'key' => Undef })
+
+```puppet
+returns ```--key``
+```
+
+###### simplib::hash_to_opts({'f' => '/tmp/file'}, {'connector' => ' ', 'prefix' => '-'})
+
+```puppet
+returns ``-f /tmp/file``
+```
 
 ##### `input`
 
@@ -1663,6 +2125,14 @@ class my_test(
   ...
 }
 
+#### Examples
+
+##### Debugging variable content
+
+```puppet
+
+```
+
 #### `simplib::inspect(String $var_name, Enum['json','yaml', 'oneline_json'] $output_type = 'json')`
 
 Prints the passed variable's Ruby type and value for debugging purposes
@@ -1681,6 +2151,14 @@ class my_test(
 }
 
 Returns: `None`
+
+##### Examples
+
+###### Debugging variable content
+
+```puppet
+
+```
 
 ##### `var_name`
 
@@ -1704,6 +2182,22 @@ Transforms an IP address to one or more interval values for `cron`.
  This can be used to avoid starting a certain cron job at the same
  time on all servers.
 
+#### Examples
+
+##### Generate one value for the `minute` cron interval
+
+```puppet
+ip_to_cron()
+```
+
+##### Generate 2 values for the `hour` cron interval, using the
+
+```puppet
+'sha256' algorithm and a provided IP address
+
+ip_to_cron(2,23,'sha256','10.0.23.45')
+```
+
 #### `simplib::ip_to_cron(Optional[Integer[1]] $occurs, Optional[Integer[1]] $max_value, Optional[IpToCronAlgorithm] $algorithm, Optional[Simplib::IP] $ip)`
 
 Transforms an IP address to one or more interval values for `cron`.
@@ -1712,6 +2206,22 @@ Transforms an IP address to one or more interval values for `cron`.
 
 Returns: `Array[Integer]` Array of integers suitable for use in the
 ``minute`` or ``hour`` cron field.
+
+##### Examples
+
+###### Generate one value for the `minute` cron interval
+
+```puppet
+ip_to_cron()
+```
+
+###### Generate 2 values for the `hour` cron interval, using the
+
+```puppet
+'sha256' algorithm and a provided IP address
+
+ip_to_cron(2,23,'sha256','10.0.23.45')
+```
 
 ##### `occurs`
 
@@ -1805,11 +2315,45 @@ Type: Puppet Language
 
 uses the knockout prefix of '--' to remove elements from an array.
 
+#### Examples
+
+##### Using knockout
+
+```puppet
+array = [
+  'ssh',
+  'sudo',
+  '--ssh',
+]
+result = simplib::knockout(array)
+
+result => [
+           'sudo'
+          ]
+```
+
 #### `simplib::knockout(Array $array)`
 
 uses the knockout prefix of '--' to remove elements from an array.
 
 Returns: `Array` Resulting array.
+
+##### Examples
+
+###### Using knockout
+
+```puppet
+array = [
+  'ssh',
+  'sudo',
+  '--ssh',
+]
+result = simplib::knockout(array)
+
+result => [
+           'sudo'
+          ]
+```
 
 ##### `array`
 
@@ -1823,11 +2367,51 @@ Type: Puppet Language
 
 Generates a LDAP Base DN from a domain
 
+#### Examples
+
+##### Generate LDAP Base DN with uppercase attributes
+
+```puppet
+
+$ldap_dn = simplib::ldap::domain_to_dn('test.local')
+
+returns $ldap_dn = 'DC=test,DC=local'
+```
+
+##### Generate LDAP Base DN with lowercase attributes
+
+```puppet
+
+$ldap_dn = simplib::ldap::domain_to_dn('test.local', true)
+
+returns $ldap_dn = 'dc=test,dc=local'
+```
+
 #### `simplib::ldap::domain_to_dn(String $domain = $facts['domain'], Boolean $downcase_attributes = false)`
 
 Generates a LDAP Base DN from a domain
 
 Returns: `String`
+
+##### Examples
+
+###### Generate LDAP Base DN with uppercase attributes
+
+```puppet
+
+$ldap_dn = simplib::ldap::domain_to_dn('test.local')
+
+returns $ldap_dn = 'DC=test,DC=local'
+```
+
+###### Generate LDAP Base DN with lowercase attributes
+
+```puppet
+
+$ldap_dn = simplib::ldap::domain_to_dn('test.local', true)
+
+returns $ldap_dn = 'dc=test,dc=local'
+```
 
 ##### `domain`
 
@@ -1858,6 +2442,26 @@ variable has been defined.
 This means that you can pre-declare a class and/or use an ENC and look up the
 variable whether it is declared this way or via Hiera or some other back-end.
 
+#### Examples
+
+##### No defaults
+
+```puppet
+simplib::lookup('foo::bar::baz')
+```
+
+##### With a default
+
+```puppet
+simplib::lookup('foo::bar::baz', { 'default_value' => 'Banana' })
+```
+
+##### With a typed default
+
+```puppet
+simplib::lookup('foo::bar::baz', { 'default_value' => 'Banana', 'value_type' => String })
+```
+
 #### `simplib::lookup(String $param, Optional[Any] $options)`
 
 A function for falling back to global scope variable lookups when the
@@ -1872,6 +2476,26 @@ variable whether it is declared this way or via Hiera or some other back-end.
 
 Returns: `Any` The value that is found in the system for the passed
 parameter.
+
+##### Examples
+
+###### No defaults
+
+```puppet
+simplib::lookup('foo::bar::baz')
+```
+
+###### With a default
+
+```puppet
+simplib::lookup('foo::bar::baz', { 'default_value' => 'Banana' })
+```
+
+###### With a typed default
+
+```puppet
+simplib::lookup('foo::bar::baz', { 'default_value' => 'Banana', 'value_type' => String })
+```
 
 ##### `param`
 
@@ -1978,6 +2602,19 @@ The simplib::nets2cidr function.
 
 Returns: `Array[String]` Array of networks in CIDR notation
 
+##### Examples
+
+###### Convert space-separated network string
+
+```puppet
+$networks = '1.2.0.0/255.255.0.0 myhost.test.local'
+$cidrs = nets2cidr($networks)
+
+returns $cidrs = [ '1.2.0.0/16',
+                   'myhost.test.local'
+                 ]
+```
+
 ##### `network_list`
 
 Data type: `String`
@@ -1990,6 +2627,25 @@ commas, or semicolons
 The simplib::nets2cidr function.
 
 Returns: `Array[String]` Array of networks in CIDR notation
+
+##### Examples
+
+###### Convert array of networks
+
+```puppet
+$networks = [ '1.2.0.0/255.255.0.0',
+              '2001:db8:85a3::8a2e:370:0/112',
+              '1.2.3.4',
+              'myhost.test.local'
+            ]
+$cidrs = nets2cidr($networks)
+
+returns $cidrs = [ '1.2.0.0/16',
+                   '2001:db8:85a3::8a2e:370:0/112',
+                   '1.2.3.4',
+                   'myhost.test.local'
+                 ]
+```
 
 ##### `networks`
 
@@ -2004,8 +2660,8 @@ Type: Ruby 4.x API
 Tranforms a list of networks into an equivalent array in
 dotted quad notation.
 
-* CIDR networks are converted to dotted quad notation networks.
-  IP addresses and hostnames are left untouched.
+* IPv4 CIDR networks are converted to dotted quad notation networks.
+  All other IP addresses and hostnames are left untouched.
 * Terminates catalog compilation if any input item is not a
   valid network or hostname.
 
@@ -2014,6 +2670,29 @@ dotted quad notation.
 The simplib::nets2ddq function.
 
 Returns: `Array[String]` Converted input
+
+##### Examples
+
+###### Convert Array input
+
+```puppet
+
+$foo = [ '10.0.1.0/24',
+         '10.0.2.0/255.255.255.0',
+         '10.0.3.25',
+         'myhost',
+         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+         '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
+
+$bar = simplib::nets2ddq($foo)
+
+$bar contains:[ '10.0.1.0/255.255.255.0',
+                '10.0.2.0/255.255.255.0',
+                '10.0.3.25',
+                'myhost',
+                '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+                '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
+```
 
 ##### `networks`
 
@@ -2026,6 +2705,24 @@ The networks to convert
 The simplib::nets2ddq function.
 
 Returns: `Array[String]` Converted input
+
+##### Examples
+
+###### Convert String input
+
+```puppet
+
+$foo = '10.0.1.0/24 10.0.2.0/255.255.255.0 10.0.3.25 myhost 2001:0db8:85a3:0000:0000:8a2e:0370:7334 2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+
+$bar = simplib::nets2ddq($foo)
+
+$bar contains:[ '10.0.1.0/255.255.255.0',
+                '10.0.2.0/255.255.255.0',
+                '10.0.3.25',
+                'myhost',
+                '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+                '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64' ]
+```
 
 ##### `networks_string`
 
@@ -2049,6 +2746,31 @@ into a structured `Hash` of host information.
     * A valid network or hostname cannot be extracted from all input items.
     * Any input item that contains a port specifies an invalid port.
 
+#### Examples
+
+##### Input with multiple host formats:
+
+```puppet
+
+simplib::parse_hosts([
+  '1.2.3.4',
+  'http://1.2.3.4',
+  'https://1.2.3.4:443'
+])
+
+Returns:
+
+{
+  '1.2.3.4' => {
+    :ports     => ['443'],
+    :protocols => {
+      'http'  => [],
+      'https' => ['443']
+    }
+  }
+}
+```
+
 #### `simplib::parse_hosts(Array[String[1],1] $hosts)`
 
 Convert an `Array` of items that may contain port numbers or protocols
@@ -2067,6 +2789,31 @@ Returns: `Hash` Structured Hash of the host information
 Raises:
 * `if` a valid network or hostname cannot be extracted from all input items
 * `if` any input item that contains a port specifies an invalid port
+
+##### Examples
+
+###### Input with multiple host formats:
+
+```puppet
+
+simplib::parse_hosts([
+  '1.2.3.4',
+  'http://1.2.3.4',
+  'https://1.2.3.4:443'
+])
+
+Returns:
+
+{
+  '1.2.3.4' => {
+    :ports     => ['443'],
+    :protocols => {
+      'http'  => [],
+      'https' => ['443']
+    }
+  }
+}
+```
 
 ##### `hosts`
 
@@ -2144,6 +2891,33 @@ Transforms an input string to one or more interval values for `cron`.
  This can be used to avoid starting a certain cron job at the same
  time on all servers.
 
+#### Examples
+
+##### Generate one value for the `minute` cron interval using
+
+```puppet
+the 'sha256' algorithm
+
+rand_cron('myhost.test.local','sha256')
+```
+
+##### Generate 2 values for the `minute` cron interval using
+
+```puppet
+the 'sha256' algorithm applied to the numeric representation of
+an IP
+
+rand_cron('10.0.23.45', 'sha256')
+```
+
+##### Generate 2 values for the `hour` cron interval, using the
+
+```puppet
+'ip_mod' algorithm
+
+rand_cron('10.0.6.78', 'ip_mod', 2, 23)
+```
+
 #### `simplib::rand_cron(String $modifier, RandCronAlgorithm $algorithm, Optional[Integer[1]] $occurs, Optional[Integer[1]] $max_value)`
 
 Transforms an input string to one or more interval values for `cron`.
@@ -2152,6 +2926,33 @@ Transforms an input string to one or more interval values for `cron`.
 
 Returns: `Array[Integer]` Array of integers suitable for use in the
 ``minute`` or ``hour`` cron field.
+
+##### Examples
+
+###### Generate one value for the `minute` cron interval using
+
+```puppet
+the 'sha256' algorithm
+
+rand_cron('myhost.test.local','sha256')
+```
+
+###### Generate 2 values for the `minute` cron interval using
+
+```puppet
+the 'sha256' algorithm applied to the numeric representation of
+an IP
+
+rand_cron('10.0.23.45', 'sha256')
+```
+
+###### Generate 2 values for the `hour` cron interval, using the
+
+```puppet
+'ip_mod' algorithm
+
+rand_cron('10.0.6.78', 'ip_mod', 2, 23)
+```
 
 ##### `modifier`
 
@@ -2233,6 +3034,21 @@ Terminates catalog compilation if
 * A valid network or hostname cannot be extracted from all input items.
 * Any input item that contains a port specifies an invalid port.
 
+#### Examples
+
+##### 
+
+```puppet
+
+$foo = ['https://mysite.net:8443',
+        'http://yoursite.net:8081',
+        'https://theirsite.com']
+
+$bar = simplib::strip_ports($foo)
+
+$bar contains: ['mysite.net','yoursite.net','theirsite.com']
+```
+
 #### `simplib::strip_ports(Array[String[1],1] $hosts)`
 
 Extract list of unique hostnames and/or IP addresses from an `Array`
@@ -2247,6 +3063,21 @@ Returns: `Array[String]` Non-port portion of hostnames
 
 Raises:
 * `if` any input item that contains a port specifies an invalid port
+
+##### Examples
+
+###### 
+
+```puppet
+
+$foo = ['https://mysite.net:8443',
+        'http://yoursite.net:8081',
+        'https://theirsite.com']
+
+$bar = simplib::strip_ports($foo)
+
+$bar contains: ['mysite.net','yoursite.net','theirsite.com']
+```
 
 ##### `hosts`
 
@@ -2309,6 +3140,26 @@ Validate that an single input is a member of another `Array` or an
 * The comparison can optionally ignore the case of `String` elements.
 * Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Validating single input
+
+```puppet
+
+validate_array_member('foo',['foo','bar'])     # succeeds
+validate_array_member('foo',['FOO','BAR'])     # fails
+validate_array_member('foo',['FOO','BAR'],'i') # succeeds
+```
+
+##### Validating array input
+
+```puppet
+
+validate_array_member(['foo','bar'],['foo','bar','baz'])      # succeeds
+validate_array_member(['foo','bar'],['FOO','BAR','BAZ'])      # fails
+validate_array_member(['foo','bar'],['FOO','BAR','BAZ'], 'i') # succeeds
+```
+
 #### `simplib::validate_array_member(Variant[SimpleTypes,Array[SimpleTypes]] $input, Array[SimpleTypes] $target, Optional[Enum['i']] $modifier)`
 
 Validate that an single input is a member of another `Array` or an
@@ -2321,6 +3172,26 @@ Returns: `Nil`
 
 Raises:
 * `if` validation fails
+
+##### Examples
+
+###### Validating single input
+
+```puppet
+
+validate_array_member('foo',['foo','bar'])     # succeeds
+validate_array_member('foo',['FOO','BAR'])     # fails
+validate_array_member('foo',['FOO','BAR'],'i') # succeeds
+```
+
+###### Validating array input
+
+```puppet
+
+validate_array_member(['foo','bar'],['foo','bar','baz'])      # succeeds
+validate_array_member(['foo','bar'],['FOO','BAR','BAZ'])      # fails
+validate_array_member(['foo','bar'],['FOO','BAR','BAZ'], 'i') # succeeds
+```
 
 ##### `input`
 
@@ -2351,6 +3222,16 @@ numerically. The range is inclusive.
 
 Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Passing
+
+```puppet
+simplib::validate_between('-1', -3, 0)
+simplib::validate_between(7, 0, 60)
+simplib::validate_between(7.6, 7.1, 8.4)
+```
+
 #### `simplib::validate_between(Variant[String[1],Numeric] $value, Numeric $min_value, Numeric $max_value)`
 
 Validate that the first value is between the second and third values
@@ -2362,6 +3243,16 @@ Returns: `Nil`
 
 Raises:
 * `if` validation fails
+
+##### Examples
+
+###### Passing
+
+```puppet
+simplib::validate_between('-1', -3, 0)
+simplib::validate_between(7, 0, 60)
+simplib::validate_between(7.6, 7.1, 8.4)
+```
 
 ##### `value`
 
@@ -2390,6 +3281,28 @@ Validate that all passed values are either `true`, 'true',
 
 Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Passing validation
+
+```puppet
+
+$iamtrue = true
+validate_bool(true)
+validate_bool("false")
+validate_bool("true")
+validate_bool(true, 'true', false, $iamtrue)
+```
+
+##### Failing validation
+
+```puppet
+$some_array = [ true ]
+validate_bool($some_array)
+validate_bool('True')
+validate_bool('TRUE')
+```
+
 #### `simplib::validate_bool(Variant[String,Boolean] *$values_to_validate)`
 
 Validate that all passed values are either `true`, 'true',
@@ -2401,6 +3314,28 @@ Returns: `Nil`
 
 Raises:
 * `if` validation fails
+
+##### Examples
+
+###### Passing validation
+
+```puppet
+
+$iamtrue = true
+validate_bool(true)
+validate_bool("false")
+validate_bool("true")
+validate_bool(true, 'true', false, $iamtrue)
+```
+
+###### Failing validation
+
+```puppet
+$some_array = [ true ]
+validate_bool($some_array)
+validate_bool('True')
+validate_bool('TRUE')
+```
 
 ##### `*values_to_validate`
 
@@ -2424,6 +3359,52 @@ Perform a deep validation on two passed `Hashes`.
   support a to_s() method.
 * Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Passing Examples
+
+```puppet
+reference = {
+  'foo' => {
+    'bar' => {
+      #NOTE: Use quotes for regular expressions instead of '/'
+      'baz' => '^\d+$',
+      'abc' => '^\w+$',
+      'def' => nil
+    },
+    'baz' => {
+      'qrs' => false
+      'xyz' => '^true|false$'
+    }
+  }
+}
+
+to_check = {
+  'foo' => {
+    'bar' => {
+      'baz' => ['123', 45]
+      'abc' => [ 'these', 'are', 'words' ],
+      'def' => 'Anything will work here!'
+    },
+    'baz' => {
+      'qrs' => false
+      'xyz' => true
+    }
+  }
+}
+
+validate_deep_hash(reference, to_check)
+```
+
+##### Failing Examples
+
+```puppet
+reference => { 'foo' => '^\d+$' }
+to_check  => { 'foo' => 'abc' }
+
+validate_deep_hash(reference, to_check)
+```
+
 #### `simplib::validate_deep_hash(Hash $reference, Hash $to_check)`
 
 Perform a deep validation on two passed `Hashes`.
@@ -2442,6 +3423,52 @@ Returns: `Nil`
 
 Raises:
 * `if` validation fails
+
+##### Examples
+
+###### Passing Examples
+
+```puppet
+reference = {
+  'foo' => {
+    'bar' => {
+      #NOTE: Use quotes for regular expressions instead of '/'
+      'baz' => '^\d+$',
+      'abc' => '^\w+$',
+      'def' => nil
+    },
+    'baz' => {
+      'qrs' => false
+      'xyz' => '^true|false$'
+    }
+  }
+}
+
+to_check = {
+  'foo' => {
+    'bar' => {
+      'baz' => ['123', 45]
+      'abc' => [ 'these', 'are', 'words' ],
+      'def' => 'Anything will work here!'
+    },
+    'baz' => {
+      'qrs' => false
+      'xyz' => true
+    }
+  }
+}
+
+validate_deep_hash(reference, to_check)
+```
+
+###### Failing Examples
+
+```puppet
+reference => { 'foo' => '^\d+$' }
+to_check  => { 'foo' => 'abc' }
+
+validate_deep_hash(reference, to_check)
+```
 
 ##### `reference`
 
@@ -2494,6 +3521,33 @@ The simplib::validate_net_list function.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+
+$trusted_nets = '10.10.10.0/24'
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = '1.2.3.5:400'
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = 'ALL'
+simplib::validate_net_list($trusted_nets,'^(%any|ALL)$')
+```
+
+###### Failing
+
+```puppet
+
+$trusted_nets = '10.10.10.0/24,1.2.3.4'
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = 'bad stuff'
+simplib::validate_net_list($trusted_nets)
+```
+
 ##### `net`
 
 Data type: `String`
@@ -2512,6 +3566,33 @@ the `//` delimiters)
 The simplib::validate_net_list function.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing
+
+```puppet
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = '10.10.10.0/24'
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
+simplib::validate_net_list($trusted_nets,'^(%any|ALL)$')
+```
+
+###### Failing
+
+```puppet
+
+$trusted_nets = ['10.10.10.0/24 1.2.3.4']
+simplib::validate_net_list($trusted_nets)
+
+$trusted_nets = 'bad stuff'
+simplib::validate_net_list($trusted_nets)
+```
 
 ##### `net_list`
 
@@ -2536,6 +3617,29 @@ Validates whether each passed argument contains valid port(s).
   range [1, 65535].
 * Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Passing
+
+```puppet
+$port = '10541'
+$ports = [5555, '7777', '1', '65535']
+simplib::validate_port($port)
+simplib::validate_port($ports)
+simplib::validate_port('11', 22)
+simplib::validate_port('11', $ports)
+```
+
+##### Failing
+
+```puppet
+simplib::validate_port('0')
+simplib::validate_port(65536)
+simplib::validate_port('1', '1000', '100000')
+simplib::validate_port(['1', '1000', '100000'])
+simplib::validate_port('1', ['1000', '100000'])
+```
+
 #### `simplib::validate_port(Variant[String[1],Integer,StringOrIntegerArray] *$port_args)`
 
 Validates whether each passed argument contains valid port(s).
@@ -2548,6 +3652,29 @@ Returns: `Nil`
 
 Raises:
 * `if` validation fails
+
+##### Examples
+
+###### Passing
+
+```puppet
+$port = '10541'
+$ports = [5555, '7777', '1', '65535']
+simplib::validate_port($port)
+simplib::validate_port($ports)
+simplib::validate_port('11', 22)
+simplib::validate_port('11', $ports)
+```
+
+###### Failing
+
+```puppet
+simplib::validate_port('0')
+simplib::validate_port(65536)
+simplib::validate_port('1', '1000', '100000')
+simplib::validate_port(['1', '1000', '100000'])
+simplib::validate_port('1', ['1000', '100000'])
+```
 
 ##### `*port_args`
 
@@ -2571,6 +3698,26 @@ against one or more regular expressions.
 The simplib::validate_re_array function.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing
+
+```puppet
+simplib::validate_re_array('one', '^one$')
+```
+
+###### Failing
+
+```puppet
+validate_re_array('one', '^two')
+```
+
+###### Custom Error Message
+
+```puppet
+validate_re_array($::puppetversion, '^2.7', 'The $puppetversion fact value does not match 2.7')
+```
 
 ##### `input`
 
@@ -2597,6 +3744,27 @@ The simplib::validate_re_array function.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+simplib::validate_re_array('one', [ '^one', '^two' ])
+```
+
+###### Failing
+
+```puppet
+validate_re_array('one', [ '^two', '^three' ])
+```
+
+###### Custom Error Message
+
+```puppet
+$myvar = 'baz'
+validate_re_array($myvar, ['^foo', '^bar'], 'myvar does not begin with foo or bar')
+```
+
 ##### `input`
 
 Data type: `String`
@@ -2622,6 +3790,27 @@ The simplib::validate_re_array function.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+simplib::validate_re_array(['one-a', 'one-b'], [ '^one', '^two' ])
+```
+
+###### Failing
+
+```puppet
+validate_re_array(['one-a', 'one-b'], [ '^two', '^three' ])
+```
+
+###### Custom Error Message
+
+```puppet
+$myvar = ['hello', 'world']
+validate_re_array($myvar, '^foo', 'myvar elements do not begin with foo')
+```
+
 ##### `inputs`
 
 Data type: `Array`
@@ -2646,6 +3835,27 @@ Optional error message to emit upon failure
 The simplib::validate_re_array function.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing
+
+```puppet
+simplib::validate_re_array(['one-a', 'one-b'], [ '^one', '^two' ])
+```
+
+###### Failing
+
+```puppet
+validate_re_array(['one-a', 'one-b'], [ '^two', '^three' ])
+```
+
+###### Custom Error Message
+
+```puppet
+$myvar = ['hello', 'world']
+validate_re_array($myvar, ['^foo', '^bar'], 'myvar elements do not begin with foo or bar')
+```
 
 ##### `inputs`
 
@@ -2675,6 +3885,14 @@ Validate that the passed value is correct for the passed `sysctl` key.
 * If a key is not known, assumes the value is valid.
 * Terminates catalog compilation if validation fails.
 
+#### Examples
+
+##### Passing validation
+
+```puppet
+validate_sysctl_value('kernel.core_pattern','/var/core/%u_%g_%p_%t_%h_%e.core')
+```
+
 #### `simplib::validate_sysctl_value(String $key, NotUndef $value)`
 
 Validate that the passed value is correct for the passed `sysctl` key.
@@ -2686,6 +3904,14 @@ Returns: `Nil`
 
 Raises:
 * `upon` validation failure
+
+##### Examples
+
+###### Passing validation
+
+```puppet
+validate_sysctl_value('kernel.core_pattern','/var/core/%u_%g_%p_%t_%h_%e.core')
+```
 
 ##### `key`
 
@@ -2716,6 +3942,18 @@ The simplib::validate_uri_list function.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+$uri = 'http://foo.bar.baz:1234'
+simplib::validate_uri_list($uri)
+
+$uri = 'ldap://my.ldap.server'
+simplib::validate_uri_list($uri,['ldap','ldaps'])
+```
+
 ##### `uri`
 
 Data type: `String[1]`
@@ -2733,6 +3971,18 @@ List of schemes (protocol types) allowed for the URI.
 The simplib::validate_uri_list function.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing
+
+```puppet
+$uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
+simplib::validate_uri_list($uris)
+
+$uris = ['ldap://my.ldap.server','ldaps://my.ldap.server']
+simplib::validate_uri_list($uris,['ldap','ldaps'])
+```
 
 ##### `uri_list`
 
@@ -2753,18 +4003,30 @@ Type: Ruby 3.x API
 Function to print deprecation warnings for 3.X functions.
 The first argument is the uniqueness key, which allows deduping of messages.
 The second argument is the message to be printed.
-Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS environment
-variable is set to 'true'.
+
+#### Examples
+
+##### 
+
+```puppet
+simplib_deprecation('foo', 'foo is deprecated: use simplib::foo in
+```
 
 #### `simplib_deprecation()`
 
 Function to print deprecation warnings for 3.X functions.
 The first argument is the uniqueness key, which allows deduping of messages.
 The second argument is the message to be printed.
-Messages can be enabled if the SIMPLIB_LOG_DEPRECATIONS environment
-variable is set to 'true'.
 
 Returns: `Nil`
+
+##### Examples
+
+###### 
+
+```puppet
+simplib_deprecation('foo', 'foo is deprecated: use simplib::foo in
+```
 
 ### slice_array
 
@@ -2808,12 +4070,42 @@ Type: Ruby 3.x API
 Take an `Array` of items that may contain port numbers and appropriately
 return the non-port portion. Works with hostnames, IPv4, and IPv6.
 
+#### Examples
+
+##### 
+
+```puppet
+
+$foo = ['https://mysite.net:8443',
+        'http://yoursite.net:8081',
+        'https://theirsite.com']
+
+$bar = strip_ports($foo)
+
+$bar contains: ['https://mysite.net','http://yoursite.net','theirsite.com']
+```
+
 #### `strip_ports(Array[String] $hosts)`
 
 Take an `Array` of items that may contain port numbers and appropriately
 return the non-port portion. Works with hostnames, IPv4, and IPv6.
 
 Returns: `Array[Str` Array[Str
+
+##### Examples
+
+###### 
+
+```puppet
+
+$foo = ['https://mysite.net:8443',
+        'http://yoursite.net:8081',
+        'https://theirsite.com']
+
+$bar = strip_ports($foo)
+
+$bar contains: ['https://mysite.net','http://yoursite.net','theirsite.com']
+```
 
 ##### `hosts`
 
@@ -2873,6 +4165,20 @@ Validate that the first `String` (or `Array`) passed is a member of the
 second `Array` passed. An optional third argument of i can be passed,
 which ignores the case of the objects inside the `Array`.
 
+#### Examples
+
+##### 
+
+```puppet
+
+validate_array_member('foo',['foo','bar'])     # => true
+validate_array_member('foo',['FOO','BAR'])     # => false
+
+#Optional 'i' as third object, ignoring case of FOO and BAR#
+
+validate_array_member('foo',['FOO','BAR'],'i') # => true
+```
+
 #### `validate_array_member()`
 
 Validate that the first `String` (or `Array`) passed is a member of the
@@ -2881,6 +4187,20 @@ which ignores the case of the objects inside the `Array`.
 
 Returns: `Boolean`
 
+##### Examples
+
+###### 
+
+```puppet
+
+validate_array_member('foo',['foo','bar'])     # => true
+validate_array_member('foo',['FOO','BAR'])     # => false
+
+#Optional 'i' as third object, ignoring case of FOO and BAR#
+
+validate_array_member('foo',['FOO','BAR'],'i') # => true
+```
+
 ### validate_array_of_hashes
 
 Type: Ruby 3.x API
@@ -2888,12 +4208,34 @@ Type: Ruby 3.x API
 Validate that the passed argument is either an empty `Array` or an
 `Array` that only contains `Hashes`.
 
+#### Examples
+
+##### 
+
+```puppet
+
+validate_array_of_hashes([{'foo' => 'bar'}])  => OK
+validate_array_of_hashes([])                  => OK
+validate_array_of_hashes(['FOO','BAR'])       => BAD
+```
+
 #### `validate_array_of_hashes()`
 
 Validate that the passed argument is either an empty `Array` or an
 `Array` that only contains `Hashes`.
 
 Returns: `Boolean`
+
+##### Examples
+
+###### 
+
+```puppet
+
+validate_array_of_hashes([{'foo' => 'bar'}])  => OK
+validate_array_of_hashes([])                  => OK
+validate_array_of_hashes(['FOO','BAR'])       => BAD
+```
 
 ### validate_between
 
@@ -2924,6 +4266,26 @@ Abort catalog compilation if any value fails this check.
 Modified from the stdlib validate_bool to handle the strings `true` and
 `false`.
 
+#### Examples
+
+##### 
+
+```puppet
+
+The following values will pass:
+
+  $iamtrue = true
+  validate_bool(true)
+  validate_bool("false")
+  validate_bool("true")
+  validate_bool(true, 'true', false, $iamtrue)
+
+The following values will fail, causing compilation to abort:
+
+  $some_array = [ true ]
+  validate_bool($some_array)
+```
+
 #### `validate_bool_simp()`
 
 Validate that all passed values are either `true` or `false`.
@@ -2934,6 +4296,26 @@ Modified from the stdlib validate_bool to handle the strings `true` and
 `false`.
 
 Returns: `Nil`
+
+##### Examples
+
+###### 
+
+```puppet
+
+The following values will pass:
+
+  $iamtrue = true
+  validate_bool(true)
+  validate_bool("false")
+  validate_bool("true")
+  validate_bool(true, 'true', false, $iamtrue)
+
+The following values will fail, causing compilation to abort:
+
+  $some_array = [ true ]
+  validate_bool($some_array)
+```
 
 ### validate_deep_hash
 
@@ -2954,6 +4336,47 @@ against.
 Unknown keys in the `Hash` being compared will cause a failure in
 validation
 
+#### Examples
+
+##### Passing Examples
+
+```puppet
+'source' = {
+  'foo' => {
+    'bar' => {
+      #NOTE: Use single quotes for regular expressions
+      'baz' => '^\d+$',
+      'abc' => '^\w+$',
+      'def' => nil #NOTE: not 'nil' in quotes
+    },
+    'baz' => {
+      'xyz' => '^true|false$'
+    }
+  }
+}
+
+'to_check' = {
+  'foo' => {
+    'bar' => {
+      'baz' => '123',
+      'abc' => [ 'these', 'are', 'words' ],
+      'def' => 'Anything will work here!'
+    },
+    'baz' => {
+      'xyz' => 'false'
+    }
+  }
+}
+```
+
+##### Failing Examples
+
+```puppet
+'source' => { 'foo' => '^\d+$' }
+
+'to_check' => { 'foo' => 'abc' }
+```
+
 #### `validate_deep_hash()`
 
 Perform a deep validation on two passed `Hashes`.
@@ -2973,6 +4396,47 @@ validation
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing Examples
+
+```puppet
+'source' = {
+  'foo' => {
+    'bar' => {
+      #NOTE: Use single quotes for regular expressions
+      'baz' => '^\d+$',
+      'abc' => '^\w+$',
+      'def' => nil #NOTE: not 'nil' in quotes
+    },
+    'baz' => {
+      'xyz' => '^true|false$'
+    }
+  }
+}
+
+'to_check' = {
+  'foo' => {
+    'bar' => {
+      'baz' => '123',
+      'abc' => [ 'these', 'are', 'words' ],
+      'def' => 'Anything will work here!'
+    },
+    'baz' => {
+      'xyz' => 'false'
+    }
+  }
+}
+```
+
+###### Failing Examples
+
+```puppet
+'source' => { 'foo' => '^\d+$' }
+
+'to_check' => { 'foo' => 'abc' }
+```
+
 ### validate_float
 
 Type: Ruby 3.x API
@@ -2991,11 +4455,35 @@ Type: Ruby 3.x API
 
 Validate that all passed values are valid MAC addresses.
 
+#### Examples
+
+##### Passing Values
+
+```puppet
+
+$macaddress = 'CA:FE:BE:EF:00:11'
+validate_macaddress($macaddress)
+validate_macaddress($macaddress, '00:11:22:33:44:55')
+validate_macaddress([$macaddress, '00:11:22:33:44:55'])
+```
+
 #### `validate_macaddress()`
 
 Validate that all passed values are valid MAC addresses.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing Values
+
+```puppet
+
+$macaddress = 'CA:FE:BE:EF:00:11'
+validate_macaddress($macaddress)
+validate_macaddress($macaddress, '00:11:22:33:44:55')
+validate_macaddress([$macaddress, '00:11:22:33:44:55'])
+```
 
 ### validate_net_list
 
@@ -3009,6 +4497,33 @@ There is a second, optional argument that is a regex of `Strings` that
 should be ignored from the list. Omit the beginning and ending `/`
 delimiters.
 
+#### Examples
+
+##### Passing
+
+```puppet
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+validate_net_list($trusted_nets)
+
+$trusted_nets = '10.10.10.0/24'
+validate_net_list($trusted_nets)
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
+validate_net_list($trusted_nets,'^(%any|ALL)$')
+```
+
+##### Failing
+
+```puppet
+
+$trusted_nets = '10.10.10.0/24,1.2.3.4'
+validate_net_list($trusted_nets)
+
+$trusted_nets = 'bad stuff'
+validate_net_list($trusted_nets)
+```
+
 #### `validate_net_list()`
 
 Validate that a passed list (`Array` or single `String`) of networks is
@@ -3021,6 +4536,33 @@ delimiters.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','1.3.4.5:400']
+validate_net_list($trusted_nets)
+
+$trusted_nets = '10.10.10.0/24'
+validate_net_list($trusted_nets)
+
+$trusted_nets = ['10.10.10.0/24','1.2.3.4','%any','ALL']
+validate_net_list($trusted_nets,'^(%any|ALL)$')
+```
+
+###### Failing
+
+```puppet
+
+$trusted_nets = '10.10.10.0/24,1.2.3.4'
+validate_net_list($trusted_nets)
+
+$trusted_nets = 'bad stuff'
+validate_net_list($trusted_nets)
+```
+
 ### validate_port
 
 Type: Ruby 3.x API
@@ -3028,12 +4570,52 @@ Type: Ruby 3.x API
 Validates whether or not the passed argument is a valid port
 (i.e. between `1` - `65535`).
 
+#### Examples
+
+##### Passing
+
+```puppet
+$port = '10541'
+$ports = ['5555', '7777', '1', '65535']
+validate_port($port)
+validate_port($ports)
+validate_port('11', '22')
+```
+
+##### Failing
+
+```puppet
+validate_port('0')
+validate_port('65536')
+validate_port(['1', '1000', '100000'])
+```
+
 #### `validate_port()`
 
 Validates whether or not the passed argument is a valid port
 (i.e. between `1` - `65535`).
 
 Returns: `N` N
+
+##### Examples
+
+###### Passing
+
+```puppet
+$port = '10541'
+$ports = ['5555', '7777', '1', '65535']
+validate_port($port)
+validate_port($ports)
+validate_port('11', '22')
+```
+
+###### Failing
+
+```puppet
+validate_port('0')
+validate_port('65536')
+validate_port(['1', '1000', '100000'])
+```
 
 ### validate_re_array
 
@@ -3050,6 +4632,28 @@ error.
 If a third argument is specified, this will be the error message raised and
 seen by the user.
 
+#### Examples
+
+##### Passing
+
+```puppet
+validate_re_array('one', '^one$')
+validate_re_array('one', [ '^one', '^two' ])
+validate_re_array(['one','two'], [ '^one', '^two' ])
+```
+
+##### Failing
+
+```puppet
+validate_re_array('one', [ '^two', '^three' ])
+```
+
+##### Custom Error Message
+
+```puppet
+validate_re_array($::puppetversion, '^2.7', 'The $puppetversion fact value does not match 2.7')
+```
+
 #### `validate_re_array()`
 
 Perform simple validation of a `String`, or `Array` of `Strings`,
@@ -3065,6 +4669,28 @@ seen by the user.
 
 Returns: `Nil`
 
+##### Examples
+
+###### Passing
+
+```puppet
+validate_re_array('one', '^one$')
+validate_re_array('one', [ '^one', '^two' ])
+validate_re_array(['one','two'], [ '^one', '^two' ])
+```
+
+###### Failing
+
+```puppet
+validate_re_array('one', [ '^two', '^three' ])
+```
+
+###### Custom Error Message
+
+```puppet
+validate_re_array($::puppetversion, '^2.7', 'The $puppetversion fact value does not match 2.7')
+```
+
 ### validate_sysctl_value
 
 Type: Ruby 3.x API
@@ -3072,6 +4698,14 @@ Type: Ruby 3.x API
 Validate that the passed value is correct for the passed `sysctl` key.
 
 If a key is not known, simply returns that the value is valid.
+
+#### Examples
+
+##### 
+
+```puppet
+validate_sysctl_value('kernel.core_pattern','some_random_pattern %p')
+```
 
 #### `validate_sysctl_value()`
 
@@ -3081,17 +4715,49 @@ If a key is not known, simply returns that the value is valid.
 
 Returns: `Nil`
 
+##### Examples
+
+###### 
+
+```puppet
+validate_sysctl_value('kernel.core_pattern','some_random_pattern %p')
+```
+
 ### validate_umask
 
 Type: Ruby 3.x API
 
 Validate that the passed `String` is a valid `umask`
 
+#### Examples
+
+##### 
+
+```puppet
+$val = '0077'
+validate_umask($val) => OK
+
+$val = '0078'
+validate_umask($val) => BAD
+```
+
 #### `validate_umask()`
 
 Validate that the passed `String` is a valid `umask`
 
 Returns: `Nil`
+
+##### Examples
+
+###### 
+
+```puppet
+$val = '0077'
+validate_umask($val) => OK
+
+$val = '0078'
+validate_umask($val) => BAD
+```
 
 ### validate_uri_list
 
@@ -3102,6 +4768,18 @@ Usage: validate_uri_list([LIST],[<VALID_SCHEMES>])
 Validate that a passed list (`Array` or single `String`) of URIs is
 valid according to Ruby's URI parser.
 
+#### Examples
+
+##### Passing
+
+```puppet
+$uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
+validate_uri_list($uris)
+
+$uris = ['ldap://my.ldap.server','ldaps://my.ldap.server']
+validate_uri_list($uris,['ldap','ldaps'])
+```
+
 #### `validate_uri_list()`
 
 Usage: validate_uri_list([LIST],[<VALID_SCHEMES>])
@@ -3110,4 +4788,16 @@ Validate that a passed list (`Array` or single `String`) of URIs is
 valid according to Ruby's URI parser.
 
 Returns: `Nil`
+
+##### Examples
+
+###### Passing
+
+```puppet
+$uris = ['http://foo.bar.baz:1234','ldap://my.ldap.server']
+validate_uri_list($uris)
+
+$uris = ['ldap://my.ldap.server','ldaps://my.ldap.server']
+validate_uri_list($uris,['ldap','ldaps'])
+```
 
