@@ -24,7 +24,6 @@ module Puppet::Parser::Functions
       retval = version if version
     end
 
-    retval.strip! if strip_whitespace
     retval
   end
 end
