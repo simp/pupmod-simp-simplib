@@ -9,11 +9,19 @@ module Puppet::Parser::Functions
 
     retval = "unknown\n"
 
-    begin
-      retval = File.read('/etc/simp/simp.version').gsub('simp-','')
-    rescue
-      tmpval = %x{PATH='/usr/local/bin:/usr/bin:/bin'; rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp}
-      $?.success? and retval = tmpval
+    if File.readable?('/etc/simp/simp.version')
+    # TODO Figure out under what circumstances the version string is prefaced
+    # with 'simp-'. This is not true for SIMP 6.x
+      version = File.read('/etc/simp/simp.version').gsub('simp-','')
+      retval = version unless version.strip.empty?
+    else
+      rpm_query = %q{PATH='/usr/local/bin:/usr/bin:/bin' rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp 2>/dev/null}
+      begin
+        version = Puppet::Util::Execution.execute(rpm_query, :failonfail => true)
+      rescue Puppet::ExecutionFailure
+        version = nil
+      end
+      retval = version if version
     end
 
     retval

@@ -13,15 +13,19 @@ Puppet::Functions.create_function(:'simplib::simp_version') do
   def simp_version(strip_whitespace = false)
     retval = "unknown\n"
 
-    begin
-      # TODO Figure out under what circumstances the version string is prefaced
-      # with 'simp-'. This is not true for SIMP 6.x
+    if File.readable?('/etc/simp/simp.version')
+    # TODO Figure out under what circumstances the version string is prefaced
+    # with 'simp-'. This is not true for SIMP 6.x
       version = File.read('/etc/simp/simp.version').gsub('simp-','')
       retval = version unless version.strip.empty?
-    rescue
+    else
       rpm_query = %q{PATH='/usr/local/bin:/usr/bin:/bin' rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp 2>/dev/null}
-      version = `#{rpm_query}`
-      retval = version if $?.success?
+      begin
+        version = Puppet::Util::Execution.execute(rpm_query, :failonfail => true)
+      rescue Puppet::ExecutionFailure
+        version = nil
+      end
+      retval = version if version
     end
 
     retval.strip! if strip_whitespace
