@@ -1,3 +1,6 @@
+* Tue May 21 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 3.15.1-0
+- Defer to the inbuilt 'fips_enabled' fact if it exists.
+
 * Thu May 09 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.1-0
 - Updated simp_version function to use Puppet::Util::Execution.execute
   instead of backtics.  This avioids a GLIBC error triggered by JRuby 9K when
