@@ -10,8 +10,7 @@ describe 'prelink fact' do
     EOS
   }
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'prepare clean environment' do
       it 'removes prelink when installed' do
         installed =  check_for_package(server, 'prelink')

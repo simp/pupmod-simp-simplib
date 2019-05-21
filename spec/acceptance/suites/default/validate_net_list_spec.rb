@@ -9,8 +9,7 @@ describe 'validate_net_list function' do
     }
   end
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when validate_net_list called" do
 
       it 'should accept valid netlist' do

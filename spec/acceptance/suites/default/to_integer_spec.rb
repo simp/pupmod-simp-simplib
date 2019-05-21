@@ -4,8 +4,7 @@ test_name 'to_integer function'
 
 describe 'to_integer function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when to_integer called" do
       let (:manifest) {
         <<-EOS

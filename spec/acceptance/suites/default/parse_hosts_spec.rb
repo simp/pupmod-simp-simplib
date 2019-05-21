@@ -4,8 +4,7 @@ test_name 'parse_hosts function'
 
 describe 'parse_hosts function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when parse_hosts called" do
       let (:manifest) {
         <<-EOS

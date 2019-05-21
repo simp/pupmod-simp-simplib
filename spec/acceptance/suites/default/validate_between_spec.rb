@@ -9,8 +9,7 @@ describe 'validate_between function' do
     }
   end
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'when validate_between called' do
 
       it 'should accept element within range' do

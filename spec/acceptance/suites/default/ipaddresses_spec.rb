@@ -4,8 +4,7 @@ test_name 'ipaddresses function'
 
 describe 'ipaddresses function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     let(:all_ips) do
       ifaces = fact_on(server, 'interfaces').split(',').map(&:strip)
 

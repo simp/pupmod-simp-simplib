@@ -4,8 +4,7 @@ test_name 'strip_ports function'
 
 describe 'strip_ports function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when strip_ports called" do
       let (:manifest) {
         <<-EOS

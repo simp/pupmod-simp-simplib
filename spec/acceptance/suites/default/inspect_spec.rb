@@ -28,8 +28,7 @@ end
 
 describe 'inspect function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "logs variables with deprecated inspect" do
       let (:manifest) {
         <<-EOS

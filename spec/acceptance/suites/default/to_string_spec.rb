@@ -4,8 +4,7 @@ test_name 'to_string function'
 
 describe 'to_string function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when to_string called" do
       let (:manifest) {
         <<-EOS

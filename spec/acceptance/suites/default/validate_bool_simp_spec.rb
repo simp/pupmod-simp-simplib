@@ -9,8 +9,7 @@ describe 'validate_bool_simp function' do
     }
   end
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'when validate_bool_simp called' do
 
       it 'should accept valid bool equivalent' do
