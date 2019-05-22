@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 test_name 'inspect function'
 
-def normalize(puppet_log)
+def normalize(puppet_log, keep_warning_lines_only = false)
   # remove normal puppet log lines and inspect/simplib::inspect
   # 'puts' lines, as their ordering relative to the Puppet warning
   # lines is non-deterministic
@@ -14,6 +14,9 @@ def normalize(puppet_log)
     line.match(/^Inspect:/)
   end
 
+  if keep_warning_lines_only
+    normalized_lines.delete_if { |line| !line.include?('Warning: ') }
+  end
 
   normalized_log = normalized_lines.join("\n")
   # remove color formatting
@@ -28,8 +31,7 @@ end
 
 describe 'inspect function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "logs variables with deprecated inspect" do
       let (:manifest) {
         <<-EOS
@@ -49,13 +51,12 @@ describe 'inspect function' do
         results = apply_manifest_on(server, manifest)
 
         expected = %r|Warning: inspect is deprecated, please use simplib::inspect
-\s+\(at /etc/puppetlabs/code/environments/production/modules/simplib/lib/puppet/parser/functions/simplib_deprecation\.rb:\d+:in `block in <module:Functions>'\)
 Warning: Inspect: Type => 'String' Content => '"var1 value"'
 Warning: Inspect: Type => 'TrueClass' Content => 'true'
 Warning: Inspect: Type => 'Hash' Content => '\{"a":"b"\}'
 Warning: Inspect: Type => 'String' Content => '""'|
 
-        expect(normalize(results.output)).to match(expected)
+        expect(normalize(results.output, true)).to match(expected)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('inspect is deprecated, please use simplib::inspect')
@@ -96,10 +97,6 @@ Notice: /Stage[main]/Main/Notify[DEBUG_INSPECT_var3]/message: defined 'message' 
 Notice: Type => NilClass Content => null
 Notice: /Stage[main]/Main/Notify[DEBUG_INSPECT_var4]/message: defined 'message' as 'Type => NilClass Content => null'
 EOM
-
-puts '<'*80
-puts normalize(results.output).inspect
-puts '>'*80
 
         expect(normalize(results.output)).to eq(expected)
 

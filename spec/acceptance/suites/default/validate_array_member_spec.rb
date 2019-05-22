@@ -9,8 +9,7 @@ describe 'validate_array_member function' do
     }
   end
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'when validate_array_member called' do
 
       it 'should accept element that is in array' do

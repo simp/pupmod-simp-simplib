@@ -4,8 +4,7 @@ test_name 'to_integer function'
 
 describe 'to_integer function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context "when to_integer called" do
       let (:manifest) {
         <<-EOS
@@ -20,8 +19,8 @@ describe 'to_integer function' do
       it 'should return an integer and log a single deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
-        expect(results.output).to match(/Notice: Type => Fixnum Content => 10/)
-        expect(results.output).to match(/Notice: Type => Fixnum Content => 2345/)
+        expect(results.output).to match(/Notice: Type => (Fixnum|Integer) Content => 10/)
+        expect(results.output).to match(/Notice: Type => (Fixnum|Integer) Content => 2345/)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('to_integer is deprecated, please use simplib::to_integer')
@@ -45,8 +44,8 @@ describe 'to_integer function' do
       it 'should return an integer without logging a deprecation warning' do
         results = apply_manifest_on(server, manifest)
 
-        expect(results.output).to match(/Notice: Type => Fixnum Content => -1/)
-        expect(results.output).to match(/Notice: Type => Fixnum Content => 24/)
+        expect(results.output).to match(/Notice: Type => (Fixnum|Integer) Content => -1/)
+        expect(results.output).to match(/Notice: Type => (Fixnum|Integer) Content => 24/)
 
         deprecation_lines = results.output.split("\n").delete_if do |line|
           !line.include?('to_integer is deprecated, please use simplib::to_integer')

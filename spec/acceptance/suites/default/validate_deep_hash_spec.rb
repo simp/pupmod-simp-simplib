@@ -9,8 +9,7 @@ describe 'validate_deep_hash function' do
     }
   end
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'when validate_deep_hash called' do
 
       it 'should accept valid hash' do

@@ -4,8 +4,7 @@ test_name 'nets2ddq function'
 
 describe 'nets2ddq function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     context 'when nets2ddq' do
       let (:manifest) {
         <<-EOS

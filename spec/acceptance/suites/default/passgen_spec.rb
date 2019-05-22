@@ -9,8 +9,7 @@ end
 
 describe 'passgen function' do
 
-  servers = hosts_with_role(hosts, 'server')
-  servers.each do |server|
+  hosts.each do |server|
     hash_algorithms.each do |hash|
       (1..10).each do |round|
       context "when set user 'testuser#{round}' to password 'test' and hash type == #{hash}" do
