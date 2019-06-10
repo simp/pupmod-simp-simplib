@@ -36,7 +36,7 @@ addons:
 
 before_install:
   - rm -f Gemfile.lock
-  - for x in ${HOME}/.rvm/gems/*; do gem uninstall -I -x -i "${x}" -v '>= 1.17' bundler || true; gem uninstall -I -x -i "${x}@global" -v '>= 1.17' bundler || true; done
+  - for x in ${HOME}/.rvm/gems/*; do gem uninstall --force -I -x -i "${x}" -v '>= 1.17' bundler || true; gem uninstall --force -I -x -i "${x}@global" -v '>= 1.17' bundler || true; done
   - gem install -v '~> 1.17' bundler
 
 global:
