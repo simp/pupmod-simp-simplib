@@ -1,4 +1,4 @@
-* Fri June 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.3-0
+* Fri Jun 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.3-0
 - Allow users to disable deprecation warnings using SIMPLIB_NOLOG_DEPRECATIONS
   environment variable
 
