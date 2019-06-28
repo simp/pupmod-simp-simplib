@@ -14,6 +14,3 @@ compliance_markup::report_types:
 # do something different based on your test requirements
 compliance_markup::enforcement:
   - "%{facts.target_compliance_profile}"
-
-sssd::domains :
-  - 'LOCAL'
