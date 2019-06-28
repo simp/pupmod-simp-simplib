@@ -29,6 +29,6 @@ Puppet::Functions.create_function(:'simplib::deprecation') do
       message = "#{message} at #{file}:#{line}"
     end
 
-    Puppet.deprecation_warning(message, key)
+    Puppet.deprecation_warning(message, key) unless ENV['SIMPLIB_NOLOG_DEPRECATIONS'] 
   end
 end

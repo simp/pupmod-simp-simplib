@@ -16,6 +16,6 @@ module Puppet::Parser::Functions
     key = arguments[0]
     message = arguments[1]
 
-    Puppet.deprecation_warning(message, key)
+    Puppet.deprecation_warning(message, key) unless ENV['SIMPLIB_NOLOG_DEPRECATIONS']
   end
 end

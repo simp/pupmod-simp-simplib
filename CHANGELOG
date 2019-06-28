@@ -1,3 +1,7 @@
+* Fri Jun 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.3-0
+- Allow users to disable deprecation warnings using SIMPLIB_NOLOG_DEPRECATIONS
+  environment variable
+
 * Fri May 31 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 3.15.2-0
 - Remove Puppet 4 support, as Puppet has removed the Puppet 4 RPMs from
   their yum repos.
