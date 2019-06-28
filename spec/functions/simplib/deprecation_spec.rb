@@ -16,16 +16,14 @@ describe 'simplib::deprecation' do
       is_expected.to run.with_params('test_key', 'test_func is deprecated')
       is_expected.to run.with_params('test_key', 'test_func is deprecated')
     end
-  end
 
-#  context 'with no SIMPLIB_LOG_DEPRECATIONS environment variable set' do
-#    it 'should not display a warning' do
-#      ENV['SIMPLIB_LOG_DEPRECATIONS'] = nil
-#      # This is working around deprecation warnings that get added by Puppet core
-#      Puppet.expects(:warning).with(includes('test_func is deprecated')).never
-#      Puppet.stubs(:warning).with(Not(includes('test_func is deprecated')))
-#
-#      is_expected.to run.with_params('test_key', 'test_func is deprecated')
-#    end
-#  end
+    it  'should not display a warning' do
+      ENV['SIMPLIB_NOLOG_DEPRECATIONS'] = 'true'
+      # This is working around deprecation warnings that get added by Puppet core
+      Puppet.expects(:warning).with(includes('test_func is deprecated')).never
+      Puppet.stubs(:warning).with(Not(includes('test_func is deprecated')))
+
+      is_expected.to run.with_params('test_key', 'test_func is deprecated')
+    end
+  end
 end
