@@ -15,13 +15,5 @@ compliance_markup::report_types:
 compliance_markup::enforcement:
   - "%{facts.target_compliance_profile}"
 
-# Required Parameters
-
-# The following from `simp_options` should not be required
-simp_options::puppet::server: 'puppet.foo.bar'
-simp_options::puppet::ca: 'puppet.foo.bar'
-simp_options::dns::servers :
-  - 1.2.3.4
-
 sssd::domains :
   - 'LOCAL'
