@@ -1,6 +1,7 @@
-# This class expands on the Puppet Stdlib stages to add a few levels that we
-# found necessary when developing various SIMP modules that had global
-# ramifications.
+# @summary Expands on the `puppetlabs-stdlib` stages
+#
+# Adds additional intermediate stages that we found necessary when developing
+# various SIMP modules that had global ramifications.
 #
 # Primarily, we wanted to ensure that anyone using the stdlib stages was not
 # tripped up by any of our modules that may enable, or disable, various system,

@@ -1,3 +1,4 @@
+# Syslog facilities in `C` compatible format
 type Simplib::Syslog::CFacility = Variant[
   Integer[0,23],
   Enum[

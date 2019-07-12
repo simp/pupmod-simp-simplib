@@ -30,6 +30,7 @@ Puppet::Type.newtype(:simp_file_line) do
   EOT
 
   ensurable do
+    desc 'Whether the line should be added or removed'
     defaultvalues
     defaultto :present
   end

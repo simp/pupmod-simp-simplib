@@ -1,3 +1,4 @@
+# Valid lowercase versions of syslog facilities
 type Simplib::Syslog::LowerFacility = Variant[
   Integer[0,23],
   Enum[

@@ -1,3 +1,4 @@
+# Valid uppercase versions of syslog priorities
 type Simplib::Syslog::UpperPriority = Enum[
   'KERN.EMERG',
   'KERN.ALERT',

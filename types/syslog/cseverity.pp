@@ -1,3 +1,4 @@
+# Syslog severities in `C` compatible format
 type Simplib::Syslog::CSeverity = Variant[
   Integer[0,7],
   Enum[

@@ -1,3 +1,4 @@
+# Valid uppercase bounds for syslog facilities
 type Simplib::Syslog::UpperFacility = Variant[
   Integer[0,23],
   Enum[

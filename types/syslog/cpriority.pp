@@ -1,3 +1,4 @@
+# Syslog priorities in `C` compatible format
 type Simplib::Syslog::CPriority = Enum[
   'LOG_KERN.LOG_EMERG',
   'LOG_KERN.LOG_ALERT',
