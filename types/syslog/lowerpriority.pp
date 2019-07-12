@@ -1,3 +1,4 @@
+# Valid lowercase versions of syslog priorities
 type Simplib::Syslog::LowerPriority = Enum[
   'kern.emerg',
   'kern.alert',

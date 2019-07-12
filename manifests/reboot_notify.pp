@@ -1,10 +1,10 @@
-# This is a simple controller class for global settings related to the
-# 'reboot_notify' custom type
+# @summary This is a simple controller class for global settings related to the
+# `reboot_notify` custom type
 #
 # @param log_level
 #   The Puppet log_level to use when generating output
-#   
-#   To change the level of the reboot_notify messages add this class 
+#
+#   To change the level of the reboot_notify messages add this class
 #   to the class list in hiera and set simplib::reboot_notify::log_level to
 #   the level you want.
 #

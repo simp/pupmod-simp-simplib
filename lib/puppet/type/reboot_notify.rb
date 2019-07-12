@@ -12,6 +12,7 @@ Puppet::Type.newtype(:reboot_notify) do
     the system is successfully rebooted.'
 
   ensurable do
+    desc 'Whether the notification should be added or removed'
     defaultto(:present)
 
     newvalue(:present) do

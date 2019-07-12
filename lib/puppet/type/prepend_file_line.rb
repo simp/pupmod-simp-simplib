@@ -13,6 +13,7 @@ Puppet::Type.newtype(:prepend_file_line) do
   EOT
 
   ensurable do
+    desc 'Has no effect, items are only added to files'
     defaultto :present
     newvalue(:present) do
       provider.create

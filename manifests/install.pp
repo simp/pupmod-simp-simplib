@@ -1,4 +1,4 @@
-# Manage packages based on Hash input
+# @summary Manage packages based on Hash input
 #
 # This has been created as a Defined Type so that it can be properly referenced
 # in manifest ordering
