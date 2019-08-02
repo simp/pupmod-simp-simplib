@@ -1,3 +1,6 @@
+* Mon Aug 12 2019 Robert Vincent <pillarsdotnet@gmail.com> - 3.16.1-0
+- Support puppetlabs/stdlib 6.x.
+
 * Mon Aug 05 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
 - Added the following functions:
   - simplib::debug::inspect
