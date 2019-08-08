@@ -1,3 +1,12 @@
+* Mon Aug 05 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
+- Added the following functions:
+  - simplib::debug::inspect
+    - Enhanced version of the old 'simplib::inspect'
+  - simplib::debug::classtrace
+    - Prints a trace of all resources traversed to get to the current point
+  - simplib::debug::stacktrace
+    - Prints a trace of all files traversed to get to the current point
+
 * Fri Jun 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.3-0
 - Allow users to disable deprecation warnings using SIMPLIB_NOLOG_DEPRECATIONS
   environment variable
