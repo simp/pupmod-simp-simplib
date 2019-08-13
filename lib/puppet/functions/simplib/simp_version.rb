@@ -13,16 +13,22 @@ Puppet::Functions.create_function(:'simplib::simp_version') do
   def simp_version(strip_whitespace = false)
     retval = "unknown\n"
 
-    if File.readable?('/etc/simp/simp.version')
-    # TODO Figure out under what circumstances the version string is prefaced
-    # with 'simp-'. This is not true for SIMP 6.x
-      version = File.read('/etc/simp/simp.version').gsub('simp-','')
+    is_windows = closure_scope['facts']['kernel'].downcase == 'windows'
+
+    version_file = '/etc/simp/simp.version'
+    version_file = 'C:\ProgramData\SIMP\simp.version' if is_windows
+
+    if File.readable?(version_file)
+      # TODO Figure out under what circumstances the version string is prefaced
+      # with 'simp-'. This is not true for SIMP 6.x
+      version = File.read(version_file).gsub('simp-','')
+
       retval = version unless version.strip.empty?
-    else
+    elsif !is_windows
       rpm_query = %q{PATH='/usr/local/bin:/usr/bin:/bin' rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp 2>/dev/null}
       begin
         version = Puppet::Util::Execution.execute(rpm_query, :failonfail => true)
-      rescue Puppet::ExecutionFailure
+      rescue
         version = nil
       end
       retval = version if version
