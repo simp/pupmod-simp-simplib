@@ -11,11 +11,6 @@ HOSTS:
     docker_image_commands:
       # Puppet Deps
       - 'yum install -y ntpdate rsync openssl'
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-7&arch=$basearch'
-        gpgkeys:
-          - https://getfedora.org/static/352C64E5.txt
 
   el6-docker:
     roles:
@@ -28,11 +23,6 @@ HOSTS:
     docker_image_commands:
       # Puppet Deps
       - 'yum install -y ntpdate rsync openssl'
-    yum_repos:
-      epel:
-        mirrorlist: 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch'
-        gpgkeys:
-          - https://getfedora.org/static/0608B895.txt
 
 CONFIG:
   log_level: verbose
