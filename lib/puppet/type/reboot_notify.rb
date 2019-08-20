@@ -1,3 +1,5 @@
+require 'puppet/parameter/boolean'
+
 Puppet::Type.newtype(:reboot_notify) do
   @doc = 'Notifies users when a system reboot is required.
 
