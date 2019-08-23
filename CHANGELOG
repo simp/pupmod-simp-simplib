@@ -1,8 +1,5 @@
-* Mon Aug 12 2019 Robert Vincent <pillarsdotnet@gmail.com> - 3.16.0-0
-- Support puppetlabs/stdlib 6.x.
-- Fix "uninitialized constant" error with reboot_notify
-
-* Mon Aug 05 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
+* Wed Aug 21 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
+- Ensure that simplib::simp_version works on Windows
 - Added the following functions:
   - simplib::debug::inspect
     - Enhanced version of the old 'simplib::inspect'
@@ -10,6 +7,10 @@
     - Prints a trace of all resources traversed to get to the current point
   - simplib::debug::stacktrace
     - Prints a trace of all files traversed to get to the current point
+
+* Mon Aug 12 2019 Robert Vincent <pillarsdotnet@gmail.com> - 3.16.0-0
+- Support puppetlabs/stdlib 6.x.
+- Fix "uninitialized constant" error with reboot_notify
 
 * Fri Jun 28 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 3.15.3-0
 - Allow users to disable deprecation warnings using SIMPLIB_NOLOG_DEPRECATIONS

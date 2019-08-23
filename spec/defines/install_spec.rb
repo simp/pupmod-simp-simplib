@@ -31,36 +31,38 @@ describe 'simplib::install', :type => :define do
         it { is_expected.to create_package('foo').with_ensure('present') }
       end
 
-      context 'with alternate defaults' do
-        let(:params) {{
-          :packages => {
-            'foo' => :undef
-          },
-          :defaults => {
-            'ensure' => 'latest'
-          }
-        }}
-
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_package('foo').with_ensure('latest') }
-      end
-
-      context 'with package specific overrides' do
-        let(:params) {{
-          :packages => {
-            'foo' => :undef,
-            'bar' => {
-              'ensure' => 'present'
+      unless os_facts[:kernel].casecmp('windows')
+        context 'with alternate defaults' do
+          let(:params) {{
+            :packages => {
+              'foo' => :undef
+            },
+            :defaults => {
+              'ensure' => 'latest'
             }
-          },
-          :defaults => {
-            'ensure' => 'latest'
-          }
-        }}
+          }}
 
-        it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_package('foo').with_ensure('latest') }
-        it { is_expected.to create_package('bar').with_ensure('present') }
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_package('foo').with_ensure('latest') }
+        end
+
+        context 'with package specific overrides' do
+          let(:params) {{
+            :packages => {
+              'foo' => :undef,
+              'bar' => {
+                'ensure' => 'present'
+              }
+            },
+            :defaults => {
+              'ensure' => 'latest'
+            }
+          }}
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to create_package('foo').with_ensure('latest') }
+          it { is_expected.to create_package('bar').with_ensure('present') }
+        end
       end
     end
   end
