@@ -1,3 +1,8 @@
+* Wed Aug 28 2019 Jeanne Greulich <jeanne.greulich@oyxpoint.com> - 4.0.0-0
+- remove deprecated Puppet 3 functions
+- See the SIMP 6.4.0 changelog in Read the Docs for a full
+  description on the functions that were remove/replaced.
+
 * Wed Aug 21 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
 - Ensure that simplib::simp_version works on Windows
 - Added the following functions:
