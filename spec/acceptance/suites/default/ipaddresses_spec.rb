@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'ipaddresses function'
+test_name 'simplib::ipaddresses function'
 
-describe 'ipaddresses function' do
+describe 'simplib::ipaddresses function' do
 
   hosts.each do |server|
     let(:all_ips) do
@@ -31,31 +31,7 @@ describe 'ipaddresses function' do
       retval
     end
 
-    context "when ipaddresses called with/without arguments" do
-      let (:manifest) {
-        <<-EOS
-        $var1 = ipaddresses()
-        $var2 = ipaddresses(true)
-
-        simplib::inspect('var1')
-        simplib::inspect('var2')
-        EOS
-      }
-
-      it 'should return IP addresses and log a single deprecation warning' do
-        results = apply_manifest_on(server, manifest).output.lines.map(&:strip)
-
-        ip_matches = all_ips.map do |ip|
-          results.grep(Regexp.new(Regexp.escape(ip)))
-        end.flatten.compact
-
-        expect(ip_matches).to_not be_empty
-
-        expect(results.grep(/ipaddresses is deprecated, please use simplib::ipaddresses/).size).to eq 1
-      end
-    end
-
-    context "when simplib::ipaddresses called with/without arguments" do
+    context "when simplib::ipaddresses called with/without arguments on #{server}" do
       let (:manifest) {
         <<-EOS
         $var1 = simplib::ipaddresses()
@@ -66,7 +42,7 @@ describe 'ipaddresses function' do
         EOS
       }
 
-      it 'should return IP addresses without logging a deprecation warning' do
+      it 'should return IP addresses' do
         results = apply_manifest_on(server, manifest).output.lines.map(&:strip)
 
         ip_matches = all_ips.map do |ip|
@@ -74,8 +50,6 @@ describe 'ipaddresses function' do
         end.flatten.compact
 
         expect(ip_matches).to_not be_empty
-
-        expect(results.grep(/ipaddresses is deprecated, please use simplib::ipaddresses/)).to be_empty
       end
     end
   end

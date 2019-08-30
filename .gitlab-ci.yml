@@ -78,7 +78,6 @@ variables:
     MATRIX_RUBY_VERSION: '2.4'
 
 .pup_6: &pup_6
-  allow_failure: true
   image: 'ruby:2.5'
   variables:
     PUPPET_VERSION: '~> 6.0'
@@ -166,31 +165,31 @@ pup5.5.10:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
-    - 'bundle exec rake beaker:suites[default]'
+    - 'bundle exec rake beaker:suites[default,default]'
 
 pup5.5.10-fips:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
 
 pup5.5.10-prelink_fact:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
-    - 'bundle exec rake beaker:suites[prelink_fact]'
+    - 'bundle exec rake beaker:suites[prelink_fact,default]'
 
 pup5.5.10-prelink_fact-fips:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact]'
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact,default]'
 
 pup5.5.10-ipa_fact:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
-    - 'bundle exec rake beaker:suites[ipa_fact]'
+    - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
 pup5.5.10-oel:
   <<: *acceptance_base
@@ -225,3 +224,23 @@ pup5.5.10-oel-prelink_fact-fips:
 #  <<: *only_with_SIMP_FULL_MATRIX
 #  script:
 #    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+#
+pup6:
+  <<: *acceptance_base
+  <<: *pup_6
+  script:
+    - 'bundle exec rake beaker:suites[default,default]'
+
+pup6-fips:
+  <<: *acceptance_base
+  <<: *pup_6
+  script:
+    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
+
+pup6-ipa_fact:
+  <<: *acceptance_base
+  <<: *pup_6
+  <<: *only_with_SIMP_FULL_MATRIX
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,default]'
+

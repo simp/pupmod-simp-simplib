@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'validate_deep_hash function'
+test_name 'simplib::validate_deep_hash function'
 
-describe 'validate_deep_hash function' do
+describe 'simplib::validate_deep_hash function' do
   let(:opts_with_exit_1) do
     {
       :acceptable_exit_codes => [1]
@@ -10,50 +10,13 @@ describe 'validate_deep_hash function' do
   end
 
   hosts.each do |server|
-    context 'when validate_deep_hash called' do
-
-      it 'should accept valid hash' do
-        manifest = <<-EOS
-        $var1 = { 'server' => 'foo.bar.com' }
-        validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
-        EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-
-      it 'should reject invalid hash' do
-        manifest = <<-EOS
-        $var1 = { 'server' => 'foo.baz.com' }
-        validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
-        EOS
-        results = apply_manifest_on(server, manifest, opts_with_exit_1)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-    end
-
-    context 'when simplib::validate_deep_hash' do
+    context "when simplib::validate_deep_hash called on #{server}" do
       it 'should accept valid hash' do
         manifest = <<-EOS
         $var1 = { 'server' => 'foo.bar.com' }
         simplib::validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
         EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest)
       end
 
       it 'should reject invalid hash' do
@@ -61,13 +24,7 @@ describe 'validate_deep_hash function' do
         $var1 = { 'server' => 'foo.baz.com' }
         simplib::validate_deep_hash({ 'server' => 'bar.com$' }, $var1)
         EOS
-        results = apply_manifest_on(server, manifest, opts_with_exit_1)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_deep_hash is deprecated, please use simplib::validate_deep_hash')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest, opts_with_exit_1)
       end
     end
   end

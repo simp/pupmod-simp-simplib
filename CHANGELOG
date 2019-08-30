@@ -1,7 +1,48 @@
 * Wed Aug 28 2019 Jeanne Greulich <jeanne.greulich@oyxpoint.com> - 4.0.0-0
-- remove deprecated Puppet 3 functions
-- See the SIMP 6.4.0 changelog in Read the Docs for a full
-  description on the functions that were remove/replaced.
+- Added support for Puppet 6
+- Removed the following deprecated Puppet 3 API functions in order to support
+  Puppet 6:
+  - array_include
+  - array_size
+  - array_union
+  - bracketize
+  - generate_reboot_msg
+  - get_ports
+  - h2n
+  - host_is_me
+  - inspect
+  - ip_is_me
+  - ip_to_cron
+  - ipaddresses
+  - join_mount_opts
+  - localuser
+  - mapval
+  - nets2cidr
+  - nets2ddq
+  - parse_hosts
+  - passgen
+  - rand_cron
+  - simp_version
+  - simplib_deprecation
+  - slice_array
+  - strip_ports
+  - to_integer
+  - to_string
+  - validate_array_member
+  - validate_array_of_hashes
+  - validate_between
+  - validate_bool_simp
+  - validate_deep_hash
+  - validate_float
+  - validate_macaddress
+  - validate_net_list
+  - validate_port
+  - validate_re_array
+  - validate_sysctl_value
+  - validate_umask
+  - validate_uri_list
+- See the SIMP 6.4.0 Changelog for more detailed information on replacements
+  for the removed Puppet 3 API functions, as appropriate.
 
 * Wed Aug 21 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
 - Ensure that simplib::simp_version works on Windows
