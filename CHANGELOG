@@ -42,7 +42,7 @@
   - validate_umask
   - validate_uri_list
 - See the SIMP 6.4.0 Changelog for more detailed information on replacements
-  for the removed Puppet 3 API functions, as appropriate.
+  for the removed Puppet 3 API functions.
 
 * Wed Aug 21 2019 Trevor Vaughan <tvaughan@oyxpoint.com> - 3.16.0-0
 - Ensure that simplib::simp_version works on Windows
