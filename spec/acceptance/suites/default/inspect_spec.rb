@@ -1,6 +1,6 @@
 require 'spec_helper_acceptance'
 
-test_name 'inspect function'
+test_name 'simplib::inspect function'
 
 def normalize(puppet_log, keep_warning_lines_only = false)
   # remove normal puppet log lines and inspect/simplib::inspect
@@ -29,44 +29,10 @@ def normalize(puppet_log, keep_warning_lines_only = false)
   normalized_log + "\n"
 end
 
-describe 'inspect function' do
+describe 'simplib::inspect function' do
 
   hosts.each do |server|
-    context "logs variables with deprecated inspect" do
-      let (:manifest) {
-        <<-EOS
-        $var1 = "var1 value"
-        $var2 = true
-        $var3 = { 'a' => 'b'}
-        $var4 = undef
-
-        inspect($var1)
-        inspect($var2)
-        inspect($var3)
-        inspect($var4)
-        EOS
-      }
-
-      it 'should be able to log variables with a single deprecation warning' do
-        results = apply_manifest_on(server, manifest)
-
-        expected = %r|Warning: inspect is deprecated, please use simplib::inspect
-Warning: Inspect: Type => 'String' Content => '"var1 value"'
-Warning: Inspect: Type => 'TrueClass' Content => 'true'
-Warning: Inspect: Type => 'Hash' Content => '\{"a":"b"\}'
-Warning: Inspect: Type => 'String' Content => '""'|
-
-        expect(normalize(results.output, true)).to match(expected)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('inspect is deprecated, please use simplib::inspect')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-    end
-
-    context "logs variables with simplib::inspect" do
+    context "logs variables with simplib::inspect on #{server}" do
       let (:manifest) {
         <<-EOS
         $var1 = "var1 value"
@@ -81,7 +47,7 @@ Warning: Inspect: Type => 'String' Content => '""'|
         EOS
       }
 
-      it 'should be log variables without any deprecation warnings' do
+      it 'should be log variables' do
         results = apply_manifest_on(server, manifest)
 
         output = results.output
@@ -99,12 +65,6 @@ Notice: /Stage[main]/Main/Notify[DEBUG_INSPECT_var4]/message: defined 'message' 
 EOM
 
         expect(normalize(results.output)).to eq(expected)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('inspect is deprecated, please use simplib::inspect')
-        end
-
-        expect(deprecation_lines.size).to eq 0
       end
     end
   end

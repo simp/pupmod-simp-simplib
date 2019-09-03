@@ -43,9 +43,6 @@ global:
   - STRICT_VARIABLES=yes
 
 jobs:
-  allow_failures:
-    - name: 'Latest Puppet 6.x (allowed to fail)'
-
   include:
     - stage: check
       name: 'Syntax, style, and validation checks'
@@ -83,7 +80,7 @@ jobs:
         - bundle exec rake spec
 
     - stage: spec
-      name: 'Latest Puppet 6.x (allowed to fail)'
+      name: 'Latest Puppet 6.x'
       rvm: 2.5.1
       env: PUPPET_VERSION="~> 6.0"
       script:

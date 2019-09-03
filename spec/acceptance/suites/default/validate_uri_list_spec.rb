@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'validate_uri_list function'
+test_name 'simplib::validate_uri_list function'
 
-describe 'validate_uri_list function' do
+describe 'simplib::validate_uri_list function' do
   let(:opts_with_exit_1) do
     {
       :acceptable_exit_codes => [1]
@@ -10,60 +10,19 @@ describe 'validate_uri_list function' do
   end
 
   hosts.each do |server|
-    context "when validate_uri_list called" do
-
-      it 'should accept valid URIs' do
-        manifest = <<-EOS
-        $var1 = validate_uri_list('https://1.2.3.4:56', ['http','https'])
-        EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_uri_list is deprecated, please use simplib::validate_uri_list')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-
-      it 'should reject invalid URIs' do
-        manifest = <<-EOS
-        $var1 = validate_uri_list('ldap://1.2.3.4:56', ['http','https'])
-        EOS
-        results = apply_manifest_on(server, manifest, opts_with_exit_1)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_uri_list is deprecated, please use simplib::validate_uri_list')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-    end
-
-    context "when simplib::validate_uri_list" do
+    context "when simplib::validate_uri_list called on #{server}" do
       it 'should accept valid URIs' do
         manifest = <<-EOS
         $var1 = simplib::validate_uri_list('https://1.2.3.4:56', ['http','https'])
         EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_uri_list is deprecated, please use simplib::validate_uri_list')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest)
       end
 
       it 'should reject invalid URIs' do
         manifest = <<-EOS
         $var1 = simplib::validate_uri_list('ldap://1.2.3.4:56', ['http','https'])
         EOS
-        results = apply_manifest_on(server, manifest, opts_with_exit_1)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_uri_list is deprecated, please use simplib::validate_uri_list')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest, opts_with_exit_1)
       end
     end
   end

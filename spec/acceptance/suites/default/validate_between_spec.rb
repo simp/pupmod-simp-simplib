@@ -1,8 +1,8 @@
 require 'spec_helper_acceptance'
 
-test_name 'validate_between function'
+test_name 'simplib::validate_between function'
 
-describe 'validate_between function' do
+describe 'simplib::validate_between function' do
   let(:opts_with_exit_1) do
     {
       :acceptable_exit_codes => [1]
@@ -10,65 +10,22 @@ describe 'validate_between function' do
   end
 
   hosts.each do |server|
-    context 'when validate_between called' do
-
-      it 'should accept element within range' do
-        manifest = <<-EOS
-        $var1 = 7
-        validate_between($var1, 0, 60)
-        EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_between is deprecated, please use simplib::validate_between')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-
-      it 'should allow element outside of range because of bug' do
-        manifest = <<-EOS
-        $var1 = 70
-        validate_between($var1, 0, 60)
-        EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_between is deprecated, please use simplib::validate_between')
-        end
-
-        expect(deprecation_lines.size).to eq 1
-      end
-    end
-
-    context 'when simplib::validate_between' do
+    context "when simplib::validate_between called on #{server}" do
       it 'should accept element within range' do
         manifest = <<-EOS
         $var1 = 7
         simplib::validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_between is deprecated, please use simplib::validate_between')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest)
       end
 
-      # bug in original code...returned false
+      # bug in the old Puppet 3 function returned false instead of failing
       it 'should reject element outside of range' do
         manifest = <<-EOS
         $var1 = 70
         simplib::validate_between($var1, 0, 60)
         EOS
-        results = apply_manifest_on(server, manifest, opts_with_exit_1)
-
-        deprecation_lines = results.output.split("\n").delete_if do |line|
-          !line.include?('validate_between is deprecated, please use simplib::validate_between')
-        end
-
-        expect(deprecation_lines.size).to eq 0
+        apply_manifest_on(server, manifest, opts_with_exit_1)
       end
     end
   end
