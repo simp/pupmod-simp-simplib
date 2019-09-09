@@ -1,3 +1,8 @@
+* Fri Sep 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Added 'blacklist' functionality to deliberately fail on an OS that's listed
+  in the metadata.json but not necessarily supported by all parts of the given
+  module.
+
 * Wed Aug 28 2019 Jeanne Greulich <jeanne.greulich@oyxpoint.com> - 4.0.0-0
 - Added support for Puppet 6
 - Removed the following deprecated Puppet 3 API functions in order to support

@@ -650,8 +650,9 @@ Fails a compile if the client system is not compatible with the module's
 `metadata.json`
 
 #### `simplib::assert_metadata(String[1] $module_name, Optional[Struct[{
-    enable => Optional[Boolean],
-    os     => Optional[Struct[{
+    enable    => Optional[Boolean],
+    blacklist => Optional[Array[String]],
+    os        => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -673,8 +674,9 @@ The name of the module that should be checked
 ##### `options`
 
 Data type: `Optional[Struct[{
-    enable => Optional[Boolean],
-    os     => Optional[Struct[{
+    enable    => Optional[Boolean],
+    blacklist => Optional[Array[String]],
+    os        => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -688,7 +690,9 @@ Behavior modifiers for the function
 
 **Options**
 
-* enable => If set to `false` disable all validation
+* enable    => If set to `false` disable all validation
+* blacklist => An Array of operating system strings that should cause
+               validation to fail. This is mostly useful for profiles.
 * os
     * validate => Whether or not to validate the OS settings
     * options

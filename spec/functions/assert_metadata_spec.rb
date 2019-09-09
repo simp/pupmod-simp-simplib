@@ -31,6 +31,26 @@ describe 'simplib::assert_metadata' do
     end
   end
 
+  context 'on a supported, but blacklisted, OS' do
+    facts = {
+      :os => {
+        'name' => 'Ubuntu',
+        'release' => {
+          'major' => '14',
+          'full' => '14.999'
+        }
+      }
+    }
+
+    let(:facts) { facts }
+
+    it {
+      expect {
+        is_expected.to run.with_params('stdlib', { 'blacklist' => ['Ubuntu'] } )
+      }.to raise_error(/OS.*is not supported/)
+    }
+  end
+
   context 'on a supported OS with an unsupported full version' do
     facts = {
       :os => {

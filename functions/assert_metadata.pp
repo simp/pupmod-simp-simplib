@@ -11,7 +11,9 @@
 #
 #   **Options**
 #
-#   * enable => If set to `false` disable all validation
+#   * enable    => If set to `false` disable all validation
+#   * blacklist => An Array of operating system strings that should cause
+#                  validation to fail. This is mostly useful for profiles.
 #   * os
 #       * validate => Whether or not to validate the OS settings
 #       * options
@@ -25,8 +27,9 @@
 function simplib::assert_metadata (
   String[1] $module_name,
   Optional[Struct[{
-    enable => Optional[Boolean],
-    os     => Optional[Struct[{
+    enable    => Optional[Boolean],
+    blacklist => Optional[Array[String]],
+    os        => Optional[Struct[{
       validate => Optional[Boolean],
       options  => Struct[{
         release_match => Enum['none','full','major']
@@ -36,10 +39,11 @@ function simplib::assert_metadata (
 ) {
 
   $_default_options = {
-    'enable' => true,
-    'os'     => {
+    'enable'    => true,
+    'blacklist' => [],
+    'os'        => {
       'validate' => true,
-      'options' => {
+      'options'  => {
         'release_match' => 'none'
       }
     }
@@ -57,15 +61,18 @@ function simplib::assert_metadata (
     $metadata = load_module_metadata($module_name)
 
     if empty($metadata) {
-      fail("Could not find metadata for '${module_name}'")
+      fail("Could not find metadata for module '${module_name}'")
     }
 
     if $_options['os']['validate'] {
       if !$metadata['operatingsystem_support'] or empty($metadata['operatingsystem_support']) {
-        debug("'operatingsystem_support' was not found in '${module_name}'")
+        debug("'operatingsystem_support' was not found in module '${module_name}'")
+      }
+      elsif $facts['os']['name'] in $_options['blacklist'] {
+        fail("OS '${facts['os']['name']}' is not supported by module '${module_name}'")
       }
       elsif !($facts['os']['name'] in $metadata['operatingsystem_support'].map |Simplib::Puppet::Metadata::OS_support $os_info| { $os_info['operatingsystem'] }) {
-        fail("OS '${facts['os']['name']}' is not supported by '${module_name}'")
+        fail("OS '${facts['os']['name']}' is not supported by module '${module_name}'")
       }
       else {
         $metadata['operatingsystem_support'].each |Simplib::Puppet::Metadata::OS_support $os_info| {
@@ -73,7 +80,7 @@ function simplib::assert_metadata (
             case $_options['os']['options']['release_match'] {
               'full': {
                 if !($facts['os']['release']['full'] in $os_info['operatingsystemrelease']) {
-                  fail("OS '${facts['os']['name']}' version '${facts['os']['release']['full']}' is not supported by '${module_name}'")
+                  fail("OS '${facts['os']['name']}' version '${facts['os']['release']['full']}' is not supported by module '${module_name}'")
                 }
               }
               'major': {
@@ -82,7 +89,7 @@ function simplib::assert_metadata (
                 }
 
                 if !($facts['os']['release']['major'] in $_os_major_releases) {
-                  fail("OS '${facts['os']['name']}' version '${facts['os']['release']['major']}' is not supported by '${module_name}'")
+                  fail("OS '${facts['os']['name']}' version '${facts['os']['release']['major']}' is not supported by module '${module_name}'")
                 }
               }
               default: {
