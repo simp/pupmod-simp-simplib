@@ -2,6 +2,15 @@
 - Added 'blacklist' functionality to deliberately fail on an OS that's listed
   in the metadata.json but not necessarily supported by all parts of the given
   module.
+* Add new, more flexible, functions for delving into the module metadata
+  * simplib::module_metadata::os_blacklisted => Determine if the passed
+    module metadata indicates that the current OS has been blacklisted
+  * simplib::module_metadata::os_supported => Determine if the passed
+    module metadata indicates that the current OS is supported
+  * simplib::module_metadata::assert => Adds an assertion based on
+    whether the OS is supported or blacklisted
+  * simplib::caller => A useful function for determining what called a
+    function
 
 * Wed Aug 28 2019 Jeanne Greulich <jeanne.greulich@oyxpoint.com> - 4.0.0-0
 - Added support for Puppet 6
