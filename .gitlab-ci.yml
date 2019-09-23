@@ -179,17 +179,17 @@ pup5.5.10-prelink_fact:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,default]'
 
-pup5.5.10-prelink_fact-fips:
-  <<: *acceptance_base
-  <<: *pup_5_5_10
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact,default]'
-
 pup5.5.10-ipa_fact:
   <<: *acceptance_base
   <<: *pup_5_5_10
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
+
+pup5.5.10-caller_function:
+  <<: *acceptance_base
+  <<: *pup_5_5_10
+  script:
+    - 'bundle exec rake beaker:suites[caller_function,default]'
 
 pup5.5.10-oel:
   <<: *acceptance_base
@@ -210,21 +210,6 @@ pup5.5.10-oel-prelink_fact:
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
-pup5.5.10-oel-prelink_fact-fips:
-  <<: *acceptance_base
-  <<: *pup_5_5_10
-  <<: *only_with_SIMP_FULL_MATRIX
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[prelink_fact,oel]'
-
-# The default node set for the ipa_fact suite includes OEL servers
-#pup5.5.10-oel-ipa_fact:
-#  <<: *acceptance_base
-#  <<: *pup_5_5_10
-#  <<: *only_with_SIMP_FULL_MATRIX
-#  script:
-#    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
-#
 pup6:
   <<: *acceptance_base
   <<: *pup_6
@@ -244,3 +229,8 @@ pup6-ipa_fact:
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
+pup6-caller_function:
+  <<: *acceptance_base
+  <<: *pup_6
+  script:
+    - 'bundle exec rake beaker:suites[caller_function,default]'
