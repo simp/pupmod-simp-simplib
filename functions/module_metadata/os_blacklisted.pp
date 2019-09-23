@@ -83,7 +83,7 @@ function simplib::module_metadata::os_blacklisted (
           }
         }
         else {
-          true or $memo
+          true
         }
       }
       else { false or $memo }
