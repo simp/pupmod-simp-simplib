@@ -5,7 +5,10 @@
 #   The name of the module that should be checked
 #
 # @param options
-#   @see $simplib::module_metadata::blacklist::options
+#   Options to control the assertion behavior
+#
+#   @see $simplib::module_metadata::os_blacklist::options
+#   @see $simplib::module_metadata::os_supported::options
 #
 # @return [None]
 #
