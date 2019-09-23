@@ -4,8 +4,6 @@
 # If a blacklist is passed, then it will return `false` if the OS is in the
 # blacklist and `true` otherwise.
 #
-# If the blacklist is not matched, the standard OS validation will be used.
-#
 # @param module_metadata
 #   A Hash of the contents of the metadata.json for a puppet module.
 #

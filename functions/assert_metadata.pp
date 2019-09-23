@@ -32,9 +32,9 @@ function simplib::assert_metadata (
     enable    => Optional[Boolean],
     os        => Optional[Struct[{
       validate => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]]       $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }),
 ) {

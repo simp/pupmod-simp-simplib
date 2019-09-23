@@ -47,6 +47,16 @@ describe 'simplib::assert_metadata' do
     }
   }
 
+  options_disable_global = {
+    'enable' => false
+  }
+
+  options_disable_validation = {
+    'os' => {
+      'validate' => false
+    }
+  }
+
   context 'with no version matching' do
     context 'on a supported OS' do
       let(:facts) { valid_facts }
@@ -59,6 +69,18 @@ describe 'simplib::assert_metadata' do
 
       context 'at the full version' do
         it { is_expected.to run.with_params('simplib', options_full) }
+      end
+    end
+
+    context 'when disabled' do
+      let(:facts) { bad_os }
+
+      context 'globally' do
+        it { is_expected.to run.with_params('simplib', options_disable_global) }
+      end
+
+      context 'os validation' do
+        it { is_expected.to run.with_params('simplib', options_disable_validation) }
       end
     end
 

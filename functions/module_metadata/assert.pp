@@ -19,15 +19,15 @@ function simplib::module_metadata::assert (
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]],
     os_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options => Struct[{
+      options => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef })
 ) {
