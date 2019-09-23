@@ -29,7 +29,7 @@ Puppet::Functions.create_function(:'simplib::caller', Puppet::Functions::Interna
     stack_trace = call_function('simplib::debug::stacktrace', false)
 
     if stack_trace.size >= depth
-      calling_file = stack_trace[-depth]
+      calling_file = stack_trace[-depth] if stack_trace[-depth]
     end
 
     return calling_file
