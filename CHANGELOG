@@ -1,3 +1,8 @@
+* Mon Sep 23 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Added a `simplib__firewalls` fact to list discovered firewall tools.
+- Added RHEL 8 support
+- Realigned supported OS listing
+
 * Wed Aug 28 2019 Jeanne Greulich <jeanne.greulich@oyxpoint.com> - 4.0.0-0
 - Added support for Puppet 6
 - Removed the following deprecated Puppet 3 API functions in order to support
