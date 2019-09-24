@@ -661,9 +661,9 @@ compatibility
     enable    => Optional[Boolean],
     os        => Optional[Struct[{
       validate => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
 
@@ -688,9 +688,9 @@ Data type: `Optional[Struct[{
     enable    => Optional[Boolean],
     os        => Optional[Struct[{
       validate => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]]`
 
@@ -1971,15 +1971,15 @@ Fails a compile if the client system is not compatible with the module's
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]],
     os_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options => Struct[{
+      options => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
 
@@ -2001,15 +2001,15 @@ Data type: `Optional[Struct[{
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]],
     os_validation => Optional[Struct[{
       enable => Optional[Boolean],
-      options => Struct[{
+      options => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]]`
 
@@ -2028,8 +2028,6 @@ metadata.json.
 If a blacklist is passed, then it will return `false` if the OS is in the
 blacklist and `true` otherwise.
 
-If the blacklist is not matched, the standard OS validation will be used.
-
 #### `simplib::module_metadata::os_blacklisted(Hash $module_metadata, Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]] $blacklist, Optional[Struct[{
     release_match => Enum['none','full','major']
   }]] $options = undef)`
@@ -2039,8 +2037,6 @@ metadata.json.
 
 If a blacklist is passed, then it will return `false` if the OS is in the
 blacklist and `true` otherwise.
-
-If the blacklist is not matched, the standard OS validation will be used.
 
 Returns: `Boolean` true  => The OS + release is blacklisted
 false => The OS + release is not not blacklisted
