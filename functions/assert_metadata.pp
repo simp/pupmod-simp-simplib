@@ -64,5 +64,17 @@ function simplib::assert_metadata (
     }
   }
 
-  simplib::module_metadata::assert($module_name, $_options)
+  if $_options['enable'] {
+    $_module_metadata = load_module_metadata($module_name)
+
+    if empty($_module_metadata) {
+      fail("Could not find metadata for module '${module_name}'")
+    }
+
+    if $_options['os_validation']['enable'] {
+      unless simplib::module_metadata::os_supported($_module_metadata, $_options['os_validation']['options']) {
+        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported by '${module_name}'")
+      }
+    }
+  }
 }
