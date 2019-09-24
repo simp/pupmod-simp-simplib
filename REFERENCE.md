@@ -24,9 +24,10 @@
 
 **Functions**
 
-* [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`
+* [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`  NOTE: New capabilities will be added to the simplib
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
+* [`simplib::caller`](#simplibcaller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
 * [`simplib::debug::classtrace`](#simplibdebugclasstrace): Prints out the stack of Puppet Classes and Defined Types that have been called up to this point  WARNING: Uses **EXPERIMENTAL** features from
 * [`simplib::debug::inspect`](#simplibdebuginspect): Prints out Puppet warning messages that display the passed variable, data type, and location.  WARNING: Uses **EXPERIMENTAL** features from P
 * [`simplib::debug::stacktrace`](#simplibdebugstacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
@@ -46,6 +47,9 @@
 * [`simplib::lookup`](#simpliblookup): A function for falling back to global scope variable lookups when the Puppet 4 ``lookup()`` function cannot find a value.  While ``lookup()``
 * [`simplib::mock_data`](#simplibmock_data): A mock data function
 * [`simplib::module_exist`](#simplibmodule_exist): Determines if a module exists in the current environment  If passed with an author, such as `simp/simplib` or `simp-simplib`, will return whe
+* [`simplib::module_metadata::assert`](#simplibmodule_metadataassert): Fails a compile if the client system is not compatible with the module's `metadata.json`
+* [`simplib::module_metadata::os_blacklisted`](#simplibmodule_metadataos_blacklisted): Returns whether or not the passed module is blacklisted per the module's metadata.json.  If a blacklist is passed, then it will return `false
+* [`simplib::module_metadata::os_supported`](#simplibmodule_metadataos_supported): Returns whether or not the passed module is supported per the module's metadata.json.
 * [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
 * [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
@@ -649,18 +653,26 @@ Type: Puppet Language
 Fails a compile if the client system is not compatible with the module's
 `metadata.json`
 
+NOTE: New capabilities will be added to the simplib::module_metadata::assert
+function instead of here but this will remain to preserve backwards
+compatibility
+
 #### `simplib::assert_metadata(String[1] $module_name, Optional[Struct[{
-    enable => Optional[Boolean],
-    os     => Optional[Struct[{
+    enable    => Optional[Boolean],
+    os        => Optional[Struct[{
       validate => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
 
 Fails a compile if the client system is not compatible with the module's
 `metadata.json`
+
+NOTE: New capabilities will be added to the simplib::module_metadata::assert
+function instead of here but this will remain to preserve backwards
+compatibility
 
 Returns: `None`
 
@@ -673,12 +685,12 @@ The name of the module that should be checked
 ##### `options`
 
 Data type: `Optional[Struct[{
-    enable => Optional[Boolean],
-    os     => Optional[Struct[{
+    enable    => Optional[Boolean],
+    os        => Optional[Struct[{
       validate => Optional[Boolean],
-      options  => Struct[{
+      options  => Optional[Struct[{
         release_match => Enum['none','full','major']
-      }]
+      }]]
     }]]
   }]]`
 
@@ -688,7 +700,7 @@ Behavior modifiers for the function
 
 **Options**
 
-* enable => If set to `false` disable all validation
+* enable    => If set to `false` disable all validation
 * os
     * validate => Whether or not to validate the OS settings
     * options
@@ -866,6 +878,43 @@ $bar contains:[ '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
 Data type: `String`
 
 The string of IPv6 addresses to bracketize (comma, space, and/or semi-colon separated)
+
+### simplib::caller
+
+Type: Ruby 4.x API
+
+Returns the location of whatever called the item that called this function (two levels up)
+
+This is meant to be used inside other functions to tell you what is calling
+the given function so that you can return a meaningful error message and has
+limited utility outside of that situation.
+
+WARNING: Uses **EXPERIMENTAL** features from Puppet, may break at any time.
+
+#### `simplib::caller(Optional[Integer[0]] $depth, Optional[Boolean] $print)`
+
+Returns the location of whatever called the item that called this function (two levels up)
+
+This is meant to be used inside other functions to tell you what is calling
+the given function so that you can return a meaningful error message and has
+limited utility outside of that situation.
+
+WARNING: Uses **EXPERIMENTAL** features from Puppet, may break at any time.
+
+Returns: `Array` The caller
+
+##### `depth`
+
+Data type: `Optional[Integer[0]]`
+
+The level to walk backwards in the stack. May be useful for popping out
+of known function nesting
+
+##### `print`
+
+Data type: `Optional[Boolean]`
+
+Whether or not to print to the visual output
 
 ### simplib::debug::classtrace
 
@@ -1909,6 +1958,162 @@ Returns: `Boolean` Whether or not the module exists in the current environment
 Data type: `String[1]`
 
 The module name to check
+
+### simplib::module_metadata::assert
+
+Type: Puppet Language
+
+Fails a compile if the client system is not compatible with the module's
+`metadata.json`
+
+#### `simplib::module_metadata::assert(String[1] $module_name, Optional[Struct[{
+    enable => Optional[Boolean],
+    blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
+    blacklist_validation => Optional[Struct[{
+      enable => Optional[Boolean],
+      options  => Optional[Struct[{
+        release_match => Enum['none','full','major']
+      }]]
+    }]],
+    os_validation => Optional[Struct[{
+      enable => Optional[Boolean],
+      options => Optional[Struct[{
+        release_match => Enum['none','full','major']
+      }]]
+    }]]
+  }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
+
+Fails a compile if the client system is not compatible with the module's
+`metadata.json`
+
+Returns: `None`
+
+##### `module_name`
+
+Data type: `String[1]`
+
+The name of the module that should be checked
+
+##### `options`
+
+Data type: `Optional[Struct[{
+    enable => Optional[Boolean],
+    blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
+    blacklist_validation => Optional[Struct[{
+      enable => Optional[Boolean],
+      options  => Optional[Struct[{
+        release_match => Enum['none','full','major']
+      }]]
+    }]],
+    os_validation => Optional[Struct[{
+      enable => Optional[Boolean],
+      options => Optional[Struct[{
+        release_match => Enum['none','full','major']
+      }]]
+    }]]
+  }]]`
+
+Options to control the assertion behavior
+
+@see $simplib::module_metadata::os_blacklist::options
+@see $simplib::module_metadata::os_supported::options
+
+### simplib::module_metadata::os_blacklisted
+
+Type: Puppet Language
+
+Returns whether or not the passed module is blacklisted per the module's
+metadata.json.
+
+If a blacklist is passed, then it will return `false` if the OS is in the
+blacklist and `true` otherwise.
+
+#### `simplib::module_metadata::os_blacklisted(Hash $module_metadata, Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]] $blacklist, Optional[Struct[{
+    release_match => Enum['none','full','major']
+  }]] $options = undef)`
+
+Returns whether or not the passed module is blacklisted per the module's
+metadata.json.
+
+If a blacklist is passed, then it will return `false` if the OS is in the
+blacklist and `true` otherwise.
+
+Returns: `Boolean` true  => The OS + release is blacklisted
+false => The OS + release is not not blacklisted
+
+##### `module_metadata`
+
+Data type: `Hash`
+
+A Hash of the contents of the metadata.json for a puppet module.
+
+* In general, this should be generated by load_module_metadata($module_name)
+
+##### `blacklist`
+
+Data type: `Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]`
+
+An Array of Strings or Hashes
+
+* Strings: Only match against the OS name, effectively blacklisting
+  all versions of the OS
+* Hash: Must be of the form { 'OS' => ['version1', 'version2'] }
+
+@example Blacklist all Windows, RHEL 7.2, and OEL 6.4
+  [ 'Windows', { 'RedHat' => ['7.2'] }, { 'OracleLinux' => ['6.4'] ]
+
+##### `options`
+
+Data type: `Optional[Struct[{
+    release_match => Enum['none','full','major']
+  }]]`
+
+Options that determine the nature of OS matching
+
+Attributes:
+  release_match:
+     * 'none'  -> No match on release (default)
+     * 'full'  -> Full release must match
+     * 'major' -> Only the major release must match
+
+### simplib::module_metadata::os_supported
+
+Type: Puppet Language
+
+Returns whether or not the passed module is supported per the module's
+metadata.json.
+
+#### `simplib::module_metadata::os_supported(Hash $module_metadata, Optional[Struct[{
+    release_match => Enum['none','full','major']
+  }]] $options = undef)`
+
+Returns whether or not the passed module is supported per the module's
+metadata.json.
+
+Returns: `Boolean` true  => The OS + release is supported
+false => The OS + release is not not supported
+
+##### `module_metadata`
+
+Data type: `Hash`
+
+A Hash of the contents of the metadata.json for a puppet module.
+
+* In general, this should be generated by load_module_metadata($module_name)
+
+##### `options`
+
+Data type: `Optional[Struct[{
+    release_match => Enum['none','full','major']
+  }]]`
+
+Options that determine the nature of OS matching
+
+Attributes:
+  release_match:
+     * 'none'  -> No match on release (default)
+     * 'full'  -> Full release must match
+     * 'major' -> Only the major release must match
 
 ### simplib::nets2cidr
 
