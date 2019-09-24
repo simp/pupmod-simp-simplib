@@ -231,13 +231,6 @@ pup6:
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
-pup6-rhel8:
-  <<: *acceptance_base
-  <<: *pup_6
-  allow_failure: true
-  script:
-    - 'bundle exec rake beaker:suites[default,rhel8]'
-
 pup6-fips:
   <<: *acceptance_base
   <<: *pup_6
