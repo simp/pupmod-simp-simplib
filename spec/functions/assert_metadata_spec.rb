@@ -1,114 +1,107 @@
 require 'spec_helper'
 
 describe 'simplib::assert_metadata' do
-  context 'on a supported OS' do
-    facts = {
-      :os => {
-        'name' => 'Ubuntu',
-        'release' => {
-          'major' => '14',
-          'full' => '14.04'
-        }
+  valid_facts = {
+    :os => {
+      'name' => 'Ubuntu',
+      'release' => {
+        'major' => '14',
+        'full'  => '14.04'
       }
     }
+  }
 
-    context 'with no version matching' do
-      let(:facts) { facts }
-
-      it { is_expected.to run.with_params('stdlib') }
-    end
-
-    context 'with full version matching' do
-      let(:facts) { facts }
-
-      it { is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'full' } } } ) }
-    end
-
-    context 'with major version matching' do
-      let(:facts) { facts }
-
-      it { is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'major' } } } ) }
-    end
-  end
-
-  context 'on a supported OS with an unsupported full version' do
-    facts = {
-      :os => {
-        'name' => 'Ubuntu',
-        'release' => {
-          'major' => '14',
-          'full' => '14.999'
-        }
+  bad_os = {
+    :os => {
+      'name' => 'Foo',
+      'release' => {
+        'major' => '14',
+        'full'  => '14.04'
       }
     }
+  }
 
-    context 'with no version matching' do
-      let(:facts) { facts }
+  bad_version = {
+    :os => {
+      'name' => 'Ubuntu',
+      'release' => {
+        'major' => '10',
+        'full'  => '10.04'
+      }
+    }
+  }
 
-      it { is_expected.to run.with_params('stdlib') }
-    end
+  options_major = {
+    'os' => {
+      'options' => {
+        'release_match' => 'major'
+      }
+    }
+  }
 
-    context 'with full version matching' do
-      let(:facts) { facts }
+  options_full = {
+    'os' => {
+      'options' => {
+        'release_match' => 'full'
+      }
+    }
+  }
 
-        it {
-          expect {
-            is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'full' } } } )
-          }.to raise_error(/OS.*is not supported/)
-        }
+  options_disable_global = {
+    'enable' => false
+  }
+
+  options_disable_validation = {
+    'os' => {
+      'validate' => false
+    }
+  }
+
+  context 'with no version matching' do
+    context 'on a supported OS' do
+      let(:facts) { valid_facts }
+
+      it { is_expected.to run.with_params('simplib') }
+
+      context 'at the major version' do
+        it { is_expected.to run.with_params('simplib', options_major) }
+      end
+
+      context 'at the full version' do
+        it { is_expected.to run.with_params('simplib', options_full) }
+      end
     end
 
     context 'when disabled' do
-      let(:facts) { facts }
+      let(:facts) { bad_os }
 
-      it { is_expected.to run.with_params('stdlib', { 'enable' => false, 'os' => { 'options' => { 'release_match' => 'full' } } } ) }
-    end
-  end
+      context 'globally' do
+        it { is_expected.to run.with_params('simplib', options_disable_global) }
+      end
 
-  context 'on a supported OS with an unsupported major version' do
-    facts = {
-      :os => {
-        'name' => 'Ubuntu',
-        'release' => {
-          'major' => '1',
-          'full' => '1.01'
-        }
-      }
-    }
-
-    context 'with no version matching' do
-      let(:facts) { facts }
-
-      it { is_expected.to run.with_params('stdlib') }
+      context 'os validation' do
+        it { is_expected.to run.with_params('simplib', options_disable_validation) }
+      end
     end
 
-    context 'with major version matching' do
-      let(:facts) { facts }
+    context 'without a match' do
+      context 'at the OS' do
+        let(:facts) { bad_os }
 
-      it {
-        expect {
-            is_expected.to run.with_params('stdlib', { 'os' => { 'options' => { 'release_match' => 'major' } } } )
-        }.to raise_error(/OS.*is not supported/)
-      }
-    end
-  end
+        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+      end
 
-  context 'on an unsupported OS' do
-    facts = {
-      :os => {
-        'name' => 'Bob'
-      }
-    }
+      context 'at the major version' do
+        let(:facts) { bad_version }
 
-    context 'with no version matching' do
-      let(:facts) { facts }
+        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+      end
 
-      it {
-        expect {
-          is_expected.to run.with_params('stdlib')
-        }.to raise_error(/OS.*is not supported/)
-      }
+      context 'at the full version' do
+        let(:facts) { bad_version }
+
+        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+      end
     end
   end
 end
-# vim: set expandtab ts=2 sw=2:
