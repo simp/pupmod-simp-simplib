@@ -92,6 +92,8 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
                                 `/` directory
   * **runlevel**             -  Return the current system runlevel
   * **shmall**               -  Return the value of shmall from sysctl
+  * **simplib__firewalls**   -  Return an array of known firewall commands that
+                                are present on the system.
   * **simplib_sysctl**       -  Return hash of sysctl values that are relevant
                                 to SIMP
   * **simp_puppet_settings** -  Returns a hash of all Puppet settings on a node
