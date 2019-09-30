@@ -273,7 +273,7 @@ describe 'simplib::passgen' do
               }
             end
 
-            if File.exist?('/proc/sys/crypto/fips_enabled') && 
+            if File.exist?('/proc/sys/crypto/fips_enabled') &&
                 File.open('/proc/sys/crypto/fips_enabled', &:readline)[0].chr == '1' &&
                 hash_selection == 'md5'
               puts 'Skipping md5, as not available on this FIPS-compliant server'
@@ -332,9 +332,28 @@ describe 'simplib::passgen' do
           # cleanup so directory can be removed when tmpdir is destroyed
           FileUtils.chmod(0750, autofiles_dir)
         end
-
         pending 'fails when password generation times out'
-        pending 'fails when it finds files/dirs not owned by puppet in the key dir'
+      end
+
+     context 'ignore chown errors' do
+
+        it 'does not fail when it can not change owner' do
+          subject()
+          vardir = Puppet[:vardir]
+          pupuser = Puppet[:user]
+          pupgroup = Puppet[:group]
+          keydir =  File.join(vardir, 'simp', 'environments', 'rp_env', 'simp_autofiles', 'gen_passwd')
+          passwd_file = File.join(keydir, 'chowntest')
+          salt_file = File.join(keydir, 'chowntest.salt')
+
+          FileUtils.stubs(:chown).with(pupuser, pupgroup, keydir).raises("chown error")
+          FileUtils.stubs(:chown).with(pupuser, pupgroup, passwd_file).raises("chown error")
+          FileUtils.stubs(:chown).with(pupuser, pupgroup, salt_file).raises("chown error")
+          result = subject.execute('chowntest')
+          expect(File.exist?(passwd_file)).to be true
+          password = IO.read(passwd_file).chomp
+          expect(password).to eq result
+        end
       end
 
 

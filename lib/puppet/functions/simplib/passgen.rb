@@ -83,17 +83,20 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     unless File.directory?(settings['keydir'])
       begin
         FileUtils.mkdir_p(settings['keydir'],{:mode => 0750})
-        # This chown is applicable as long as it is applied
-        # by puppet, not puppetserver.
-        FileUtils.chown(settings['puppet_user'],
-         settings['puppet_group'], settings['keydir']
-       )
       rescue SystemCallError => e
         err_msg = "simplib::passgen: Could not make directory" +
          " #{settings['keydir']}:  #{e.message}. Ensure that" +
          " #{File.dirname(settings['keydir'])} is writable by" +
          " '#{settings['puppet_user']}'"
         fail(err_msg)
+      end
+      begin
+        # This chown is applicable as long as it is applied
+        # by puppet, not puppetserver.
+        FileUtils.chown(settings['puppet_user'], settings['puppet_group'], settings['keydir'])
+      rescue => e
+        # Ignore errors setting owner because Bolt or other standalone
+        Puppet.debug("simplib::passgen: Error setting owner/group for #{settings['keydir']}: #{e.message}")
       end
     end
 
@@ -194,8 +197,13 @@ Puppet::Functions.create_function(:'simplib::passgen') do
 
     # These chowns are applicable as long as they are applied
     # by puppet, not puppetserver.
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt.path)
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt_hash.path)
+    begin
+      FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt.path)
+      FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt_hash.path)
+    rescue => e
+      # Ignore errors setting owner/group because Bolt or other standalone
+      Puppet.debug("simplib::passgen(get_current_password): Error setting owner/group target path  #{e.message}")
+    end
 
     passwd = ''
     salt = ''
@@ -310,7 +318,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
 
         unowned_files << file unless (file_owner == settings['puppet_user'])
       rescue ArgumentError => e
-        debug("simplib::passgen: Error getting UID for #{file}: #{e}")
+        Puppet.debug("simplib::passgen: Error getting UID for #{file}: #{e}")
 
         unowned_files << file
       end
@@ -318,9 +326,15 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       # Ignore any file/directory that we don't own
       Find.prune if unowned_files.last == file
 
-      FileUtils.chown(settings['puppet_user'],
-        settings['puppet_group'], file
-      )
+      begin
+        FileUtils.chown(settings['puppet_user'],
+          settings['puppet_group'], file
+        )
+      rescue => e
+        # Ignore errors setting user/group because stand alone tools like Bolt
+        Puppet.debug("simplib::passgen(lockdown_stored_password_perms): Error setting owner/group for #{file}: #{e.message}")
+      end
+
 
       file_mode = file_stat.mode
       desired_mode = symbolic_mode_to_int('u+rwX,g+rX,o-rwx',file_mode,File.directory?(file))

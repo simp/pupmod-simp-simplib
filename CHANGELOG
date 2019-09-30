@@ -1,3 +1,8 @@
+* Mon Sep 30 2019 Jeanne Greulich <jeanne.greulich@onyxpoint.com> - 4.0.0-0
+- When running standalone in bolt, the passgen function may not be
+  able to set the user/group to puppet.  This fix allows the passgen
+  function to complete if it can not set the user/group to puppet.
+
 * Fri Sep 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
 - Added 'blacklist' functionality to deliberately fail on an OS that's listed
   in the metadata.json but not necessarily supported by all parts of the given
