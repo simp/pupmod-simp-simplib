@@ -1,4 +1,7 @@
-* Fri Sep 06 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+* Mon Sep 23 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Added a `simplib__firewalls` fact to list discovered firewall tools.
+- Added RHEL 8 support
+- Realigned supported OS listing
 - Added 'blacklist' functionality to deliberately fail on an OS that's listed
   in the metadata.json but not necessarily supported by all parts of the given
   module.
