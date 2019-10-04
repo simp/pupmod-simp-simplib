@@ -1,3 +1,15 @@
+* Fri Oct 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
+- Updated `simplib::passgen` to run in legacy mode or in a libkv mode.
+  - When in libkv mode, `simplib:passgen` uses libkv for password persistence.
+  - libkv mode is enabled by setting `simplib::passgen::libkv` to `true`
+    in hieradata.
+  - If you enable libkv mode in a system that already has passwords generated
+    via the legacy code, currently, **all passwords will be regenerated**.
+  - Added `libkv_options` parameter to `simplib::passgen` for use in libkv mode.
+  - Added `gen_timeout_seconds` password option.  Previously this was hardcoded
+    to 30 seconds.
+- Added simp-libkv as a module dependency.
+
 * Wed Oct 02 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.0.0-0
 - Update passgen function to  set permissions on files to user
   running the catalog compile.  This will allow bolt to set perms correctly.

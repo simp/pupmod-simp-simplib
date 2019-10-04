@@ -1,343 +1,165 @@
 # Generates/retrieves a random password string or its hash for a
 # passed identifier.
 #
-# * Uses `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
-#   as the destination directory for password storage.
+# * Supports 2 implementations:
+#   * libkv
+#     * Persists the passwords using libkv.
+#     * Terminates catalog compilation if `password_options` contains invalid
+#       parameters, any libkv operation fails or the password cannot be
+#       created in the allotted time.
+#   * Legacy
+#     * Uses
+#       `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
+#       as the destination directory for password storage.
+#     * Terminates catalog compilation if the password storage directory
+#       cannot be created/accessed by the Puppet user, the password cannot
+#       be created in the allotted time, or files not owned by the Puppet
+#       user are present in the password storage directory.
+# * To enable libkv implementation, set `simplib::passgen::libkv` to `true`
+#   in hieradata. When that setting absent or false, legacy mode will be used.
 # * The minimum length password that this function will return is `8`
 #   characters.
-# * Terminates catalog compilation if the password storage directory
-#   cannot be created/accessed by the Puppet user, the password cannot
-#   be created in the allotted time, or files not owned by the Puppet
-#   user are present in the password storage directory.
 #
 Puppet::Functions.create_function(:'simplib::passgen') do
 
   # @param identifier Unique `String` to identify the password usage.
+  #   Must conform to the following:
+  #   * Identifier must contain only the following characters:
+  #     * a-z
+  #     * A-Z
+  #     * 0-9
+  #     * The following special characters: `._:-/`
+  #   * Identifier may not contain '/./' or '/../' sequences.
   #
-  # @param modifier_hash Options `Hash`. May include any
-  #   of the following options:
-  #   * `last` => `false`(*) or `true`
-  #        * Return the last generated password
-  #   * `length` => `Integer`
-  #        * Length of the new password
-  #   * `hash` => `false`(*), `true`, `md5`, `sha256` (true), `sha512`
-  #        * Return a `Hash` of the password instead of the password itself
-  #   * `complexity` => `0`(*), `1`, `2`
-  #        * `0` => Use only Alphanumeric characters in your password (safest)
-  #        * `1` => Add reasonably safe symbols
-  #        * `2` => Printable ASCII
-  #   **private options:**
-  #   * `password` => contains the string representation of the password to hash (used for testing)
-  #   * `salt` => contains the string literal salt to use (used for testing)
-  #   * `complex_only` => use only the characters explicitly added by the complexity rules (used for testing)
+  # @param password_options
+  #   Password options
   #
-  # @return [String] Password or password hash specified. If no
-  #   `modifier_hash` or an invalid `modifier_hash` is provided,
-  #   it will return the currently stored/generated password.
+  # @option password_options [Boolean] 'last'
+  #   Whether to return the last generated password.
+  #   Defaults to `false`.
+  # @option password_options [Integer[8]] 'length'
+  #   Length of the new password.
+  #   Defaults to `32`.
+  # @option password_options [Enum[true,false,'md5',sha256','sha512']] 'hash'
+  #   Return a `Hash` of the password instead of the password itself.
+  #   Defaults to `false`.  `true` is equivalent to 'sha256'.
+  # @option password_options [Integer[0,2]] 'complexity'
+  #   Specifies the types of characters to be used in the password
+  #     * `0` => Default. Use only Alphanumeric characters in your password (safest)
+  #     * `1` => Add reasonably safe symbols
+  #     * `2` => Printable ASCII
+  # @option password_options [Boolean] 'complex_only'
+  #   Whether to use only the characters explicitly added by the complexity rules.
+  #   For example, when `complexity` is `1`, create a password from only safe symbols.
+  #   Defaults to `false`.
+  # @option password_options [Variant[Integer[0],Float[0]]] 'gen_timeout_seconds'
+  #   Maximum time allotted to generate the password.
+  #     * Value of `0` disables the timeout.
+  #     * Defaults to `30`.
+  #
+  # @param libkv_options
+  #   libkv configuration when in libkv mode.
+  #
+  #     * Will be merged with `libkv::options`.
+  #     * All keys are optional.
+  #
+  # @option libkv_options [String] 'app_id'
+  #   Specifies an application name that can be used to identify which backend
+  #   configuration to use via fuzzy name matching, in the absence of the
+  #   `backend` option.
+  #
+  #     * More flexible option than `backend`.
+  #     * Useful for grouping together libkv function calls found in different
+  #       catalog resources.
+  #     * When specified and the `backend` option is absent, the backend will be
+  #       selected preferring a backend in the merged `backends` option whose
+  #       name exactly matches the `app_id`, followed by the longest backend
+  #       name that matches the beginning of the `app_id`, followed by the
+  #       `default` backend.
+  #     * When absent and the `backend` option is also absent, this function
+  #       will use the `default` backend.
+  #
+  # @option libkv_options [String] 'backend'
+  #   Definitive name of the backend to use.
+  #
+  #     * Takes precedence over `app_id`.
+  #     * When present, must match a key in the `backends` option of the
+  #       merged options Hash or the function will fail.
+  #     * When absent in the merged options, this function will select
+  #       the backend as described in the `app_id` option.
+  #
+  # @option libkv_options [Hash] 'backends'
+  #   Hash of backend configurations
+  #
+  #     * Each backend configuration in the merged options Hash must be
+  #       a Hash that has the following keys:
+  #
+  #       * `type`:  Backend type.
+  #       * `id`:  Unique name for the instance of the backend. (Same backend
+  #         type can be configured differently).
+  #
+  #      * Other keys for configuration specific to the backend may also be
+  #        present.
+  #
+  # @option libkv_options [String] 'environment'
+  #   Puppet environment to prepend to keys.
+  #
+  #     * When set to a non-empty string, it is prepended to the key used in
+  #       the backend operation.
+  #     * Should only be set to an empty string when the key being accessed is
+  #       truly global.
+  #     * Defaults to the Puppet environment for the node.
+  #
+  # @option libkv_options [Boolean] 'softfail'
+  #   Whether to ignore libkv operation failures.
+  #
+  #     * When `true`, this function will return a result even when the
+  #       operation failed at the backend.
+  #     * When `false`, this function will fail when the backend operation
+  #       failed.
+  #     * Defaults to `false`.
+  #
+  #
+  # @return [String] Password or password hash specified.
+  #
+  #   * When the `last` password option is `true`, the password is determined
+  #     as follows:
+  #
+  #     * If the last password exists in the key/value store, uses the existing
+  #       last password.
+  #     * Otherwise, if the current password exists in the key/value store,
+  #       uses the existing current password.
+  #     * Otherwise, creates and stores a new password as the current password,
+  #       and then uses this new password
+  #
+  #   * When `last` option is `false`, the password is determined as follows:
+  #
+  #     * If the current password doesn't exist in the key/value store, creates
+  #       and stores a new password as the current password, and then uses this
+  #       new password.
+  #     * Otherwise, if the current password exists in the key/value store and it
+  #       has an appropriate length, uses the current password.
+  #     * Otherwise, stores the current password as the last password, creates
+  #       and stores a new password as the current password, and then uses this
+  #       new password.
+  #
+  # @raise Exception if `password_options` contains invalid parameters,
+  #   a libkv operation fails, or password generation times out
   #
   dispatch :passgen do
     required_param 'String[1]', :identifier
-    optional_param 'Hash',      :modifier_hash
+    optional_param 'Hash',      :password_options
+    optional_param 'Hash',      :libkv_options
   end
 
-  def initialize(closure_scope, loader)
-    super
-
-    require 'puppet/util/symbolic_file_mode'
-    # mixin Puppet::Util::SymbolicFileMode module for symbolic_mode_to_int()
-    self.extend(Puppet::Util::SymbolicFileMode)
-  end
-
-  def passgen(identifier, modifier_hash=nil)
-    require 'etc'
-    require 'timeout'
-
-    scope = closure_scope
-
-    settings = {}
-    settings['user'] = Etc.getpwuid(Process.uid).name
-    settings['group'] = Etc.getgrgid(Process.gid).name
-    settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
-      'environments', scope.lookupvar('::environment'),
-      'simp_autofiles', 'gen_passwd'
-    )
-    settings['min_password_length'] = 8
-    settings['default_password_length'] = 32
-    settings['crypt_map'] = {
-      'md5'     => '1',
-      'sha256'  => '5',
-      'sha512'  => '6'
-    }
-
-    base_options = {
-      'return_current' => false,
-      'last'           => false,
-      'length'         => settings['default_password_length'],
-      'hash'           => false,
-      'complexity'     => 0,
-      'complex_only'   => false,
-    }
-
-    options = build_options(base_options, modifier_hash, settings)
-
-    unless File.directory?(settings['keydir'])
-      begin
-        FileUtils.mkdir_p(settings['keydir'],{:mode => 0750})
-        # This chown is applicable as long as it is applied
-        # by puppet, not puppetserver.
-        FileUtils.chown(settings['user'],
-         settings['group'], settings['keydir']
-       )
-      rescue SystemCallError => e
-        err_msg = "simplib::passgen: Could not make directory" +
-         " #{settings['keydir']}:  #{e.message}. Ensure that" +
-         " #{File.dirname(settings['keydir'])} is writable by" +
-         " '#{settings['user']}'"
-        fail(err_msg)
-      end
-    end
-
-    if options['last']
-      passwd,salt = get_last_password(identifier, options, settings)
+  def passgen(identifier, password_options={}, libkv_options={'app_id' => 'simplib::passgen'})
+    use_libkv = call_function('lookup', 'simplib::passgen::libkv', { 'default_value' => false })
+    password = nil
+    if use_libkv
+      password = call_function('simplib::passgen::libkv', identifier, password_options, libkv_options)
     else
-      passwd,salt = get_current_password(identifier, options, settings)
+      password = call_function('simplib::passgen::legacy', identifier, password_options)
     end
-
-    lockdown_stored_password_perms(settings)
-
-    # Return the hash, not the password
-    if options['hash']
-      return passwd.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}")
-    else
-      return passwd
-    end
-  rescue Timeout::Error => e
-    fail("simplib::passgen timed out for #{identifier}!")
-  end
-
-
-  # Build a merged options hash and validate the options
-  # raises ArgumentError if any option in the modifier_hash is invalid
-  def build_options(base_options, modifier_hash, settings)
-    options = base_options.dup
-    if modifier_hash.nil?
-      options['return_current'] = true
-      return options
-    end
-
-    options.merge!(modifier_hash)
-
-    if options['length'].to_s !~ /^\d+$/
-      raise ArgumentError,
-        "simplib::passgen: Error: Length '#{options['length']}' must be an integer!"
-    else
-      options['length'] = options['length'].to_i
-      if options['length'] == 0
-        options['length'] = settings['default_password_length']
-      elsif options['length'] < settings['min_password_length']
-        options['length'] = settings['min_password_length']
-      end
-    end
-
-    if options['complexity'].to_s !~ /^\d+$/
-      raise ArgumentError,
-        "simplib::passgen: Error: Complexity '#{options['complexity']}' must be an integer!"
-    else
-      options['complexity'] = options['complexity'].to_i
-    end
-
-
-    # Make sure a valid hash was passed if one was passed.
-    if options['hash'] == true
-      options['hash'] = 'sha256'
-    end
-    if options['hash'] and !settings['crypt_map'].keys.include?(options['hash'])
-      raise ArgumentError,
-       "simplib::passgen: Error: '#{options['hash']}' is not a valid hash."
-    end
-    return options
-  end
-
-  # Generate a password
-  def gen_password(options)
-    call_function('simplib::gen_random_password', options['length'],
-      options['complexity'], options['complex_only']
-    )
-  end
-
-  # Generate the salt to be used to encrypt a password
-  def gen_salt
-    # complexity of 0 is required to prevent disallowed
-    # characters from being included in the salt
-    call_function('simplib::gen_random_password', 16, 0)
-  end
-
-  # Retrieve or generate a current password
-  #
-  # If the password file doesn't exist, the file is empty, or the
-  # length of the password that was read from the file is not equal
-  # to the length of the expected password, then build a new password
-  # file.
-  #
-  # If no options were passed, and the file exists, then just throw
-  # back the value in the file.  If the file is empty, create the new
-  # password anyway.
-  #
-  # Rotate if you're creating a new password.
-  #
-  # Add an associated 'salt' file for returning crypted passwords.
-  def get_current_password(identifier, options, settings)
-    # Open the file in append + read mode to prepare for what is to
-    # come.
-    tgt = File.new("#{settings['keydir']}/#{identifier}","a+")
-    tgt_hash = File.new("#{tgt.path}.salt","a+")
-
-    # These chowns are applicable as long as they are applied
-    # by puppet, not puppetserver.
-    FileUtils.chown(settings['user'],settings['group'],tgt.path)
-    FileUtils.chown(settings['user'],settings['group'],tgt_hash.path)
-
-    passwd = ''
-    salt = ''
-
-    # Create salt file if not there, no matter what, just in case we have an
-    # upgraded system.
-    if tgt_hash.stat.size.zero?
-      if options.key?('salt')
-        salt = options['salt']
-      else
-        salt = gen_salt
-      end
-      tgt_hash.puts(salt)
-      tgt_hash.rewind
-    end
-
-    if tgt.stat.size.zero?
-      if options.key?('password')
-        passwd = options['password']
-      else
-        passwd = gen_password(options)
-      end
-      tgt.puts(passwd)
-    else
-      passwd = tgt.gets.chomp
-      salt = tgt_hash.gets.chomp
-
-      if !options['return_current'] and passwd.length != options['length']
-        tgt_last = File.new("#{tgt.path}.last","w+")
-        tgt_last.puts(passwd)
-        tgt_last.chmod(0640)
-        tgt_last.flush
-        tgt_last.close
-
-        tgt_hash_last = File.new("#{tgt_hash.path}.last","w+")
-        tgt_hash_last.puts(salt)
-        tgt_hash_last.chmod(0640)
-        tgt_hash_last.flush
-        tgt_hash_last.close
-
-        tgt.rewind
-        tgt.truncate(0)
-        passwd = gen_password(options)
-        salt = gen_salt
-
-        tgt.puts(passwd)
-        tgt_hash.puts(salt)
-      end
-    end
-
-    tgt.chmod(0640)
-    tgt.flush
-    tgt.close
-
-    [passwd, salt]
-  end
-
-  # Try to get the last password entry, if it exists.  If it doesn't
-  # use the current entry, the 'password' in options, or a freshly-
-  # generated password, in that order of precedence.  Also, warn the
-  # user about manifest ordering problems, if we had to use the
-  # 'password' in options or had to generate a password.
-  def get_last_password(identifier, options, settings)
-    toread = nil
-    if File.exists?("#{settings['keydir']}/#{identifier}.last")
-      toread = "#{settings['keydir']}/#{identifier}.last"
-    else
-      toread = "#{settings['keydir']}/#{identifier}"
-    end
-
-    passwd = ''
-    salt = ''
-    if File.exists?(toread)
-      passwd = IO.readlines(toread)[0].to_s.chomp
-      sf = "#{File.dirname(toread)}/#{File.basename(toread,'.last')}.salt.last"
-      saltfile = File.open(sf,'a+',0640)
-      if saltfile.stat.size.zero?
-        if options.key?('salt')
-          salt = options['salt']
-        else
-          salt = gen_salt
-        end
-        saltfile.puts(salt)
-        saltfile.close
-      end
-      salt = IO.readlines(sf)[0].to_s.chomp
-    else
-      warn_msg = "Could not find a primary or 'last' file for " +
-        "#{identifier}, please ensure that you have included this" +
-        " function in the proper order in your manifest!"
-      Puppet.warning warn_msg
-      if options.key?('password')
-        passwd = options['password']
-      else
-        passwd = gen_password(options)
-      end
-    end
-    [passwd, salt]
-  end
-
-  # Ensure that the password space is readable and writable by the
-  # Puppet user and no other users.
-  # Fails if any file/directory not owned by the Puppet user is found.
-  def lockdown_stored_password_perms(settings)
-    unowned_files = []
-    Find.find(settings['keydir']) do |file|
-      file_stat = File.stat(file)
-
-      # Do we own this file?
-      begin
-        file_owner = Etc.getpwuid(file_stat.uid).name
-
-        unowned_files << file unless (file_owner == settings['user'])
-      rescue ArgumentError => e
-        debug("simplib::passgen: Error getting UID for #{file}: #{e}")
-
-        unowned_files << file
-      end
-
-      # Ignore any file/directory that we don't own
-      Find.prune if unowned_files.last == file
-
-      FileUtils.chown(settings['user'],
-        settings['group'], file
-      )
-
-      file_mode = file_stat.mode
-      desired_mode = symbolic_mode_to_int('u+rwX,g+rX,o-rwx',file_mode,File.directory?(file))
-
-      unless (file_mode & 007777) == desired_mode
-        FileUtils.chmod(desired_mode,file)
-      end
-    end
-
-    unless unowned_files.empty?
-      err_msg = <<-EOM.gsub(/^\s+/,'')
-        simplib::passgen: Error: Could not verify ownership by '#{settings['user']}' on the following files:
-        * #{unowned_files.join("\n* ")}
-      EOM
-
-      fail(err_msg)
-    end
+    password
   end
 end
-# vim: set expandtab ts=2 sw=2:
