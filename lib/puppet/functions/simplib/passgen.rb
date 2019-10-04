@@ -335,7 +335,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
         simplib::passgen: Error: Could not verify ownership by '#{settings['user']}' on the following files:
         * #{unowned_files.join("\n* ")}
       EOM
-      # Don't fail if you are in Bolt
+
       fail(err_msg)
     end
   end
