@@ -55,8 +55,8 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     scope = closure_scope
 
     settings = {}
-    settings['puppet_user'] = Puppet.settings[:user] ? Puppet.settings[:user] : 'puppet'
-    settings['puppet_group'] = Puppet.settings[:group] ? Puppet.settings[:group] : 'puppet'
+    settings['user'] = Etc.getpwuid(Process.uid).name
+    settings['group'] = Etc.getgrgid(Process.gid).name
     settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
       'environments', scope.lookupvar('::environment'),
       'simp_autofiles', 'gen_passwd'
@@ -85,14 +85,14 @@ Puppet::Functions.create_function(:'simplib::passgen') do
         FileUtils.mkdir_p(settings['keydir'],{:mode => 0750})
         # This chown is applicable as long as it is applied
         # by puppet, not puppetserver.
-        FileUtils.chown(settings['puppet_user'],
-         settings['puppet_group'], settings['keydir']
+        FileUtils.chown(settings['user'],
+         settings['group'], settings['keydir']
        )
       rescue SystemCallError => e
         err_msg = "simplib::passgen: Could not make directory" +
          " #{settings['keydir']}:  #{e.message}. Ensure that" +
          " #{File.dirname(settings['keydir'])} is writable by" +
-         " '#{settings['puppet_user']}'"
+         " '#{settings['user']}'"
         fail(err_msg)
       end
     end
@@ -194,8 +194,8 @@ Puppet::Functions.create_function(:'simplib::passgen') do
 
     # These chowns are applicable as long as they are applied
     # by puppet, not puppetserver.
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt.path)
-    FileUtils.chown(settings['puppet_user'],settings['puppet_group'],tgt_hash.path)
+    FileUtils.chown(settings['user'],settings['group'],tgt.path)
+    FileUtils.chown(settings['user'],settings['group'],tgt_hash.path)
 
     passwd = ''
     salt = ''
@@ -308,7 +308,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       begin
         file_owner = Etc.getpwuid(file_stat.uid).name
 
-        unowned_files << file unless (file_owner == settings['puppet_user'])
+        unowned_files << file unless (file_owner == settings['user'])
       rescue ArgumentError => e
         debug("simplib::passgen: Error getting UID for #{file}: #{e}")
 
@@ -318,8 +318,8 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       # Ignore any file/directory that we don't own
       Find.prune if unowned_files.last == file
 
-      FileUtils.chown(settings['puppet_user'],
-        settings['puppet_group'], file
+      FileUtils.chown(settings['user'],
+        settings['group'], file
       )
 
       file_mode = file_stat.mode
@@ -332,9 +332,10 @@ Puppet::Functions.create_function(:'simplib::passgen') do
 
     unless unowned_files.empty?
       err_msg = <<-EOM.gsub(/^\s+/,'')
-        simplib::passgen: Error: Could not verify ownership by '#{settings['puppet_user']}' on the following files:
+        simplib::passgen: Error: Could not verify ownership by '#{settings['user']}' on the following files:
         * #{unowned_files.join("\n* ")}
       EOM
+
       fail(err_msg)
     end
   end
