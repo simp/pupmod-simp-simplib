@@ -1,3 +1,10 @@
+* Fri Oct 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
+- Reworked `simplib::passgen` to use libkv for password persistence
+- Added `libkv_options` parameter to `simplib::passgen`
+- Updated `simplib::passgen` password options
+  - Added `gen_timeout_seconds` option
+  - Removed unnecessary test options: 'password' and 'salt'
+
 * Wed Oct 02 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.0.0-0
 - Update passgen function to  set permissions on files to user
   running the catalog compile.  This will allow bolt to set perms correctly.

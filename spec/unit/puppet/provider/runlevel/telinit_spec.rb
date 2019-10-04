@@ -18,6 +18,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
   context '#level' do
     it 'should return the runlevel' do
       Facter.stubs(:value).with(:runlevel).returns('5')
+      Facter.stubs(:value).with(Not(equals(:runlevel)))
 
       expect(provider.level).to eq('5')
     end
@@ -57,6 +58,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.rewind
 
           File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
+          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
 
           expect(provider.persist).to eq(:true)
         end
@@ -66,6 +68,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.rewind
 
           File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
+          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
 
           expect(provider.persist).to eq(:false)
         end
@@ -77,6 +80,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.rewind
 
           File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
+          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
 
           fh = IO.open(IO.sysopen(@tempfile, 'w'), 'w')
 
