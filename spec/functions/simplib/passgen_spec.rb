@@ -1,6 +1,46 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 require 'base64'
+
+def locked_operation(lockfile, &block)
+  locker_thread = nil   # thread that will lock the file
+  mutex = Mutex.new
+  locked = ConditionVariable.new
+  begin
+    locker_thread = Thread.new do
+      puts "     >> Locking lock file #{lockfile}"
+      file = File.open(lockfile, 'w')
+      file.flock(File::LOCK_EX)
+
+      # signal the lock has taken place
+      mutex.synchronize { locked.signal }
+
+      # pause the thread until we are done our access attempt
+      Thread.stop
+      file.close
+      puts '     >> Lock released with close'
+    end
+
+
+    # wait for the thread to signal the lock has taken place
+    mutex.synchronize { locked.wait(mutex) }
+
+    # exercise the accessor
+    block.call
+
+  ensure
+    if locker_thread
+      # wait until thread has paused
+      sleep 0.5 while locker_thread.status != 'sleep'
+
+      # resume and then wait until thread completed
+      locker_thread.run
+      locker_thread.join
+    end
+  end
+
+end
+
 def parse_modular_crypt(input)
   retval = nil
   support_params = {
@@ -303,6 +343,293 @@ describe 'simplib::passgen' do
               end
             end
           end
+        end
+      end
+
+      context 'password migration' do
+        # DEBUG NOTES:
+        #   Puppet[:vardir] is dynamically created as a tmpdir by the test
+        #   framework, when the subject is first created. So if you want
+        #   to know what vardir is so you can create/modify files in
+        #   that directory as part of the test setup, in the 'it' block,
+        #   first create the subject yourself and then retrieve the
+        #   vardir value as shown below:
+        #
+        # it 'does something' do
+        #   subject()  # vardir created as a tmpdir for this example block
+        #   vardir = Puppet[:vardir]
+        #
+        #   <pre-seed file content here>
+        #
+        #   is_expected.to run.with_params('spectest')  # run the function
+        #
+        # end
+        let(:key) { 'user1' }
+        let(:password) { 'user1 password' }
+        let(:salt) { 'user1 salt'}
+
+        it 'should do nothing to old keydir when it has no files for the key' do
+          # populate old keydir with a password file for a different key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+
+          FileUtils.mkdir_p(old_keydir)
+          otheruser_passwd_file = File.join(old_keydir, 'other user')
+          File.open(otheruser_passwd_file, 'w') { |file| file.puts('otheruser password') }
+
+          result = subject.execute(key)
+          expect(result.length).to eq 32
+
+          expect( File.exist?(otheruser_passwd_file) ).to be true
+          archive_dir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', '.gen_passwd')
+          expect( Dir.exist?(archive_dir) ).to be false
+        end
+
+        it 'should migrate current password and salt' do
+          # populate old keydir with current password and salt files for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          password_file = File.join(old_keydir, key)
+          File.open(password_file, 'w') { |file| file.puts(password) }
+          salt_file =  "#{password_file}.salt"
+          File.open(salt_file, 'w') { |file| file.puts(salt) }
+
+          result = subject.execute(key)
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to eq salt
+
+          expect( File.exist?(password_file) ).to be false
+          expect( File.exist?(salt_file) ).to be false
+
+          archive_password_file = password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+          expect( IO.read(archive_password_file).strip ).to eq password
+          archive_salt_file = salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+          expect( IO.read(archive_salt_file).strip ).to eq salt
+        end
+
+        it 'should migrate last password and salt' do
+          # populate old keydir with last password and salt files for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          last_password_file = File.join(old_keydir, "#{key}.last")
+          File.open(last_password_file, 'w') { |file| file.puts(password) }
+          last_salt_file = File.join(old_keydir, "#{key}.salt.last")
+          File.open(last_salt_file, 'w') { |file| file.puts(salt) }
+
+          result = subject.execute(key, {'last' => true})
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}.last")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to eq salt
+
+          expect( File.exist?(last_password_file) ).to be false
+          expect( File.exist?(last_salt_file) ).to be false
+
+          archive_password_file = last_password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+          archive_salt_file = last_salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+        end
+
+        it 'should generate salt for current password when existing salt is empty' do
+          # populate old keydir with current password and salt files for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          password_file = File.join(old_keydir, key)
+          File.open(password_file, 'w') { |file| file.puts(password) }
+          salt_file =  "#{password_file}.salt"
+          File.open(salt_file, 'w') { |file| file.puts('') }
+
+          result = subject.execute(key)
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to_not be_empty
+
+          expect( File.exist?(password_file) ).to be false
+          expect( File.exist?(salt_file) ).to be false
+
+          archive_password_file = password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+          archive_salt_file = salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+        end
+
+        it 'should generate salt for current password when existing salt is missing' do
+          # populate old keydir with current password file for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          password_file = File.join(old_keydir, key)
+          File.open(password_file, 'w') { |file| file.puts(password) }
+
+          result = subject.execute(key)
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to_not be_empty
+
+          expect( File.exist?(password_file) ).to be false
+
+          archive_password_file = password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+        end
+
+        it 'should generate salt for last password when existing salt is empty' do
+          # populate old keydir with last password and salt files for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          last_password_file = File.join(old_keydir, "#{key}.last")
+          File.open(last_password_file, 'w') { |file| file.puts(password) }
+          last_salt_file = File.join(old_keydir, "#{key}.salt.last")
+          File.open(last_salt_file, 'w') { |file| file.puts('') }
+
+          result = subject.execute(key, {'last' => true})
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}.last")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to_not be_empty
+
+          expect( File.exist?(last_password_file) ).to be false
+          expect( File.exist?(last_salt_file) ).to be false
+
+          archive_password_file = last_password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+          archive_salt_file = last_salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+        end
+
+        it 'should generate salt for last password when existing salt is missing' do
+          # populate old keydir with last password file for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          last_password_file = File.join(old_keydir, "#{key}.last")
+          File.open(last_password_file, 'w') { |file| file.puts(password) }
+
+          result = subject.execute(key, {'last' => true})
+          expect(result).to eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}.last")
+          expect(stored_info['value']['password']).to eq password
+          expect(stored_info['value']['salt']).to_not be_empty
+
+          expect( File.exist?(last_password_file) ).to be false
+
+          archive_password_file = last_password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be true
+        end
+
+        it 'should only archive current salt file without a current password file' do
+          # populate old keydir with current salt file for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          salt_file = File.join(old_keydir, "#{key}.salt")
+          File.open(salt_file, 'w') { |file| file.puts(salt) }
+
+          result = subject.execute(key)
+          expect(result).to_not eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}")
+          expect(stored_info['value']['password']).to_not eq password
+          expect(stored_info['value']['salt']).to_not eq salt
+
+          expect( File.exist?(salt_file) ).to be false
+
+          archive_salt_file = salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+        end
+
+        it 'should only archive last salt file without a last password file' do
+          # populate old keydir with last salt file for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          last_salt_file = File.join(old_keydir, "#{key}.salt.last")
+          File.open(last_salt_file, 'w') { |file| file.puts(salt) }
+
+          result = subject.execute(key, {'last' => true})
+          expect(result).to_not eq password
+
+          # retrieve what has been stored by libkv and validate
+          stored_info = call_function('libkv::get', "gen_passwd/#{key}.last")
+          expect(stored_info['value']['password']).to_not eq password
+          expect(stored_info['value']['salt']).to_not eq salt
+
+          expect( File.exist?(last_salt_file) ).to be false
+
+          archive_salt_file = last_salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be true
+        end
+
+        it 'should fail migration when lock cannot be obtained' do
+          # populate old keydir with current password and salt files for the key
+          subject()
+          vardir = Puppet[:vardir]
+          old_keydir =  File.join(vardir, 'simp', 'environments', 'rp_env',
+            'simp_autofiles', 'gen_passwd')
+          FileUtils.mkdir_p(old_keydir)
+          password_file = File.join(old_keydir, key)
+          File.open(password_file, 'w') { |file| file.puts(password) }
+          salt_file =  "#{password_file}.salt"
+          File.open(salt_file, 'w') { |file| file.puts(salt) }
+
+          lockfile = File.join(old_keydir, '.migrate')
+
+          locked_operation(lockfile) do
+            puts "     >> Executing simplib::passgen with migration for '#{key}'"
+            expect { subject.execute(key, {'gen_timeout_seconds' => 1}) }.
+              to raise_error(RuntimeError, /simplib::passgen timed out for '#{key}'/)
+          end
+
+          expect(call_function('libkv::exists', "gen_passwd/#{key}")).to be false
+
+          expect( File.exist?(password_file) ).to be true
+          expect( File.exist?(salt_file) ).to be true
+          archive_password_file = password_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_password_file) ).to be false
+          archive_salt_file = salt_file.gsub('gen_passwd', '.gen_passwd')
+          expect( File.exist?(archive_salt_file) ).to be false
         end
       end
 

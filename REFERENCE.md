@@ -53,7 +53,7 @@
 * [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
 * [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
-* [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Persists the passwords using libkv. * The minimum length
+* [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Persists the passwords using libkv. * Migrates any passw
 * [`simplib::rand_cron`](#simplibrand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
 * [`simplib::simp_version`](#simplibsimp_version): Return the version of SIMP that this server is running or "unknown\n"
 * [`simplib::strip_ports`](#simplibstrip_ports): Extract list of unique hostnames and/or IP addresses from an `Array` of hosts, each of which may may contain protocols and/or port numbers  T
@@ -2360,6 +2360,8 @@ Generates/retrieves a random password string or its hash for a
 passed identifier.
 
 * Persists the passwords using libkv.
+* Migrates any passwords from non-libkv versions of `simplib::passgen`
+  into libkv.
 * The minimum length password that this function will return is `8`
   characters.
 * Terminates catalog compilation if `password_options` contains invalid
@@ -2372,6 +2374,8 @@ Generates/retrieves a random password string or its hash for a
 passed identifier.
 
 * Persists the passwords using libkv.
+* Migrates any passwords from non-libkv versions of `simplib::passgen`
+  into libkv.
 * The minimum length password that this function will return is `8`
   characters.
 * Terminates catalog compilation if `password_options` contains invalid
@@ -2402,7 +2406,7 @@ Returns: `String` Password or password hash specified.
     new password.
 
 Raises:
-* `Exception` if `password_options` contains invalid parameters, a libkv operation fails, or password generation times out
+* `Exception` if `password_options` contains invalid parameters, a libkv operation fails, or password generation or migration times out
 
 ##### `identifier`
 
@@ -2440,7 +2444,7 @@ Defaults to `false`.  `true` is equivalent to 'sha256'.
 * **'complex_only'** `Boolean`: Whether to use only the characters explicitly added by the complexity rules.
 For example, when `complexity` is `1`, create a password from only safe symbols.
 Defaults to `false`.
-* **'gen_timeout_seconds'** `Variant[Integer[0],Float[0]]`: Maximum time allotted to generate the password.
+* **'gen_timeout_seconds'** `Variant[Integer[0],Float[0]]`: Maximum time allotted to generate or migrate the password.
   * Value of `0` disables the timeout.
   * Defaults to `30`.
 

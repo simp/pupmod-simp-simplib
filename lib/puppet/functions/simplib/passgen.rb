@@ -2,6 +2,8 @@
 # passed identifier.
 #
 # * Persists the passwords using libkv.
+# * Migrates any passwords from non-libkv versions of `simplib::passgen`
+#   into libkv.
 # * The minimum length password that this function will return is `8`
 #   characters.
 # * Terminates catalog compilation if `password_options` contains invalid
@@ -41,7 +43,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #   For example, when `complexity` is `1`, create a password from only safe symbols.
   #   Defaults to `false`.
   # @option password_options [Variant[Integer[0],Float[0]]] 'gen_timeout_seconds'
-  #   Maximum time allotted to generate the password.
+  #   Maximum time allotted to generate or migrate the password.
   #     * Value of `0` disables the timeout.
   #     * Defaults to `30`.
   #
@@ -129,7 +131,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #       new password.
   #
   # @raise Exception if `password_options` contains invalid parameters,
-  #   a libkv operation fails, or password generation times out
+  #   a libkv operation fails, or password generation or migration times out
   #
   dispatch :passgen do
     required_param 'String[1]', :identifier
@@ -137,8 +139,10 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     optional_param 'Hash',      :libkv_options
   end
 
-  def passgen(identifier, password_options=nil, libkv_options={'app_id' => 'simplib::passgen'})
+  def passgen(identifier, password_options={}, libkv_options={'app_id' => 'simplib::passgen'})
     require 'timeout'
+
+    scope = closure_scope
 
     # internal settings
     settings = {}
@@ -151,17 +155,25 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       'sha512'  => '6'
     }
 
+    # location of key and salt files in non-libkv versions of simplib::passgen
+    settings['legacy_key_dir'] = File.join(Puppet.settings[:vardir], 'simp',
+      'environments', scope.lookupvar('::environment'),
+      'simp_autofiles', 'gen_passwd'
+    )
+
+    # archive for legacy key and salt files that are migrated into libkv
+    settings['archive_key_dir'] = File.join(Puppet.settings[:vardir], 'simp',
+      'environments', scope.lookupvar('::environment'),
+      'simp_autofiles', '.gen_passwd'
+    )
+
     base_options = {
       'last'                => false,
       'length'              => settings['default_password_length'],
       'hash'                => false,
       'complexity'          => 0,
       'complex_only'        => false,
-      'gen_timeout_seconds' => 30,
-
-      # internal options
-      'length_configured'   => false,
-      'key_root_dir'        => settings['key_root_dir']
+      'gen_timeout_seconds' => 30
     }
 
     options = build_options(base_options, password_options, settings)
@@ -169,13 +181,16 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     password = nil
     salt = nil
     begin
+      migrate_old_files(identifier, options, libkv_options)
+
       if options['last']
         password,salt = get_last_password(identifier, options, libkv_options)
       else
         password,salt = get_current_password(identifier, options, libkv_options)
       end
     rescue Timeout::Error => e
-      # can get here if simplib::gen_random_password times out
+      # can get here if simplib::gen_random_password or migrate_old_files
+      # times out
       fail("simplib::passgen timed out for '#{identifier}'!")
     end
 
@@ -192,11 +207,15 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   # @raise ArgumentError if any option in the password_options is invalid
   def build_options(base_options, password_options, settings)
     options = base_options.dup
-    return options if password_options.nil?
-
     options.merge!(password_options)
-    options['length_configured'] = true if password_options['length']
 
+    # set internal options
+    options['length_configured'] = password_options.has_key?('length')
+    options['key_root_dir']      = settings['key_root_dir']
+    options['legacy_key_dir']    = settings['legacy_key_dir']
+    options['archive_key_dir']   = settings['archive_key_dir']
+
+    # validate
     if options['length'].to_s !~ /^\d+$/
       raise ArgumentError,
         "simplib::passgen: Error: Length '#{options['length']}' must be an integer!"
@@ -335,6 +354,82 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     end
 
     [password, salt]
+  end
+
+  # Migrate any existing key and salt files for the identifier into libkv
+  #
+  # * Stores the current password and salt in libkv, when the files exist.
+  # * Stores the last password and salt in libkv, when the files exist.
+  # * Archives processed files.
+  # * When a password is missing its salt file or the salt is empty, generates
+  #   a salt for it before storing in libkv.
+  # * When the password file is missing or the password is empty, does not
+  #   store in libkv. Just archives.
+  #
+  # @raise Exception if cannot retrieve migration lock or any libkv store fails
+  def migrate_old_files(identifier, options, libkv_options)
+    return unless Dir.exist?(options['legacy_key_dir'])
+    return if Dir.glob(File.join(options['legacy_key_dir'], "#{identifier}*")).empty?
+
+    file = nil
+    begin
+      # To ensure all threads are not sharing the same file descriptor
+      # do **NOT** use a File.open block!
+      lockfile = File.join(options['legacy_key_dir'], '.migrate')
+      file = File.open(lockfile, 'w')
+
+      Timeout::timeout(options['gen_timeout_seconds']) do
+        file.flock(File::LOCK_EX)
+      end
+
+      FileUtils.mkdir_p(options['archive_key_dir'])
+
+      current      = File.join(options['legacy_key_dir'], identifier)
+      current_salt = File.join(options['legacy_key_dir'], "#{identifier}.salt")
+      current_key  = "#{options['key_root_dir']}/#{identifier}"
+      migrate_old_file_pair(current, current_salt, current_key, options,
+        libkv_options)
+
+      last      = File.join(options['legacy_key_dir'], "#{identifier}.last")
+      last_salt = File.join(options['legacy_key_dir'], "#{identifier}.salt.last")
+      last_key  = "#{current_key}.last"
+      migrate_old_file_pair(last, last_salt, last_key, options, libkv_options)
+
+    ensure
+      unless file.nil?
+        file.close # lock released with close
+        file = nil
+      end
+    end
+  end
+
+  # Store the password and salt in libkv and then archive the files.
+  #
+  # Generates a salt if the existing salt is empty or missing.
+  # Just archives if only the salt file exists or the password is empty.
+  #
+  # @raise Exception if the libkv store operation fails
+  def migrate_old_file_pair(password_file, salt_file, password_key,
+      options, libkv_options)
+
+    archive_dir = options['archive_key_dir']
+    if File.exist?(password_file)
+      # only store if password file exists
+      password = IO.readlines(password_file)[0].to_s.chomp
+      unless password.empty?
+        salt = File.exist?(salt_file) ? IO.readlines(salt_file)[0].to_s.chomp : ''
+        salt = gen_salt(options) if salt.empty?
+        store_password_info(password, salt, password_key, libkv_options)
+      end
+
+      archive_file = File.join(archive_dir, File.basename(password_file))
+      FileUtils.mv(password_file, archive_file)
+    end
+
+    if File.exist?(salt_file)
+      archive_file = File.join(archive_dir, File.basename(salt_file))
+      FileUtils.mv(salt_file, archive_file)
+    end
   end
 
   # @return [password, salt] retrieved from the key/value store

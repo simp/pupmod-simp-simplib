@@ -1,5 +1,7 @@
 * Fri Oct 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
 - Reworked `simplib::passgen` to use libkv for password persistence
+- Added auto-migration of any `simplib::passgen` passwords created
+  by earlier versions of `simplib::passgen`.
 - Added `libkv_options` parameter to `simplib::passgen`
 - Updated `simplib::passgen` password options
   - Added `gen_timeout_seconds` option
