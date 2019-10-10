@@ -330,8 +330,8 @@ Puppet::Functions.create_function(:'simplib::passgen') do
         " manifest!"
       Puppet.warning warn_msg
       # generate password and salt
-      password = gen_password(options),
-      salt = gen_salt
+      password = gen_password(options)
+      salt = gen_salt(options)
       store_password_info(password, salt, last_key, libkv_options)
     end
 

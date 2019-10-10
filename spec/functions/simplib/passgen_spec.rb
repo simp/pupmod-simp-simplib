@@ -210,7 +210,7 @@ describe 'simplib::passgen' do
         end
 
         it 'should return a new password if "last" is true but there is no current or previous password' do
-          result = subject.execute('spectest', {'length' => 32})
+          result = subject.execute('spectest', {'last' => true})
           expect(result.length).to eql(32)
         end
 
