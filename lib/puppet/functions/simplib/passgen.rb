@@ -233,7 +233,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   def create_and_store_password(password_key, options, libkv_options)
     password = gen_password(options)
     salt = gen_salt(options)
-    store_password_info(password, salt, password_key, libkv_options)
+    store_password_info(password, salt, options, password_key, libkv_options)
     [password, salt]
   end
 
@@ -285,7 +285,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       unless valid_length?(password, options)
         # store old password
         last_key = "#{current_key}.last"
-        store_password_info(password, salt, last_key, libkv_options)
+        store_password_info(password, salt, options, last_key, libkv_options)
         generate = true
       end
     else
@@ -329,10 +329,9 @@ Puppet::Functions.create_function(:'simplib::passgen') do
         " that you have used simplib::passgen in the proper order in your" +
         " manifest!"
       Puppet.warning warn_msg
-      # generate password and salt
-      password = gen_password(options)
-      salt = gen_salt(options)
-      store_password_info(password, salt, last_key, libkv_options)
+      # generate password and salt and then store
+      password, salt = create_and_store_password(last_key, options,
+        libkv_options)
     end
 
     [password, salt]
@@ -347,10 +346,15 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     [password, salt]
   end
 
-  # store a password and its salt in the key/value store
-  def store_password_info(password, salt, password_key, libkv_options)
+  # store a password and its salt in the key/value store along with
+  # metadata containing the password's complexity and complex_only settings
+  def store_password_info(password, salt, options, password_key, libkv_options)
     key_info = { 'password' => password, 'salt' => salt }
-    metadata = {}
+    metadata = {
+      'complexity'   => options['complexity'],
+      'complex_only' => options['complex_only']
+    }
+
     call_function('libkv::put', password_key, key_info, metadata, libkv_options)
   end
 

@@ -124,6 +124,8 @@ describe 'simplib::passgen' do
           salt = stored_info['value']['salt']
           expect(salt.length).to eq 16
           expect(salt).to match(/^(#{default_chars.join('|')})+$/)
+          meta = { 'complexity' => 0, 'complex_only' => false }
+          expect(stored_info['metadata']).to eq(meta)
         end
 
         it 'should return a password that is 32 alphanumeric characters long by default' do
@@ -156,6 +158,11 @@ describe 'simplib::passgen' do
           expect(result).to match(/(#{default_chars.join('|')})/)
           expect(result).to match(/(#{(safe_special_chars).join('|')})/)
           expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
+
+          # retrieve what has been stored by libkv and validate metadata
+          stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+          meta = { 'complexity' => 1, 'complex_only' => false }
+          expect(stored_info['metadata']).to eq(meta)
         end
 
         it 'should return a password that only contains "safe" special characters if complexity is 1 and complex_only is true' do
@@ -164,6 +171,11 @@ describe 'simplib::passgen' do
           expect(result).not_to match(/(#{default_chars.join('|')})/)
           expect(result).to match(/(#{(safe_special_chars).join('|')})/)
           expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
+
+          # retrieve what has been stored by libkv and validate metadata
+          stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+          meta = { 'complexity' => 1, 'complex_only' => true }
+          expect(stored_info['metadata']).to eq(meta)
         end
 
         it 'should work with a String complexity' do
@@ -172,6 +184,11 @@ describe 'simplib::passgen' do
           expect(result).to match(/(#{default_chars.join('|')})/)
           expect(result).to match(/(#{(safe_special_chars).join('|')})/)
           expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
+
+          # retrieve what has been stored by libkv and validate metadata
+          stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+          meta = { 'complexity' => 1, 'complex_only' => false }
+          expect(stored_info['metadata']).to eq(meta)
         end
 
         it 'should return a password that contains all special characters if complexity is 2' do
@@ -179,6 +196,11 @@ describe 'simplib::passgen' do
           expect(result.length).to eql(32)
           expect(result).to match(/(#{default_chars.join('|')})/)
           expect(result).to match(/(#{(unsafe_special_chars).join('|')})/)
+
+          # retrieve what has been stored by libkv and validate metadata
+          stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+          meta = { 'complexity' => 2, 'complex_only' => false }
+          expect(stored_info['metadata']).to eq(meta)
         end
 
         it 'should return a password that only contains all special characters if complexity is 2 and complex_only is true' do
@@ -186,6 +208,11 @@ describe 'simplib::passgen' do
           expect(result.length).to eql(32)
           expect(result).to_not match(/(#{default_chars.join('|')})/)
           expect(result).to match(/(#{(unsafe_special_chars).join('|')})/)
+
+          # retrieve what has been stored by libkv and validate metadata
+          stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+          meta = { 'complexity' => 2, 'complex_only' => true }
+          expect(stored_info['metadata']).to eq(meta)
         end
       end
 

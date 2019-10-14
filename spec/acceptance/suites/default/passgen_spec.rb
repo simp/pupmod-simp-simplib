@@ -13,6 +13,10 @@ describe 'simplib::passgen function' do
   hosts.each do |server|
     hash_algorithms.each do |hash|
       (1..10).each do |round|
+        # This test does exercise simplib::passgen, but since simplib::passgen
+        # does not validate a generated password against any pam settings,
+        # (e.g., make sure it passes pwscore), using it for local user passwords
+        # IRL may not be advised.
         context "when set user 'testuser#{round}#{hash}' password of hash type == #{hash} on #{server}" do
           let(:manifest) {
             <<-EOS
