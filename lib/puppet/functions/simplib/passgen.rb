@@ -419,7 +419,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
       unless password.empty?
         salt = File.exist?(salt_file) ? IO.readlines(salt_file)[0].to_s.chomp : ''
         salt = gen_salt(options) if salt.empty?
-        store_password_info(password, salt, password_key, libkv_options)
+        store_password_info(password, salt, options, password_key, libkv_options)
       end
 
       archive_file = File.join(archive_dir, File.basename(password_file))
