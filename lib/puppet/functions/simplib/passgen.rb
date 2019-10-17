@@ -28,7 +28,9 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #     * a-z
   #     * A-Z
   #     * 0-9
-  #     * The following special characters: `._:-/`
+  #     * The following special characters:
+  #       * `._:-` for the legacy implementation
+  #       * `._:-/` for the libkv-enabled implementation
   #   * Identifier may not contain '/./' or '/../' sequences.
   #
   # @param password_options
