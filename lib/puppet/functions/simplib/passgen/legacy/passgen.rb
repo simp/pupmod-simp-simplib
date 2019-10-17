@@ -1,8 +1,8 @@
 # Generates/retrieves a random password string or its hash for a
 # passed identifier.
 #
-# * Uses `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
-#   as the destination directory for password storage.
+# * Password info is stored in files on the local file system at
+#   `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`.
 # * The minimum length password that this function will return is `8`
 #   characters.
 # * Terminates catalog compilation if the password storage directory
@@ -10,7 +10,7 @@
 #   be created in the allotted time, or files not owned by the Puppet
 #   user are present in the password storage directory.
 #
-Puppet::Functions.create_function(:'simplib::passgen::legacy') do
+Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
   # @param identifier Unique `String` to identify the password usage.
   #
@@ -305,6 +305,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy') do
       if options.key?('password')
         passwd = options['password']
       else
+        #FIXME?  Why doesn't this persist the password?
         passwd = gen_password(options)
       end
     end

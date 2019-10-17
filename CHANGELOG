@@ -8,6 +8,14 @@
   - Added `libkv_options` parameter to `simplib::passgen` for use in libkv mode.
   - Added `gen_timeout_seconds` password option.  Previously this was hardcoded
     to 30 seconds.
+  - Enhanced `simplib::passgen` operation when in libkv mode
+    - Stores 'complexity' and 'complex_only' setting in the password's libkv
+      metadata, so that the password can be regenerated with the same
+      characteristics.
+    - Regenerates the password if the requested 'complexity' or 'complex_only'
+      setting differs from the setting used for the latest persisted password.
+    - Stores up to the lastest 10 <password,salt> pairs in the password's libkv
+      metadata.
 - Added simp-libkv as a module dependency.
 
 * Wed Oct 02 2019 Jeanne Greulich <jeannegreulich@onyxpoint.com> - 4.0.0-0

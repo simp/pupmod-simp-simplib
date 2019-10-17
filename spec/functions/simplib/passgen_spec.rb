@@ -90,6 +90,24 @@ describe 'simplib::passgen' do
         end
 
         context 'password generation with history' do
+          it 'should return the same password when called multiple times with same options' do
+            first_result = subject.execute('spectest', {'length' => 32})
+            expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
+            expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
+          end
+
+          it 'should return current password if no password options are specified' do
+            result = subject.execute('spectest', {'length' => 32})
+            expect(subject.execute('spectest')).to eql(result)
+          end
+
+          it 'should return a new password if previous password has different specified length' do
+            first_result = subject.execute('spectest', {'length' => 32})
+            second_result = subject.execute('spectest', {'length' => 64})
+            expect(second_result).to_not eq(first_result)
+            expect(second_result.length).to eq(64)
+          end
+
           it 'should return the next to last created password if "last" is true' do
             first_result = subject.execute('spectest', {'length' => 32})
             second_result = subject.execute('spectest', {'length' => 33})
@@ -183,7 +201,7 @@ describe 'simplib::passgen' do
            salt = stored_info['value']['salt']
            expect(salt.length).to eq 16
            expect(salt).to match(/^(#{default_chars.join('|')})+$/)
-           meta = { 'complexity' => 0, 'complex_only' => false }
+           meta = { 'complexity' => 0, 'complex_only' => false, 'history' => [] }
            expect(stored_info['metadata']).to eq(meta)
          end
 
@@ -202,7 +220,7 @@ describe 'simplib::passgen' do
 
             # retrieve what has been stored by libkv and validate metadata
             stored_info = call_function('libkv::get', 'gen_passwd/spectest')
-            meta = { 'complexity' => 1, 'complex_only' => false }
+            meta = { 'complexity' => 1, 'complex_only' => false, 'history' => [] }
             expect(stored_info['metadata']).to eq(meta)
           end
 
@@ -214,12 +232,39 @@ describe 'simplib::passgen' do
 
             # retrieve what has been stored by libkv and validate metadata
             stored_info = call_function('libkv::get', 'gen_passwd/spectest')
-            meta = { 'complexity' => 2, 'complex_only' => false }
+            meta = { 'complexity' => 2, 'complex_only' => false, 'history' => [] }
             expect(stored_info['metadata']).to eq(meta)
           end
         end
 
         context 'password generation with history' do
+          it 'should return the same password when called multiple times with same options' do
+            first_result = subject.execute('spectest', {'length' => 32})
+            expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
+            expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
+            stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+            expect(stored_info['metadata']['history']).to be_empty
+          end
+
+          it 'should return current password if no password options are specified' do
+            # intentionally pick a password with a length different than default length
+            result = subject.execute('spectest', {'length' => 64})
+            expect(subject.execute('spectest')).to eql(result)
+          end
+
+          it 'should return a new password if previous password has different specified length' do
+            first_result = subject.execute('spectest', {'length' => 32})
+            second_result = subject.execute('spectest', {'length' => 64})
+            expect(second_result).to_not eq(first_result)
+            expect(second_result.length).to eq(64)
+          end
+
+          it 'should return a new password if previous password has different specified complexity' do
+            first_result = subject.execute('spectest', {'complexity' => 0})
+            second_result = subject.execute('spectest', {'complexity' => 1})
+            expect(second_result).to_not eq(first_result)
+          end
+
           it 'should return the next to last created password if "last" is true' do
             first_result = subject.execute('spectest', {'length' => 32})
             # changing password length forces a new password to be generated

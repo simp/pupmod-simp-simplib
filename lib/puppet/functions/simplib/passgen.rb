@@ -1,21 +1,20 @@
 # Generates/retrieves a random password string or its hash for a
 # passed identifier.
 #
-# * Supports 2 implementations:
+# * Supports 2 modes:
 #   * libkv
-#     * Persists the passwords using libkv.
+#     * Password info is stored in a key/value store and accessed using libkv.
 #     * Terminates catalog compilation if `password_options` contains invalid
 #       parameters, any libkv operation fails or the password cannot be
 #       created in the allotted time.
 #   * Legacy
-#     * Uses
-#       `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`
-#       as the destination directory for password storage.
+#     * Password info is stored in files on the local file system at
+#       `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`.
 #     * Terminates catalog compilation if the password storage directory
 #       cannot be created/accessed by the Puppet user, the password cannot
 #       be created in the allotted time, or files not owned by the Puppet
 #       user are present in the password storage directory.
-# * To enable libkv implementation, set `simplib::passgen::libkv` to `true`
+# * To enable the libkv mode, set `simplib::passgen::libkv` to `true`
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 # * The minimum length password that this function will return is `8`
 #   characters.
@@ -155,12 +154,16 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   end
 
   def passgen(identifier, password_options={}, libkv_options={'app_id' => 'simplib::passgen'})
-    use_libkv = call_function('lookup', 'simplib::passgen::libkv', { 'default_value' => false })
+    use_libkv = call_function('lookup', 'simplib::passgen::libkv',
+      { 'default_value' => false })
+
     password = nil
     if use_libkv
-      password = call_function('simplib::passgen::libkv', identifier, password_options, libkv_options)
+      password = call_function('simplib::passgen::libkv::passgen', identifier,
+        password_options, libkv_options)
     else
-      password = call_function('simplib::passgen::legacy', identifier, password_options)
+      password = call_function('simplib::passgen::legacy::passgen', identifier,
+        password_options)
     end
     password
   end
