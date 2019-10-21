@@ -1,27 +1,45 @@
-# Using libkv, sets a generated password with attributes
+# Sets a generated password with attributes
 #
-# * libkv key is the identifier.
-# * libkv value is a Hash with 'password' and 'salt' attributes
-# * libkv metadata is a Hash with 'complexity', 'complex_only' and 'history'
-#   attributes
-#  * 'complexity' and 'complex_only' attributes are stored so that the password
-#    to be regenerated with the same characteristics and the current password.
-#  * 'history' attribute stores up to 10 most recent <password,salt> pairs.
-# * Stores complexity and complex_only settings in metadata so the password can
-#   be regenerated with the same characteristics and the current password
-# * Maintains a history of up to 10 previous <password,salt> pairs in metadata.
-# * Terminates catalog compilation if any libkv operation fails.
+# * Sets the password and salt, backs up the previous password and salt, and
+#   depending upon mode selected, persists other password information.
+# * Supports 2 modes:
+#   * libkv
+#     * Password info is stored in a key/value store and stored using libkv.
+#       * libkv key is the identifier.
+#       * libkv value is a Hash with 'password' and 'salt' attributes
+#       * libkv metadata is a Hash with 'complexity', 'complex_only' and
+#         'history' attributes
+#         * 'complexity' and 'complex_only' attributes are stored so that the
+#           user can regenerate the password the same characteristics as the
+#           current password, as needed.
+#         * 'history' attribute stores up to 10 most recent <password,salt>
+#           pairs.
+#     * Terminates catalog compilation if any libkv operation fails.
 #
-Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
+#   * Legacy
+#     * Password info is stored in files on the local file system at
+#       `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`.
+#       * Password is stored in a file named for the identifier.
+#       * Salt is stored in a separate file named <identifier>.salt`.
+#     * Backs up most recent password and salt files
+#       * Backup files are named `<identifier>.last` and <identifier>.salt.last`.
+#     * Terminates catalog compilation if any password files cannot be
+#       created/modified by the user.
+#
+# * To enable libkv implementation, set `simplib::passgen::libkv` to `true`
+#   in hieradata. When that setting absent or false, legacy mode will be used.
+#
+Puppet::Functions.create_function(:'simplib::passgen::set') do
 
-  # @param identifier
-  #   Unique `String` to identify the password usage.
+  # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
   #     * a-z
   #     * A-Z
   #     * 0-9
-  #     * The following special characters: `._:-/`
+  #     * The following special characters:
+  #       * `._:-` for the legacy implementation
+  #       * `._:-/` for the libkv-enabled implementation
   #   * Identifier may not contain '/./' or '/../' sequences.
   #
   # @param password
@@ -35,15 +53,18 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #     * `0` => Only Alphanumeric characters
   #     * `1` => Alphanumeric characters plus reasonably safe symbols
   #     * `2` => Printable ASCII
+  #     * Used by libkv mode only
   #
   # @param complex_only
   #   Whether the password contains only the characters explicitly added by the
   #   complexity rules.  For example, when `complexity` is `1`, the password
   #   contains only safe symbols.
+  #     * Used by libkv mode only
   #
   # @param libkv_options
-  #   libkv configuration that will be merged `libkv::options`.
-  #   All keys are optional.
+  #   libkv configuration when in libkv mode.
+  #     * Will be merged with `libkv::options`.
+  #     * All keys are optional.
   #
   # @option libkv_options [String] 'app_id'
   #   Specifies an application name that can be used to identify which backend
@@ -102,7 +123,8 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #     * Defaults to `false`.
   #
   # @return [Nil]
-  # @raise Exception if a libkv operation fails
+  # @raise Exception if a libkv operation fails, or any legacy password files
+  #   cannot be be created/modified by the user.
   #
   dispatch :set do
     required_param 'String[1]',    :identifier
@@ -116,37 +138,14 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   def set(identifier, password, salt, complexity, complex_only,
       libkv_options={'app_id' => 'simplib::passgen'})
 
-    key_root_dir = call_function('simplib::passgen::libkv::root_dir')
-    key = "#{key_root_dir}/#{identifier}"
-    key_info = { 'password' => password, 'salt' => salt }
-    metadata = {
-      'complexity'   => complexity,
-      'complex_only' => complex_only,
-      'history'      => get_history(identifier, libkv_options)
-    }
+    use_libkv = call_function('lookup', 'simplib::passgen::libkv',
+      { 'default_value' => false })
 
-    # TODO If libkv is updated to allow transaction locks, lock prior to
-    # get_history() which calls libkv::get under the hood, and release the
-    # lock after this libkv::put call.
-    call_function('libkv::put', key, key_info, metadata, libkv_options)
-  end
-
-  def get_history(identifier, libkv_options)
-    last_password_info = call_function('simplib::passgen::libkv::get', identifier,
-      libkv_options)
-
-    history = []
-    unless last_password_info.empty?
-      history = last_password_info['metadata']['history'].dup
-      history.unshift([
-        last_password_info['value']['password'],
-        last_password_info['value']['salt']
-      ])
-
-      # only keep the last 10 <password,salt> pairs
-      history = history[0..9]
+    if use_libkv
+      call_function('simplib::passgen::libkv::set', identifier, password, salt,
+        complexity, complex_only, libkv_options)
+    else
+      call_function('simplib::passgen::legacy::set', identifier, password, salt)
     end
-
-    history
   end
 end

@@ -1,18 +1,22 @@
-# Retrieves a generated password and stored attributes from a key/value store
-# using libkv
+# Using libkv, retrieves the list of generated passwords with attributes and
+# the list of sub-folders stored at a simplib::passgen folder in a key/value
+# store.
 #
-# Terminates catalog compilation if any libkv operation fails.
+# * List operation does not recurse into sub-folders.
+# * Terminates catalog compilation if any libkv operation fails.
 #
-Puppet::Functions.create_function(:'simplib::passgen::libkv::get') do
+Puppet::Functions.create_function(:'simplib::passgen::libkv::list') do
 
-  # @param identifier Unique `String` to identify the password usage.
-  #   Must conform to the following:
-  #   * Identifier must contain only the following characters:
-  #     * a-z
-  #     * A-Z
-  #     * 0-9
-  #     * The following special characters: `._:-/`
-  #   * Identifier may not contain '/./' or '/../' sequences.
+  # @param folder Unique `String` to identify the password sub-folder
+  #   of the root folder for simplib::passgen
+  #   * When unset or '', the list operation will be for the root folder
+  #   * Otherwise, must conform to the following:
+  #     * Identifier must contain only the following characters:
+  #       * a-z
+  #       * A-Z
+  #       * 0-9
+  #       * The following special characters: `._:-/`
+  #     * Identifier may not contain '/./' or '/../' sequences.
   #
   # @param libkv_options
   #   libkv configuration that will be merged `libkv::options`.
@@ -74,35 +78,44 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::get') do
   #       failed.
   #     * Defaults to `false`.
   #
-  # @return [Hash] Password information or {} if the password does not exist
+  # @return [Hash]  Hash of results or {} if folder does not exist
   #
-  #   * 'value'- Hash containing 'password' and 'salt' attributes
-  #   * 'metadata' - Hash containing 'complexity', 'complex_only' and
-  #     'history' attributes
-  #      * 'history' is an Array of up to the last 10 <password,salt> pairs.
-  #        history[0][0] is the most recent password and history[0][1] is its
-  #        salt.
+  #   * 'keys' = Hash of password information
+  #     * 'value'- Hash containing 'password' and 'salt' attributes
+  #     * 'metadata' - Hash containing 'complexity', 'complex_only' and
+  #       'history' attributes
+  #       * 'history' is an Array of up to the last 10 <password,salt> pairs.
+  #         history[0][0] is the most recent password and history[0][1] is its
+  #         salt.
+  #   * 'folders' = Array of sub-folder names
   #
-  # @raise Exception if a libkv operation fails or retrieved information
-  #   is malformed
+  # @raise Exception if a libkv operation fails
   #
-  dispatch :get do
-    required_param 'String[1]', :identifier
-    optional_param 'Hash',      :libkv_options
+  dispatch :list do
+    optional_param 'String', :folder
+    optional_param 'Hash',   :libkv_options
   end
 
-  def get(identifier, libkv_options={'app_id' => 'simplib::passgen'})
-    key_root_dir = call_function('simplib::passgen::libkv::root_dir')
-    key = "#{key_root_dir}/#{identifier}"
-    password_info = {}
-    if call_function('libkv::exists', key, libkv_options)
-      password_info = call_function('libkv::get', key, libkv_options)
+  def list(folder='/', libkv_options={'app_id' => 'simplib::passgen'})
+    root_dir = call_function('simplib::passgen::libkv::root_dir')
+    keydir = File.join(root_dir, folder)
 
-      unless call_function('simplib::passgen::libkv::valid_password_info', password_info)
-        raise("Malformed password info retrieved for '#{identifier}': #{password_info}")
+    results = {}
+    if call_function('libkv::exists', keydir, libkv_options)
+      raw_results = call_function('libkv::list', keydir, libkv_options)
+      results = { 'keys' => {}, 'folders' => raw_results['folders'] }
+      raw_results['keys'].each do |id,info|
+        if call_function('simplib::passgen::libkv::valid_password_info', info)
+          results['keys'][id] = info
+        else
+          # only get here if someone manually inserted bad info into the
+          # key/value store
+          Puppet.warning("Ignoring simplib::passgen id '#{id}': incomplete info=#{info}")
+        end
       end
     end
 
-    password_info
+    results
   end
 end
+

@@ -1,9 +1,10 @@
-# Retrieves a generated password and stored attributes from a key/value store
-# using libkv
+# Removes a generated password, history and stored attributes
 #
-# Terminates catalog compilation if any libkv operation fails.
+# * Password info is stored in a key/value store and removed using libkv.
+#   * libkv key is the identifier.
+# * Terminates catalog compilation if any libkv operation fails.
 #
-Puppet::Functions.create_function(:'simplib::passgen::libkv::get') do
+Puppet::Functions.create_function(:'simplib::passgen::libkv::remove') do
 
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
@@ -15,8 +16,10 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::get') do
   #   * Identifier may not contain '/./' or '/../' sequences.
   #
   # @param libkv_options
-  #   libkv configuration that will be merged `libkv::options`.
-  #   All keys are optional.
+  #   libkv configuration when in libkv mode.
+  #
+  #     * Will be merged with `libkv::options`.
+  #     * All keys are optional.
   #
   # @option libkv_options [String] 'app_id'
   #   Specifies an application name that can be used to identify which backend
@@ -74,35 +77,21 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::get') do
   #       failed.
   #     * Defaults to `false`.
   #
-  # @return [Hash] Password information or {} if the password does not exist
   #
-  #   * 'value'- Hash containing 'password' and 'salt' attributes
-  #   * 'metadata' - Hash containing 'complexity', 'complex_only' and
-  #     'history' attributes
-  #      * 'history' is an Array of up to the last 10 <password,salt> pairs.
-  #        history[0][0] is the most recent password and history[0][1] is its
-  #        salt.
+  # @return [Nil]
+  # @raise Exception if a libkv operation fails or any legacy password file
+  #   cannot be removed
   #
-  # @raise Exception if a libkv operation fails or retrieved information
-  #   is malformed
-  #
-  dispatch :get do
+  dispatch :remove do
     required_param 'String[1]', :identifier
     optional_param 'Hash',      :libkv_options
   end
 
-  def get(identifier, libkv_options={'app_id' => 'simplib::passgen'})
+  def remove(identifier, libkv_options={'app_id' => 'simplib::passgen'})
     key_root_dir = call_function('simplib::passgen::libkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
-    password_info = {}
     if call_function('libkv::exists', key, libkv_options)
-      password_info = call_function('libkv::get', key, libkv_options)
-
-      unless call_function('simplib::passgen::libkv::valid_password_info', password_info)
-        raise("Malformed password info retrieved for '#{identifier}': #{password_info}")
-      end
+      call_function('libkv::delete', key, libkv_options)
     end
-
-    password_info
   end
 end

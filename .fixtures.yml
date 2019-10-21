@@ -1,7 +1,11 @@
 ---
 fixtures:
   repositories:
-    libkv: https://github.com/simp/pupmod-simp-libkv
+#    libkv: https://github.com/simp/pupmod-simp-libkv
+# FIXME BEFORE YOU MERGE
+    libkv:
+      repo: https://github.com/lnemsick-simp/pupmod-simp-libkv
+      branch: SIMP-7171
     stdlib: https://github.com/simp/puppetlabs-stdlib
 
     # This needs to be in place for the rspec-puppet Hiera 5 hook to work

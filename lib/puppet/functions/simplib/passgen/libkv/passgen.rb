@@ -171,7 +171,7 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::passgen') do
         password,salt = get_current_password(identifier, options, libkv_options)
       end
     rescue Timeout::Error => e
-      # can get here if simplib::gen_random_password times out
+      # can get here if password/salt generation timed out
       fail("simplib::passgen timed out for '#{identifier}'!")
     end
 
@@ -244,19 +244,10 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::passgen') do
   # @raise Timeout::Error if password or salt generation times out
   # @raise Exception if libkv operation fails
   def create_and_store_password(identifier, options, libkv_options)
-    password = call_function('simplib::gen_random_password',
+    password, salt = call_function('simplib::passgen::gen_password_and_salt',
       options['length'],
       options['complexity'],
       options['complex_only'],
-      options['gen_timeout_seconds']
-    )
-
-    # complexity of 0 is required to prevent disallowed
-    # characters from being included in the salt
-    salt = call_function('simplib::gen_random_password',
-      16,    # length
-      0,     # complexity
-      false, # complex_only
       options['gen_timeout_seconds']
     )
 

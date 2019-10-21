@@ -1,18 +1,10 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe 'simplib::passgen::libkv::get' do
+describe 'simplib::passgen::libkv::remove' do
   let(:key_root_dir) { 'gen_passwd' }
   let(:id) { 'my_id' }
   let(:key) { "#{key_root_dir}/#{id}" }
-  let(:password) { 'password for my_id 2' }
-  let(:salt) { 'salt for my_id 2' }
-  let(:complexity) { 0 }
-  let(:complex_only) { false }
-  let(:history) { [
-    [ 'password for my_id 1', 'salt for my_id 1'],
-    [ 'password for my_id 0', 'salt for my_id 0']
-  ] }
 
   after(:each) do
     # This is required for GitLab, because the spec tests are run by a
@@ -33,43 +25,29 @@ describe 'simplib::passgen::libkv::get' do
   end
 
   context 'successful operation' do
-    it 'should return {} when the password does not exist' do
-      is_expected.to run.with_params(id).and_return( {} )
+    it 'should succeed when password key does not exist' do
+      is_expected.to run.with_params(id)
     end
 
-    it 'should return a stored password' do
+    it 'should remove password key when it exists' do
       # call subject() to make sure test Puppet environment is created
       # before we try to pre-populate the default key/value store with
       # a password
       subject()
-      value = { 'password' => password, 'salt' => salt }
+      value = { 'password' => 'the password', 'salt' => 'the salt' }
       meta = {
-        'complexity'   => complexity,
-        'complex_only' => complex_only,
-        'history'      => history
+        'complexity' => 0,
+        'complex_only' => false,
+        'history' => []
       }
       call_function('libkv::put', key, value, meta)
 
-      expected = { 'value' => value, 'metadata' => meta}
-      expect( subject.execute(id) ).to eq expected
+      is_expected.to run.with_params(id)
+      expect( call_function('libkv::exists', key) ).to be false
     end
   end
 
   context 'failures' do
-    it 'fails when returned info is incomplete' do
-      subject()
-      value = { 'salt' => salt }
-      meta = {
-        'complexity'   => complexity,
-        'complex_only' => complex_only,
-        'history'      => history
-      }
-      call_function('libkv::put', key, value, meta)
-
-      is_expected.to run.with_params(id).and_raise_error(RuntimeError,
-        /Malformed password info retrieved for 'my_id'/)
-    end
-
     it 'fails when libkv operation fails' do
       libkv_options = {
         'backend'  => 'oops',
@@ -81,9 +59,8 @@ describe 'simplib::passgen::libkv::get' do
         }
       }
 
-      is_expected.to run.with_params(id, libkv_options).
-        and_raise_error(ArgumentError,
-        /libkv Configuration Error/)
+      is_expected.to run.with_params( id, libkv_options).
+        and_raise_error(ArgumentError, /libkv Configuration Error/)
     end
   end
 end
