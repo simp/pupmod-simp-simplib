@@ -1,5 +1,6 @@
 * Fri Oct 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
 - Updated `simplib::passgen` to run in legacy mode or in a libkv mode.
+  - libkv mode is **EXPERIMENTAL**.
   - When in libkv mode, `simplib:passgen` uses libkv for password persistence.
   - libkv mode is enabled by setting `simplib::passgen::libkv` to `true`
     in hieradata.
