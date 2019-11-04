@@ -43,14 +43,7 @@ Puppet::Functions.create_function(:'simplib::passgen::gen_password_and_salt') do
       timeout_seconds
     )
 
-    # complexity of 0 is required to prevent disallowed
-    # characters from being included in the salt
-    salt = call_function('simplib::gen_random_password',
-      16,    # length
-      0,     # complexity
-      false, # complex_only
-      timeout_seconds
-    )
+    salt = call_function('simplib::passgen::gen_salt', timeout_seconds)
 
     [password, salt]
   end

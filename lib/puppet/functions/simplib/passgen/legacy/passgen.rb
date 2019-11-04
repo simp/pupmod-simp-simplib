@@ -26,6 +26,12 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   #        * `0` => Use only Alphanumeric characters in your password (safest)
   #        * `1` => Add reasonably safe symbols
   #        * `2` => Printable ASCII
+  #   * `user` => user for generated files/directories
+  #        * Defaults to the user compiling the catalog.
+  #        * Only useful when running `puppet apply` as the `root` user.
+  #   * `group => Group for generated files/directories
+  #        * Defaults to the group compiling the catalog.
+  #        * Only useful when running `puppet apply` as the `root` user.
   #   **private options:**
   #   * `password` => contains the string representation of the password to hash (used for testing)
   #   * `salt` => contains the string literal salt to use (used for testing)
@@ -55,8 +61,8 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     scope = closure_scope
 
     settings = {}
-    settings['user'] = Etc.getpwuid(Process.uid).name
-    settings['group'] = Etc.getgrgid(Process.gid).name
+    settings['user'] = modifier_hash.key?('user') ? modifier_hash['user'] : Etc.getpwuid(Process.uid).name
+    settings['group'] = modifier_hash.key?('group') ? modifier_hash['group'] : Etc.getgrgid(Process.gid).name
     settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
       'environments', scope.lookupvar('::environment'),
       'simp_autofiles', 'gen_passwd'
@@ -177,12 +183,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
   # Generate the salt to be used to encrypt a password
   def gen_salt(options)
-    # complexity of 0 is required to prevent disallowed
-    # characters from being included in the salt
-    call_function('simplib::gen_random_password',
-      16,    # length
-      0,     # complexity
-      false, # complex_only
+    call_function('simplib::passgen::gen_salt',
       options['gen_timeout_seconds']
     )
   end

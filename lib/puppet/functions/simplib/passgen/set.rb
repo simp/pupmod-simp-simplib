@@ -48,18 +48,37 @@ Puppet::Functions.create_function(:'simplib::passgen::set') do
   # @param salt
   #   Salt for the password for use in encryption operations
   #
-  # @param complexity
+  # @param password_options
+  #   Password options to be used/persisted
+  #
+  # @option password_options [Integer[0,2]] 'complexity'
   #   Specifies the types of characters in the password
   #     * `0` => Only Alphanumeric characters
   #     * `1` => Alphanumeric characters plus reasonably safe symbols
   #     * `2` => Printable ASCII
-  #     * Used by libkv mode only
+  #     * Required by libkv mode
+  #     * Unused by legacy mode
   #
-  # @param complex_only
+  # @option password_options [Boolean] 'complex_only'
   #   Whether the password contains only the characters explicitly added by the
   #   complexity rules.  For example, when `complexity` is `1`, the password
   #   contains only safe symbols.
-  #     * Used by libkv mode only
+  #     * Required by libkv mode
+  #     * Unused by legacy mode
+  #
+  # @option password_options [String] 'user'
+  #   User for generated files/directories
+  #     * Defaults to the user compiling the catalog.
+  #     * Only useful when running `puppet apply` as the `root` user.
+  #     * Optional for legacy mode
+  #     * Unused by libkv mode
+  #
+  # @option password_options [String] 'group'
+  #   Group for generated files/directories
+  #     * Defaults to the group compiling the catalog.
+  #     * Only useful when running `puppet apply` as the `root` user.
+  #     * Optional for legacy mode
+  #     * Unused by libkv mode
   #
   # @param libkv_options
   #   libkv configuration when in libkv mode.
@@ -123,29 +142,43 @@ Puppet::Functions.create_function(:'simplib::passgen::set') do
   #     * Defaults to `false`.
   #
   # @return [Nil]
-  # @raise Exception if a libkv operation fails, or any legacy password files
-  #   cannot be be created/modified by the user.
+  # @raise Exception if required `password_options` missing, a libkv operation
+  #   fails, or any legacy password files cannot be be created/modified by the
+  #   user.
   #
   dispatch :set do
     required_param 'String[1]',    :identifier
     required_param 'String[1]',    :password
     required_param 'String[1]',    :salt
-    required_param 'Integer[0,2]', :complexity
-    required_param 'Boolean',      :complex_only
+    required_param 'Hash',         :password_options
     optional_param 'Hash',         :libkv_options
   end
 
-  def set(identifier, password, salt, complexity, complex_only,
+  def set(identifier, password, salt, password_options,
       libkv_options={'app_id' => 'simplib::passgen'})
 
     use_libkv = call_function('lookup', 'simplib::passgen::libkv',
       { 'default_value' => false })
 
     if use_libkv
+      unless password_options.key?('complexity')
+        msg = "simplib::passgen::set: password_options must contain 'complexity' in libkv mode"
+        raise ArgumentError.new(msg)
+      end
+
+      unless password_options.key?('complex_only')
+        msg = "simplib::passgen::set: password_options must contain 'complex_only' in libkv mode"
+        raise ArgumentError.new(msg)
+      end
+
       call_function('simplib::passgen::libkv::set', identifier, password, salt,
-        complexity, complex_only, libkv_options)
+        password_options['complexity'], password_options['complex_only'],
+        libkv_options)
     else
-      call_function('simplib::passgen::legacy::set', identifier, password, salt)
+      args = [ 'simplib::passgen::legacy::set', identifier, password, salt ]
+      args << password_options['user'] if password_options.key?('user')
+      args << password_options['group'] if password_options.key?('group')
+      call_function(*args)
     end
   end
 end

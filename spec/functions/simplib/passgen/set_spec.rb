@@ -7,8 +7,6 @@ describe 'simplib::passgen::set' do
   let(:key) { "#{key_root_dir}/#{id}" }
   let(:password) { 'password for my_id' }
   let(:salt) { 'salt for my_id' }
-  let(:complexity) { 0 }
-  let(:complex_only) { false }
 
   # The bulk of simplib::passgen::set testing is done in tests for
   # simplib::passgen::legacy::set and simplib::passgen::libkv::set.
@@ -46,8 +44,7 @@ describe 'simplib::passgen::set' do
     # end
     context 'success cases' do
       it 'should create password and salt files when password does not exist' do
-        is_expected.to run.with_params(
-          id, passwords[0], salts[0], complexity, complex_only)
+        is_expected.to run.with_params(id, passwords[0], salts[0], {})
 
         settings = call_function('simplib::passgen::legacy::common_settings')
         password_file = File.join(settings['keydir'], id)
@@ -75,8 +72,7 @@ describe 'simplib::passgen::set' do
         salt_file = File.join(settings['keydir'], "#{id}.salt")
         File.open(salt_file, 'w') { |file| file.puts salts[1] }
 
-        is_expected.to run.with_params(
-          id, passwords[0], salts[0], complexity, complex_only)
+        is_expected.to run.with_params(id, passwords[0], salts[0], {})
 
         expect( IO.read(password_file).chomp ).to eq passwords[0]
         expect( IO.read(salt_file).chomp ).to eq salts[0]
@@ -96,9 +92,8 @@ describe 'simplib::passgen::set' do
             settings['keydir'], {:mode => settings['dir_mode']}
           ).raises(Errno::EACCES, 'dir create failed')
 
-        is_expected.to run.with_params(
-            id, password, salt, complexity, complex_only
-          ).and_raise_error(RuntimeError, /Could not make directory/)
+        is_expected.to run.with_params(id, password, salt, {}).
+          and_raise_error(RuntimeError, /Could not make directory/)
       end
 
       it 'fails when a password/salt file cannot be created' do
@@ -115,15 +110,20 @@ describe 'simplib::passgen::set' do
         File.stubs(:chmod).with(
           Not(equals(settings['file_mode'])), Not(equals(password_file)))
 
-        is_expected.to run.with_params(
-            id, password, salt, complexity, complex_only
-          ).and_raise_error(Errno::EACCES, /Permission denied/)
+        is_expected.to run.with_params(id, password, salt, {}).
+          and_raise_error(Errno::EACCES, /Permission denied/)
       end
     end
   end
 
   context 'libkv passgen::set' do
-    let(:hieradata){ 'simplib_passgen_libkv' }
+    let(:hieradata) { 'simplib_passgen_libkv' }
+    let(:complexity) { 0 }
+    let(:complex_only) { false }
+    let(:password_options) { {
+      'complexity'   => complexity,
+      'complex_only' => complex_only
+     } }
 
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
@@ -145,8 +145,7 @@ describe 'simplib::passgen::set' do
 
     context 'successes' do
       it 'should store a new password' do
-        is_expected.to run.with_params(
-          id, password, salt, complexity, complex_only)
+        is_expected.to run.with_params(id, password, salt, password_options)
 
         # retrieve what has been stored by libkv and validate
         stored_info = call_function('libkv::get', key)
@@ -165,7 +164,7 @@ describe 'simplib::passgen::set' do
         (1..12).each do |run|
           rpassword = "#{password} run #{run}"
           rsalt = "#{salt} run #{run}"
-          subject.execute(id, rpassword, rsalt, complexity, complex_only)
+          subject.execute(id, rpassword, rsalt, password_options)
           expected_history << [rpassword, rsalt]
         end
 
@@ -188,6 +187,26 @@ describe 'simplib::passgen::set' do
     end
 
     context 'failures' do
+      it 'fails when password_options is missing complexity' do
+        bad_password_options = password_options.dup
+        bad_password_options.delete('complexity')
+
+        is_expected.to run.with_params(
+          id, password, salt, bad_password_options).and_raise_error(
+          ArgumentError,
+          /simplib::passgen::set: password_options must contain 'complexity' in libkv mode/)
+      end
+
+      it 'fails when password_options is missing complex_only' do
+        bad_password_options = password_options.dup
+        bad_password_options.delete('complex_only')
+
+        is_expected.to run.with_params(
+          id, password, salt, bad_password_options).and_raise_error(
+          ArgumentError,
+          /simplib::passgen::set: password_options must contain 'complex_only' in libkv mode/)
+      end
+
       it 'fails when libkv operation fails' do
         libkv_options = {
           'backend'  => 'oops',
@@ -200,7 +219,7 @@ describe 'simplib::passgen::set' do
         }
 
         is_expected.to run.with_params(
-            id, password, salt, complexity, complex_only, libkv_options
+            id, password, salt, password_options, libkv_options
           ).and_raise_error(ArgumentError, /libkv Configuration Error/)
       end
     end

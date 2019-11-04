@@ -24,6 +24,16 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
   # @param salt
   #   Salt for the password for use in encryption operations
   #
+  # @param user
+  #   User for generated files/directories
+  #     * Defaults to the user compiling the catalog.
+  #     * Only useful when running `puppet apply` as the `root` user.
+  #
+  # @param group
+  #   Group for generated files/directories
+  #     * Defaults to the group compiling the catalog.
+  #     * Only useful when running `puppet apply` as the `root` user.
+  #
   # @return [Nil]
   # @raise Exception if any legacy password files cannot be be created/modified
   #   by the user.
@@ -32,10 +42,17 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
     required_param 'String[1]', :identifier
     required_param 'String[1]', :password
     required_param 'String[1]', :salt
+    optional_param 'String[1]', :user
+    optional_param 'String[1]', :group
   end
 
-  def set(identifier, password, salt)
+  def set(identifier, password, salt, user=nil, group=nil)
     settings = call_function('simplib::passgen::legacy::common_settings')
+
+    # override settings for user and group when those parameters are set
+    settings['user'] = user unless user.nil?
+    settings['group'] = group unless group.nil?
+
     keydir = settings['keydir']
 
     set_up_keydir(settings) unless File.directory?(keydir)
