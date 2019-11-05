@@ -39,6 +39,7 @@
 * [`simplib::host_is_me`](#simplibhost_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of  hostnames and/o
 * [`simplib::in_bolt`](#simplibin_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
 * [`simplib::inspect`](#simplibinspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
+* [`simplib::ip::family_hash`](#simplibipfamily_hash): Process an array of IP addresses and return them split by IP family and include metadata and/or processed versions.
 * [`simplib::ip_to_cron`](#simplibip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
 * [`simplib::ipaddresses`](#simplibipaddresses): Return an `Array` of all IPv4 addresses known to be associated with the client, optionally excluding local addresses.
 * [`simplib::join_mount_opts`](#simplibjoin_mount_opts): Merge two sets of `mount` options in a reasonable fashion, giving precedence to the second set.
@@ -1566,6 +1567,66 @@ Data type: `Enum['json','yaml', 'oneline_json']`
 The format that you wish to use to display the output during the
 run. 'json' and 'yaml' result in multi-line message content.
 'oneline_json' results in single-line message content.
+
+### simplib::ip::family_hash
+
+Type: Ruby 4.x API
+
+Process an array of IP addresses and return them split by IP family and
+include metadata and/or processed versions.
+
+#### `simplib::ip::family_hash(Variant[
+      Simplib::IP,
+      Simplib::IP::V4::DDQ,
+      Simplib::IP::V4::CIDR,
+      Simplib::IP::V6::CIDR,
+      Array[Variant[
+        Simplib::IP,
+        Simplib::IP::V4::DDQ,
+        Simplib::IP::V4::CIDR,
+        Simplib::IP::V6::CIDR
+      ]]
+    ] $ip_addresses)`
+
+Process an array of IP addresses and return them split by IP family and
+include metadata and/or processed versions.
+
+Returns: `Hash` Converted Hash with the following format (YAML representation):
+
+```
+# IPv4 Addresses
+ipv4:
+  <Passed Address>:
+    address: <normalized address>
+    netmask:
+      ddq: <dotted quad notation netmask>
+      cidr: <CIDR netmask>
+# IPv6 Addresses
+ipv6:
+  <Passed Address>:
+    address: <normalized address>
+    netmask:
+      # DDQ is not valid for IPv6
+      ddq: nil
+      cidr: <CIDR netmask>
+```
+
+##### `ip_addresses`
+
+Data type: `Variant[
+      Simplib::IP,
+      Simplib::IP::V4::DDQ,
+      Simplib::IP::V4::CIDR,
+      Simplib::IP::V6::CIDR,
+      Array[Variant[
+        Simplib::IP,
+        Simplib::IP::V4::DDQ,
+        Simplib::IP::V4::CIDR,
+        Simplib::IP::V6::CIDR
+      ]]
+    ]`
+
+The addresses to convert
 
 ### simplib::ip_to_cron
 

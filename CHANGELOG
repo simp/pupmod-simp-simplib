@@ -1,3 +1,8 @@
+* Tue Nov 05 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
+- Add `simplib::ip::family_hash` function that takes an IP address or Array of
+  IP addresses and returns a Hash with the addresses broken down by family with
+  additional helpful metadata
+
 * Fri Oct 04 2019 Liz Nemsick <lnemsick.simp@gmail.com> - 4.0.0-0
 - Updated `simplib::passgen` to run in legacy mode or in a libkv mode.
   - libkv mode is **EXPERIMENTAL**.
