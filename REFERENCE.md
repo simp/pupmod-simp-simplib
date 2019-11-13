@@ -55,6 +55,7 @@
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
 * [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Supports 2 modes:   * libkv     * Password info is store
 * [`simplib::passgen::gen_password_and_salt`](#simplibpassgengen_password_and_salt): Generates a password and salt  * Password length, complexity and complex-only settings are specified by   the caller. * Salt length, complexi
+* [`simplib::passgen::gen_salt`](#simplibpassgengen_salt): Generates a salt  * Terminates catalog compilation if the salt cannot be created   in the allotted time.
 * [`simplib::passgen::get`](#simplibpassgenget): Retrieves a generated password and any stored attributes  * Supports 2 modes:   * libkv     * Password info is stored in a key/value store an
 * [`simplib::passgen::legacy::common_settings`](#simplibpassgenlegacycommon_settings): Returns common settings used by simplib::passgen in legacy mode
 * [`simplib::passgen::legacy::get`](#simplibpassgenlegacyget): Retrieves a generated password and any stored attributes that have been stored in files on the local file system at `Puppet.settings[:vardir]
@@ -2605,6 +2606,34 @@ Data type: `Variant[Integer[0],Float[0]]`
 Maximum time allotted to generate the password or
 the salt; a value of 0 disables the timeout
 
+### simplib::passgen::gen_salt
+
+Type: Ruby 4.x API
+
+Generates a salt
+
+* Terminates catalog compilation if the salt cannot be created
+  in the allotted time.
+
+#### `simplib::passgen::gen_salt(Optional[Variant[Integer[0],Float[0]]] $timeout_seconds)`
+
+Generates a salt
+
+* Terminates catalog compilation if the salt cannot be created
+  in the allotted time.
+
+Returns: `String` Generated salt
+
+Raises:
+* `if` password cannot be created within allotted time
+
+##### `timeout_seconds`
+
+Data type: `Optional[Variant[Integer[0],Float[0]]]`
+
+Maximum time allotted to generate the salt;
+a value of 0 disables the timeout
+
 ### simplib::passgen::get
 
 Type: Ruby 4.x API
@@ -2877,6 +2906,12 @@ of the following options:
      * `0` => Use only Alphanumeric characters in your password (safest)
      * `1` => Add reasonably safe symbols
      * `2` => Printable ASCII
+* `user` => user for generated files/directories
+     * Defaults to the user compiling the catalog.
+     * Only useful when running `puppet apply` as the `root` user.
+* `group => Group for generated files/directories
+     * Defaults to the group compiling the catalog.
+     * Only useful when running `puppet apply` as the `root` user.
 **private options:**
 * `password` => contains the string representation of the password to hash (used for testing)
 * `salt` => contains the string literal salt to use (used for testing)
@@ -2944,7 +2979,7 @@ Stores a generated password and salt in files on the local filesystem at
   * Backup files are named `<identifier>.last` and <identifier>.salt.last`.
 * Terminates catalog compilation if any password files cannot be created/modified by the user.
 
-#### `simplib::passgen::legacy::set(String[1] $identifier, String[1] $password, String[1] $salt)`
+#### `simplib::passgen::legacy::set(String[1] $identifier, String[1] $password, String[1] $salt, Optional[String[1]] $user, Optional[String[1]] $group)`
 
 Stores a generated password and salt in files on the local filesystem at
 `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`.
@@ -2984,6 +3019,22 @@ Password value
 Data type: `String[1]`
 
 Salt for the password for use in encryption operations
+
+##### `user`
+
+Data type: `Optional[String[1]]`
+
+User for generated files/directories
+  * Defaults to the user compiling the catalog.
+  * Only useful when running `puppet apply` as the `root` user.
+
+##### `group`
+
+Data type: `Optional[String[1]]`
+
+Group for generated files/directories
+  * Defaults to the group compiling the catalog.
+  * Only useful when running `puppet apply` as the `root` user.
 
 ### simplib::passgen::libkv::get
 
@@ -3899,7 +3950,7 @@ Sets a generated password with attributes
 * To enable libkv implementation, set `simplib::passgen::libkv` to `true`
   in hieradata. When that setting absent or false, legacy mode will be used.
 
-#### `simplib::passgen::set(String[1] $identifier, String[1] $password, String[1] $salt, Integer[0,2] $complexity, Boolean $complex_only, Optional[Hash] $libkv_options)`
+#### `simplib::passgen::set(String[1] $identifier, String[1] $password, String[1] $salt, Hash $password_options, Optional[Hash] $libkv_options)`
 
 Sets a generated password with attributes
 
@@ -3935,7 +3986,7 @@ Sets a generated password with attributes
 Returns: `Nil`
 
 Raises:
-* `Exception` if a libkv operation fails, or any legacy password files cannot be be created/modified by the user.
+* `Exception` if required `password_options` missing, a libkv operation fails, or any legacy password files cannot be be created/modified by the user.
 
 ##### `identifier`
 
@@ -3964,24 +4015,35 @@ Data type: `String[1]`
 
 Salt for the password for use in encryption operations
 
-##### `complexity`
+##### `password_options`
 
-Data type: `Integer[0,2]`
+Data type: `Hash`
 
-Specifies the types of characters in the password
+Password options to be used/persisted
+
+Options:
+
+* **'complexity'** `Integer[0,2]`: Specifies the types of characters in the password
   * `0` => Only Alphanumeric characters
   * `1` => Alphanumeric characters plus reasonably safe symbols
   * `2` => Printable ASCII
-  * Used by libkv mode only
-
-##### `complex_only`
-
-Data type: `Boolean`
-
-Whether the password contains only the characters explicitly added by the
+  * Required by libkv mode
+  * Unused by legacy mode
+* **'complex_only'** `Boolean`: Whether the password contains only the characters explicitly added by the
 complexity rules.  For example, when `complexity` is `1`, the password
 contains only safe symbols.
-  * Used by libkv mode only
+  * Required by libkv mode
+  * Unused by legacy mode
+* **'user'** `String`: User for generated files/directories
+  * Defaults to the user compiling the catalog.
+  * Only useful when running `puppet apply` as the `root` user.
+  * Optional for legacy mode
+  * Unused by libkv mode
+* **'group'** `String`: Group for generated files/directories
+  * Defaults to the group compiling the catalog.
+  * Only useful when running `puppet apply` as the `root` user.
+  * Optional for legacy mode
+  * Unused by libkv mode
 
 ##### `libkv_options`
 

@@ -31,7 +31,7 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
     require 'timeout'
     passwd = ''
     Timeout::timeout(timeout_seconds) do
-      default_charlist = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
+      default_charlist = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
       specific_charlist = nil
       case complexity
         when 1
@@ -59,13 +59,12 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
         ]
       end
 
-      charlists.each do |charlist|
-        (length/charlists.length).ceil.times { |i|
-          passwd += charlist[rand(charlist.size-1)]
-        }
+      index = 0
+      Integer(length).times do |i|
+        passwd += charlists[index][rand(charlists[index].length-1)]
+        index += 1
+        index = 0 if index == charlists.length
       end
-
-      passwd = passwd[0..(length-1)]
     end
 
     return passwd
