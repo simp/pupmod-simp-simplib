@@ -1575,6 +1575,40 @@ Type: Ruby 4.x API
 Process an array of IP addresses and return them split by IP family and
 include metadata and/or processed versions.
 
+#### Examples
+
+##### 
+
+```puppet
+
+simplib::ip::family_hash([
+  '1.2.3.4',
+  '2.3.4.5/8',
+  '::1'
+])
+
+Returns (YAML Formatted for clarity)
+
+---
+ipv4:
+  '1.2.3.4':
+    address: '1.2.3.4'
+    netmask:
+      ddq: '255.255.255.255'
+      cidr: 32
+  '2.3.4.5/8':
+    address: '2.0.0.0'
+    netmask:
+      ddq: '255.0.0.0'
+      cidr: 8
+ipv6:
+  '::1':
+    address: '[::1]'
+    netmask:
+      ddq: nil
+      cidr: 128
+```
+
 #### `simplib::ip::family_hash(Variant[
       Simplib::IP,
       Simplib::IP::V4::DDQ,
@@ -1609,6 +1643,40 @@ ipv6:
       # DDQ is not valid for IPv6
       ddq: nil
       cidr: <CIDR netmask>
+```
+
+##### Examples
+
+###### 
+
+```puppet
+
+simplib::ip::family_hash([
+  '1.2.3.4',
+  '2.3.4.5/8',
+  '::1'
+])
+
+Returns (YAML Formatted for clarity)
+
+---
+ipv4:
+  '1.2.3.4':
+    address: '1.2.3.4'
+    netmask:
+      ddq: '255.255.255.255'
+      cidr: 32
+  '2.3.4.5/8':
+    address: '2.0.0.0'
+    netmask:
+      ddq: '255.0.0.0'
+      cidr: 8
+ipv6:
+  '::1':
+    address: '[::1]'
+    netmask:
+      ddq: nil
+      cidr: 128
 ```
 
 ##### `ip_addresses`

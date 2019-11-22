@@ -26,6 +26,35 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
   #         cidr: <CIDR netmask>
   #   ```
   #
+  # @example
+  #
+  #   simplib::ip::family_hash([
+  #     '1.2.3.4',
+  #     '2.3.4.5/8',
+  #     '::1'
+  #   ])
+  #
+  #   Returns (YAML Formatted for clarity)
+  #
+  #   ---
+  #   ipv4:
+  #     '1.2.3.4':
+  #       address: '1.2.3.4'
+  #       netmask:
+  #         ddq: '255.255.255.255'
+  #         cidr: 32
+  #     '2.3.4.5/8':
+  #       address: '2.0.0.0'
+  #       netmask:
+  #         ddq: '255.0.0.0'
+  #         cidr: 8
+  #   ipv6:
+  #     '::1':
+  #       address: '[::1]'
+  #       netmask:
+  #         ddq: nil
+  #         cidr: 128
+  #
   dispatch :family_hash do
     required_param 'Variant[
       Simplib::IP,
