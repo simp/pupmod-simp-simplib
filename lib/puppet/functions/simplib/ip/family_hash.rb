@@ -83,7 +83,9 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
         addr_normalized, cidr_netmask = call_function('simplib::nets2cidr', addr).
           first.split('/')
 
-        ip_breakdown['address'] = call_function('simplib::bracketize', Array(addr_normalized))
+        addr_normalized.delete!('[]')
+
+        ip_breakdown['address'] = addr_normalized
         ip_breakdown['netmask']['cidr'] = cidr_netmask && cidr_netmask.to_i
 
         if ip.ipv4?

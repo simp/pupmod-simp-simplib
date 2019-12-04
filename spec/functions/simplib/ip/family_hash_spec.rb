@@ -38,21 +38,21 @@ describe 'simplib::ip::family_hash' do
       },
       'ipv6' => {
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334' => {
-          'address' => '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+          'address' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
           'netmask' => {
             'ddq'  => nil,
             'cidr' => 128
           }
         },
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]' => {
-          'address' => '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
+          'address' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
           'netmask' => {
             'ddq'  => nil,
             'cidr' => 128
           }
         },
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' => {
-          'address' => '[2001:d00::]',
+          'address' => '2001:d00::',
           'netmask' => {
             'ddq'  => nil,
             'cidr' => 24
@@ -88,7 +88,7 @@ describe 'simplib::ip::family_hash' do
     output = {
       'ipv6' => {
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' => {
-          'address' => '[2001:d00::]',
+          'address' => '2001:d00::',
           'netmask' => {
             'ddq'  => nil,
             'cidr' => 24
@@ -119,7 +119,7 @@ describe 'simplib::ip::family_hash' do
       },
       'ipv6' => {
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24' => {
-          'address' => '[2001:d00::]',
+          'address' => '2001:d00::',
           'netmask' => {
             'ddq'  => nil,
             'cidr' => 24
