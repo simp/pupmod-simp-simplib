@@ -1,3 +1,7 @@
+* Wed Dec 04 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.1-0
+- Fixed an issue in `simplib::ip::family_hash` where the 'unknown' entries were
+  not properly populated.
+
 * Tue Nov 05 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.0-0
 - Add `simplib::ip::family_hash` function that takes an IP address or Array of
   IP addresses and returns a Hash with the addresses broken down by family with
