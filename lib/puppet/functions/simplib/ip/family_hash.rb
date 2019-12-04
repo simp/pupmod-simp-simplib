@@ -57,16 +57,11 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
   #
   dispatch :family_hash do
     required_param 'Variant[
-      Simplib::IP,
+      Simplib::Host,
       Simplib::IP::V4::DDQ,
       Simplib::IP::V4::CIDR,
       Simplib::IP::V6::CIDR,
-      Array[Variant[
-        Simplib::IP,
-        Simplib::IP::V4::DDQ,
-        Simplib::IP::V4::CIDR,
-        Simplib::IP::V6::CIDR
-      ]]
+      Simplib::Netlist
     ]', :ip_addresses
   end
 
@@ -74,33 +69,41 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
     results = {}
 
     Array(addresses).uniq.each do |addr|
-      ip = IPAddr.new(addr)
-
-      addr_normalized, cidr_netmask = call_function('simplib::nets2cidr', addr).
-        first.split('/')
-
       ip_breakdown = {
-        'address' => call_function('simplib::bracketize', Array(addr_normalized)),
+        'address' => addr,
         'netmask' => {
           'ddq'  => nil,
-          'cidr' => cidr_netmask && cidr_netmask.to_i
+          'cidr' => nil
         }
       }
 
-      if ip.ipv4?
-        ip_family = 'ipv4'
+      begin
+        ip = IPAddr.new(addr)
 
-        ip_breakdown['netmask']['ddq'] = call_function('simplib::nets2ddq', addr).
-          first.split('/')[1] || '255.255.255.255'
+        addr_normalized, cidr_netmask = call_function('simplib::nets2cidr', addr).
+          first.split('/')
 
-        ip_breakdown['netmask']['cidr'] = 32 unless ip_breakdown['netmask']['cidr']
-      elsif ip.ipv6?
-        ip_family = 'ipv6'
+        ip_breakdown['address'] = call_function('simplib::bracketize', Array(addr_normalized))
+        ip_breakdown['netmask']['cidr'] = cidr_netmask && cidr_netmask.to_i
 
-        ip_breakdown['netmask']['cidr'] = 128 unless ip_breakdown['netmask']['cidr']
-      else
+        if ip.ipv4?
+          ip_family = 'ipv4'
+
+          ip_breakdown['netmask']['ddq'] = call_function('simplib::nets2ddq', addr).
+            first.split('/')[1] || '255.255.255.255'
+
+          ip_breakdown['netmask']['cidr'] = 32 unless ip_breakdown['netmask']['cidr']
+        elsif ip.ipv6?
+          ip_family = 'ipv6'
+
+          ip_breakdown['netmask']['cidr'] = 128 unless ip_breakdown['netmask']['cidr']
+        else
+          ip_family = 'unknown'
+        end
+      rescue
         ip_family = 'unknown'
       end
+
 
       results[ip_family] ||= {}
       results[ip_family][addr] = ip_breakdown
