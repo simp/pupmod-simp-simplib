@@ -1610,16 +1610,11 @@ ipv6:
 ```
 
 #### `simplib::ip::family_hash(Variant[
-      Simplib::IP,
+      Simplib::Host,
       Simplib::IP::V4::DDQ,
       Simplib::IP::V4::CIDR,
       Simplib::IP::V6::CIDR,
-      Array[Variant[
-        Simplib::IP,
-        Simplib::IP::V4::DDQ,
-        Simplib::IP::V4::CIDR,
-        Simplib::IP::V6::CIDR
-      ]]
+      Simplib::Netlist
     ] $ip_addresses)`
 
 Process an array of IP addresses and return them split by IP family and
@@ -1682,16 +1677,11 @@ ipv6:
 ##### `ip_addresses`
 
 Data type: `Variant[
-      Simplib::IP,
+      Simplib::Host,
       Simplib::IP::V4::DDQ,
       Simplib::IP::V4::CIDR,
       Simplib::IP::V6::CIDR,
-      Array[Variant[
-        Simplib::IP,
-        Simplib::IP::V4::DDQ,
-        Simplib::IP::V4::CIDR,
-        Simplib::IP::V6::CIDR
-      ]]
+      Simplib::Netlist
     ]`
 
 The addresses to convert

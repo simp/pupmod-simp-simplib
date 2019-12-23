@@ -11,6 +11,7 @@ HOSTS:
       - default
       - master
       - client
+      - prelink
     platform:   el-6-x86_64
     box:        centos/6
     hypervisor: <%= hypervisor %>
@@ -18,8 +19,16 @@ HOSTS:
   el7:
     roles:
       - client
+      - prelink
     platform: el-7-x86_64
     box: centos/7
+    hypervisor: <%= hypervisor %>
+
+  el8:
+    roles:
+      - client
+    platform: el-8-x86_64
+    box: centos/8
     hypervisor: <%= hypervisor %>
 
 CONFIG:

@@ -74,6 +74,7 @@ describe 'ipa fact' do
 
     context 'when IPA is installed, but host has not yet joined IPA domain' do
       it 'ipa fact should be nil because /etc/ipa/default.conf does not exist' do
+        upgrade_package(server, 'nss')
         install_package(server, 'ipa-server')
         server.reboot # WORKAROUND: https://bugzilla.redhat.com/show_bug.cgi?id=1504688
 
@@ -94,6 +95,7 @@ describe 'ipa fact' do
         fqdn = fact_on(server, 'fqdn')
 
         cmd = [
+          'umask 0022 &&',
           'ipa-server-install',
           # IPA realm and domain do not have to match hostname
           "--domain #{ipa_domain}",
