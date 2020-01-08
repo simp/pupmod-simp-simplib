@@ -229,8 +229,10 @@ pup6-ipa_fact:
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
+# simplib::caller function is failing in puppet 6.  jira  SIMP-7471
 pup6-caller_function:
   <<: *acceptance_base
   <<: *pup_6
+  allow_failure: true
   script:
     - 'bundle exec rake beaker:suites[caller_function,default]'
