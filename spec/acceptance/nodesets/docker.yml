@@ -34,7 +34,7 @@ HOSTS:
     docker_preserve_image: true
     docker_image_commands:
       # Puppet Deps
-      - 'yum install -y ntpdate rsync openssl'
+      - 'yum install -y rsync openssl'
 
 CONFIG:
   log_level: verbose
