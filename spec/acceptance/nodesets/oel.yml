@@ -11,6 +11,7 @@ HOSTS:
       - default
       - master
       - client
+      - prelink
     platform:   el-6-x86_64
     box:        onyxpoint/oel-6-x86_64
     hypervisor: <%= hypervisor %>
@@ -18,8 +19,16 @@ HOSTS:
   oel7:
     roles:
       - client
+      - prelink
     platform:   el-7-x86_64
-    box:        onyxpoint/oel-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+
+  oel8:
+    roles:
+      - client
+    platform:   el-8-x86_64
+    box:        generic/oracle8
     hypervisor: <%= hypervisor %>
 
 CONFIG:

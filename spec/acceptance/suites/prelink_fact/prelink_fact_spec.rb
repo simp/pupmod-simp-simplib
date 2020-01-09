@@ -32,27 +32,29 @@ describe 'prelink fact' do
       end
     end
 
-    context 'when prelink is installed but disabled' do
-      it 'prelink fact should report prelink as disabled' do
-        server.install_package('prelink')
-        # prelinking is enabled by default on el6
-        on(server, "sed -i '/PRELINKING=yes/ c\\PRELINKING=no' /etc/sysconfig/prelink")
+    if server.host_hash[:roles].include?('prelink')
+      context 'when prelink is installed but disabled' do
+        it 'prelink fact should report prelink as disabled' do
+          server.install_package('prelink')
+          # prelinking is enabled by default on el6
+          on(server, "sed -i '/PRELINKING=yes/ c\\PRELINKING=no' /etc/sysconfig/prelink")
 
-        results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(/Notice: Type => Hash Content => {"enabled":false}/)
-        results = on(server, 'puppet facts')
-        expect(results.output).to match(/"prelink": {/)
+          results = apply_manifest_on(server, manifest)
+          expect(results.output).to match(/Notice: Type => Hash Content => {"enabled":false}/)
+          results = on(server, 'puppet facts')
+          expect(results.output).to match(/"prelink": {/)
+        end
       end
-    end
 
-    context 'when prelink is installed and enabled' do
-      it 'prelink fact should report prelink as enabled' do
-        on(server, "sed -i '/PRELINKING=no/ c\\PRELINKING=yes' /etc/sysconfig/prelink")
+      context 'when prelink is installed and enabled' do
+        it 'prelink fact should report prelink as enabled' do
+          on(server, "sed -i '/PRELINKING=no/ c\\PRELINKING=yes' /etc/sysconfig/prelink")
 
-        results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(/Notice: Type => Hash Content => {"enabled":true}/)
-        results = on(server, 'puppet facts')
-        expect(results.output).to match(/"prelink": {/)
+          results = apply_manifest_on(server, manifest)
+          expect(results.output).to match(/Notice: Type => Hash Content => {"enabled":true}/)
+          results = on(server, 'puppet facts')
+          expect(results.output).to match(/"prelink": {/)
+        end
       end
     end
   end

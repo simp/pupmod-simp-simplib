@@ -1,3 +1,6 @@
+* Fri Dec 20 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
+- Add EL8 support
+
 * Wed Dec 04 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.0.1-0
 - Fixed an issue in `simplib::ip::family_hash` where the 'unknown' entries were
   not properly populated.
