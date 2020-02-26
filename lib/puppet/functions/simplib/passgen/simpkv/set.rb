@@ -1,8 +1,8 @@
-# Using libkv, sets a generated password with attributes
+# Using simpkv, sets a generated password with attributes
 #
-# * libkv key is the identifier.
-# * libkv value is a Hash with 'password' and 'salt' attributes
-# * libkv metadata is a Hash with 'complexity', 'complex_only' and 'history'
+# * simpkv key is the identifier.
+# * simpkv value is a Hash with 'password' and 'salt' attributes
+# * simpkv metadata is a Hash with 'complexity', 'complex_only' and 'history'
 #   attributes
 #  * 'complexity' and 'complex_only' attributes are stored so that the password
 #    to be regenerated with the same characteristics and the current password.
@@ -10,9 +10,9 @@
 # * Stores complexity and complex_only settings in metadata so the password can
 #   be regenerated with the same characteristics and the current password
 # * Maintains a history of up to 10 previous <password,salt> pairs in metadata.
-# * Terminates catalog compilation if any libkv operation fails.
+# * Terminates catalog compilation if any simpkv operation fails.
 #
-Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
+Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
 
   # @param identifier
   #   Unique `String` to identify the password usage.
@@ -41,17 +41,17 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #   complexity rules.  For example, when `complexity` is `1`, the password
   #   contains only safe symbols.
   #
-  # @param libkv_options
-  #   libkv configuration that will be merged `libkv::options`.
+  # @param simpkv_options
+  #   simpkv configuration that will be merged `simpkv::options`.
   #   All keys are optional.
   #
-  # @option libkv_options [String] 'app_id'
+  # @option simpkv_options [String] 'app_id'
   #   Specifies an application name that can be used to identify which backend
   #   configuration to use via fuzzy name matching, in the absence of the
   #   `backend` option.
   #
   #     * More flexible option than `backend`.
-  #     * Useful for grouping together libkv function calls found in different
+  #     * Useful for grouping together simpkv function calls found in different
   #       catalog resources.
   #     * When specified and the `backend` option is absent, the backend will be
   #       selected preferring a backend in the merged `backends` option whose
@@ -61,7 +61,7 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #     * When absent and the `backend` option is also absent, this function
   #       will use the `default` backend.
   #
-  # @option libkv_options [String] 'backend'
+  # @option simpkv_options [String] 'backend'
   #   Definitive name of the backend to use.
   #
   #     * Takes precedence over `app_id`.
@@ -70,7 +70,7 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #     * When absent in the merged options, this function will select
   #       the backend as described in the `app_id` option.
   #
-  # @option libkv_options [Hash] 'backends'
+  # @option simpkv_options [Hash] 'backends'
   #   Hash of backend configurations
   #
   #     * Each backend configuration in the merged options Hash must be
@@ -83,7 +83,7 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #      * Other keys for configuration specific to the backend may also be
   #        present.
   #
-  # @option libkv_options [String] 'environment'
+  # @option simpkv_options [String] 'environment'
   #   Puppet environment to prepend to keys.
   #
   #     * When set to a non-empty string, it is prepended to the key used in
@@ -92,8 +92,8 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #       truly global.
   #     * Defaults to the Puppet environment for the node.
   #
-  # @option libkv_options [Boolean] 'softfail'
-  #   Whether to ignore libkv operation failures.
+  # @option simpkv_options [Boolean] 'softfail'
+  #   Whether to ignore simpkv operation failures.
   #
   #     * When `true`, this function will return a result even when the
   #       operation failed at the backend.
@@ -102,7 +102,7 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
   #     * Defaults to `false`.
   #
   # @return [Nil]
-  # @raise Exception if a libkv operation fails
+  # @raise Exception if a simpkv operation fails
   #
   dispatch :set do
     required_param 'String[1]',    :identifier
@@ -110,30 +110,30 @@ Puppet::Functions.create_function(:'simplib::passgen::libkv::set') do
     required_param 'String[1]',    :salt
     required_param 'Integer[0,2]', :complexity
     required_param 'Boolean',      :complex_only
-    optional_param 'Hash',         :libkv_options
+    optional_param 'Hash',         :simpkv_options
   end
 
   def set(identifier, password, salt, complexity, complex_only,
-      libkv_options={'app_id' => 'simplib::passgen'})
+      simpkv_options={'app_id' => 'simplib::passgen'})
 
-    key_root_dir = call_function('simplib::passgen::libkv::root_dir')
+    key_root_dir = call_function('simplib::passgen::simpkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
     key_info = { 'password' => password, 'salt' => salt }
     metadata = {
       'complexity'   => complexity,
       'complex_only' => complex_only,
-      'history'      => get_history(identifier, libkv_options)
+      'history'      => get_history(identifier, simpkv_options)
     }
 
-    # TODO If libkv is updated to allow transaction locks, lock prior to
-    # get_history() which calls libkv::get under the hood, and release the
-    # lock after this libkv::put call.
-    call_function('libkv::put', key, key_info, metadata, libkv_options)
+    # TODO If simpkv is updated to allow transaction locks, lock prior to
+    # get_history() which calls simpkv::get under the hood, and release the
+    # lock after this simpkv::put call.
+    call_function('simpkv::put', key, key_info, metadata, simpkv_options)
   end
 
-  def get_history(identifier, libkv_options)
-    last_password_info = call_function('simplib::passgen::libkv::get', identifier,
-      libkv_options)
+  def get_history(identifier, simpkv_options)
+    last_password_info = call_function('simplib::passgen::simpkv::get', identifier,
+      simpkv_options)
 
     history = []
     unless last_password_info.empty?

@@ -1,8 +1,8 @@
-# Returns whether password information retrieved from libkv is valid
+# Returns whether password information retrieved from simpkv is valid
 #
-Puppet::Functions.create_function(:'simplib::passgen::libkv::valid_password_info') do
+Puppet::Functions.create_function(:'simplib::passgen::simpkv::valid_password_info') do
 
-  # @param password_info  Hash of password information retrieved from libkv
+  # @param password_info  Hash of password information retrieved from simpkv
   #   * 'value'- Hash that should contain 'password' and 'salt' attributes
   #   * 'metadata' - Hash that should contain 'complexity', 'complex_only' and
   #       'history' attributes

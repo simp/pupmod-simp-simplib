@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-describe 'simplib::passgen::libkv::valid_password_info' do
+describe 'simplib::passgen::simpkv::valid_password_info' do
   let(:password) { 'password for my_id 2' }
   let(:salt) { 'salt for my_id 2' }
   let(:complexity) { 0 }

@@ -19,7 +19,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::remove') do
   #     * 0-9
   #     * The following special characters:
   #       * `._:-` for the legacy implementation
-  #       * `._:-/` for the libkv-enabled implementation
+  #       * `._:-/` for the simpkv-enabled implementation
   #   * Identifier may not contain '/./' or '/../' sequences.
   #
   # @return [Nil]

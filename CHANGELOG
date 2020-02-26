@@ -1,3 +1,7 @@
+* Wed Feb 26 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Change simp-libkv to simp-simpkv
+  - SIMPkv support is still **EXPERIMENTAL**
+
 * Fri Dec 20 2019 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.1.0-0
 - Add EL8 support
 

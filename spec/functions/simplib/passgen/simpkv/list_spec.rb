@@ -16,10 +16,10 @@ def store_valid_passwords(folder, id_base, password_base, salt_base, recurse = t
     complexity       = 2
     complex_only     = true
 
-    call_function('simplib::passgen::libkv::set', full_id, prev_password,
+    call_function('simplib::passgen::simpkv::set', full_id, prev_password,
       prev_salt, complexity, complex_only)
 
-    call_function('simplib::passgen::libkv::set', full_id, current_password,
+    call_function('simplib::passgen::simpkv::set', full_id, current_password,
       current_salt, complexity, complex_only)
 
     key = "#{folder}/#{id}"
@@ -48,7 +48,7 @@ def store_valid_passwords(folder, id_base, password_base, salt_base, recurse = t
   expected
 end
 
-describe 'simplib::passgen::libkv::list' do
+describe 'simplib::passgen::simpkv::list' do
   let(:key_root_dir) { 'gen_passwd' }
   let(:id_base) { 'my_id' }
   let(:password_base) { 'password for my_id' }
@@ -58,19 +58,19 @@ describe 'simplib::passgen::libkv::list' do
   after(:each) do
     # This is required for GitLab, because the spec tests are run by a
     # privileged user who ends up creating a global file store in
-    # /var/simp/libkv/file/auto_default, instead of a set of per-test,
+    # /var/simp/simpkv/file/auto_default, instead of a set of per-test,
     # temporary file stores, each within its test-specific Puppet
     # environment.
     #
     # If we wanted to be truly safe from privileged user issues, we would
-    # either configure libkv to use the file plugin with an appropriate
+    # either configure simpkv to use the file plugin with an appropriate
     # per-test path, or, convert all the unit test to use rspec-mocks
     # instead of mocha and then use an appropriate pair of
     # `allow(FileUtils).to receive(:mkdir_p).with...` that fail the global
     # file store directory creation but allow other directory creations.
-    # (See spec tests in pupmod-simp-libkv).
+    # (See spec tests in pupmod-simp-simpkv).
     #
-    call_function('libkv::deletetree', key_root_dir)
+    call_function('simpkv::deletetree', key_root_dir)
   end
 
   context 'successes' do
@@ -85,9 +85,9 @@ describe 'simplib::passgen::libkv::list' do
         # before we try to pre-populate the default key/value store with
         # passwords
         subject()
-        call_function('simplib::passgen::libkv::set', 'my_id', 'password',
+        call_function('simplib::passgen::simpkv::set', 'my_id', 'password',
           'salt', 1, true)
-        call_function('simplib::passgen::libkv::remove', 'my_id')
+        call_function('simplib::passgen::simpkv::remove', 'my_id')
 
         expected = { 'keys' => {}, 'folders' => [] }
         is_expected.to run.with_params().and_return( expected )
@@ -111,7 +111,7 @@ describe 'simplib::passgen::libkv::list' do
           'password' => "bad_key #{password_base}",
           'salt' => "bad_key #{salt_base}"
         }
-        call_function('libkv::put', key_without_meta, value)
+        call_function('simpkv::put', key_without_meta, value)
 
         is_expected.to run.with_params().and_return( expected )
       end
@@ -127,9 +127,9 @@ describe 'simplib::passgen::libkv::list' do
         # before we try to pre-populate the default key/value store with
         # passwords
         subject()
-        call_function('simplib::passgen::libkv::set', "#{sub_folder}/my_id",
+        call_function('simplib::passgen::simpkv::set', "#{sub_folder}/my_id",
           'password', 'salt', 1, true)
-        call_function('simplib::passgen::libkv::remove', "#{sub_folder}/my_id")
+        call_function('simplib::passgen::simpkv::remove', "#{sub_folder}/my_id")
 
         expected = { 'keys' => {}, 'folders' => [] }
         is_expected.to run.with_params(sub_folder).and_return( expected )
@@ -155,7 +155,7 @@ describe 'simplib::passgen::libkv::list' do
           'password' => "bad_key #{password_base}",
           'salt' => "bad_key #{salt_base}"
         }
-        call_function('libkv::put', key_without_meta, value)
+        call_function('simpkv::put', key_without_meta, value)
 
         is_expected.to run.with_params(sub_folder).and_return( expected )
       end
@@ -164,8 +164,8 @@ describe 'simplib::passgen::libkv::list' do
 
   context 'failures' do
 
-    it 'fails when libkv operation fails' do
-      libkv_options = {
+    it 'fails when simpkv operation fails' do
+      simpkv_options = {
         'backend'  => 'oops',
         'backends' => {
           'oops'  => {
@@ -175,9 +175,9 @@ describe 'simplib::passgen::libkv::list' do
         }
       }
 
-      is_expected.to run.with_params('/', libkv_options).
+      is_expected.to run.with_params('/', simpkv_options).
         and_raise_error(ArgumentError,
-        /libkv Configuration Error/)
+        /simpkv Configuration Error/)
     end
   end
 end

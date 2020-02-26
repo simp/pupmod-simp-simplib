@@ -4,7 +4,7 @@ require_relative '../crypt_helper'
 
 include CryptHelper
 
-describe 'simplib::passgen::libkv::passgen' do
+describe 'simplib::passgen::simpkv::passgen' do
   let(:key_root_dir) { 'gen_passwd' }
   let(:id) { 'spectest' }
   let(:key) { "#{key_root_dir}/#{id}" }
@@ -33,19 +33,19 @@ describe 'simplib::passgen::libkv::passgen' do
   after(:each) do
     # This is required for GitLab, because the spec tests are run by a
     # privileged user who ends up creating a global file store in
-    # /var/simp/libkv/file/auto_default, instead of a set of per-test,
+    # /var/simp/simpkv/file/auto_default, instead of a set of per-test,
     # temporary file stores, each within its test-specific Puppet
     # environment.
     #
     # If we wanted to be truly safe from privileged user issues, we would
-    # either configure libkv to use the file plugin with an appropriate
+    # either configure simpkv to use the file plugin with an appropriate
     # per-test path, or, convert all the unit test to use rspec-mocks
     # instead of mocha and then use an appropriate pair of
     # `allow(FileUtils).to receive(:mkdir_p).with...` that fail the global
     # file store directory creation but allow other directory creations.
-    # (See spec tests in pupmod-simp-libkv).
+    # (See spec tests in pupmod-simp-simpkv).
     #
-    call_function('libkv::deletetree', key_root_dir)
+    call_function('simpkv::deletetree', key_root_dir)
   end
 
   context 'basic password generation' do
@@ -54,8 +54,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result.length).to eq 32
       expect(result).to match(/^(#{default_chars.join('|')})+$/)
 
-      # retrieve what has been stored by libkv and validate
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate
+      stored_info = call_function('simpkv::get', key)
       expect(stored_info['value']['password']).to eq result
       salt = stored_info['value']['salt']
       expect(salt.length).to eq 16
@@ -95,8 +95,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result).to match(/(#{(safe_special_chars).join('|')})/)
       expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
 
-      # retrieve what has been stored by libkv and validate metadata
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate metadata
+      stored_info = call_function('simpkv::get', key)
       meta = { 'complexity' => 1, 'complex_only' => false, 'history' => [] }
       expect(stored_info['metadata']).to eq(meta)
     end
@@ -108,8 +108,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result).to match(/(#{(safe_special_chars).join('|')})/)
       expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
 
-      # retrieve what has been stored by libkv and validate metadata
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate metadata
+      stored_info = call_function('simpkv::get', key)
       meta = { 'complexity' => 1, 'complex_only' => true, 'history' => [] }
       expect(stored_info['metadata']).to eq(meta)
     end
@@ -121,8 +121,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result).to match(/(#{(safe_special_chars).join('|')})/)
       expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
 
-      # retrieve what has been stored by libkv and validate metadata
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate metadata
+      stored_info = call_function('simpkv::get', key)
       meta = { 'complexity' => 1, 'complex_only' => false, 'history' => [] }
       expect(stored_info['metadata']).to eq(meta)
     end
@@ -133,8 +133,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result).to match(/(#{default_chars.join('|')})/)
       expect(result).to match(/(#{(unsafe_special_chars).join('|')})/)
 
-      # retrieve what has been stored by libkv and validate metadata
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate metadata
+      stored_info = call_function('simpkv::get', key)
       meta = { 'complexity' => 2, 'complex_only' => false, 'history' => [] }
       expect(stored_info['metadata']).to eq(meta)
     end
@@ -145,8 +145,8 @@ describe 'simplib::passgen::libkv::passgen' do
       expect(result).to_not match(/(#{default_chars.join('|')})/)
       expect(result).to match(/(#{(unsafe_special_chars).join('|')})/)
 
-      # retrieve what has been stored by libkv and validate metadata
-      stored_info = call_function('libkv::get', key)
+      # retrieve what has been stored by simpkv and validate metadata
+      stored_info = call_function('simpkv::get', key)
       meta = { 'complexity' => 2, 'complex_only' => true, 'history' => [] }
       expect(stored_info['metadata']).to eq(meta)
     end
@@ -157,7 +157,7 @@ describe 'simplib::passgen::libkv::passgen' do
       first_result = subject.execute('spectest', {'length' => 32})
       expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
       expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
-      stored_info = call_function('libkv::get', key)
+      stored_info = call_function('simpkv::get', key)
       expect(stored_info['metadata']['history']).to be_empty
     end
 
@@ -189,12 +189,12 @@ describe 'simplib::passgen::libkv::passgen' do
 
     it 'should return the next to last created password if "last" is true' do
       first_result = subject.execute('spectest', {'length' => 32})
-      first_stored_info = call_function('libkv::get', key)
+      first_stored_info = call_function('simpkv::get', key)
       # changing password length forces a new password to be generated
       second_result = subject.execute('spectest', {'length' => 33})
-      second_stored_info = call_function('libkv::get', key)
+      second_stored_info = call_function('simpkv::get', key)
       third_result = subject.execute('spectest', {'length' => 34})
-      third_stored_info = call_function('libkv::get', key)
+      third_stored_info = call_function('simpkv::get', key)
       expect(subject.execute('spectest', {'last' => true})).to eql(second_result)
       expected_history = [
         [second_stored_info['value']['password'], second_stored_info['value']['salt']],
@@ -286,8 +286,8 @@ describe 'simplib::passgen::libkv::passgen' do
         /simplib::passgen timed out for 'spectest'!/)
     end
 
-    it 'fails when libkv operation fails' do
-      libkv_options = {
+    it 'fails when simpkv operation fails' do
+      simpkv_options = {
         'backend'  => 'oops',
         'backends' => {
           'oops'  => {
@@ -297,9 +297,9 @@ describe 'simplib::passgen::libkv::passgen' do
         }
       }
 
-      is_expected.to run.with_params('spectest', {}, libkv_options).
+      is_expected.to run.with_params('spectest', {}, simpkv_options).
         and_raise_error(ArgumentError,
-        /libkv Configuration Error/)
+        /simpkv Configuration Error/)
     end
   end
 
