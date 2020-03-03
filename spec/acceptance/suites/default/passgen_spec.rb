@@ -47,12 +47,12 @@ shared_examples_for 'a password generator' do |host|
 end
 
 describe 'simplib::passgen function' do
-  context 'libkv mode' do
-    let(:hieradata) {{ 'simplib::passgen::libkv' => true }}
+  context 'simpkv mode' do
+    let(:hieradata) {{ 'simplib::passgen::simpkv' => true }}
 
     hosts.each do |server|
       context 'test prep' do
-        it 'should enable libkv mode for simplib::passgen' do
+        it 'should enable simpkv mode for simplib::passgen' do
           set_hieradata_on(server, hieradata)
         end
       end
@@ -64,11 +64,11 @@ describe 'simplib::passgen function' do
   end
 
   context 'legacy mode' do
-    let(:hieradata) {{ 'simplib::passgen::libkv' => false }}
+    let(:hieradata) {{ 'simplib::passgen::simpkv' => false }}
 
     hosts.each do |server|
       context 'test prep' do
-        it 'should disable libkv mode for simplib::passgen' do
+        it 'should disable simpkv mode for simplib::passgen' do
           set_hieradata_on(server, hieradata)
         end
       end

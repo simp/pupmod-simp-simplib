@@ -15,7 +15,7 @@ describe 'simplib::passgen::get' do
   ] }
 
   # The bulk of simplib::passgen::get testing is done in tests for
-  # simplib::passgen::legacy::get and simplib::passgen::libkv::get.
+  # simplib::passgen::legacy::get and simplib::passgen::simpkv::get.
   # The  primary focus of this test is to spot check that the correct
   # function is called and failures are appropriately reported.
 
@@ -99,25 +99,25 @@ describe 'simplib::passgen::get' do
     end
   end
 
-  context 'libkv passgen::get' do
-    let(:hieradata){ 'simplib_passgen_libkv' }
+  context 'simpkv passgen::get' do
+    let(:hieradata){ 'simplib_passgen_simpkv' }
 
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
       # privileged user who ends up creating a global file store in
-      # /var/simp/libkv/file/auto_default, instead of a set of per-test,
+      # /var/simp/simpkv/file/auto_default, instead of a set of per-test,
       # temporary file stores, each within its test-specific Puppet
       # environment.
       #
       # If we wanted to be truly safe from privileged user issues, we would
-      # either configure libkv to use the file plugin with an appropriate
+      # either configure simpkv to use the file plugin with an appropriate
       # per-test path, or, convert all the unit test to use rspec-mocks
       # instead of mocha and then use an appropriate pair of
       # `allow(FileUtils).to receive(:mkdir_p).with...` that fail the global
       # file store directory creation but allow other directory creations.
-      # (See spec tests in pupmod-simp-libkv).
+      # (See spec tests in pupmod-simp-simpkv).
       #
-      call_function('libkv::deletetree', key_root_dir)
+      call_function('simpkv::deletetree', key_root_dir)
     end
 
     context 'successes' do
@@ -136,7 +136,7 @@ describe 'simplib::passgen::get' do
           'complex_only' => complex_only,
           'history' => history
         }
-        call_function('libkv::put', key, value, meta)
+        call_function('simpkv::put', key, value, meta)
 
         expected = { 'value' => value, 'metadata' => meta}
         expect( subject.execute(id) ).to eq expected
@@ -152,14 +152,14 @@ describe 'simplib::passgen::get' do
           'complex_only' => complex_only,
           'history' => history
         }
-        call_function('libkv::put', key, value, meta)
+        call_function('simpkv::put', key, value, meta)
 
         is_expected.to run.with_params(id).and_raise_error(RuntimeError,
           /Malformed password info retrieved for 'my_id'/)
       end
 
-      it 'fails when libkv operation fails' do
-        libkv_options = {
+      it 'fails when simpkv operation fails' do
+        simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
             'oops'  => {
@@ -169,9 +169,9 @@ describe 'simplib::passgen::get' do
           }
         }
 
-        is_expected.to run.with_params(id, libkv_options).
+        is_expected.to run.with_params(id, simpkv_options).
           and_raise_error(ArgumentError,
-          /libkv Configuration Error/)
+          /simpkv Configuration Error/)
       end
     end
   end

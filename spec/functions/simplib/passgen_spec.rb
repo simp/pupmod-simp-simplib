@@ -21,7 +21,7 @@ describe 'simplib::passgen' do
   end
 
   # The bulk of simplib::passgen testing is done in tests for
-  # simplib::passgen::legacy::passgen and simplib::passgen::libkv::passgen.
+  # simplib::passgen::legacy::passgen and simplib::passgen::simpkv::passgen.
   # The primary focus of this test is to spot check that the correct
   # function is called and failures are appropriately reported.
 
@@ -164,25 +164,25 @@ describe 'simplib::passgen' do
     end
   end
 
-  context 'libkv passgen' do
-    let(:hieradata){ 'simplib_passgen_libkv' }
+  context 'simpkv passgen' do
+    let(:hieradata){ 'simplib_passgen_simpkv' }
 
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
       # privileged user who ends up creating a global file store in
-      # /var/simp/libkv/file/auto_default, instead of a set of per-test,
+      # /var/simp/simpkv/file/auto_default, instead of a set of per-test,
       # temporary file stores, each within its test-specific Puppet
       # environment.
       #
       # If we wanted to be truly safe from privileged user issues, we would
-      # either configure libkv to use the file plugin with an appropriate
+      # either configure simpkv to use the file plugin with an appropriate
       # per-test path, or, convert all the unit test to use rspec-mocks
       # instead of mocha and then use an appropriate pair of
       # `allow(FileUtils).to receive(:mkdir_p).with...` that fail the global
       # file store directory creation but allow other directory creations.
-      # (See spec tests in pupmod-simp-libkv).
+      # (See spec tests in pupmod-simp-simpkv).
       #
-      call_function('libkv::deletetree', 'gen_passwd')
+      call_function('simpkv::deletetree', 'gen_passwd')
     end
 
     context 'basic password generation' do
@@ -191,8 +191,8 @@ describe 'simplib::passgen' do
        expect(result.length).to eq 32
        expect(result).to match(/^(#{default_chars.join('|')})+$/)
 
-       # retrieve what has been stored by libkv and validate
-       stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+       # retrieve what has been stored by simpkv and validate
+       stored_info = call_function('simpkv::get', 'gen_passwd/spectest')
        expect(stored_info['value']['password']).to eq result
        salt = stored_info['value']['salt']
        expect(salt.length).to eq 16
@@ -214,8 +214,8 @@ describe 'simplib::passgen' do
         expect(result).to match(/(#{(safe_special_chars).join('|')})/)
         expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
 
-        # retrieve what has been stored by libkv and validate metadata
-        stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+        # retrieve what has been stored by simpkv and validate metadata
+        stored_info = call_function('simpkv::get', 'gen_passwd/spectest')
         meta = { 'complexity' => 1, 'complex_only' => false, 'history' => [] }
         expect(stored_info['metadata']).to eq(meta)
       end
@@ -226,8 +226,8 @@ describe 'simplib::passgen' do
         expect(result).to match(/(#{default_chars.join('|')})/)
         expect(result).to match(/(#{(unsafe_special_chars).join('|')})/)
 
-        # retrieve what has been stored by libkv and validate metadata
-        stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+        # retrieve what has been stored by simpkv and validate metadata
+        stored_info = call_function('simpkv::get', 'gen_passwd/spectest')
         meta = { 'complexity' => 2, 'complex_only' => false, 'history' => [] }
         expect(stored_info['metadata']).to eq(meta)
       end
@@ -238,7 +238,7 @@ describe 'simplib::passgen' do
         first_result = subject.execute('spectest', {'length' => 32})
         expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
         expect(subject.execute('spectest', {'length' => 32})).to eq (first_result)
-        stored_info = call_function('libkv::get', 'gen_passwd/spectest')
+        stored_info = call_function('simpkv::get', 'gen_passwd/spectest')
         expect(stored_info['metadata']['history']).to be_empty
       end
 
@@ -281,8 +281,8 @@ describe 'simplib::passgen' do
     end
 
     context 'misc errors' do
-      it 'fails when libkv operation fails' do
-        libkv_options = {
+      it 'fails when simpkv operation fails' do
+        simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
             'oops'  => {
@@ -292,9 +292,9 @@ describe 'simplib::passgen' do
           }
         }
 
-        is_expected.to run.with_params('spectest', {}, libkv_options).
+        is_expected.to run.with_params('spectest', {}, simpkv_options).
           and_raise_error(ArgumentError,
-          /libkv Configuration Error/)
+          /simpkv Configuration Error/)
       end
 
       it do

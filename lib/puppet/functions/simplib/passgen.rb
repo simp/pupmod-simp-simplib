@@ -2,10 +2,10 @@
 # passed identifier.
 #
 # * Supports 2 modes:
-#   * libkv
-#     * Password info is stored in a key/value store and accessed using libkv.
+#   * simpkv
+#     * Password info is stored in a key/value store and accessed using simpkv.
 #     * Terminates catalog compilation if `password_options` contains invalid
-#       parameters, any libkv operation fails or the password cannot be
+#       parameters, any simpkv operation fails or the password cannot be
 #       created in the allotted time.
 #   * Legacy
 #     * Password info is stored in files on the local file system at
@@ -14,7 +14,7 @@
 #       cannot be created/accessed by the Puppet user, the password cannot
 #       be created in the allotted time, or files not owned by the Puppet
 #       user are present in the password storage directory.
-# * To enable the libkv mode, set `simplib::passgen::libkv` to `true`
+# * To enable the simpkv mode, set `simplib::passgen::simpkv` to `true`
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 # * The minimum length password that this function will return is `8`
 #   characters.
@@ -29,7 +29,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #     * 0-9
   #     * The following special characters:
   #       * `._:-` for the legacy implementation
-  #       * `._:-/` for the libkv-enabled implementation
+  #       * `._:-/` for the simpkv-enabled implementation
   #   * Identifier may not contain '/./' or '/../' sequences.
   #
   # @param password_options
@@ -58,19 +58,19 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #     * Value of `0` disables the timeout.
   #     * Defaults to `30`.
   #
-  # @param libkv_options
-  #   libkv configuration when in libkv mode.
+  # @param simpkv_options
+  #   simpkv configuration when in simpkv mode.
   #
-  #     * Will be merged with `libkv::options`.
+  #     * Will be merged with `simpkv::options`.
   #     * All keys are optional.
   #
-  # @option libkv_options [String] 'app_id'
+  # @option simpkv_options [String] 'app_id'
   #   Specifies an application name that can be used to identify which backend
   #   configuration to use via fuzzy name matching, in the absence of the
   #   `backend` option.
   #
   #     * More flexible option than `backend`.
-  #     * Useful for grouping together libkv function calls found in different
+  #     * Useful for grouping together simpkv function calls found in different
   #       catalog resources.
   #     * When specified and the `backend` option is absent, the backend will be
   #       selected preferring a backend in the merged `backends` option whose
@@ -80,7 +80,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #     * When absent and the `backend` option is also absent, this function
   #       will use the `default` backend.
   #
-  # @option libkv_options [String] 'backend'
+  # @option simpkv_options [String] 'backend'
   #   Definitive name of the backend to use.
   #
   #     * Takes precedence over `app_id`.
@@ -89,7 +89,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #     * When absent in the merged options, this function will select
   #       the backend as described in the `app_id` option.
   #
-  # @option libkv_options [Hash] 'backends'
+  # @option simpkv_options [Hash] 'backends'
   #   Hash of backend configurations
   #
   #     * Each backend configuration in the merged options Hash must be
@@ -102,7 +102,7 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #      * Other keys for configuration specific to the backend may also be
   #        present.
   #
-  # @option libkv_options [String] 'environment'
+  # @option simpkv_options [String] 'environment'
   #   Puppet environment to prepend to keys.
   #
   #     * When set to a non-empty string, it is prepended to the key used in
@@ -111,8 +111,8 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #       truly global.
   #     * Defaults to the Puppet environment for the node.
   #
-  # @option libkv_options [Boolean] 'softfail'
-  #   Whether to ignore libkv operation failures.
+  # @option simpkv_options [Boolean] 'softfail'
+  #   Whether to ignore simpkv operation failures.
   #
   #     * When `true`, this function will return a result even when the
   #       operation failed at the backend.
@@ -145,22 +145,22 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   #       new password.
   #
   # @raise Exception if `password_options` contains invalid parameters,
-  #   a libkv operation fails, or password generation times out
+  #   a simpkv operation fails, or password generation times out
   #
   dispatch :passgen do
     required_param 'String[1]', :identifier
     optional_param 'Hash',      :password_options
-    optional_param 'Hash',      :libkv_options
+    optional_param 'Hash',      :simpkv_options
   end
 
-  def passgen(identifier, password_options={}, libkv_options={'app_id' => 'simplib::passgen'})
-    use_libkv = call_function('lookup', 'simplib::passgen::libkv',
+  def passgen(identifier, password_options={}, simpkv_options={'app_id' => 'simplib::passgen'})
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
       { 'default_value' => false })
 
     password = nil
-    if use_libkv
-      password = call_function('simplib::passgen::libkv::passgen', identifier,
-        password_options, libkv_options)
+    if use_simpkv
+      password = call_function('simplib::passgen::simpkv::passgen', identifier,
+        password_options, simpkv_options)
     else
       password = call_function('simplib::passgen::legacy::passgen', identifier,
         password_options)

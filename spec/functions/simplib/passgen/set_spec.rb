@@ -9,7 +9,7 @@ describe 'simplib::passgen::set' do
   let(:salt) { 'salt for my_id' }
 
   # The bulk of simplib::passgen::set testing is done in tests for
-  # simplib::passgen::legacy::set and simplib::passgen::libkv::set.
+  # simplib::passgen::legacy::set and simplib::passgen::simpkv::set.
   # The  primary focus of this test is to spot check that the correct
   # function is called and failures are appropriately reported.
 
@@ -116,8 +116,8 @@ describe 'simplib::passgen::set' do
     end
   end
 
-  context 'libkv passgen::set' do
-    let(:hieradata) { 'simplib_passgen_libkv' }
+  context 'simpkv passgen::set' do
+    let(:hieradata) { 'simplib_passgen_simpkv' }
     let(:complexity) { 0 }
     let(:complex_only) { false }
     let(:password_options) { {
@@ -128,27 +128,27 @@ describe 'simplib::passgen::set' do
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
       # privileged user who ends up creating a global file store in
-      # /var/simp/libkv/file/auto_default, instead of a set of per-test,
+      # /var/simp/simpkv/file/auto_default, instead of a set of per-test,
       # temporary file stores, each within its test-specific Puppet
       # environment.
       #
       # If we wanted to be truly safe from privileged user issues, we would
-      # either configure libkv to use the file plugin with an appropriate
+      # either configure simpkv to use the file plugin with an appropriate
       # per-test path, or, convert all the unit test to use rspec-mocks
       # instead of mocha and then use an appropriate pair of
       # `allow(FileUtils).to receive(:mkdir_p).with...` that fail the global
       # file store directory creation but allow other directory creations.
-      # (See spec tests in pupmod-simp-libkv).
+      # (See spec tests in pupmod-simp-simpkv).
       #
-      call_function('libkv::deletetree', key_root_dir)
+      call_function('simpkv::deletetree', key_root_dir)
     end
 
     context 'successes' do
       it 'should store a new password' do
         is_expected.to run.with_params(id, password, salt, password_options)
 
-        # retrieve what has been stored by libkv and validate
-        stored_info = call_function('libkv::get', key)
+        # retrieve what has been stored by simpkv and validate
+        stored_info = call_function('simpkv::get', key)
         expect(stored_info['value']['password']).to eq password
         expect(stored_info['value']['salt']).to eq salt
         expected_meta = {
@@ -173,8 +173,8 @@ describe 'simplib::passgen::set' do
         expected_history.delete_at(0)
         expected_history.reverse!
 
-        # retrieve what has been stored by libkv and validate
-        stored_info = call_function('libkv::get', key)
+        # retrieve what has been stored by simpkv and validate
+        stored_info = call_function('simpkv::get', key)
         expect(stored_info['value']['password']).to eq current_password
         expect(stored_info['value']['salt']).to eq current_salt
         expected_meta = {
@@ -194,7 +194,7 @@ describe 'simplib::passgen::set' do
         is_expected.to run.with_params(
           id, password, salt, bad_password_options).and_raise_error(
           ArgumentError,
-          /simplib::passgen::set: password_options must contain 'complexity' in libkv mode/)
+          /simplib::passgen::set: password_options must contain 'complexity' in simpkv mode/)
       end
 
       it 'fails when password_options is missing complex_only' do
@@ -204,11 +204,11 @@ describe 'simplib::passgen::set' do
         is_expected.to run.with_params(
           id, password, salt, bad_password_options).and_raise_error(
           ArgumentError,
-          /simplib::passgen::set: password_options must contain 'complex_only' in libkv mode/)
+          /simplib::passgen::set: password_options must contain 'complex_only' in simpkv mode/)
       end
 
-      it 'fails when libkv operation fails' do
-        libkv_options = {
+      it 'fails when simpkv operation fails' do
+        simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
             'oops'  => {
@@ -219,8 +219,8 @@ describe 'simplib::passgen::set' do
         }
 
         is_expected.to run.with_params(
-            id, password, salt, password_options, libkv_options
-          ).and_raise_error(ArgumentError, /libkv Configuration Error/)
+            id, password, salt, password_options, simpkv_options
+          ).and_raise_error(ArgumentError, /simpkv Configuration Error/)
       end
     end
   end
