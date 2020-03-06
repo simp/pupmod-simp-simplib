@@ -1,6 +1,10 @@
 # All discovered firewall capabilities
 #
 Facter.add('simplib__firewalls') do
+  confine :kernel do |value|
+    value.downcase != 'windows'
+  end
+
   setcode do
     discovered_firewalls = []
 

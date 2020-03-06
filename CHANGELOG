@@ -1,4 +1,6 @@
-* Wed Feb 26 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+* Fri Mar 06 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
+- Namespace the `simplib__firewalls` fact so that it does not trigger on Windows
+  systems
 - Change simp-libkv to simp-simpkv
   - SIMPkv support is still **EXPERIMENTAL**
 
