@@ -1,3 +1,7 @@
+* Tue Apr 07 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.1-0
+- Fix an issue in the simplib__sshd_config fact that would cause the daemon to
+  start on an EL6 system that did not already have it running
+
 * Fri Mar 06 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.0-0
 - Namespace the `simplib__firewalls` fact so that it does not trigger on Windows
   systems
