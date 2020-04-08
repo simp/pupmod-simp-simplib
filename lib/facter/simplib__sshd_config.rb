@@ -17,7 +17,7 @@ Facter.add('simplib__sshd_config') do
 
     sshd = Facter::Util::Resolution.which('sshd')
     if sshd
-      full_version = Facter::Core::Execution.execute("#{sshd} --help 2>&1", :on_fail => :failed)
+      full_version = Facter::Core::Execution.execute("#{sshd} -. 2>&1", :on_fail => :failed)
 
       unless full_version == :failed
         sshd_config ||= {}
