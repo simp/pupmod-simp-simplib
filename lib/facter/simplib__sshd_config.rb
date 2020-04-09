@@ -31,50 +31,52 @@ Facter.add('simplib__sshd_config') do
       end
     end
 
-    sshd_disk_config = File.read('/etc/ssh/sshd_config')
+    if File.exist?('/etc/ssh/sshd_config')
+      sshd_disk_config = File.read('/etc/ssh/sshd_config')
 
-    match_section = nil
-    sshd_disk_config.lines do |line|
-      line.strip!
+      match_section = nil
+      sshd_disk_config.lines do |line|
+        line.strip!
 
-      next if line.empty?
-      next if line[0].chr == '#'
+        next if line.empty?
+        next if line[0].chr == '#'
 
-      if config_parts = line.match(/^(?:(?<key>.+?))\s+(?<value>.+)\s*$/)
-        if config_parts[:key] == 'Match'
-          match_section = line
-          next
-        end
-
-        next unless selected_settings.keys.include?(config_parts[:key])
-
-        if match_section
-          sshd_config ||= {}
-          sshd_config[match_section] ||= {}
-
-          if sshd_config[match_section][config_parts[:key]]
-            sshd_config[match_section][config_parts[:key]] = Array(sshd_config[match_section][config_parts[:key]])
-            sshd_config[match_section][config_parts[:key]] << config_parts[:value]
-          else
-            sshd_config[match_section][config_parts[:key]] = config_parts[:value]
+        if config_parts = line.match(/^(?:(?<key>.+?))\s+(?<value>.+)\s*$/)
+          if config_parts[:key] == 'Match'
+            match_section = line
+            next
           end
-        else
-          sshd_config ||= {}
 
-          if sshd_config[config_parts[:key]]
-            sshd_config[config_parts[:key]] = Array(sshd_config[config_parts[:key]])
-            sshd_config[config_parts[:key]] << config_parts[:value]
+          next unless selected_settings.keys.include?(config_parts[:key])
+
+          if match_section
+            sshd_config ||= {}
+            sshd_config[match_section] ||= {}
+
+            if sshd_config[match_section][config_parts[:key]]
+              sshd_config[match_section][config_parts[:key]] = Array(sshd_config[match_section][config_parts[:key]])
+              sshd_config[match_section][config_parts[:key]] << config_parts[:value]
+            else
+              sshd_config[match_section][config_parts[:key]] = config_parts[:value]
+            end
           else
-            sshd_config[config_parts[:key]] = config_parts[:value]
+            sshd_config ||= {}
+
+            if sshd_config[config_parts[:key]]
+              sshd_config[config_parts[:key]] = Array(sshd_config[config_parts[:key]])
+              sshd_config[config_parts[:key]] << config_parts[:value]
+            else
+              sshd_config[config_parts[:key]] = config_parts[:value]
+            end
           end
         end
       end
-    end
 
-    if sshd_config
-      # Add in any defaults that we missed
-      # This should *not* be a deep_merge!
-      selected_settings.merge(sshd_config)
+      if sshd_config
+        # Add in any defaults that we missed
+        # This should *not* be a deep_merge!
+        selected_settings.merge(sshd_config)
+      end
     end
   end
 end
