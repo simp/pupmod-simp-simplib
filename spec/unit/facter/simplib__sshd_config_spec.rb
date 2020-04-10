@@ -8,7 +8,7 @@ describe "simplib__sshd_config" do
     Facter::Util::Resolution.expects(:which).with('sshd').returns('/usr/bin/sshd')
     Facter::Core::Execution.expects(:execute).with('/usr/bin/sshd -. 2>&1', :on_fail => :failed).returns(openssh_version['full_version'])
 
-    File.expects(:exist?).with('/etc/ssh/sshd_config').returns(true)
+    File.expects(:exist?).with('/etc/ssh/sshd_config').at_least_once.returns(true)
     File.expects(:readable?).with('/etc/ssh/sshd_config').returns(true)
     File.expects(:read).with('/etc/ssh/sshd_config').returns(sshd_config_content)
 

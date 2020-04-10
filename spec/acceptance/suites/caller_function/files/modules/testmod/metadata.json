@@ -14,7 +14,7 @@
   "dependencies": [
     {
       "name": "simp/simplib",
-      "version_requirement": ">= 4.13.1 < 7.0.0"
+      "version_requirement": ">= 4.2.1 < 7.0.0"
     }
   ],
   "operatingsystem_support": [

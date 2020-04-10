@@ -19,7 +19,7 @@ describe 'simplib::caller function' do
     })
 
     it 'should return the correct location' do
-      results = apply_manifest_on(host, manifest, :expect_failures => true).output
+      results = apply_manifest_on(host, manifest).output
 
       expect(results).to match(%r{#{host_modulepath}/testmod/manifests/init.pp}m)
     end

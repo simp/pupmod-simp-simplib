@@ -26,7 +26,7 @@ Puppet::Functions.create_function(:'simplib::caller', Puppet::Functions::Interna
 
     calling_file = 'TOPSCOPE'
 
-    stack_trace = call_function('simplib::debug::stacktrace', false)
+    stack_trace = call_function('simplib::debug::stacktrace', print)
 
     if stack_trace.size >= depth
       calling_file = stack_trace[-depth] if stack_trace[-depth]
