@@ -1,3 +1,9 @@
+* Thu Jun 18 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.3.0-0
+- Added additional helper capabilities
+  - simplib::safe_filename() => Replace unsafe characters with safe ones in
+    filename strings
+  - Simplib::Systemd::ServiceName => Data type for safe service name strings
+
 * Tue Apr 07 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.2.1-0
 - Fix an issue in the simplib__sshd_config fact that would cause the daemon to
   start on an EL6 system that did not already have it running
