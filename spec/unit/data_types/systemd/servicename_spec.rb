@@ -19,6 +19,7 @@ invalid_data = [
   '',
   '@',
   'foo@',
+  'foo bar',
   'a' * 257
 ]
 

@@ -1,3 +1,6 @@
+* Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
+- Added a simplib__auditd fact to return comprehensive information about auditd
+
 * Thu Jun 18 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.3.0-0
 - Added additional helper capabilities
   - simplib::safe_filename() => Replace unsafe characters with safe ones in
