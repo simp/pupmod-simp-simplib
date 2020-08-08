@@ -194,10 +194,10 @@ variables:
     BEAKER_PUPPET_COLLECTION: 'puppet5'
     MATRIX_RUBY_VERSION: '2.4'
 
-.pup_5_5_17: &pup_5_5_17
+.pup_5_5_20: &pup_5_5_20
   image: 'ruby:2.4'
   variables:
-    PUPPET_VERSION: '5.5.17'
+    PUPPET_VERSION: '5.5.20'
     BEAKER_PUPPET_COLLECTION: 'puppet5'
     MATRIX_RUBY_VERSION: '2.4'
 
@@ -283,14 +283,16 @@ pup6-lint:
 pup5-unit:
   <<: *pup_5
   <<: *unit_tests
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
-pup5.5.17-unit:
-  <<: *pup_5_5_17
+pup5.5.20-unit:
+  <<: *pup_5_5_20
   <<: *unit_tests
 
 pup6-unit:
   <<: *pup_6
   <<: *unit_tests
+  <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
 pup6.16.0-unit:
   <<: *pup_6_16_0
@@ -306,52 +308,52 @@ pup6.16.0-unit:
 # Repo-specific content
 # ==============================================================================
 
-pup5.5.17:
+pup5.5.20:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
-pup5.5.17-fips:
+pup5.5.20-fips:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
 
-pup5.5.17-prelink_fact:
+pup5.5.20-prelink_fact:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,default]'
 
-pup5.5.17-ipa_fact:
+pup5.5.20-ipa_fact:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
-pup5.5.17-caller_function:
+pup5.5.20-caller_function:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[caller_function,default]'
 
-pup5.5.17-oel:
+pup5.5.20-oel:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
-pup5.5.17-oel-fips:
+pup5.5.20-oel-fips:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
-pup5.5.17-oel-prelink_fact:
+pup5.5.20-oel-prelink_fact:
   <<: *acceptance_base
-  <<: *pup_5_5_17
+  <<: *pup_5_5_20
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
