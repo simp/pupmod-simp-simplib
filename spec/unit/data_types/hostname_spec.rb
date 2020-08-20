@@ -6,6 +6,8 @@ singular_item = 'hostname'
 plural_item = 'hostnames'
 
 valid_data = [
+  'all',
+  'ANY',
   'localhost',
   'localhost.localdomain',
   'my-domain.com',
