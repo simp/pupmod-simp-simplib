@@ -6072,7 +6072,7 @@ Alias of `Variant[Integer[0,7], Enum[
 
 Valid systemd service names
 
-Alias of `Pattern['^([A-Za-z0-9.:_\\\\-]){1,256}$']`
+Alias of `Pattern['^(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}$']`
 
 ### `Simplib::URI`
 
