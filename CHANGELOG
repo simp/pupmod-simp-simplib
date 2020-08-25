@@ -1,3 +1,7 @@
+* Thu Aug 20 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+- Fixed Simplib::Systemd::ServiceName to accept instance services
+- Added 'any' and 'ALL' to the data_types/hostname spec test
+
 * Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
 - Added a simplib__auditd fact to return comprehensive information about auditd
 
