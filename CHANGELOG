@@ -1,3 +1,7 @@
+* Tue Aug 25 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+- Fixed the simplib__auditd fact so that it detects the state of the running
+  auditd process
+
 * Tue Aug 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.0-0
 - Added a simplib__auditd fact to return comprehensive information about auditd
 
