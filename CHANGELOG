@@ -1,4 +1,6 @@
-* Thu Aug 20 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+* Tue Aug 25 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
+- Fixed the simplib__auditd fact so that it detects the state of the running
+  auditd process
 - Fixed Simplib::Systemd::ServiceName to accept instance services
 - Added 'any' and 'ALL' to the data_types/hostname spec test
 
