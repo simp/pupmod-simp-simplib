@@ -1,3 +1,12 @@
+* Tue Sep 01 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
+- Add a simplib__mountpoints fact that returns information about mountpoints of
+  specific interest to SIMP. This may be deprecated in the future if core facter
+  can be updated to contain the relevant information.
+- Refactor the tmp_mounts fact to use simplib__mountpoints
+- Mark tmp_mounts as deprecated for removal in a future release
+- Add a Simplib::Proc_hidepid() function that returns the numeric value of
+  the `hidepid` option for the `/proc` mount and `0` by default
+
 * Tue Aug 25 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
 - Fixed the simplib__auditd fact so that it detects the state of the running
   auditd process
