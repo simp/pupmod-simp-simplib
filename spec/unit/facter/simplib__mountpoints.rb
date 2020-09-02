@@ -8,7 +8,15 @@ describe 'simplib__mountpoints' do
     Facter.stubs(:value).with(:kernel).returns('Linux')
     File.stubs(:exist?).with('/proc/mounts').returns(true)
 
-    Etc.stubs(:getgrgid).with(953).returns('read_proc')
+    class EtcStub
+      attr_accessor :name
+
+      def initialize
+        @name= 'read_proc'
+      end
+    end
+
+    Etc.stubs(:getgrgid).with(953).returns(EtcStub.new)
 
     Facter::Util::Resolution.stubs(:exec).with('cat /proc/mounts 2> /dev/null').returns(
       <<~EL7_PROC_MOUNTS,

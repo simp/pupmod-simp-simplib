@@ -117,7 +117,7 @@ Facter.add('simplib__mountpoints') do
         begin
           known_translations[:uid] ||= {}
 
-          found_uid = known_translations[:uid][mount_list[mnt]['options_hash']['uid']] || Etc.getpwuid(mount_list[mnt]['options_hash']['uid'])
+          found_uid = known_translations[:uid][mount_list[mnt]['options_hash']['uid']] || Etc.getpwuid(mount_list[mnt]['options_hash']['uid']).name
           mount_list[mnt]['options_hash']['_uid__user'] = found_uid
 
           known_translations[:uid][mount_list[mnt]['options_hash']['uid']] = found_uid
@@ -131,7 +131,7 @@ Facter.add('simplib__mountpoints') do
       begin
         known_translations[:gid] ||= {}
 
-        found_gid = known_translations[:gid][mount_list[mnt]['options_hash']['gid']] || Etc.getgrgid(mount_list[mnt]['options_hash']['gid'])
+        found_gid = known_translations[:gid][mount_list[mnt]['options_hash']['gid']] || Etc.getgrgid(mount_list[mnt]['options_hash']['gid']).name
         mount_list[mnt]['options_hash']['_gid__group'] = found_gid
 
         known_translations[:gid][mount_list[mnt]['options_hash']['gid']] = found_gid
