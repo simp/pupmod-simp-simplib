@@ -7,11 +7,13 @@ describe 'simplib__mountpoints' do
     Facter.stubs(:value).with(:kernel).returns('Linux')
     File.stubs(:exist?).with('/proc/mounts').returns(true)
 
+    Etc.stubs(:getgrgid).with(953).returns('read_proc')
+
     Facter::Util::Resolution.stubs(:exec).with('cat /proc/mounts 2> /dev/null').returns(
       <<~EOM
       rootfs / rootfs rw 0 0
       sysfs /sys sysfs rw,seclabel,nosuid,nodev,noexec,relatime 0 0
-      proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+      proc /proc proc rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953 0 0
       devtmpfs /dev devtmpfs rw,seclabel,nosuid,size=2964804k,nr_inodes=741201,mode=755 0 0
       securityfs /sys/kernel/security securityfs rw,nosuid,nodev,noexec,relatime 0 0
       tmpfs /dev/shm tmpfs rw,seclabel,nosuid,nodev 0 0
@@ -67,7 +69,7 @@ describe 'simplib__mountpoints' do
     Facter::Util::Resolution.stubs(:exec).with('findmnt /proc').returns(
       <<~EOM
       TARGET SOURCE FSTYPE OPTIONS
-      /proc  proc   proc   rw,nosuid,nodev,noexec,relatime
+      /proc  proc   proc   rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953
       EOM
     )
   end
@@ -75,17 +77,21 @@ describe 'simplib__mountpoints' do
   let(:min_results) {
     {
       '/tmp' => {
-        'device' => 'tmpfs',
-        'filesystem' => 'tmpfs',
-        'options' => [
+        'device'       => 'tmpfs',
+        'filesystem'   => 'tmpfs',
+        'options'      => [
           'rw',
           'seclabel'
-        ]
+        ],
+        'options_hash' => {
+          'rw'       => nil,
+          'seclabel' => nil
+        }
       },
       '/var/tmp' => {
-        'device' => '/var/tmp',
-        'filesystem' => 'none',
-        'options' => [
+        'device'       => '/var/tmp',
+        'filesystem'   => 'none',
+        'options'      => [
           'rw',
           'seclabel',
           'relatime',
@@ -93,28 +99,55 @@ describe 'simplib__mountpoints' do
           'inode64',
           'noquota',
           'bind'
-        ]
+        ],
+        'options_hash' => {
+          'rw'       => nil,
+          'seclabel' => nil,
+          'relatime' => nil,
+          'attr2'    => nil,
+          'inode64'  => nil,
+          'noquota'  => nil,
+          'bind'     => nil
+        }
       },
       '/dev/shm' => {
-        'device' => 'tmpfs',
-        'filesystem' => 'tmpfs',
-        'options' => [
+        'device'       => 'tmpfs',
+        'filesystem'   => 'tmpfs',
+        'options'      => [
           'rw',
           'seclabel',
           'nosuid',
           'nodev'
-        ]
+        ],
+        'options_hash' => {
+          'rw'       => nil,
+          'seclabel' => nil,
+          'nosuid'   => nil,
+          'nodev'    => nil
+        }
       },
       '/proc' => {
-        'device' => 'proc',
-        'filesystem' => 'proc',
-        'options' => [
+        'device'       => 'proc',
+        'filesystem'   => 'proc',
+        'options'      => [
           'rw',
           'nosuid',
           'nodev',
           'noexec',
-          'relatime'
-        ]
+          'relatime',
+          'hidepid=2',
+          'gid=953'
+        ],
+        'options_hash' => {
+          'hidepid'  => 2,
+          'gid'      => 953,
+          'rw'       => nil,
+          'nosuid'   => nil,
+          'nodev'    => nil,
+          'noexec'   => nil,
+          'relatime' => nil,
+          '_group'   => 'read_proc'
+        }
       }
     }
   }
@@ -133,12 +166,12 @@ describe 'simplib__mountpoints' do
     # Trimmed to ditch most of the things that we don't care about
     let(:facter_mountpoints) {{
       '/' => {
-        'available' => "36.66 GiB",
+        'available'       => "36.66 GiB",
         'available_bytes' => 39359275008,
-        'capacity' => "8.31%",
-        'device' => "/dev/sda1",
-        'filesystem' => "xfs",
-        'options' => [
+        'capacity'        => "8.31%",
+        'device'          => "/dev/sda1",
+        'filesystem'      => "xfs",
+        'options'         => [
           "rw",
           "seclabel",
           "relatime",
@@ -146,18 +179,18 @@ describe 'simplib__mountpoints' do
           "inode64",
           "noquota"
         ],
-        'size' => "39.98 GiB",
-        'size_bytes' => 42927656960,
-        'used' => "3.32 GiB",
-        'used_bytes' => 3568381952
+        'size'            => "39.98 GiB",
+        'size_bytes'      => 42927656960,
+        'used'            => "3.32 GiB",
+        'used_bytes'      => 3568381952
       },
       '/dev' => {
-        'available' => "2.83 GiB",
-        'available_bytes' => 3035959296,
-        'capacity' => "0%",
-        'device' => "devtmpfs",
-        'filesystem' => "devtmpfs",
-        'options' => [
+        'available'           => "2.83 GiB",
+        'available_bytes'     => 3035959296,
+        'capacity'            => "0%",
+        'device'              => "devtmpfs",
+        'filesystem'          => "devtmpfs",
+        'options'             => [
           "rw",
           "seclabel",
           "nosuid",
@@ -165,66 +198,66 @@ describe 'simplib__mountpoints' do
           "nr_inodes=741201",
           "mode=755"
         ],
-        'size' => "2.83 GiB",
-        'size_bytes' => 3035959296,
-        'used' => "0 bytes",
-        'used_bytes' => 0
+        'size'                => "2.83 GiB",
+        'size_bytes'          => 3035959296,
+        'used'                => "0 bytes",
+        'used_bytes'          => 0
       },
       '/dev/hugepages' => {
-        'available' => "0 bytes",
+        'available'       => "0 bytes",
         'available_bytes' => 0,
-        'capacity' => "100%",
-        'device' => "hugetlbfs",
-        'filesystem' => "hugetlbfs",
-        'options' => [
+        'capacity'        => "100%",
+        'device'          => "hugetlbfs",
+        'filesystem'      => "hugetlbfs",
+        'options'         => [
           "rw",
           "seclabel",
           "relatime"
         ],
-        'size' => "0 bytes",
-        'size_bytes' => 0,
-        'used' => "0 bytes",
-        'used_bytes' => 0
+        'size'            => "0 bytes",
+        'size_bytes'      => 0,
+        'used'            => "0 bytes",
+        'used_bytes'      => 0
       },
       '/dev/shm' => {
-        'available' => "2.83 GiB",
+        'available'       => "2.83 GiB",
         'available_bytes' => 3043655680,
-        'capacity' => "0%",
-        'device' => "tmpfs",
-        'filesystem' => "tmpfs",
-        'options' => [
+        'capacity'        => "0%",
+        'device'          => "tmpfs",
+        'filesystem'      => "tmpfs",
+        'options'         => [
           "rw",
           "seclabel",
           "nosuid",
           "nodev"
         ],
-        'size' => "2.83 GiB",
-        'size_bytes' => 3043655680,
-        'used' => "0 bytes",
-        'used_bytes' => 0
+        'size'            => "2.83 GiB",
+        'size_bytes'      => 3043655680,
+        'used'            => "0 bytes",
+        'used_bytes'      => 0
       },
       '/tmp' => {
-        'available' => "2.83 GiB",
+        'available'       => "2.83 GiB",
         'available_bytes' => 3043655680,
-        'capacity' => "0%",
-        'device' => "tmpfs",
-        'filesystem' => "tmpfs",
-        'options' => [
+        'capacity'        => "0%",
+        'device'          => "tmpfs",
+        'filesystem'      => "tmpfs",
+        'options'         => [
           "rw",
           "seclabel"
         ],
-        'size' => "2.83 GiB",
-        'size_bytes' => 3043655680,
-        'used' => "0 bytes",
-        'used_bytes' => 0
+        'size'            => "2.83 GiB",
+        'size_bytes'      => 3043655680,
+        'used'            => "0 bytes",
+        'used_bytes'      => 0
       },
       '/var/tmp' => {
-        'available' => "36.66 GiB",
+        'available'       => "36.66 GiB",
         'available_bytes' => 39359275008,
-        'capacity' => "8.31%",
-        'device' => "/dev/sda1",
-        'filesystem' => "xfs",
-        'options' => [
+        'capacity'        => "8.31%",
+        'device'          => "/dev/sda1",
+        'filesystem'      => "xfs",
+        'options'         => [
           "rw",
           "seclabel",
           "relatime",
@@ -232,10 +265,10 @@ describe 'simplib__mountpoints' do
           "inode64",
           "noquota"
         ],
-        'size' => "39.98 GiB",
-        'size_bytes' => 42927656960,
-        'used' => "3.32 GiB",
-        'used_bytes' => 3568381952
+        'size'            => "39.98 GiB",
+        'size_bytes'      => 42927656960,
+        'used'            => "3.32 GiB",
+        'used_bytes'      => 3568381952
       }
     }}
 
@@ -244,16 +277,17 @@ describe 'simplib__mountpoints' do
     end
 
     it 'returns the merged fact' do
-      final_mountpoints = min_results.merge(Marshal.load(Marshal.dump(facter_mountpoints)))
-      final_mountpoints.delete_if{|k,v|
-        !min_results.keys.include?(k)
-      }
+      require 'deep_merge'
+
+      final_mountpoints = Marshal.load(Marshal.dump(min_results))
+      final_mountpoints.deep_merge!(Marshal.load(Marshal.dump(facter_mountpoints)))
+
+      final_mountpoints.delete_if{ |k,v| (facter_mountpoints.keys - min_results.keys).include?(k) }
 
       final_mountpoints['/var/tmp']['device'] = '/var/tmp'
       final_mountpoints['/var/tmp']['filesystem'] = 'none'
-      final_mountpoints['/var/tmp']['options'] << 'bind'
 
-      expect(Facter.fact('simplib__mountpoints').value).to eq(final_mountpoints)
+      expect(Facter.fact('simplib__mountpoints').value).to match(final_mountpoints)
     end
   end
 end
