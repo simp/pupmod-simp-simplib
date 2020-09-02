@@ -26,6 +26,9 @@ group :development do
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-doc'
+  gem 'rubocop'
+  gem 'rubocop-rspec'
+  gem 'rubocop-i18n'
 end
 
 group :system_tests do
