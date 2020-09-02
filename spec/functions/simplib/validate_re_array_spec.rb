@@ -33,7 +33,7 @@ describe 'simplib::validate_re_array' do
 
     it 'rejects a string against an array' do
       is_expected.to run.with_params('oneA',['^one[0-9]', '^one[a-z]']).and_raise_error(
-        /"oneA" does not match \["\^one\[0-9\]", "\^one\[a-z\]"]/ )
+        /"oneA" does not match \["\^one\[0-9\]", "\^one\[a-z\]"\]/ )
     end
 
     it 'rejects a string against an array with a custom message' do
