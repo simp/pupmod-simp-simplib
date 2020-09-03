@@ -18,7 +18,7 @@ describe 'simplib__mountpoints' do
 
     Etc.stubs(:getgrgid).with(953).returns(EtcStub.new)
 
-    Facter::Util::Resolution.stubs(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).returns(
+    Facter::Core::Execution.stubs(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).returns(
       <<~EL7_PROC_MOUNTS,
       rootfs / rootfs rw 0 0
       sysfs /sys sysfs rw,seclabel,nosuid,nodev,noexec,relatime 0 0
@@ -56,26 +56,26 @@ describe 'simplib__mountpoints' do
     )
 
     # Standard systemd tmp.mount
-    Facter::Util::Resolution.stubs(:execute).with('findmnt /tmp', :on_fail => nil).returns(
+    Facter::Core::Execution.stubs(:execute).with('findmnt /tmp', :on_fail => nil).returns(
       <<~EL7_FINDMNT_TMP,
       TARGET SOURCE FSTYPE OPTIONS
       /tmp   tmpfs  tmpfs  rw,seclabel
       EL7_FINDMNT_TMP
     )
     # Bind mounted onto itself
-    Facter::Util::Resolution.stubs(:execute).with('findmnt /var/tmp', :on_fail => nil).returns(
+    Facter::Core::Execution.stubs(:execute).with('findmnt /var/tmp', :on_fail => nil).returns(
       <<~EL7_FINDMNT_VAR_TMP,
       TARGET   SOURCE              FSTYPE OPTIONS
       /var/tmp /dev/sda1[/var/tmp] xfs    rw,relatime,seclabel,attr2,inode64,noquota
       EL7_FINDMNT_VAR_TMP
     )
-    Facter::Util::Resolution.stubs(:execute).with('findmnt /dev/shm', :on_fail => nil).returns(
+    Facter::Core::Execution.stubs(:execute).with('findmnt /dev/shm', :on_fail => nil).returns(
       <<~EL7_FINDMNT_DEV_SHM,
       TARGET   SOURCE FSTYPE OPTIONS
       /dev/shm tmpfs  tmpfs  rw,nosuid,nodev,seclabel
       EL7_FINDMNT_DEV_SHM
     )
-    Facter::Util::Resolution.stubs(:execute).with('findmnt /proc', :on_fail => nil).returns(
+    Facter::Core::Execution.stubs(:execute).with('findmnt /proc', :on_fail => nil).returns(
       <<~EL7_FINDMNT_PROC,
       TARGET SOURCE FSTYPE OPTIONS
       /proc  proc   proc   rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953
