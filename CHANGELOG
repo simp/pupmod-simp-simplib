@@ -4,6 +4,7 @@
   can be updated to contain the relevant information.
 - Refactor the tmp_mounts fact to use simplib__mountpoints
 - Mark tmp_mounts as deprecated for removal in a future release
+- Fixed bugs in the grub_version and init_systems facts
 
 * Tue Aug 25 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
 - Fixed the simplib__auditd fact so that it detects the state of the running

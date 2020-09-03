@@ -6,7 +6,7 @@
 # Each entry is under a hash entry of its associated section.
 
 Facter.add(:puppet_settings) do
-   if Object.const_defined?('Puppet') && Puppet.respond_to?(:settings)
+  if Object.const_defined?('Puppet') && Puppet.respond_to?(:settings)
     setcode do
       retval = {}
       puppet_settings = Hash[Puppet.settings.map { |k, v| [k, v] }]
