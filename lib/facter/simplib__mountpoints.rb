@@ -28,10 +28,10 @@
 #       'filesystem'   => 'filesystem type',
 #       'options'      => ['mount', 'options', 'gid=100'],
 #       'options_hash' => {
-#         'mount'   => nil,
-#         'options' => nil,
-#         'gid'     => '100',
-#         '_group'  => 'users'
+#         'mount'       => nil,
+#         'options'     => nil,
+#         'gid'         => 100,
+#         '_gid__group' => 'users'
 #       }
 #     }
 #   }
@@ -51,7 +51,7 @@ Facter.add('simplib__mountpoints') do
     facter_mountpoints = Facter.value('mountpoints') || {}
 
     # Sometimes Ruby has issues with /proc so fall back to a shell command
-    Facter::Util::Resolution.exec('cat /proc/mounts 2> /dev/null').each_line do |line|
+    Facter::Util::Resolution.execute('cat /proc/mounts 2> /dev/null', :on_fail => nil).each_line do |line|
       line.strip!
 
       next if line.empty? || line.match(%r{^\s+none\s+})
@@ -77,9 +77,7 @@ Facter.add('simplib__mountpoints') do
       mount_list[mnt]['options'] ||= []
 
       unless mount_list[mnt]['options'].include?('bind')
-        findmnt_output = Facter::Util::Resolution.exec("findmnt #{mnt}")
-        # on RHEL 5 the command "findmnt" doesn't exist, if it doesn't exist
-        # then we just want to ignore this since there's nothing to do
+        findmnt_output = Facter::Util::Resolution.execute("findmnt #{mnt}", :on_fail => nil)
         if findmnt_output
           mnt_source = findmnt_output.lines.last.split(%r{\s+})[1]
 
