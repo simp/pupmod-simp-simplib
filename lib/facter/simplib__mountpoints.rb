@@ -127,6 +127,8 @@ Facter.add('simplib__mountpoints') do
       next unless mount_list[mnt]['options_hash']['gid']
 
       begin
+        require 'etc'
+
         known_translations[:gid] ||= {}
 
         found_gid = known_translations[:gid][mount_list[mnt]['options_hash']['gid']] || Etc.getgrgid(mount_list[mnt]['options_hash']['gid']).name
