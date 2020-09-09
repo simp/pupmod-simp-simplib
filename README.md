@@ -94,10 +94,13 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
   * **shmall**               -  Return the value of shmall from sysctl
   * **simplib__firewalls**   -  Return an array of known firewall commands that
                                 are present on the system.
+  * **simplib__mountpoints** -  Return a hash of mountpoints of particular
+                                interest to SIMP modules.
   * **simplib_sysctl**       -  Return hash of sysctl values that are relevant
                                 to SIMP
   * **simp_puppet_settings** -  Returns a hash of all Puppet settings on a node
-  * **tmp_mounts**           -  This fact provides information about `/tmp`,
+  * **tmp_mounts**           -  DEPRECATED - use `simplib__mountpoints`
+                                This fact provides information about `/tmp`,
                                 `/var/tmp`, and `/dev/shm` should they be present
                                 on the system
   * **uid_min**              -  Return the minimum uid allowed

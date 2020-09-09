@@ -1,4 +1,9 @@
-* Wed Sep 02 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.2-0
+* Tue Sep 01 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
+- Add a simplib__mountpoints fact that returns information about mountpoints of
+  specific interest to SIMP. This may be deprecated in the future if core facter
+  can be updated to contain the relevant information.
+- Refactor the tmp_mounts fact to use simplib__mountpoints
+- Mark tmp_mounts as deprecated for removal in a future release
 - Fixed bugs in the grub_version and init_systems facts
 
 * Tue Aug 25 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.4.1-0
