@@ -86,6 +86,8 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
   * **ipv6_enabled**         -  Return true if IPv6 is enabled and false if not
   * **login_defs**           -  Return the contents of `/etc/login.defs` as a
                                 hash with downcased keys
+  * **lspci**                -  Return the contents of `lspci` as a hash with a
+                                format of lspci[class][vendor][slot][attr] = value
   * **prelink**              -  Returns a hash containing prelink status
   * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
   * **root_dir_uuid**        -  Return the UUID of the partition holding the
