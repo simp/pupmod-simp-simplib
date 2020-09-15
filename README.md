@@ -74,6 +74,7 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
                                 hash
   * **defaultgateway**       -  Return the default gateway of the system
   * **defaultgatewayiface**  -  Return the default gw interface of the system
+  * **efi_enabled**          -  Returns true if the system is using EFI
   * **fips_ciphers**         -  Returns a list of available OpenSSL ciphers
   * **fips_enabled**         -  Determine whether FIPS is enabled on this system
   * **fullrun**              -  Determine whether to do an intensive run
@@ -91,6 +92,7 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
   * **root_dir_uuid**        -  Return the UUID of the partition holding the
                                 `/` directory
   * **runlevel**             -  Return the current system runlevel
+  * **secure_boot_enabled**  -  Returns true if the host is using uEFI Secure Boot
   * **shmall**               -  Return the value of shmall from sysctl
   * **simplib__firewalls**   -  Return an array of known firewall commands that
                                 are present on the system.
