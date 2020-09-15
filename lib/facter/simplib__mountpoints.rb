@@ -39,10 +39,9 @@
 require 'facter'
 
 Facter.add('simplib__mountpoints') do
-  setcode do
-    confine :kernel => :Linux
-    confine { File.exist?('/proc/mounts') }
-
+  confine :kernel => :Linux
+  confine { File.exist?('/proc/mounts') }
+setcode do
     target_dirs = ['/tmp', '/var/tmp', '/dev/shm', '/proc']
 
     # Holder of the multi-call content

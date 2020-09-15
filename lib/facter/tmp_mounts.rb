@@ -21,8 +21,9 @@ simplib__tmp_mount_list = nil
 
 simplib__tmp_mount_target_dirs.each do |dir|
   Facter.add("tmp_mount#{dir.gsub('/','_')}") do
+    confine :kernel => :Linux
+    confine { File.directory?(dir) }
     setcode do
-      confine { File.directory?(dir) }
 
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
       next unless simplib__tmp_mount_list[dir]
@@ -31,8 +32,9 @@ simplib__tmp_mount_target_dirs.each do |dir|
   end
 
   Facter.add("tmp_mount_path#{dir.gsub('/','_')}") do
+    confine :kernel => :Linux
+    confine { File.directory?(dir) }
     setcode do
-      confine { File.directory?(dir) }
 
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
       next unless simplib__tmp_mount_list[dir]
@@ -41,8 +43,9 @@ simplib__tmp_mount_target_dirs.each do |dir|
   end
 
   Facter.add("tmp_mount_fstype#{dir.gsub('/','_')}") do
+    confine :kernel => :Linux
+    confine { File.directory?(dir) }
     setcode do
-      confine { File.directory?(dir) }
 
       simplib__tmp_mount_list ||= Facter.value(:simplib__mountpoints)
       next unless simplib__tmp_mount_list[dir]
