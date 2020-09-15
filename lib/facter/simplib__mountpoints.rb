@@ -41,6 +41,7 @@ require 'facter'
 Facter.add('simplib__mountpoints') do
   confine :kernel => :Linux
   confine { File.exist?('/proc/mounts') }
+
 setcode do
     target_dirs = ['/tmp', '/var/tmp', '/dev/shm', '/proc']
 
@@ -59,12 +60,23 @@ setcode do
 
       next unless target_dirs.include?(path)
 
-      mount_list[path] = (facter_mountpoints[path] || {
+      path_settings = {
         'device' => dev,
         'filesystem' => fs,
         # Split on commas that are not in quotes
         'options' => opts.gsub(%r{'|"}, '').split(%r{,(?=(?:(?:[^'"]*(?:'|")){2})*[^'"]*$)}).map(&:strip)
-      })
+      }
+
+      if facter_mountpoints[path]
+        mount_list[path] = facter_mountpoints[path]
+
+        # The mountpoins fact does not capture all options correctly
+        mount_list[path]['options'] = path_settings['options']
+      else
+        mount_list[path] = path_settings
+      end
+
+
     end
 
     # Lookup table so we don't constantly lookup found UIDs and GIDs, etc...

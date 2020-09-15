@@ -408,3 +408,9 @@ pup6.16.0-oel-fips:
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
+
+pup6.16.0-win:
+  <<: *acceptance_base
+  <<: *pup_6_16_0
+  script:
+    - 'bundle exec rake beaker:suites[windows,default]'
