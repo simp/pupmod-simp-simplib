@@ -1,34 +1,47 @@
 # _Description_
 #
-# Return true if system booted via uEFI Secure Boot
+# Return true if system booted via UEFI Secure Boot
 #
 Facter.add("simplib__secure_boot_enabled") do
   confine :kernel => 'Linux'
 
   setcode do
-    retval = false
-
+    secure_boot_status = false
     Dir.glob('/sys/firmware/efi/efivars/SecureBoot-*').each do | file |
-      File.open(file, 'r') do | hexcode |
-        # skip leading status codes
-        hexcode.read(4)
-        code = hexcode.read()
-        # If we didn't get any data, unpacking will fail
-        retval = (1 == code.unpack('H*').first.to_i) if code
-      end
-    end
-    if retval
-      Dir.glob('/sys/firmware/efi/efivars/SetupMode-*').each do | file |
+      begin
         File.open(file, 'r') do | hexcode |
           # skip leading status codes
           hexcode.read(4)
           code = hexcode.read()
           # If we didn't get any data, unpacking will fail
-          retval = (0 == code.unpack('H*').first.to_i) if code
+          secure_boot_status = (1 == code.unpack('H*').first.to_i) if code
         end
+      rescue Errno::EPERM, Errno::EACCES
+        next
       end
+
+      break if secure_boot_status
     end
 
-    retval
+    setup_mode_status = false
+    if secure_boot_status
+      Dir.glob('/sys/firmware/efi/efivars/SetupMode-*').each do | file |
+        begin
+          File.open(file, 'r') do | hexcode |
+            # skip leading status codes
+            hexcode.read(4)
+            code = hexcode.read()
+            # If we didn't get any data, unpacking will fail
+            setup_mode_status = (0 == code.unpack('H*').first.to_i) if code
+          end
+        rescue Errno::EPERM, Errno::EACCES
+          next
+        end
+      end
+
+      break if setup_mode_status
+    end
+
+    secure_boot_status && setup_mode_status
   end
 end
