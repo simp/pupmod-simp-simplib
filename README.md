@@ -65,47 +65,47 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
 
 ### Facts
 
-  * **acpid_enabled**        -  Return true if ACPI is available on the system
-  * **boot_dir_uuid**        -  Return the UUID of the partition holding the
-                                boot directory
-  * **cmdline**              -  Returns the contents of `/proc/cmdline` as a
-                                hash
-  * **cpuinfo**              -  Returns the contents of `/proc/cpuinfo` as a
-                                hash
-  * **defaultgateway**       -  Return the default gateway of the system
-  * **defaultgatewayiface**  -  Return the default gw interface of the system
-  * **efi_enabled**          -  Returns true if the system is using EFI
-  * **fips_ciphers**         -  Returns a list of available OpenSSL ciphers
-  * **fips_enabled**         -  Determine whether FIPS is enabled on this system
-  * **fullrun**              -  Determine whether to do an intensive run
-  * **gdm_version**          -  Return the version of GDM that is installed
-  * **grub_version**         -  Return the grub version installed on the system
-  * **init_systems**         -  Return a list of all init systems present on
-   the system
-  * **ipa**                  -  Return a hash containing the IPA domain and
-                                server to which a host is connected
-  * **ipv6_enabled**         -  Return true if IPv6 is enabled and false if not
-  * **login_defs**           -  Return the contents of `/etc/login.defs` as a
-                                hash with downcased keys
-  * **prelink**              -  Returns a hash containing prelink status
-  * **reboot_required**      -  Returns a hash of 'name' => 'reason' entries
-  * **root_dir_uuid**        -  Return the UUID of the partition holding the
-                                `/` directory
-  * **runlevel**             -  Return the current system runlevel
-  * **secure_boot_enabled**  -  Returns true if the host is using uEFI Secure Boot
-  * **shmall**               -  Return the value of shmall from sysctl
-  * **simplib__firewalls**   -  Return an array of known firewall commands that
-                                are present on the system.
-  * **simplib__mountpoints** -  Return a hash of mountpoints of particular
-                                interest to SIMP modules.
-  * **simplib_sysctl**       -  Return hash of sysctl values that are relevant
-                                to SIMP
-  * **simp_puppet_settings** -  Returns a hash of all Puppet settings on a node
-  * **tmp_mounts**           -  DEPRECATED - use `simplib__mountpoints`
-                                This fact provides information about `/tmp`,
-                                `/var/tmp`, and `/dev/shm` should they be present
-                                on the system
-  * **uid_min**              -  Return the minimum uid allowed
+  * **acpid_enabled**                 -  Return true if ACPI is available on the system
+  * **boot_dir_uuid**                 -  Return the UUID of the partition holding the
+                                         boot directory
+  * **cmdline**                       -  Returns the contents of `/proc/cmdline` as a
+                                         hash
+  * **cpuinfo**                       -  Returns the contents of `/proc/cpuinfo` as a
+                                         hash
+  * **defaultgateway**                -  Return the default gateway of the system
+  * **defaultgatewayiface**           -  Return the default gw interface of the system
+  * **fips_ciphers**                  -  Returns a list of available OpenSSL ciphers
+  * **fips_enabled**                  -  Determine whether FIPS is enabled on this system
+  * **fullrun**                       -  Determine whether to do an intensive run
+  * **gdm_version**                   -  Return the version of GDM that is installed
+  * **grub_version**                  -  Return the grub version installed on the system
+  * **init_systems**                  -  Return a list of all init systems present on
+                                         the system
+  * **ipa**                           -  Return a hash containing the IPA domain and
+                                         server to which a host is connected
+  * **ipv6_enabled**                  -  Return true if IPv6 is enabled and false if not
+  * **login_defs**                    -  Return the contents of `/etc/login.defs` as a
+                                         hash with downcased keys
+  * **prelink**                       -  Returns a hash containing prelink status
+  * **reboot_required**               -  Returns a hash of 'name' => 'reason' entries
+  * **root_dir_uuid**                 -  Return the UUID of the partition holding the
+                                         `/` directory
+  * **runlevel**                      -  Return the current system runlevel
+  * **shmall**                        -  Return the value of shmall from sysctl
+  * **simplib__efi_enabled**          -  Returns true if the system is using EFI
+  * **simplib__secure_boot_enabled**  -  Returns true if the host is using uEFI Secure Boot
+  * **simplib__firewalls**            -  Return an array of known firewall commands that
+                                         are present on the system.
+  * **simplib__mountpoints**          -  Return a hash of mountpoints of particular
+                                         interest to SIMP modules.
+  * **simplib_sysctl**                -  Return hash of sysctl values that are relevant
+                                         to SIMP
+  * **simp_puppet_settings**          -  Returns a hash of all Puppet settings on a node
+  * **tmp_mounts**                    -  DEPRECATED - use `simplib__mountpoints`
+                                         This fact provides information about `/tmp`,
+                                         `/var/tmp`, and `/dev/shm` should they be present
+                                         on the system
+  * **uid_min**                       -  Return the minimum uid allowed
 
 ### Run stages
 
