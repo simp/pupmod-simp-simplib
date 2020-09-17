@@ -37,11 +37,11 @@ Facter.add("simplib__secure_boot_enabled") do
         rescue Errno::EPERM, Errno::EACCES
           next
         end
-      end
 
-      break if setup_mode_status
+        break if setup_mode_status
+      end
     end
 
-    secure_boot_status && setup_mode_status
+    secure_boot_status & setup_mode_status
   end
 end
