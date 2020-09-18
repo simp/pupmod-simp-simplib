@@ -1,3 +1,8 @@
+* Thu Sep 17 2020 Pat Riehecky <3534830+jcpunk@users.noreply.github.com> - 4.5.0-0
+- Add facts to note EFI status
+  - simplib__efi_enabled
+  - simplib__secure_boot_enabled
+
 * Tue Sep 01 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.5.0-0
 - Add a simplib__mountpoints fact that returns information about mountpoints of
   specific interest to SIMP. This may be deprecated in the future if core facter
