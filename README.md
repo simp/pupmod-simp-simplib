@@ -98,6 +98,7 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
                                          are present on the system.
   * **simplib__mountpoints**          -  Return a hash of mountpoints of particular
                                          interest to SIMP modules.
+  * **simplib__numa**                 -  Return hash of numa values about your system.
   * **simplib_sysctl**                -  Return hash of sysctl values that are relevant
                                          to SIMP
   * **simp_puppet_settings**          -  Returns a hash of all Puppet settings on a node
