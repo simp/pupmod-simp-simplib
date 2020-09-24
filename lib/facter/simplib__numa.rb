@@ -30,6 +30,7 @@ Facter.add("simplib__numa") do
           end
         end
       end
+    end
 
     result
   end
