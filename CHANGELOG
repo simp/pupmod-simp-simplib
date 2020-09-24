@@ -1,4 +1,7 @@
-* Thu Sep 17 2020 Pat Riehecky <3534830+jcpunk@users.noreply.github.com> - 4.5.0-0
+* Thu Sep 24 2020 Pat Riehecky <riehecky@fnal.gov> - 4.6.0-0
+- Add simplib__numa to collect NUMA-related facts
+
+* Thu Sep 17 2020 Pat Riehecky <riehecky@fnal.gov> - 4.5.0-0
 - Add facts to note EFI status
   - simplib__efi_enabled
   - simplib__secure_boot_enabled
