@@ -9,6 +9,7 @@ Facter.add('simplib__numa') do
 
   setcode do
     result = {}
+    result['nodes'] = []
 
     # read the 'possible' nodes file
     if File.exist?('/sys/devices/system/node/possible')
@@ -24,11 +25,13 @@ Facter.add('simplib__numa') do
     Dir.glob('/sys/devices/system/node/node*').each do | file |
       meminfo_file = Pathname.new(File.join(file, 'meminfo'))
       next unless meminfo_file.exist?
+      nodename = File.basename(file)
+      result['nodes'].append(nodename)
 
       File.foreach(meminfo_file) do | text |
         if text =~ /\sMemTotal:\s+(\d+)/
-          result[File.basename(file)] ||= {}
-          result[File.basename(file)]['MemTotalBytes'] = ($1.to_i * 1024)
+          result[nodename] ||= {}
+          result[nodename]['MemTotalBytes'] = ($1.to_i * 1024)
         end
       end
     end
