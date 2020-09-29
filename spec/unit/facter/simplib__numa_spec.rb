@@ -237,7 +237,7 @@ describe 'simplib__numa' do
         expect(Facter.fact('simplib__numa').value).to eq({
           'possible' => '0-1',
           'online'   => '0',
-          'nodes'    => ['node0'],
+          'nodes'    => ['node0', 'node1'],
           'node0'    => { 'MemTotalBytes' => 16480608256 },
           'node1'    => { 'MemTotalBytes' => 16480608256 }
         })
