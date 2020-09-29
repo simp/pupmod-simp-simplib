@@ -26,7 +26,7 @@ Facter.add('simplib__numa') do
       meminfo_file = Pathname.new(File.join(file, 'meminfo'))
       next unless meminfo_file.exist?
       nodename = File.basename(file)
-      result['nodes'].append(nodename)
+      result['nodes'].push(nodename)
 
       File.foreach(meminfo_file) do | text |
         if text =~ /\sMemTotal:\s+(\d+)/
