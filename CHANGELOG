@@ -1,3 +1,6 @@
+* Fri Oct 23 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.1-0
+- Fix the use of simplib::debug::inspect when using Bolt
+
 * Thu Sep 24 2020 Pat Riehecky <riehecky@fnal.gov> - 4.6.0-0
 - Add simplib__numa to collect NUMA-related facts
 

@@ -20,12 +20,20 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
 
   def inspect(scope, to_inspect, print=true)
     data = {
-      :type        => to_inspect.class,
-      :content     => to_inspect.to_pson,
-      :module_name => scope.source.module_name,
-      :file        => scope.source.file,
-      :line        => scope.source.line
+      :type     => to_inspect.class,
+      :content  => to_inspect.to_pson
     }
+
+    if scope
+      data[:scope] = scope.to_s
+
+      if scope.source
+        data[:module_name] = scope.source.module_name
+        data[:file] = scope.source.file
+        data[:line] = scope.source.line
+      end
+    end
+
 
     if print
       msg = [
@@ -34,12 +42,16 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
         "Content => '#{data[:content]}'"
       ]
 
-      unless data[:module_name].empty?
+      if data[:module_name] && !data[:module_name].empty?
         msg << "Module: '#{data[:module_name]}'"
       end
 
       if data[:file]
         msg << "Location: '#{data[:file]}:#{data[:line]}'"
+      end
+
+      if data[:scope]
+        msg << "Scope: '#{data[:scope]}'"
       end
 
       msg = msg.join(' ')
