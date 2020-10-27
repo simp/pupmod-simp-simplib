@@ -16,9 +16,9 @@ describe 'simplib::debug::inspect' do
   }}
 
   it {
-    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"test_value"')).once
-    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"other value"' Location: ':6')).once
-    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"foo"')).once
+    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"test_value"' Scope: 'Scope(Class[main])')).once
+    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"other value"' Location: ':6' Scope: 'Scope(Class[Test])')).once
+    Puppet.expects(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"foo"' Scope: 'Scope(Class[main])')).once
 
     retval = scope.call_function('simplib::debug::inspect', 'foo')
 
@@ -26,6 +26,7 @@ describe 'simplib::debug::inspect' do
       :type        => String,
       :content     => '"foo"',
       :module_name => '',
+      :scope       => "Scope(Class[main])",
       :file        => nil,
       :line        => nil
     })
