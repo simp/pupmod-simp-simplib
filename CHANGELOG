@@ -1,7 +1,7 @@
 * Wed Nov 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.2-0
 - Added Amazon Linux support
-- Allow the operatingsystemrelease to be optinally defined in metadata.json
-  operatingsystem_support
+- Changed Simplib::Puppet::Metadata::OS_support type to allow the
+  operatingsystemrelease to be optionally defined.
 
 * Fri Oct 23 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.1-0
 - Fix the use of simplib::debug::inspect when using Bolt
