@@ -1,3 +1,7 @@
+* Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.3-0
+- Updated Gemfile to use rspec puppet 2.8.0 or later
+- corrected the names of spec tests that did not end in _spec.rb.
+
 * Wed Nov 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.2-0
 - Added Amazon Linux support
 - Changed Simplib::Puppet::Metadata::OS_support type to allow the
