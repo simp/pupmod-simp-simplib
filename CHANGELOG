@@ -1,6 +1,5 @@
 * Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0-0
 - Added simplib__package_managers fact
-- Fixed names of varous facter spec tests
 
 * Wed Nov 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.2-0
 - Added Amazon Linux support
