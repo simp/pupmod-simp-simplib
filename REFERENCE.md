@@ -5877,7 +5877,7 @@ The 'operating_support' data structure in metadata.json
 
 Alias of `Struct[{
   'operatingsystem'        => String,
-  'operatingsystemrelease' => Array[String]
+  'operatingsystemrelease' => Optional[Array[String]]
 }]`
 
 ### `Simplib::PuppetLogLevel`
