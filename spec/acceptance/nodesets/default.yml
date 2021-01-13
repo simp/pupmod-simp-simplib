@@ -6,19 +6,12 @@
   end
 -%>
 HOSTS:
-  el6:
-    roles:
-      - default
-      - master
-      - client
-      - prelink
-    platform:   el-6-x86_64
-    box:        centos/6
-    hypervisor: <%= hypervisor %>
-
   el7:
     roles:
       - client
+      # roles migrated from now-removed el6 node(s):
+      - default
+      - master
       - prelink
     platform: el-7-x86_64
     box: centos/7

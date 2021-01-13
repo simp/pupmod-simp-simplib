@@ -1,3 +1,6 @@
+* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.6.4
+- Removed EL6 from supported OSe
+
 * Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.3-0
 - Updated REFERENCE.md
 
