@@ -155,9 +155,9 @@ describe 'simplib::passgen::legacy::set' do
     it 'fails when the key directory cannot be created' do
       subject()
       settings = call_function('simplib::passgen::legacy::common_settings')
-      FileUtils.stubs(:mkdir_p).with(
+      expect(FileUtils).to receive(:mkdir_p).with(
           settings['keydir'], {:mode => settings['dir_mode']}
-        ).raises(Errno::EACCES, 'dir create failed')
+        ).and_raise(Errno::EACCES, 'dir create failed')
 
       is_expected.to run.with_params(id, passwords[0], salts[0]).
         and_raise_error(RuntimeError, /Could not make directory/)
@@ -167,15 +167,9 @@ describe 'simplib::passgen::legacy::set' do
       subject()
       settings = call_function('simplib::passgen::legacy::common_settings')
       password_file = File.join(settings['keydir'], id)
-      # mocha doesn't allow us to tell it to call original implementation
-      # in some cases (which rspec-mocks does).  So, have to mock a different
-      # method in simplib::psssgen::legacy::set::write_file
-#          File.stubs(:open).with(password_file, 'w').
-#            raises(Errno::EACCES, 'file create failed')
-      File.stubs(:chmod).with(settings['file_mode'], password_file).
-        raises(Errno::EACCES, 'file chmod failed')
-      File.stubs(:chmod).with(
-        Not(equals(settings['file_mode'])), Not(equals(password_file)))
+      allow(File).to receive(:chmod).with(any_args).and_call_original
+      expect(File).to receive(:chmod).with(settings['file_mode'], password_file).
+        and_raise(Errno::EACCES, 'file chmod failed')
 
       is_expected.to run.with_params(id, passwords[0], salts[0]).
         and_raise_error( Errno::EACCES, 'Permission denied - file chmod failed')

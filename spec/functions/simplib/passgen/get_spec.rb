@@ -90,8 +90,8 @@ describe 'simplib::passgen::get' do
         salt_file = File.join(settings['keydir'], "#{id}.salt")
         File.open(salt_file, 'w') { |file| file.puts salt }
 
-        IO.expects(:readlines).with(password_file).
-          raises(Errno::EACCES, 'read failed')
+        expect(IO).to receive(:readlines).with(password_file).
+          and_raise(Errno::EACCES, 'read failed')
         is_expected.to run.with_params(id).and_raise_error(Errno::EACCES,
           'Permission denied - read failed')
       end

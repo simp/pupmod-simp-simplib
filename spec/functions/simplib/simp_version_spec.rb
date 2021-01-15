@@ -15,26 +15,27 @@ describe 'simplib::simp_version' do
       }
 
       context 'a valid version exists in simp.version' do
+        before(:each) do
+          allow(File).to receive(:read).with(any_args).and_call_original
+        end
+
         it 'should return the version with whitespace retained' do
-          File.expects(:read).with(simp_version_path).returns(" 6.4.0-0\n")
-          File.stubs(:readable?).with(simp_version_path).returns(true)
-          File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns('')
+          expect(File).to receive(:read).with(simp_version_path).and_return(" 6.4.0-0\n")
+          expect(File).to receive(:readable?).with(simp_version_path).and_return(true)
 
           is_expected.to run.and_return(" 6.4.0-0\n")
         end
 
         it "should return the version with 'simp-' stripped" do
-          File.stubs(:readable?).with(simp_version_path).returns(true)
-          File.stubs(:read).with(simp_version_path).returns("simp-5.4.0-0\n")
-          File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns('')
+          expect(File).to receive(:readable?).with(simp_version_path).and_return(true)
+          expect(File).to receive(:read).with(simp_version_path).and_return("simp-5.4.0-0\n")
 
           is_expected.to run.and_return("5.4.0-0\n")
         end
 
         it 'should return the version with whitespace stripped when stripping is enabled' do
-          File.stubs(:readable?).with(simp_version_path).returns(true)
-          File.stubs(:read).with(simp_version_path).returns("6.4.0-0\n")
-          File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns('')
+          expect(File).to receive(:readable?).with(simp_version_path).and_return(true)
+          expect(File).to receive(:read).with(simp_version_path).and_return("6.4.0-0\n")
 
           is_expected.to run.with_params(true).and_return('6.4.0-0')
         end
@@ -42,9 +43,9 @@ describe 'simplib::simp_version' do
 
       context 'simp.version is empty' do
         it 'should return unknown' do
-          File.stubs(:read).with(simp_version_path).returns("")
-          File.stubs(:readable?).with(simp_version_path).returns(true)
-          File.stubs(:read).with(regexp_matches(/metadata.json/), {:encoding => "utf-8"}).returns('')
+          allow(File).to receive(:read).with(any_args).and_call_original
+          expect(File).to receive(:read).with(simp_version_path).and_return("")
+          expect(File).to receive(:readable?).with(simp_version_path).and_return(true)
 
           is_expected.to run.and_return("unknown\n")
         end
@@ -58,15 +59,15 @@ describe 'simplib::simp_version' do
 
           context 'rpm query succeeds' do
             it 'should return the version with whitespace retained' do
-              File.stubs(:readable?).with(simp_version_path).returns(false)
-              Puppet::Util::Execution.stubs(:execute).with(rpm_query, {:failonfail => true}).returns("6.4.0-0\n")
+              expect(File).to receive(:readable?).with(simp_version_path).and_return(false)
+              expect(Puppet::Util::Execution).to receive(:execute).with(rpm_query, {:failonfail => true}).and_return("6.4.0-0\n")
 
               is_expected.to run.and_return("6.4.0-0\n")
             end
 
             it 'should return the version with whitespace stripped when stripping is enabled' do
-              File.stubs(:readable?).with(simp_version_path).returns(false)
-              Puppet::Util::Execution.stubs(:execute).with(rpm_query, {:failonfail => true}).returns("6.4.0-0\n")
+              expect(File).to receive(:readable?).with(simp_version_path).and_return(false)
+              expect(Puppet::Util::Execution).to receive(:execute).with(rpm_query, {:failonfail => true}).and_return("6.4.0-0\n")
 
               is_expected.to run.with_params(true).and_return('6.4.0-0')
             end
@@ -74,8 +75,8 @@ describe 'simplib::simp_version' do
 
           context 'rpm query fails' do
             it 'should return unknown' do
-              File.stubs(:readable?).with(simp_version_path).returns(false)
-              Puppet::Util::Execution.stubs(:execute).with(rpm_query, {:failonfail => true}).raises(Puppet::ExecutionFailure, "Failed")
+              expect(File).to receive(:readable?).with(simp_version_path).and_return(false)
+              expect(Puppet::Util::Execution).to receive(:execute).with(rpm_query, {:failonfail => true}).and_raise(Puppet::ExecutionFailure, "Failed")
 
               is_expected.to run.and_return("unknown\n")
             end

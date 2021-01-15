@@ -10,16 +10,17 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
   before(:each) do
     @catalog = Puppet::Resource::Catalog.new
-    Puppet::Type::Runlevel.any_instance.stubs(:catalog).returns(@catalog)
+    allow_any_instance_of(Puppet::Type::Runlevel).to receive(:catalog).and_return(@catalog)
 
-    described_class.stubs(:command).with(:systemctl).returns('/usr/bin/systemctl')
-    described_class.stubs(:command).with(:pgrep).returns('/bin/pgrep')
-    Facter.stubs(:value).with(:kernel).returns('Linux')
+    allow(described_class).to receive(:command).with(:systemctl).and_return('/usr/bin/systemctl')
+    allow(described_class).to receive(:command).with(:pgrep).and_return('/bin/pgrep')
+    allow(Facter).to receive(:value).with(any_args).and_call_original
+    allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
   end
 
   context '#level' do
     it 'should return the runlevel' do
-      Facter.stubs(:value).with(:runlevel).returns('5')
+      expect(Facter).to receive(:value).with(:runlevel).and_return('5')
 
       expect(provider.level).to eq('5')
     end
@@ -29,8 +30,8 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
     context 'with a normal transition' do
       context 'when in sync' do
         it 'should run without a warning' do
-          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("\n")
-          Puppet.expects(:warning).never
+          expect(provider).to receive(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).and_return("\n")
+          expect(Puppet).to receive(:warning).never
 
           expect(provider.level_insync?('5','5')).to be true
         end
@@ -38,8 +39,8 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
       context 'when out of sync' do
         it 'should run without a warning' do
-          provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("\n")
-          Puppet.expects(:warning).never
+          expect(provider).to receive(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).and_return("\n")
+          expect(Puppet).to receive(:warning).never
 
           expect(provider.level_insync?('3','5')).to be false
         end
@@ -48,8 +49,8 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context 'with a systemctl isolation already running' do
       it 'should emit a warning' do
-        provider.expects(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).returns("1234 systemctl isolate multi-user.target\n")
-        Puppet.expects(:warning)
+        expect(provider).to receive(:execute).with(['/bin/pgrep', '-f', %{^(/usr/bin/)?systemctl[[:space:]]+isolate}], :failonfail => false).and_return("1234 systemctl isolate multi-user.target\n")
+        expect(Puppet).to receive(:warning)
 
         expect(provider.level_insync?('5','3')).to be true
       end
@@ -59,7 +60,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
   context '#level=' do
     context 'with a normal transition' do
       it 'should succeed' do
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target'])
+        expect(provider).to receive(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target'])
 
         provider.level=(resource[:level])
       end
@@ -67,7 +68,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context 'with a timeout' do
       it 'should raise an exception' do
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target']).raises(Timeout::Error)
+        expect(provider).to receive(:execute).with(['/usr/bin/systemctl', 'isolate', 'graphical.target']).and_raise(Timeout::Error)
 
         expect { provider.level=(resource[:level]) }.to raise_error(/Could not transition to runlevel/)
       end
@@ -75,13 +76,13 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context '#persist' do
       it 'returns :true if in sync' do
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'get-default']).returns('graphical.target')
+        expect(provider).to receive(:execute).with(['/usr/bin/systemctl', 'get-default']).and_return('graphical.target')
 
         expect(provider.persist).to eq(:true)
       end
 
       it 'returns :false if not in sync' do
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'get-default']).returns('3')
+        expect(provider).to receive(:execute).with(['/usr/bin/systemctl', 'get-default']).and_return('3')
 
         expect(provider.persist).to eq(:false)
       end
@@ -89,7 +90,7 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
 
     context '#persist=' do
       it 'sets the system default runlevel' do
-        provider.expects(:execute).with(['/usr/bin/systemctl', 'set-default', 'graphical.target'])
+        expect(provider).to receive(:execute).with(['/usr/bin/systemctl', 'set-default', 'graphical.target'])
 
         provider.persist=(resource[:level])
       end

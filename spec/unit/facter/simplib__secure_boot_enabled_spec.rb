@@ -5,12 +5,12 @@ require 'spec_helper'
 describe 'simplib__secure_boot_enabled' do
   before :each do
     Facter.clear
-    Facter.stubs(:value).with(:kernel).returns('Linux')
+    allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
   end
 
   context 'without SecureBoot files in /sys/firmware/efi/efivars' do
     it do
-      Dir.stubs(:glob).with('/sys/firmware/efi/efivars/SecureBoot-*').returns([])
+      expect(Dir).to receive(:glob).with('/sys/firmware/efi/efivars/SecureBoot-*').and_return([])
 
       expect(Facter.fact('simplib__secure_boot_enabled').value).to match(false)
     end
@@ -21,8 +21,8 @@ describe 'simplib__secure_boot_enabled' do
       @sb_tempfile = Tempfile.new('simplib__secure_boot_enabled')
       @sm_tempfile = Tempfile.new('simplib__secure_boot_enabled')
 
-      Dir.stubs(:glob).with('/sys/firmware/efi/efivars/SecureBoot-*').returns([@sb_tempfile.path])
-      Dir.stubs(:glob).with('/sys/firmware/efi/efivars/SetupMode-*').returns([@sm_tempfile.path])
+      allow(Dir).to receive(:glob).with('/sys/firmware/efi/efivars/SecureBoot-*').and_return([@sb_tempfile.path])
+      allow(Dir).to receive(:glob).with('/sys/firmware/efi/efivars/SetupMode-*').and_return([@sm_tempfile.path])
     end
 
     after :each do

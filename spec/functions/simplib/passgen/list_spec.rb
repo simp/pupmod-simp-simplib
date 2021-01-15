@@ -52,8 +52,8 @@ describe 'simplib::passgen::list' do
         subject()
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
-        Dir.expects(:chdir).with(settings['keydir']).
-          raises(Errno::EACCES, 'chdir failed')
+        expect(Dir).to receive(:chdir).with(settings['keydir']).
+          and_raise(Errno::EACCES, 'chdir failed')
 
         is_expected.to run.with_params().and_raise_error(Errno::EACCES,
           'Permission denied - chdir failed')

@@ -41,7 +41,7 @@ describe 'simplib::passgen::gen_salt' do
   end
 
   it 'fails when salt generation times out' do
-    Timeout.expects(:timeout).with(20).raises(Timeout::Error, 'Timeout')
+    expect(Timeout).to receive(:timeout).with(20).and_raise(Timeout::Error, 'Timeout')
     is_expected.to run.with_params(20).and_raise_error(Timeout::Error,
       'Timeout')
   end

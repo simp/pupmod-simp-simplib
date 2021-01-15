@@ -7,7 +7,7 @@ runlevel_type = Puppet::Type.type(:runlevel)
 describe runlevel_type do
   before(:each) do
     @catalog = Puppet::Resource::Catalog.new
-    Puppet::Type::Runlevel.any_instance.stubs(:catalog).returns(@catalog)
+    allow_any_instance_of(Puppet::Type::Runlevel).to receive(:catalog).and_return(@catalog)
   end
 
   context 'when setting parameters' do

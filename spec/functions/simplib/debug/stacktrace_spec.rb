@@ -12,7 +12,7 @@ describe 'simplib::debug::stacktrace' do
   }}
 
   it {
-    Puppet.expects(:warning).with(%(Simplib::Debug::Stacktrace:\n    => unknown:2\n    => unknown:4)).once
+    expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Stacktrace:\n    => unknown:2\n    => unknown:4))
 
     retval = scope.call_function('simplib::debug::stacktrace', false)
 

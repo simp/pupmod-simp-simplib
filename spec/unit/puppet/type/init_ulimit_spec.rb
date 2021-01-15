@@ -5,11 +5,6 @@ require 'spec_helper'
 init_ulimit_type = Puppet::Type.type(:init_ulimit)
 
 describe init_ulimit_type do
-  before(:each) do
-    @catalog = Puppet::Resource::Catalog.new
-    Puppet::Type::Reboot_notify.any_instance.stubs(:catalog).returns(@catalog)
-  end
-
   context 'when setting parameters' do
     it 'should accept valid input' do
       resource = init_ulimit_type.new(

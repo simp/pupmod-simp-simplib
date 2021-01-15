@@ -5,17 +5,18 @@ require 'spec_helper'
 describe 'simplib__numa' do
   before :each do
     Facter.clear
-    Facter.stubs(:value).with(:kernel).returns('Linux')
-    File.expects(:exist?).with('/sys/devices/system/node').once.returns(true)
+    allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
+    expect(File).to receive(:exist?).with('/sys/devices/system/node').and_return(true)
+    allow(File).to receive(:read).with(any_args).and_call_original
   end
 
   context 'with files set for two NUMA zones ' do
     before :each do
-      File.expects(:exist?).with('/sys/devices/system/node/possible').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/possible').once.returns("0-1")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/possible').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/possible').and_return("0-1")
 
-      File.expects(:exist?).with('/sys/devices/system/node/online').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/online').once.returns("0-1")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/online').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/online').and_return("0-1")
 
       @memory1_tempdir = Dir.mktmpdir
       @memory2_tempdir = Dir.mktmpdir
@@ -26,7 +27,7 @@ describe 'simplib__numa' do
       Dir.mkdir(node0)
       Dir.mkdir(node1)
 
-      Dir.stubs(:glob).with('/sys/devices/system/node/node*').returns([node0, node1])
+      expect(Dir).to receive(:glob).with('/sys/devices/system/node/node*').and_return([node0, node1])
     end
 
     after :each do
@@ -129,11 +130,11 @@ describe 'simplib__numa' do
 
   context 'with files set for one NUMA zone online ' do
     before :each do
-      File.expects(:exist?).with('/sys/devices/system/node/possible').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/possible').once.returns("0-1")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/possible').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/possible').and_return("0-1")
 
-      File.expects(:exist?).with('/sys/devices/system/node/online').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/online').once.returns("0")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/online').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/online').and_return("0")
 
       @memory1_tempdir = Dir.mktmpdir
       @memory2_tempdir = Dir.mktmpdir
@@ -144,7 +145,7 @@ describe 'simplib__numa' do
       Dir.mkdir(node0)
       Dir.mkdir(node1)
 
-      Dir.stubs(:glob).with('/sys/devices/system/node/node*').returns([node0, node1])
+      expect(Dir).to receive(:glob).with('/sys/devices/system/node/node*').and_return([node0, node1])
     end
 
     after :each do
@@ -247,11 +248,11 @@ describe 'simplib__numa' do
 
   context 'with files set for one NUMA zone ' do
     before :each do
-      File.expects(:exist?).with('/sys/devices/system/node/possible').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/possible').once.returns("0")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/possible').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/possible').and_return("0")
 
-      File.expects(:exist?).with('/sys/devices/system/node/online').once.returns(true)
-      File.expects(:read).with('/sys/devices/system/node/online').once.returns("0")
+      expect(File).to receive(:exist?).with('/sys/devices/system/node/online').and_return(true)
+      expect(File).to receive(:read).with('/sys/devices/system/node/online').and_return("0")
 
       @memory1_tempdir = Dir.mktmpdir
 
@@ -259,7 +260,7 @@ describe 'simplib__numa' do
 
       Dir.mkdir(node0)
 
-      Dir.stubs(:glob).with('/sys/devices/system/node/node*').returns([node0])
+      expect(Dir).to receive(:glob).with('/sys/devices/system/node/node*').and_return([node0])
     end
 
     after :each do

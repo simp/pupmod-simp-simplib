@@ -281,7 +281,7 @@ describe 'simplib::passgen::simpkv::passgen' do
   context 'misc errors' do
 
     it 'fails when password generation times out' do
-      Timeout.expects(:timeout).with(30).raises(Timeout::Error, 'Timeout')
+      expect(Timeout).to receive(:timeout).with(30).and_raise(Timeout::Error, 'Timeout')
       is_expected.to run.with_params('spectest').and_raise_error(RuntimeError,
         /simplib::passgen timed out for 'spectest'!/)
     end
