@@ -349,81 +349,35 @@ pup7.x-unit:
 # Repo-specific content
 # ==============================================================================
 
-pup5.pe:
+pup5.x:
   <<: *acceptance_base
-  <<: *pup_5_pe
+  <<: *pup_5_x
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
-pup5.pe-fips:
+pup5.x-prelink_fact:
   <<: *acceptance_base
-  <<: *pup_5_pe
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
-
-pup5.pe-prelink_fact:
-  <<: *acceptance_base
-  <<: *pup_5_pe
+  <<: *pup_5_x
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,default]'
 
-pup5.pe-ipa_fact:
+pup5.x-ipa_fact:
   <<: *acceptance_base
-  <<: *pup_5_pe
+  <<: *pup_5_x
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
-pup5.pe-caller_function:
+pup5.x-caller_function:
   <<: *acceptance_base
-  <<: *pup_5_pe
+  <<: *pup_5_x
   script:
     - 'bundle exec rake beaker:suites[caller_function,default]'
-
-pup5.pe-oel:
-  <<: *acceptance_base
-  <<: *pup_5_pe
-  script:
-    - 'bundle exec rake beaker:suites[default,oel]'
-
-pup5.pe-oel-fips:
-  <<: *acceptance_base
-  <<: *pup_5_pe
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
-
-pup5.pe-oel-prelink_fact:
-  <<: *acceptance_base
-  <<: *pup_5_pe
-  script:
-    - 'bundle exec rake beaker:suites[prelink_fact,oel]'
 
 pup6.x:
   <<: *acceptance_base
   <<: *pup_6_x
   script:
     - 'bundle exec rake beaker:suites[default,default]'
-
-pup6.x-fips:
-  <<: *acceptance_base
-  <<: *pup_6_x
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
-
-pup6.x-ipa_fact:
-  <<: *acceptance_base
-  <<: *pup_6_x
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'bundle exec rake beaker:suites[ipa_fact,default]'
-
-# simplib::caller function is failing in puppet 6.  jira  SIMP-7471
-pup6.x-caller_function:
-  <<: *acceptance_base
-  <<: *pup_6_x
-  allow_failure: true
-  script:
-    - 'bundle exec rake beaker:suites[caller_function,default]'
 
 pup6.pe:
   <<: *acceptance_base
@@ -442,13 +396,6 @@ pup6.pe-oel:
   <<: *pup_6_pe
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
-
-pup6.pe-oel-fips:
-  <<: *acceptance_base
-  <<: *pup_6_pe
-  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
-  script:
-    - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,oel]'
 
 pup6.pe-win:
   <<: *acceptance_base
