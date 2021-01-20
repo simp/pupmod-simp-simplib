@@ -2231,8 +2231,8 @@ An Array of Strings or Hashes
   all versions of the OS
 * Hash: Must be of the form { 'OS' => ['version1', 'version2'] }
 
-@example Blacklist all Windows, RHEL 7.2, and OEL 6.4
-  [ 'Windows', { 'RedHat' => ['7.2'] }, { 'OracleLinux' => ['6.4'] ]
+@example Blacklist all Windows, RHEL 7.2, and OEL 8.2
+  [ 'Windows', { 'RedHat' => ['7.2'] }, { 'OracleLinux' => ['8.2'] ]
 
 ##### `options`
 

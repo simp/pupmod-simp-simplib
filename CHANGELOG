@@ -1,8 +1,11 @@
-* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.6.4
-- Removed EL6 from supported OSe
-
-* Thu Nov 12 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.3-0
+* Wed Jan 20 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.3
 - Updated REFERENCE.md
+- Ensure that the `puppet_settings` fact supports both the `server` and `master`
+  settings for backwards compatibility
+- Add a tertiary check to the `grub_version` fact
+
+* Wed Jan 13 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.6.3
+- Removed EL6 from supported OSs
 
 * Wed Nov 04 2020 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.2-0
 - Added Amazon Linux support
