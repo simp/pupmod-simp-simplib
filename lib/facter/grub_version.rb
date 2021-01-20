@@ -8,6 +8,8 @@ Facter.add('grub_version') do
       Facter::Util::Resolution.exec('grub --version').split.last.delete('()')
     elsif Facter::Util::Resolution.which('grub2-mkconfig')
       Facter::Util::Resolution.exec('grub2-mkconfig --version').split.last.delete('()')
+    elsif Facter::Util::Resolution.which('grub-mkconfig')
+      Facter::Util::Resolution.exec('grub-mkconfig --version').split.last.delete('()')
     end
   end
 end

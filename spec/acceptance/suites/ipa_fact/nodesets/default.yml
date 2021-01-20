@@ -9,6 +9,8 @@ HOSTS:
   server-el7:
     roles:
       - default
+      # roles migrated from now-removed el6 node(s):
+      - no
       - server
     masterless: true
     platform: el-7-x86_64
@@ -23,24 +25,6 @@ HOSTS:
     masterless: true
     platform: el-7-x86_64
     box: centos/7
-    hypervisor: <%= hypervisor %>
-
-  client-el6:
-    roles:
-      - client
-      - no_fips
-    masterless: true
-    platform:   el-6-x86_64
-    box:        centos/6
-    hypervisor: <%= hypervisor %>
-
-  client-oel6:
-    roles:
-      - client
-      - no_fips
-    masterless: true
-    platform:   el-6-x86_64
-    box:        onyxpoint/oel-6-x86_64
     hypervisor: <%= hypervisor %>
 
   client-oel7:

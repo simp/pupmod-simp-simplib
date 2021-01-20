@@ -45,6 +45,13 @@ Facter.add(:puppet_settings) do
         end
       end
 
+      # For backwards compatibility
+      if retval['master'] && !retval['server']
+        retval['server'] = retval['master']
+      elsif !retval['master'] && retval['server']
+        retval['master'] = retval['server']
+      end
+
       retval
     end
   end
