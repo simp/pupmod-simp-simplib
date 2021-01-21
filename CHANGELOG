@@ -1,6 +1,6 @@
 * Thu Jan 21 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.7.0
 - Added the simplib__crypto_policy_state fact since it is required by both the
-  crypto_policy and fips modules
+  simp/crypto_policy and simp/fips modules
 
 * Wed Jan 20 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.6.3
 - Updated REFERENCE.md
