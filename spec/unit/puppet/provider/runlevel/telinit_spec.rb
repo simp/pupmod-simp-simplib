@@ -10,24 +10,28 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
 
   before(:each) do
     @catalog = Puppet::Resource::Catalog.new
-    Puppet::Type::Runlevel.any_instance.stubs(:catalog).returns(@catalog)
+    allow_any_instance_of(Puppet::Type::Runlevel).to receive(:catalog).and_return(@catalog)
 
-    described_class.stubs(:command).with(:telinit).returns('/sbin/telinit')
+    allow(described_class).to receive(:command).with(:telinit).and_return('/sbin/telinit')
   end
 
   context '#level' do
     it 'should return the runlevel' do
-      Facter.stubs(:value).with(:runlevel).returns('5')
-      Facter.stubs(:value).with(Not(equals(:runlevel)))
+    allow(Facter).to receive(:value).with(any_args).and_call_original
+      expect(Facter).to receive(:value).with(:runlevel).and_return('5')
 
       expect(provider.level).to eq('5')
     end
   end
 
   context '#level=' do
+    before(:each) do
+      allow(File).to receive(:open).with(any_args).and_call_original
+    end
+
     context 'with a normal transition' do
       it 'should succeed' do
-        provider.expects(:execute).with(['/sbin/telinit', resource[:level]])
+        expect(provider).to receive(:execute).with(['/sbin/telinit', resource[:level]])
 
         provider.level=(resource[:level])
       end
@@ -35,7 +39,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
 
     context 'with a timeout' do
       it 'should raise an exception' do
-        provider.expects(:execute).with(['/sbin/telinit', resource[:level]]).raises(Timeout::Error)
+        expect(provider).to receive(:execute).with(['/sbin/telinit', resource[:level]]).and_raise(Timeout::Error)
 
         expect { provider.level=(resource[:level]) }.to raise_error(/Could not transition to runlevel/)
       end
@@ -57,8 +61,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.write("id:#{resource[:level]}:initdefault:nil\n")
           @tempfile.rewind
 
-          File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
-          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(@tempfile)
 
           expect(provider.persist).to eq(:true)
         end
@@ -67,8 +70,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.write('')
           @tempfile.rewind
 
-          File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
-          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(@tempfile)
 
           expect(provider.persist).to eq(:false)
         end
@@ -79,12 +81,11 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           @tempfile.write("id:#{resource[:level]}:initdefault:nil\n")
           @tempfile.rewind
 
-          File.expects(:open).with('/etc/inittab', 'r').returns(@tempfile)
-          File.stubs(:open).with(Not(equals(['/etc/inittab', 'r'])))
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(@tempfile)
 
           fh = IO.open(IO.sysopen(@tempfile, 'w'), 'w')
 
-          File.expects(:open).with('/etc/inittab', 'w').returns(fh)
+          expect(File).to receive(:open).with('/etc/inittab', 'w').and_return(fh)
 
           provider.persist=(resource[:level])
 

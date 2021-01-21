@@ -334,8 +334,6 @@ pup6.pe-unit:
   <<: *unit_tests
 
 pup7.x-unit:
-  # SIMP-9115
-  allow_failure: true
   <<: *pup_7_x
   <<: *unit_tests
 

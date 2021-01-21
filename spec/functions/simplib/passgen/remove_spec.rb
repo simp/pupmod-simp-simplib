@@ -75,7 +75,7 @@ describe 'simplib::passgen::remove' do
         password_file = File.join(settings['keydir'], id)
         File.open(password_file, 'w') { |file| file.puts passwords[0] }
 
-        File.stubs(:unlink).with(password_file).raises(Errno::EACCES, 'file unlink failed')
+        expect(File).to receive(:unlink).with(password_file).and_raise(Errno::EACCES, 'file unlink failed')
 
         is_expected.to run.with_params(id).and_raise_error( RuntimeError,
           /Unable to remove all files:.*#{id}: Permission denied - file unlink failed/m)

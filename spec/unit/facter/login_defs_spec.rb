@@ -5,7 +5,9 @@ describe "custom fact login_defs" do
   before(:each) do
     Facter.clear
 
-    Facter.stubs(:value).with(:operatingsystem).returns('Linux')
+    allow(Facter).to receive(:value).with(any_args).and_call_original
+    allow(Facter).to receive(:value).with(:operatingsystem).and_return('Linux')
+    allow(File).to receive(:read).with(any_args).and_call_original
   end
 
   context 'with a well formed /etc/login.defs' do
@@ -45,18 +47,9 @@ MD5_CRYPT_ENAB  no
     }
 
     it 'should return hash of values from /etc/login.defs with appropriate conversions' do
-      File.expects(:exist?).with('/etc/login.defs').returns(true)
-      File.expects(:readable?).with('/etc/login.defs').returns(true)
-      File.expects(:read).with('/etc/login.defs').returns(login_defs_content)
-
-      # This resets the stubbing code in Mocha to ensure that the code does not
-      # try to catch any other calls to the stubbed methods above.
-      #
-      # This is not documented well and is almost always what you want in
-      # Puppet testing
-      File.stubs(:exist?).with(Not(equals('/etc/login.defs')))
-      File.stubs(:readable?).with(Not(equals('/etc/login.defs')))
-      File.stubs(:read).with(Not(equals('/etc/login.defs')))
+      expect(File).to receive(:exist?).with('/etc/login.defs').and_return(true)
+      expect(File).to receive(:readable?).with('/etc/login.defs').and_return(true)
+      expect(File).to receive(:read).with('/etc/login.defs').and_return(login_defs_content)
 
       expect(Facter.fact('login_defs').value).to eq({
         "mail_dir"        =>"/var/spool/mail",
@@ -83,13 +76,9 @@ MD5_CRYPT_ENAB  no
 
   context 'with an empty login.defs' do
     it 'should return hash of the uid_min and gid_min defaults' do
-      File.expects(:exist?).with('/etc/login.defs').returns(true)
-      File.expects(:readable?).with('/etc/login.defs').returns(true)
-      File.expects(:read).with('/etc/login.defs').returns('')
-
-      File.stubs(:exist?).with(Not(equals('/etc/login.defs')))
-      File.stubs(:readable?).with(Not(equals('/etc/login.defs')))
-      File.stubs(:read).with(Not(equals('/etc/login.defs')))
+      expect(File).to receive(:exist?).with('/etc/login.defs').and_return(true)
+      expect(File).to receive(:readable?).with('/etc/login.defs').and_return(true)
+      expect(File).to receive(:read).with('/etc/login.defs').and_return('')
 
       expect(Facter.fact('login_defs').value).to eq({ })
     end

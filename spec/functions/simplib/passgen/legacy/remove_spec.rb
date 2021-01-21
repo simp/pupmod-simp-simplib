@@ -74,7 +74,7 @@ describe 'simplib::passgen::legacy::remove' do
       password_file = File.join(settings['keydir'], id)
       File.open(password_file, 'w') { |file| file.puts passwords[0] }
 
-      File.stubs(:unlink).with(password_file).raises(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(password_file).and_raise(Errno::EACCES, 'file unlink failed')
 
       is_expected.to run.with_params(id).and_raise_error( RuntimeError,
         /Unable to remove all files:.*#{id}: Permission denied - file unlink failed/m)
@@ -98,12 +98,12 @@ describe 'simplib::passgen::legacy::remove' do
       File.open(salt_file_last, 'w') { |file| file.puts salts[1] }
       File.open(salt_file_last_last, 'w') { |file| file.puts salts[2] }
 
-      File.stubs(:unlink).with(password_file).raises(Errno::EACCES, 'file unlink failed')
-      File.stubs(:unlink).with(password_file_last).raises(Errno::EACCES, 'file unlink failed')
-      File.stubs(:unlink).with(password_file_last_last).raises(Errno::EACCES, 'file unlink failed')
-      File.stubs(:unlink).with(salt_file).raises(Errno::EACCES, 'file unlink failed')
-      File.stubs(:unlink).with(salt_file_last).raises(Errno::EACCES, 'file unlink failed')
-      File.stubs(:unlink).with(salt_file_last_last).raises(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(password_file).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(password_file_last).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(password_file_last_last).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(salt_file).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(salt_file_last).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
+      expect(File).to receive(:unlink).with(salt_file_last_last).exactly(6).times.and_raise(Errno::EACCES, 'file unlink failed')
 
       [
         password_file,

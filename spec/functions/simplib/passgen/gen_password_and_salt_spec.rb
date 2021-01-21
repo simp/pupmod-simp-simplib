@@ -96,7 +96,7 @@ describe 'simplib::passgen::gen_password_and_salt' do
 
   context 'errors' do
     it 'fails when password generation times out' do
-      Timeout.expects(:timeout).with(30).raises(Timeout::Error, 'Timeout')
+      expect(Timeout).to receive(:timeout).with(30).and_raise(Timeout::Error, 'Timeout')
       is_expected.to run.with_params(16, 0, false, 30).and_raise_error(Timeout::Error,
         'Timeout')
     end

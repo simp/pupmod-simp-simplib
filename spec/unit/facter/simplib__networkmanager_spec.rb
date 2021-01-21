@@ -4,12 +4,12 @@ describe 'simplib__networkmanager' do
 
   before :each do
     Facter.clear
-    Facter::Core::Execution.stubs(:exec).with('uname -s').returns('Linux')
-    Facter::Util::Resolution.stubs(:which).with('nmcli').returns('/usr/sbin/nmcli')
+    expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    expect(Facter::Util::Resolution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
 
-    Facter::Core::Execution.stubs(:execute).with('/usr/sbin/nmcli -t -m multiline general status', :on_fail => :failed).returns(general_status)
-    Facter::Core::Execution.stubs(:execute).with('/usr/sbin/nmcli -t general hostname', :on_fail => :failed).returns(general_hostname)
-    Facter::Core::Execution.stubs(:execute).with('/usr/sbin/nmcli -t connection show', :on_fail => :failed).returns(connections)
+    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status', :on_fail => :failed).and_return(general_status)
+    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname', :on_fail => :failed).and_return(general_hostname)
+    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t connection show', :on_fail => :failed).and_return(connections)
   end
 
   context 'nmcli fails' do

@@ -5,22 +5,13 @@ describe "simplib__sshd_config" do
   before :each do
     Facter.clear
 
-    Facter::Util::Resolution.expects(:which).with('sshd').returns('/usr/bin/sshd')
-    Facter::Core::Execution.expects(:execute).with('/usr/bin/sshd -. 2>&1', :on_fail => :failed).returns(openssh_version['full_version'])
+    expect(Facter::Util::Resolution).to receive(:which).with('sshd').and_return('/usr/bin/sshd')
+    expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/sshd -. 2>&1', :on_fail => :failed).and_return(openssh_version['full_version'])
 
-    File.expects(:exist?).with('/etc/ssh/sshd_config').at_least_once.returns(true)
-    File.expects(:readable?).with('/etc/ssh/sshd_config').returns(true)
-    File.expects(:read).with('/etc/ssh/sshd_config').returns(sshd_config_content)
-
-    # This resets the stubbing code in Mocha to ensure that the code does not
-    # try to catch any other calls to the stubbed methods above.
-    #
-    # This is not documented well and is almost always what you want in
-    # Puppet testing
-
-    File.stubs(:exist?).with(Not(equals('/etc/ssh/sshd_config')))
-    File.stubs(:readable?).with(Not(equals('/etc/ssh/sshd_config')))
-    File.stubs(:read).with(Not(equals('/etc/ssh/sshd_config')))
+    expect(File).to receive(:exist?).with('/etc/ssh/sshd_config').and_return(true).at_least(:once)
+    expect(File).to receive(:readable?).with('/etc/ssh/sshd_config').and_return(true)
+    allow(File).to receive(:read).with(any_args).and_call_original
+    expect(File).to receive(:read).with('/etc/ssh/sshd_config').and_return(sshd_config_content)
   end
 
   let(:openssh_version) {{

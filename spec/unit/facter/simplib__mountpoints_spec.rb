@@ -5,8 +5,8 @@ require 'spec_helper'
 describe 'simplib__mountpoints' do
   before :each do
     Facter.clear
-    Facter.stubs(:value).with(:kernel).returns('Linux')
-    File.stubs(:exist?).with('/proc/mounts').returns(true)
+    allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
+    expect(File).to receive(:exist?).with('/proc/mounts').and_return(true)
 
     class EtcStub
       attr_accessor :name
@@ -16,9 +16,9 @@ describe 'simplib__mountpoints' do
       end
     end
 
-    Etc.stubs(:getgrgid).with(953).returns(EtcStub.new)
+    expect(Etc).to receive(:getgrgid).with(953).and_return(EtcStub.new)
 
-    Facter::Core::Execution.stubs(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).returns(
+    expect(Facter::Core::Execution).to receive(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).and_return(
       <<~EL7_PROC_MOUNTS,
       rootfs / rootfs rw 0 0
       sysfs /sys sysfs rw,seclabel,nosuid,nodev,noexec,relatime 0 0
@@ -56,26 +56,26 @@ describe 'simplib__mountpoints' do
     )
 
     # Standard systemd tmp.mount
-    Facter::Core::Execution.stubs(:execute).with('findmnt /tmp', :on_fail => nil).returns(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /tmp', :on_fail => nil).and_return(
       <<~EL7_FINDMNT_TMP,
       TARGET SOURCE FSTYPE OPTIONS
       /tmp   tmpfs  tmpfs  rw,seclabel
       EL7_FINDMNT_TMP
     )
     # Bind mounted onto itself
-    Facter::Core::Execution.stubs(:execute).with('findmnt /var/tmp', :on_fail => nil).returns(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /var/tmp', :on_fail => nil).and_return(
       <<~EL7_FINDMNT_VAR_TMP,
       TARGET   SOURCE              FSTYPE OPTIONS
       /var/tmp /dev/sda1[/var/tmp] xfs    rw,relatime,seclabel,attr2,inode64,noquota
       EL7_FINDMNT_VAR_TMP
     )
-    Facter::Core::Execution.stubs(:execute).with('findmnt /dev/shm', :on_fail => nil).returns(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /dev/shm', :on_fail => nil).and_return(
       <<~EL7_FINDMNT_DEV_SHM,
       TARGET   SOURCE FSTYPE OPTIONS
       /dev/shm tmpfs  tmpfs  rw,nosuid,nodev,seclabel
       EL7_FINDMNT_DEV_SHM
     )
-    Facter::Core::Execution.stubs(:execute).with('findmnt /proc', :on_fail => nil).returns(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /proc', :on_fail => nil).and_return(
       <<~EL7_FINDMNT_PROC,
       TARGET SOURCE FSTYPE OPTIONS
       /proc  proc   proc   rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953
@@ -163,7 +163,7 @@ describe 'simplib__mountpoints' do
 
   context 'when Facter does not have a filled "mountpoints" fact' do
     before :each do
-      Facter.stubs(:value).with('mountpoints').returns(nil)
+      expect(Facter).to receive(:value).with('mountpoints').and_return(nil)
     end
 
     it 'returns the minimally filled fact' do
@@ -284,7 +284,7 @@ describe 'simplib__mountpoints' do
     end
 
     before :each do
-      Facter.stubs(:value).with('mountpoints').returns(facter_mountpoints)
+      expect(Facter).to receive(:value).with('mountpoints').and_return(facter_mountpoints)
     end
 
     it 'returns the merged fact' do

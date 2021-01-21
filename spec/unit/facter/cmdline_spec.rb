@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'cmdline' do
   before :each do
     Facter.clear
+    allow(File).to receive(:read).with(any_args).and_call_original
   end
 
   let(:unique_line) {
@@ -14,7 +15,7 @@ describe 'cmdline' do
 
   context '/proc/cmdline exists' do
     it 'and has no duplicate entries' do
-      File.stubs(:read).with('/proc/cmdline').returns(unique_line)
+      expect(File).to receive(:read).with('/proc/cmdline').and_return(unique_line)
       expect(Facter.fact(:cmdline).value).to eq({
         'root'      => '/dev/mapper/VolGroup00-RootVol',
         'ro'        => nil,
@@ -27,7 +28,7 @@ describe 'cmdline' do
     end
 
     it 'and has duplicate entries' do
-      File.stubs(:read).with('/proc/cmdline').returns(dup_line)
+      expect(File).to receive(:read).with('/proc/cmdline').and_return(dup_line)
       expect(Facter.fact(:cmdline).value).to eq({
         'root'      => '/dev/mapper/VolGroup00-RootVol',
         'ro'        => nil,
@@ -45,7 +46,7 @@ describe 'cmdline' do
 
   context '/proc/cmdline does not exist' do
     it 'returns nil' do
-      Facter::Util::Resolution.stubs(:which).with('ip').returns(nil)
+      expect(Facter::Util::Resolution).to receive(:which).with('ip').and_return(nil)
       expect(Facter.fact(:defaultgateway).value).to eq('unknown')
     end
   end

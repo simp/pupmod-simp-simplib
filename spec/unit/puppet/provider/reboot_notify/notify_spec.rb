@@ -13,11 +13,12 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
 
   before(:each) do
     @catalog = Puppet::Resource::Catalog.new
-    Puppet::Type::Reboot_notify.any_instance.stubs(:catalog).returns(@catalog)
+    allow_any_instance_of(Puppet::Type::Reboot_notify).to receive(:catalog).and_return(@catalog)
 
     @tmpdir = Dir.mktmpdir('rspec_reboot_notify')
     @target = File.join(@tmpdir, 'reboot_notifications.json')
-    Puppet.stubs(:[]).with(:vardir).returns @tmpdir
+    allow(Puppet).to receive(:[]).with(any_args).and_call_original
+    expect(Puppet).to receive(:[]).with(:vardir).at_least(:once).and_return(@tmpdir)
   end
 
   after(:each) do
@@ -218,12 +219,8 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
           it do
             # This should always be prevented by the Type but is here in case
             # of a regression in Puppet or a bad update to the type.
-            Puppet.expects(:warning).with(
-              regexp_matches(/Invalid log_level:/)
-            ).never
-            Puppet.expects(log_level).with(
-              regexp_matches(/System Reboot Required Because:/)
-            ).at_most_once
+            expect(Puppet).to receive(:warning).with(/Invalid log_level:/).never
+            expect(Puppet).to receive(log_level).with(/System Reboot Required Because:/).at_most(:once)
 
             expect{ provider.update }.to_not raise_error
             expect(
@@ -244,9 +241,9 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
     let(:output) { JSON.parse(File.read(@target)) }
 
     it do
-      Puppet.expects(:notice).with(
-        regexp_matches(/System Reboot Required Because:/)
-      ).at_most_once
+      expect(Puppet).to receive(:notice).with(
+        /System Reboot Required Because:/
+      ).at_most(:once)
 
       expect{ provider.class.post_resource_eval }.to_not raise_error
     end
@@ -303,9 +300,9 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
 
       it do
         expect{ provider.update }.to_not raise_error
-        Puppet.expects(:debug).with(
-          regexp_matches(/System Reboot Required Because:/)
-        ).at_most_once
+        expect(Puppet).to receive(:debug).with(
+          /System Reboot Required Because:/
+        ).at_most(:once)
         expect{ provider.class.post_resource_eval}.to_not raise_error
 
         content = JSON.parse(File.read(@target))
