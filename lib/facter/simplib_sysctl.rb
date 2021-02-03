@@ -17,6 +17,7 @@ Facter.add("simplib_sysctl") do
       'kernel.shmmni',
       'kernel.tainted',
       'kernel.threads-max',
+      'net.ipv6.conf.all.disable_ipv6',
       'vm.swappiness'
     ]
 
