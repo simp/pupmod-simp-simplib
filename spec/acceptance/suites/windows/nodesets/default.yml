@@ -17,8 +17,7 @@ HOSTS:
     roles:
       - windows
     platform: windows-server-amd64
-    box: gusztavvargadr/windows-server
-    box_version: 1809.0.2006.standard
+    box: opentable/win-2012r2-standard-amd64-nocm
     hypervisor: <%= hypervisor %>
     vagrant_memsize: 2048
     vagrant_cpus: 2
