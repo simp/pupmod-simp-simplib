@@ -4,7 +4,7 @@ require:
 - rubocop-i18n
 AllCops:
   DisplayCopNames: true
-  TargetRubyVersion: '2.4'
+  TargetRubyVersion: '2.6'
   Include:
   - "**/*.rb"
   Exclude:
@@ -29,9 +29,9 @@ Lint/RaiseException:
   Enabled: true
 Lint/StructNewOverride:
   Enabled: false
-GetText:
+I18n/GetText:
   Enabled: false
-GetText/DecorateString:
+I18n/GetText/DecorateString:
   Description: We don't want to decorate test output.
   Exclude:
   - spec/**/*
@@ -124,11 +124,11 @@ Style/MethodCalledOnDoEndBlock:
   Enabled: true
 Style/StringMethods:
   Enabled: true
-GetText/DecorateFunctionMessage:
+I18n/GetText/DecorateFunctionMessage:
   Enabled: false
-GetText/DecorateStringFormattingUsingInterpolation:
+I18n/GetText/DecorateStringFormattingUsingInterpolation:
   Enabled: false
-GetText/DecorateStringFormattingUsingPercent:
+I18n/GetText/DecorateStringFormattingUsingPercent:
   Enabled: false
 Layout/EndOfLine:
   Enabled: false
@@ -157,6 +157,8 @@ RSpec/ExampleLength:
 RSpec/MessageExpectation:
   Enabled: false
 RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
   Enabled: false
 RSpec/NestedGroups:
   Enabled: false
