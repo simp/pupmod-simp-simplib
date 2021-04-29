@@ -7,5 +7,5 @@ group :test do
 end
 
 group :system_tests do
-  gem 'docker-api', '~> 2.1'
+  gem 'beaker-windows'
 end
