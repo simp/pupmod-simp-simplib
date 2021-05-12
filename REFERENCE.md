@@ -54,7 +54,7 @@
 * [`simplib::module_metadata::os_supported`](#simplibmodule_metadataos_supported): Returns whether or not the passed module is supported per the module's metadata.json.
 * [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
 * [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
-* [`simplib::params2hash`](#simplibparams2hash): Returns a Hash of the parameters of the calling resource
+* [`simplib::params2hash`](#simplibparams2hash): Returns a Hash of the parameters of the calling resource  This is meant to get the parameters of classes and defined types. The behavior when
 * [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
 * [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Supports 2 modes:   * simpkv     * Password info is stor
 * [`simplib::passgen::gen_password_and_salt`](#simplibpassgengen_password_and_salt): Generates a password and salt  * Password length, complexity and complex-only settings are specified by   the caller. * Salt length, complexi
@@ -2481,9 +2481,15 @@ Type: Ruby 4.x API
 
 Returns a Hash of the parameters of the calling resource
 
+This is meant to get the parameters of classes and defined types.
+The behavior when calling from other contexts is undefined
+
 #### `simplib::params2hash(Optional[Array[String[1]]] $prune)`
 
 Returns a Hash of the parameters of the calling resource
+
+This is meant to get the parameters of classes and defined types.
+The behavior when calling from other contexts is undefined
 
 Returns: `Hash` All in-scope parameters
 

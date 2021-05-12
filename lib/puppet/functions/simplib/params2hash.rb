@@ -1,4 +1,7 @@
 # Returns a Hash of the parameters of the calling resource
+#
+# This is meant to get the parameters of classes and defined types.
+# The behavior when calling from other contexts is undefined
 Puppet::Functions.create_function(:'simplib::params2hash', Puppet::Functions::InternalFunction) do
 
   # @param prune
