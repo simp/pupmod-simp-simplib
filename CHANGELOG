@@ -1,3 +1,7 @@
+* Thu Apr 29 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0
+- Add a `simplib::params2hash()` function to return all of the calling scope's
+  parameters as a Hash
+
 * Mon Feb 01 2021 Kendall Moore <kendall.moore@onyxpoint.com> - 4.7.1
 - Add net.ipv6.conf.all.disable_ipv6 to simplib_sysctl
 
