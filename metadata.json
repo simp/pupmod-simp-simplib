@@ -1,6 +1,6 @@
 {
   "name": "simp-simplib",
-  "version": "4.8.0",
+  "version": "4.9.0",
   "author": "SIMP Team",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",
@@ -119,7 +119,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 5.0.0 < 7.0.0"
+      "version_requirement": ">= 5.0.0 < 8.0.0"
     }
   ],
   "package_release_version": "0"

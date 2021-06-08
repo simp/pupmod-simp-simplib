@@ -1,3 +1,7 @@
+* Tue Jun 08 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0
+- Add a `simplib::cron::to_systemd` function to provide 'best-effort'
+  conversions of cron resource parameters to a systemd timespec
+
 * Thu Apr 29 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.8.0
 - Add a `simplib::params2hash()` function to return all of the calling scope's
   parameters as a Hash
