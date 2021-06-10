@@ -29,6 +29,7 @@
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
 * [`simplib::caller`](#simplibcaller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
+* [`simplib::cron::to_systemd`](#simplibcronto_systemd): Convert a set of 'cron' native type parameters to a 'best effort' systemd calendar String
 * [`simplib::debug::classtrace`](#simplibdebugclasstrace): Prints out the stack of Puppet Classes and Defined Types that have been called up to this point  WARNING: Uses **EXPERIMENTAL** features from
 * [`simplib::debug::inspect`](#simplibdebuginspect): Prints out Puppet warning messages that display the passed variable, data type, and location.  WARNING: Uses **EXPERIMENTAL** features from P
 * [`simplib::debug::stacktrace`](#simplibdebugstacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
@@ -1010,6 +1011,50 @@ of known function nesting
 Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
+
+### <a name="simplibcronto_systemd"></a>`simplib::cron::to_systemd`
+
+Type: Puppet Language
+
+Convert a set of 'cron' native type parameters to a 'best effort' systemd
+calendar String
+
+#### `simplib::cron::to_systemd(Simplib::Cron::Minute $minute = '*', Simplib::Cron::Hour $hour = '*', Simplib::Cron::Month $month = '*', Simplib::Cron::Monthday $monthday = '*', Optional[Simplib::Cron::Weekday] $weekday = undef)`
+
+Convert a set of 'cron' native type parameters to a 'best effort' systemd
+calendar String
+
+Returns: `String`
+
+##### `minute`
+
+Data type: `Simplib::Cron::Minute`
+
+The `minute` parameter from the cron resource
+
+##### `hour`
+
+Data type: `Simplib::Cron::Hour`
+
+The `hour` parameter from the cron resource
+
+##### `month`
+
+Data type: `Simplib::Cron::Month`
+
+The `month` parameter from the cron resource
+
+##### `monthday`
+
+Data type: `Simplib::Cron::Monthday`
+
+The `monthday` parameter from the cron resource
+
+##### `weekday`
+
+Data type: `Optional[Simplib::Cron::Weekday]`
+
+The `weekday` parameter from the cron resource
 
 ### <a name="simplibdebugclasstrace"></a>`simplib::debug::classtrace`
 

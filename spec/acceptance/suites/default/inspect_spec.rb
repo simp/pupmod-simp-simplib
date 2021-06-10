@@ -7,6 +7,7 @@ def normalize(puppet_log, keep_warning_lines_only = false)
   # 'puts' lines, as their ordering relative to the Puppet warning
   # lines is non-deterministic
   normalized_lines = puppet_log.split("\n").delete_if do |line|
+    line.include?('unresolved dependencies') or
     line.include?('Loading facts') or
     line.include?('Compiled catalog for') or
     line.include?('Applying configuration version') or
