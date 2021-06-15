@@ -9,14 +9,17 @@ describe 'simplib::cron::to_systemd' do
     test_hash = {
       [] => '*-* *:*',
       [0] => '*-* *:0',
+      [['27','57']] => '*-* *:27,57',
       [nil,0] => '*-* 0:*',
       [0,0] => '*-* 0:0',
       [nil,nil,5] => '5-* *:*',
       [nil,nil,'*',3] => '*-3 *:*',
       [nil,nil,5,3] => '5-3 *:*',
       [nil,nil,'MAY',3] => '5-3 *:*',
+      [nil,nil,['MAY','jan'],3] => '5,1-3 *:*',
       [nil,nil,nil,nil,'tue'] => 'tue *-* *:*',
       [nil,nil,nil,nil,0] => 'Sun *-* *:*',
+      [nil,nil,nil,nil,[0,1]] => 'Sun,Mon *-* *:*',
     }
 
     test_hash.each_pair do |input, output|
