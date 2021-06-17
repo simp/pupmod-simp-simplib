@@ -3,7 +3,7 @@ fixtures:
   repositories:
     simpkv: https://github.com/simp/pupmod-simp-simpkv.git
     stdlib: https://github.com/simp/puppetlabs-stdlib.git
-    
+
     # This needs to be in place for the rspec-puppet Hiera 5 hook to work
     # No idea why, it may be because Puppet sees a custom backend and loads all
     # of the global parts.
