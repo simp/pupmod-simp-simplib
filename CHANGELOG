@@ -1,3 +1,7 @@
+* Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.0
+- Removed support for Puppet 5
+- Ensured support for Puppet 7 in requirements and stdlib
+
 * Tue Jun 08 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0
 - Add a `simplib::cron::to_systemd` function to provide 'best-effort'
   conversions of cron resource parameters to a systemd timespec
