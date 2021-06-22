@@ -9,8 +9,9 @@ Facter.add(:simplib__networkmanager) do
 
     nmcli_cmd = @nmcli_cmd + ' -t'
 
-    general_status = Facter::Core::Execution.execute(%(#{nmcli_cmd} -m multiline general status), :on_fail => :failed)
-    unless general_status == :failed
+    general_status = Facter::Core::Execution.execute(%(#{nmcli_cmd} -m multiline general status))
+
+    if $?.success?
       general_status = general_status.lines.map{|line| line.strip.split(':') }
 
       info['enabled'] = true
@@ -21,15 +22,17 @@ Facter.add(:simplib__networkmanager) do
       }
     end
 
-    general_hostname = Facter::Core::Execution.execute(%{#{nmcli_cmd} general hostname}, :on_fail => :failed)
-    unless general_hostname == :failed
+    general_hostname = Facter::Core::Execution.execute(%{#{nmcli_cmd} general hostname})
+
+    if $?.success?
       info['enabled'] = true
       info['general'] ||= {}
       info['general']['hostname'] = general_hostname.strip
     end
 
-    connections = Facter::Core::Execution.execute(%(#{nmcli_cmd} connection show), :on_fail => :failed)
-    unless connections == :failed
+    connections = Facter::Core::Execution.execute(%(#{nmcli_cmd} connection show))
+
+    if $?.success?
       info['enabled'] = true
       info['connection'] = {}
 
