@@ -23,38 +23,24 @@ describe 'ipa fact' do
   ipa_realm = ipa_domain.upcase
 
   hosts.each do |host|
-    it 'should be running haveged for entropy' do
-      if skip_fips(host)
-        pending("#{host} does not work in FIPS mode")
-        expect(false).to eq true
+    next if skip_fips(host)
 
-        next
-      else
-        # IPA requires entropy, so use haveged service
-        on(host, 'puppet resource package epel-release ensure=present')
-        on(host, 'puppet resource package haveged ensure=present')
-        on(host, 'puppet resource service haveged ensure=running enable=true')
+    # IPA requires entropy!
+    it 'should be running haveged or rngd for entropy' do
+      apply_manifest_on(host, 'include haveged', :accept_all_exit_codes => true)
+      apply_manifest_on(host, 'include haveged')
+    end
 
-        # Install the IPA client on all hosts
-        on(host, 'puppet resource package ipa-client ensure=present')
+    it 'should install IPA client package' do
+      on(host, 'puppet resource package ipa-client ensure=present')
+    end
 
-        # Admintools for EL6
-        on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
+    it 'should ensure hostname is set to the FQDN' do
+      hostname = fact_on(host, 'fqdn')
+      on(host, "hostnamectl set-hostname #{hostname}")
 
-        # Ensure that the hostname is set to the FQDN
-        hostname = fact_on(host, 'fqdn')
-        if host.host_hash['platform'] =~ /el-7/
-          on(host, "hostnamectl set-hostname #{hostname}")
-        else
-          on(host, "hostname #{hostname}")
-          create_remote_file(host, '/etc/hostname', "#{hostname}\n")
-          on(host, "sed -i '/HOSTNAME/d' /etc/sysconfig/network")
-          on(host, "echo HOSTNAME=#{hostname} >> /etc/sysconfig/network")
-        end
-
-        # DBus may need to be restarted after updating, and a reboot is the only way
-        host.reboot
-      end
+      # DBus may need to be restarted after updating, and a reboot is the only way
+      host.reboot
     end
   end
 
@@ -171,8 +157,6 @@ describe 'ipa fact' do
             '--principal=admin',
             # Admin password
             "--password='#{admin_password}'",
-            # Don't update using authconfig
-            '--noac'
           ].join(' ')
 
           on(client, ipa_command)
