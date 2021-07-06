@@ -64,6 +64,7 @@ describe "custom fact ipa" do
   context 'host is joined to IPA domain' do
 
     before(:each) do
+      expect(ENV).to receive(:fetch).with('LANG', 'en_US.UTF-8').and_return('en_US.UTF-8')
       expect(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
       expect(Facter::Core::Execution).to receive(:which).with('klist').and_return('/usr/bin/klist')
       expect(Facter::Core::Execution).to receive(:which).with('ipa').and_return('/usr/bin/ipa')
