@@ -6,28 +6,40 @@
   end
 -%>
 HOSTS:
-  oel7:
+  server-oel7:
+    roles:
+      - default
+      - no_fips
+      - server
+    masterless: true
+    platform: el-7-x86_64
+    box:        generic/oracle7
+    hypervisor: <%= hypervisor %>
+    vagrant_memsize: 2048
+    vagrant_cpus: 2
+
+  client-oel7:
     roles:
       - client
-      - default
-      - master
-      - prelink
+    masterless: true
     platform:   el-7-x86_64
     box:        generic/oracle7
     hypervisor: <%= hypervisor %>
 
-  oel8:
+  client-oel8:
     roles:
       - client
+    masterless: true
     platform:   el-8-x86_64
     box:        generic/oracle8
     hypervisor: <%= hypervisor %>
+
 
 CONFIG:
   log_level: verbose
   type: aio
   vagrant_memsize: 256
   vagrant_cpus: 1
-<% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
-  puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
+<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
+  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
 <% end -%>

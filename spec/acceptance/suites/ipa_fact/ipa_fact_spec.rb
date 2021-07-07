@@ -23,38 +23,24 @@ describe 'ipa fact' do
   ipa_realm = ipa_domain.upcase
 
   hosts.each do |host|
-    it 'should be running haveged for entropy' do
-      if skip_fips(host)
-        pending("#{host} does not work in FIPS mode")
-        expect(false).to eq true
+    next if skip_fips(host)
 
-        next
-      else
-        # IPA requires entropy, so use haveged service
-        on(host, 'puppet resource package epel-release ensure=present')
-        on(host, 'puppet resource package haveged ensure=present')
-        on(host, 'puppet resource service haveged ensure=running enable=true')
+    # IPA requires entropy!
+    it 'should be running haveged or rngd for entropy' do
+      apply_manifest_on(host, 'include haveged', :accept_all_exit_codes => true)
+      apply_manifest_on(host, 'include haveged')
+    end
 
-        # Install the IPA client on all hosts
-        on(host, 'puppet resource package ipa-client ensure=present')
+    it 'should install IPA client package' do
+      on(host, 'puppet resource package ipa-client ensure=present')
+    end
 
-        # Admintools for EL6
-        on(host, 'puppet resource package ipa-admintools ensure=present', :accept_all_exit_codes => true)
+    it 'should ensure hostname is set to the FQDN' do
+      hostname = pfact_on(host, 'fqdn')
+      on(host, "hostnamectl set-hostname #{hostname}")
 
-        # Ensure that the hostname is set to the FQDN
-        hostname = fact_on(host, 'fqdn')
-        if host.host_hash['platform'] =~ /el-7/
-          on(host, "hostnamectl set-hostname #{hostname}")
-        else
-          on(host, "hostname #{hostname}")
-          create_remote_file(host, '/etc/hostname', "#{hostname}\n")
-          on(host, "sed -i '/HOSTNAME/d' /etc/sysconfig/network")
-          on(host, "echo HOSTNAME=#{hostname} >> /etc/sysconfig/network")
-        end
-
-        # DBus may need to be restarted after updating, and a reboot is the only way
-        host.reboot
-      end
+      # DBus may need to be restarted after updating, and a reboot is the only way
+      host.reboot
     end
   end
 
@@ -66,9 +52,7 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
-
-        expect(results['values']['ipa']).to be_nil
+        expect(pfact_on(server, 'ipa')).to be_empty
       end
     end
 
@@ -81,9 +65,7 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
-
-        expect(results['values']['ipa']).to be_nil
+        expect(pfact_on(server, 'ipa')).to be_empty
       end
     end
 
@@ -92,7 +74,7 @@ describe 'ipa fact' do
       it 'ipa fact should contain domain and IPA server' do
         # ipa-server-install installs both the IPA server and client.
         # The fact uses the client env.
-        fqdn = fact_on(server, 'fqdn')
+        fqdn = pfact_on(server, 'fqdn')
 
         cmd = [
           'umask 0022 &&',
@@ -112,23 +94,23 @@ describe 'ipa fact' do
         # We only care about this data
         expect(apply_manifest_on(server, manifest).output).to match(/Hash Content => {"/)
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = pfact_on(server, 'ipa')
 
-        expect(results['values']['ipa']).to_not be_nil
-        expect(results['values']['ipa']['connected']).to eq true
-        expect(results['values']['ipa']['server']).to eq fqdn
-        expect(results['values']['ipa']['domain']).to eq ipa_domain
-        expect(results['values']['ipa']['realm']).to eq ipa_realm
+        expect(results).to_not be_empty
+        expect(results['connected']).to eq true
+        expect(results['server']).to eq fqdn
+        expect(results['domain']).to eq ipa_domain
+        expect(results['realm']).to eq ipa_realm
       end
 
       it 'ipa fact should have unknown status when connection to IPA server is down' do
         # stop IPA server
         on(server, 'ipactl stop')
 
-        results = JSON.load(on(server, 'puppet facts').output)
+        results = pfact_on(server, 'ipa')
 
-        expect(results['values']['ipa']).to_not be_nil
-        expect(results['values']['ipa']['connected']).to eq false
+        expect(results).to_not be_empty
+        expect(results['connected']).to eq false
       end
 
       it 'should restart the IPA server for further tests' do
@@ -144,15 +126,13 @@ describe 'ipa fact' do
 
       context 'prior to registration' do
         it 'should not have an IPA fact' do
-          results = JSON.load(on(client, 'puppet facts').output)
-
-          expect(results['values']['ipa']).to be_nil
+          expect(pfact_on(client, 'ipa')).to be_empty
         end
       end
 
       context 'after registration' do
         let(:ipa_server) {
-          fact_on(hosts_with_role(hosts, 'server').first, 'fqdn')
+          pfact_on(hosts_with_role(hosts, 'server').first, 'fqdn')
         }
 
         it 'should register with the IPA server' do
@@ -171,21 +151,19 @@ describe 'ipa fact' do
             '--principal=admin',
             # Admin password
             "--password='#{admin_password}'",
-            # Don't update using authconfig
-            '--noac'
           ].join(' ')
 
           on(client, ipa_command)
         end
 
         it 'should have the IPA fact populated' do
-          results = JSON.load(on(client, 'puppet facts').output)
+          results = pfact_on(client, 'ipa')
 
-          expect(results['values']['ipa']).to_not be_nil
-          expect(results['values']['ipa']['connected']).to eq true
-          expect(results['values']['ipa']['server']).to eq ipa_server
-          expect(results['values']['ipa']['domain']).to eq ipa_domain
-          expect(results['values']['ipa']['realm']).to eq ipa_realm
+          expect(results).to_not be_empty
+          expect(results['connected']).to eq true
+          expect(results['server']).to eq ipa_server
+          expect(results['domain']).to eq ipa_domain
+          expect(results['realm']).to eq ipa_realm
         end
 
         it 'ipa fact should have unknown status when connection to IPA server is down' do
@@ -194,10 +172,10 @@ describe 'ipa fact' do
             on(server, 'ipactl stop')
           end
 
-          results = JSON.load(on(client, 'puppet facts').output)
+          results = pfact_on(client, 'ipa')
 
-          expect(results['values']['ipa']).to_not be_nil
-          expect(results['values']['ipa']['connected']).to eq false
+          expect(results).to_not be_empty
+          expect(results['connected']).to eq false
         end
 
         it 'should restart the IPA server for further tests' do

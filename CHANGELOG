@@ -1,7 +1,9 @@
-* Tue Jun 22 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0
-- Add a `simplib::cron::to_systemd` function to provide 'best-effort'
+* Tue Jul 06 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0
+- Added a `simplib::cron::to_systemd` function to provide 'best-effort'
   conversions of cron resource parameters to a systemd timespec
-- Fix the simplib__networkmanager fact
+- Fixed the simplib__networkmanager fact
+- Fixed a bug where the ipa fact did not detect when an EL8 client was
+  joined to an IPA domain
 
 * Wed Jun 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.9.0
 - Removed support for Puppet 5

@@ -356,8 +356,47 @@ pup6.pe-oel:
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
-pup6.pe-win:
+pup6.pe-caller_function:
+  <<: *acceptance_base
+  <<: *pup_6_pe
+  script:
+    - 'bundle exec rake beaker:suites[caller_function,default]'
+
+pup6.pe-ipa_fact:
+  <<: *acceptance_base
+  <<: *pup_6_pe
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,default]'
+
+pup6.pe-ipa_fact-oel:
+  <<: *acceptance_base
+  <<: *pup_6_pe
+  <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
+  script:
+    - 'bundle exec rake beaker:suites[ipa_fact,oel]'
+
+pup6.pe-prelink_fact:
+  <<: *acceptance_base
+  <<: *pup_6_pe
+  script:
+    - 'bundle exec rake beaker:suites[prelink_fact,default]'
+
+pup6.pe-windows:
   <<: *acceptance_base
   <<: *pup_6_pe
   script:
     - 'bundle exec rake beaker:suites[windows,default]'
+
+pup7.x:
+  <<: *pup_7_x
+  <<: *acceptance_base
+  script:
+    - 'bundle exec rake beaker:suites[default,default]'
+
+# caller_function exercises code that depends upon Puppet-internals, so make
+# sure it is run for the latest version of Puppet
+pup7.pe-caller_function:
+  <<: *acceptance_base
+  <<: *pup_7_x
+  script:
+    - 'bundle exec rake beaker:suites[caller_function,default]'

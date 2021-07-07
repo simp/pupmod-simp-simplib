@@ -9,8 +9,7 @@ HOSTS:
   server-el7:
     roles:
       - default
-      # roles migrated from now-removed el6 node(s):
-      - no
+      - no_fips
       - server
     masterless: true
     platform: el-7-x86_64
@@ -19,20 +18,20 @@ HOSTS:
     vagrant_memsize: 2048
     vagrant_cpus: 2
 
+  client-el8:
+    roles:
+      - client
+    masterless: true
+    platform: el-8-x86_64
+    box: generic/centos8
+    hypervisor: <%= hypervisor %>
+
   client-el7:
     roles:
       - client
     masterless: true
-    platform: el-7-x86_64
-    box: centos/7
-    hypervisor: <%= hypervisor %>
-
-  client-oel7:
-    roles:
-      - client
-    masterless: true
     platform:   el-7-x86_64
-    box:        onyxpoint/oel-7-x86_64
+    box:        centos/7
     hypervisor: <%= hypervisor %>
 
 CONFIG:

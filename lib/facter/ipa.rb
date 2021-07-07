@@ -23,8 +23,20 @@ Facter.add(:ipa) do
   kinit = Facter::Core::Execution.which('kinit')
   confine { kinit }
 
+  klist = Facter::Core::Execution.which('klist')
+  confine { klist }
+
   ipa = Facter::Core::Execution.which('ipa')
   confine { ipa }
+
+  truecmd = Facter::Core::Execution.which('true')
+  confine { truecmd }
+
+  # In EL8 the ipa command needs LC_ALL set to UTF-8 and this is the only
+  # workaround at this time
+  locale = ENV.fetch('LANG', 'en_US.UTF-8')
+  locale = 'en_US.UTF-8' unless locale.match?(/UTF-?8/i)
+  ipacmd = "#{truecmd} && LC_ALL=#{locale} #{ipa}"
 
   # This file is only present if the host has, at some time,
   # been joined to an IPA domain.
@@ -57,19 +69,19 @@ Facter.add(:ipa) do
     # We won't know if we are connected to a server until later
     defaults['connected'] = false
 
-    # Grab the necessary information from 'ipa env'
-    ipa_response = Facter::Core::Execution.execute("#{ipa} env #{needed_keys.join(' ')}", options = {:timeout => ipa_timeout})
-
-    if ipa_response.strip.empty?
+    Facter::Core::Execution.execute(klist)
+    unless $?.success?
       # Obtain host Kerberos token so we can use IPA API
       kinit_msg = Facter::Core::Execution.execute("#{kinit} -k 2>&1", options = {:timeout => kinit_timeout})
-      ipa_response = Facter::Core::Execution.execute("#{ipa} env #{needed_keys.join(' ')}", options = {:timeout => ipa_timeout})
     end
+
+    # Grab the necessary information from 'ipa env'
+    ipa_response = Facter::Core::Execution.execute("#{ipacmd} env #{needed_keys.join(' ')}", options = {:timeout => ipa_timeout})
 
     if ipa_response.strip.empty?
       ipa_response = {}
     else
-      ipa_server_response = Facter::Core::Execution.execute("#{ipa} env --server host", options = {:timeout => ipa_timeout})
+      ipa_server_response = Facter::Core::Execution.execute("#{ipacmd} env --server host", options = {:timeout => ipa_timeout})
 
       defaults['connected'] = !ipa_server_response.strip.empty?
 

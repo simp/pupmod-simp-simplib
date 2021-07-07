@@ -14,11 +14,11 @@ describe "custom fact ipa" do
   }
 
   let (:ipa_env_query) {
-    '/usr/bin/ipa env domain server realm basedn tls_ca_cert'
+    '/bin/true && LC_ALL=en_US.UTF-8 /usr/bin/ipa env domain server realm basedn tls_ca_cert'
   }
 
   let (:ipa_env_server_query) {
-    '/usr/bin/ipa env --server host'
+    '/bin/true && LC_ALL=en_US.UTF-8 /usr/bin/ipa env --server host'
   }
 
   let (:default_conf) {
@@ -62,13 +62,22 @@ describe "custom fact ipa" do
   end
 
   context 'host is joined to IPA domain' do
+
+    before(:each) do
+      expect(ENV).to receive(:fetch).with('LANG', 'en_US.UTF-8').and_return('en_US.UTF-8')
+      expect(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
+      expect(Facter::Core::Execution).to receive(:which).with('klist').and_return('/usr/bin/klist')
+      expect(Facter::Core::Execution).to receive(:which).with('ipa').and_return('/usr/bin/ipa')
+      expect(Facter::Core::Execution).to receive(:which).with('true').and_return('/bin/true')
+    end
+
     context 'IPA server is available' do
       context 'kinit is not required' do
         it 'should execute only ipa commands and report local env + connected status' do
-          expect(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
-          expect(Facter::Core::Execution).to receive(:which).with('ipa').and_return('/usr/bin/ipa')
           expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
+          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+          allow_any_instance_of(Process::Status).to receive(:success?).and_return(true)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return(ipa_env)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
           expect(Facter.fact('ipa').value).to eq({
@@ -83,12 +92,12 @@ describe "custom fact ipa" do
 
       context 'kinit is required' do
         it 'should execute kinit + ipa commands and return local env + connected status' do
-          expect(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
-          expect(Facter::Core::Execution).to receive(:which).with('ipa').and_return('/usr/bin/ipa')
           expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
+          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+          allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
           expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('')
-          expect(Facter::Core::Execution).to receive(:execute).twice.with( ipa_env_query, ipa_query_options).and_return('', ipa_env)
+          expect(Facter::Core::Execution).to receive(:execute).with( ipa_env_query, ipa_query_options).and_return(ipa_env)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
           expect(Facter.fact('ipa').value).to eq({
             'connected' => true,
@@ -103,12 +112,12 @@ describe "custom fact ipa" do
 
     context 'IPA server is not available' do
       it 'should return defaults from /etc/ipa/default.conf and disconnected status' do
-        expect(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
-        expect(Facter::Core::Execution).to receive(:which).with('ipa').and_return('/usr/bin/ipa')
         expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
         expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
+        expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+        allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
         expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('some error message')
-        expect(Facter::Core::Execution).to receive(:execute).twice.with(ipa_env_query, ipa_query_options).and_return('')
+        expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return('')
         expect(Facter.fact('ipa').value).to eq({
           'connected' => false,
           'domain'    => 'example.com',
