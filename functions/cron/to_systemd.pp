@@ -25,9 +25,9 @@ function simplib::cron::to_systemd(
   Simplib::Cron::Monthday          $monthday = '*',
   Optional[Simplib::Cron::Weekday] $weekday  = undef
 ) {
-  $_minute = Array($minute, true).join(',')
+  $_minute = simplib::cron::expand_range(Array($minute, true).join(','))
 
-  $_hour = Array($hour, true).join(',')
+  $_hour = simplib::cron::expand_range(Array($hour, true).join(','))
 
   $_month = Array($month, true).map |$m| {
     $m ? {
@@ -50,18 +50,29 @@ function simplib::cron::to_systemd(
   $_monthday = Array($monthday, true).join(',')
 
   if $weekday {
-    $_weekday = Array($weekday, true).map |$w| {
-      $w ? {
-        '*'     => undef,
-        0       => 'Sun',
-        1       => 'Mon',
-        2       => 'Tue',
-        3       => 'Wed',
-        4       => 'Thu',
-        5       => 'Fri',
-        6       => 'Sat',
-        default => $weekday
+    $_munged_weekday = Array($weekday, true).map |$w| {
+      if '-' in $w {
+        simplib::cron::expand_range($w)
       }
+      else {
+        $w
+      }
+    }
+
+    $_weekday = Array($_munged_weekday, true).map |$w| {
+      "${w}".split(',').map |$mw| {
+        "${mw}" ? {
+          '*'     => undef,
+          '0'     => 'Sun',
+          '1'     => 'Mon',
+          '2'     => 'Tue',
+          '3'     => 'Wed',
+          '4'     => 'Thu',
+          '5'     => 'Fri',
+          '6'     => 'Sat',
+          default => $weekday
+        }
+      }.join(',')
     }.join(',')
   }
   else {
