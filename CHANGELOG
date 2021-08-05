@@ -1,7 +1,7 @@
 * Tue Aug 03 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.0
 - Fixed
-  - simplib::cron::hour_entry now supports ranges
-  - simplib::cron::minute_entry now supports ranges
+  - simplib::cron::hour_entry now supports comma separated lists
+  - simplib::cron::minute_entry now supports comma separated lists
   - simplib::cron::to_systemd() properly supports/converts ranges and commas
 - Added
   - simplib::cron::expand_range() to expand ranges into comma separated
