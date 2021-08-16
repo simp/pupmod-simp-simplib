@@ -1,3 +1,14 @@
+* Tue Aug 03 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.0
+- Fixed
+  - simplib::cron::hour_entry now supports comma separated lists
+  - simplib::cron::minute_entry now supports comma separated lists
+  - simplib::cron::to_systemd() properly supports/converts ranges and commas
+- Added
+  - simplib::cron::expand_range() to expand ranges into comma separated
+    strings
+  - Better tests for simplib::cron::to_systemd()
+  - Acceptance tests for simplib::cron::to_systemd()
+
 * Tue Jul 06 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.9.0
 - Added a `simplib::cron::to_systemd` function to provide 'best-effort'
   conversions of cron resource parameters to a systemd timespec

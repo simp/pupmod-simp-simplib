@@ -29,6 +29,7 @@
 * [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
 * [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
 * [`simplib::caller`](#simplibcaller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
+* [`simplib::cron::expand_range`](#simplibcronexpand_range): Expand all ranges ('-') into a comma separated list
 * [`simplib::cron::to_systemd`](#simplibcronto_systemd): Convert a set of 'cron' native type parameters to a 'best effort' systemd calendar String
 * [`simplib::debug::classtrace`](#simplibdebugclasstrace): Prints out the stack of Puppet Classes and Defined Types that have been called up to this point  WARNING: Uses **EXPERIMENTAL** features from
 * [`simplib::debug::inspect`](#simplibdebuginspect): Prints out Puppet warning messages that display the passed variable, data type, and location.  WARNING: Uses **EXPERIMENTAL** features from P
@@ -1011,6 +1012,24 @@ of known function nesting
 Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
+
+### <a name="simplibcronexpand_range"></a>`simplib::cron::expand_range`
+
+Type: Puppet Language
+
+Expand all ranges ('-') into a comma separated list
+
+#### `simplib::cron::expand_range(String $range)`
+
+Expand all ranges ('-') into a comma separated list
+
+Returns: `String`
+
+##### `range`
+
+Data type: `String`
+
+The range to convert
 
 ### <a name="simplibcronto_systemd"></a>`simplib::cron::to_systemd`
 
@@ -5569,7 +5588,7 @@ Alias of
 ```puppet
 Variant[Integer[0,23], Pattern['^(?x)(?:\*|
 (?:\*\/(?:[01]?\d|2[0-3]))|
-(?:(?:[01]?\d|2[0-3])(?:(?:-(?:[01]?\d|2[0-3]))(?:\/(?:[01]?\d|2[0-3]))?)?)
+(?:(?:[01]?\d|2[0-3])(?:(?:(-|,)(?:[01]?\d|2[0-3]))?(?:\/(?:[01]?\d|2[0-3]))?)?)
 )$']]
 ```
 
@@ -5594,7 +5613,7 @@ Alias of
 ```puppet
 Variant[Integer[0,59], Pattern['^(?x)(?:\*|
 (?:\*\/(?:[0-5]?\d))|
-(?:(?:[0-5]?\d)(?:(?:-(?:[0-5]?\d))(?:\/(?:[0-5]?\d))?)?)
+(?:(?:[0-5]?\d)(?:(?:(-|,)(?:[0-5]?\d))?(?:\/(?:[0-5]?\d))?)?)
 )$']]
 ```
 
