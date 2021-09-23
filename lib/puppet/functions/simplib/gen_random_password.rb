@@ -74,6 +74,8 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
           rand_list_index = rand_list_index-1
         end
 
+        last_list_rand = rand_list_index
+
         rand_index = rand(charlists[rand_list_index].length).floor
 
         if rand_index == last_char_rand
