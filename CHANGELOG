@@ -1,3 +1,7 @@
+* Thu Sep 23 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.1
+- Fixed
+  - Increased randomization in simplib::gen_random_password
+
 * Tue Aug 03 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.0
 - Fixed
   - simplib::cron::hour_entry now supports comma separated lists

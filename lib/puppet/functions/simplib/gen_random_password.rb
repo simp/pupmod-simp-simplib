@@ -31,44 +31,62 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
     require 'timeout'
     passwd = ''
     Timeout::timeout(timeout_seconds) do
-      default_charlist = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
-      specific_charlist = nil
+      lower_charlist = ('a'..'z').to_a
+      upper_charlist = ('A'..'Z').to_a
+      digit_charlist = ('0'..'9').to_a
+      symbol_charlist = nil
       case complexity
         when 1
-          specific_charlist = ['@','%','-','_','+','=','~']
+          symbol_charlist = ['@','%','-','_','+','=','~']
         when 2
-          specific_charlist = (' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a
+          symbol_charlist = (' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a
         else
       end
 
-      unless specific_charlist.nil?
+      unless symbol_charlist.nil?
         if complex_only == true
           charlists = [
-            specific_charlist
+            symbol_charlist
           ]
         else
           charlists = [
-            default_charlist,
-            specific_charlist
+            lower_charlist,
+            upper_charlist,
+            digit_charlist,
+            symbol_charlist
           ]
         end
 
       else
         charlists = [
-          default_charlist
+          lower_charlist,
+          upper_charlist,
+          digit_charlist
         ]
       end
 
-      index = 0
+      last_list_rand = nil
+      last_char_rand = nil
       Integer(length).times do |i|
-        passwd += charlists[index][rand(charlists[index].length-1)]
-        index += 1
-        index = 0 if index == charlists.length
+        rand_list_index = rand(charlists.length).floor
+
+        if rand_list_index == last_list_rand
+          rand_list_index = rand_list_index-1
+        end
+
+        rand_index = rand(charlists[rand_list_index].length).floor
+
+        if rand_index == last_char_rand
+          rand_index = rand_index-1
+        end
+
+        passwd += charlists[rand_list_index][rand_index]
+
+        last_char_rand = rand_index
       end
     end
 
     return passwd
   end
-
 end
 # vim: set expandtab ts=2 sw=2:

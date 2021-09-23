@@ -45,7 +45,7 @@ describe 'simplib::gen_random_password' do
       expect(result).not_to match(/(#{(unsafe_special_chars).join('|')})/)
     end
 
-    it 'should return a password that contains all special characters if complexity is 2' do
+    it 'should return a password that contains all normal and special characters if complexity is 2' do
       result = subject.execute(32, 2)
       expect(result.length).to eql(32)
       expect(result).to match(/(#{default_chars.join('|')})/)
