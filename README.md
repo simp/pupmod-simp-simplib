@@ -55,8 +55,6 @@ Agents will need to enable `pluginsync`.
 
 Please see [reference](#reference) for usage.
 
-Full documentation can be found in the [module docs](https://simp.github.io/pupmod-simp-simplib)
-
 ## Reference
 
 Items not covered by `puppet strings` are provided below.
