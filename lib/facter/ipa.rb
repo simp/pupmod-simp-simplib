@@ -69,7 +69,7 @@ Facter.add(:ipa) do
     # We won't know if we are connected to a server until later
     defaults['connected'] = false
 
-    Facter::Core::Execution.execute(klist)
+    Facter::Core::Execution.execute("#{klist} -s")
     unless $?.success?
       # Obtain host Kerberos token so we can use IPA API
       kinit_msg = Facter::Core::Execution.execute("#{kinit} -k 2>&1", options = {:timeout => kinit_timeout})
