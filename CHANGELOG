@@ -1,3 +1,7 @@
+* Thu Dec 16 2021 ke5C2Fin <noreply@github.com> - 4.10.2
+- Fixed
+  - Call `klist -s` instead of `klist` to properly handle cache issues
+
 * Thu Sep 23 2021 Trevor Vaughan <tvaughan@onyxpoint.com> - 4.10.1
 - Fixed
   - Increased randomization in simplib::gen_random_password

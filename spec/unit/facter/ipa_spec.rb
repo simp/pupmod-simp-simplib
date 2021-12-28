@@ -76,7 +76,7 @@ describe "custom fact ipa" do
         it 'should execute only ipa commands and report local env + connected status' do
           expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
-          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist -s')
           allow_any_instance_of(Process::Status).to receive(:success?).and_return(true)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return(ipa_env)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
@@ -94,7 +94,7 @@ describe "custom fact ipa" do
         it 'should execute kinit + ipa commands and return local env + connected status' do
           expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
-          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+          expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist -s')
           allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
           expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('')
           expect(Facter::Core::Execution).to receive(:execute).with( ipa_env_query, ipa_query_options).and_return(ipa_env)
@@ -114,7 +114,7 @@ describe "custom fact ipa" do
       it 'should return defaults from /etc/ipa/default.conf and disconnected status' do
         expect(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
         expect(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
-        expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist')
+        expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/klist -s')
         allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
         expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('some error message')
         expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return('')
