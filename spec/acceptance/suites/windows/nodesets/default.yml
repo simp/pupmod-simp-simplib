@@ -30,7 +30,6 @@ HOSTS:
 CONFIG:
   log_level: verbose
   type: aio
-  vagrant_memsize: 256
 <% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
   puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
 <% end -%>
