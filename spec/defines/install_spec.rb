@@ -17,7 +17,7 @@ describe 'simplib::install', :type => :define do
         }}
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_package('foo').with_ensure('present') }
+        it { is_expected.to create_package('foo').with_ensure('installed') }
       end
 
       context 'with an empty hash for options' do
@@ -28,7 +28,7 @@ describe 'simplib::install', :type => :define do
         }}
 
         it { is_expected.to compile.with_all_deps }
-        it { is_expected.to create_package('foo').with_ensure('present') }
+        it { is_expected.to create_package('foo').with_ensure('installed') }
       end
 
       unless os_facts[:kernel].casecmp('windows')
@@ -51,7 +51,7 @@ describe 'simplib::install', :type => :define do
             :packages => {
               'foo' => :undef,
               'bar' => {
-                'ensure' => 'present'
+                'ensure' => 'installed'
               }
             },
             :defaults => {
@@ -61,7 +61,7 @@ describe 'simplib::install', :type => :define do
 
           it { is_expected.to compile.with_all_deps }
           it { is_expected.to create_package('foo').with_ensure('latest') }
-          it { is_expected.to create_package('bar').with_ensure('present') }
+          it { is_expected.to create_package('bar').with_ensure('installed') }
         end
       end
     end
