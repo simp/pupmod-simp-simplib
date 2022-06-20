@@ -50,14 +50,17 @@ function simplib::module_metadata::os_supported (
       if $os_info['operatingsystem'] == $facts['os']['name'] {
         $memo and case $_options['release_match'] {
           'full': {
-            $facts['os']['release']['full'] in $os_info['operatingsystemrelease']
+            !$os_info['operatingsystemrelease'] or ($facts['os']['release']['full'] in $os_info['operatingsystemrelease'])
           }
           'major': {
-            $_os_major_releases = $os_info['operatingsystemrelease'].map |$os_release| {
-              split($os_release, '\.')[0]
-            }
+            if $os_info['operatingsystemrelease'] {
+              $_os_major_releases = $os_info['operatingsystemrelease'].map |$os_release| {
+                split($os_release, '\.')[0]
+              }
 
-            $facts['os']['release']['major'] in $_os_major_releases
+              $facts['os']['release']['major'] in $_os_major_releases
+            }
+            else { true }
           }
           default: { true }
         }

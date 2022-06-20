@@ -26,7 +26,6 @@
     }
   ],
   "operatingsystem_support": [
-    { "operatingsystem": "AIX" },
     { "operatingsystem": "AlmaLinux" },
     { "operatingsystem": "Amazon" },
     { "operatingsystem": "Archlinux" },
@@ -36,13 +35,12 @@
     { "operatingsystem": "Fedora" },
     { "operatingsystem": "FreeBSD" },
     { "operatingsystem": "Gentoo" },
-    { "operatingsystem": "Linux" },
     { "operatingsystem": "LinuxMint" },
     { "operatingsystem": "OpenBSD" },
     { "operatingsystem": "OpenSUSE" },
     { "operatingsystem": "OracleLinux" },
-    { "operatingsystem": "Pop!_OS" },
     { "operatingsystem": "RedHat" },
+    { "operatingsystem": "Pop!_OS" },
     { "operatingsystem": "Rocky" },
     { "operatingsystem": "SLES" },
     { "operatingsystem": "Scientific" },

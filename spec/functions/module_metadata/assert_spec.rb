@@ -1,6 +1,20 @@
 require 'spec_helper'
 
 describe 'simplib::module_metadata::assert' do
+  module_metadata = {
+    'name' => 'simp-simplib',
+    'version' => '1.2.3',
+    'author' => 'Yep',
+    'summary' => 'Stubby',
+    'license' => 'Apache-2.0',
+    'operatingsystem_support' => [
+      {
+        'operatingsystem' => 'Ubuntu',
+        'operatingsystemrelease' => ['14.04']
+      }
+    ]
+  }.to_json
+
   valid_facts = {
     :os => {
       'name' => 'Ubuntu',
@@ -90,6 +104,14 @@ describe 'simplib::module_metadata::assert' do
       }
     }
   }
+
+  let(:pre_condition) do
+    <<~PRE_CONDITION
+      function load_module_metadata(String $any) {
+        parsejson('#{module_metadata}')
+      }
+    PRE_CONDITION
+  end
 
   context 'with no version matching' do
     context 'on a supported OS' do
