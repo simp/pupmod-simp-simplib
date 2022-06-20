@@ -15,6 +15,10 @@ describe 'simplib::assert_optional_dependency' do
           },
           {
             'name'                => 'dep/two'
+          },
+          {
+            'name'                => 'dep-three',
+            'version_requirement' => '>= 1.2.3 < 2.0.0'
           }
         ]
       }
@@ -32,6 +36,13 @@ describe 'simplib::assert_optional_dependency' do
     {
       'name'    => 'dep-two',
       'version' => '3.4.5'
+    }
+  }
+
+  let(:dep_three_metadata) {
+    {
+      'name'    => 'dep-three',
+      'version' => '1.2.3-alpha'
     }
   }
 
@@ -57,6 +68,8 @@ describe 'simplib::assert_optional_dependency' do
       expect(func).to receive(:call_function).with('load_module_metadata', 'one').and_return(dep_one_metadata)
       expect(func).to receive(:call_function).with('simplib::module_exist', 'two').and_return(true)
       expect(func).to receive(:call_function).with('load_module_metadata', 'two').and_return(dep_two_metadata)
+      expect(func).to receive(:call_function).with('simplib::module_exist', 'three').and_return(true)
+      expect(func).to receive(:call_function).with('load_module_metadata', 'three').and_return(dep_three_metadata)
       is_expected.to run.with_params('my/module')
     end
 
@@ -125,7 +138,7 @@ describe 'simplib::assert_optional_dependency' do
       it 'should fail' do
         expect(func).to_not receive(:call_function).with('simplib::module_exist', 'one')
 
-        expect{is_expected.to run.with_params('my/module', 'three')}.to raise_error(%r('three' not found in metadata.json))
+        expect{is_expected.to run.with_params('my/module', 'badmod')}.to raise_error(%r('badmod' not found in metadata.json))
       end
     end
   end
@@ -137,6 +150,8 @@ describe 'simplib::assert_optional_dependency' do
       expect(func).to receive(:call_function).with('load_module_metadata', 'one').and_return(dep_one_bad_version)
       expect(func).to receive(:call_function).with('simplib::module_exist', 'two').and_return(true)
       expect(func).to receive(:call_function).with('load_module_metadata', 'two').and_return(dep_two_metadata)
+      expect(func).to receive(:call_function).with('simplib::module_exist', 'three').and_return(true)
+      expect(func).to receive(:call_function).with('load_module_metadata', 'three').and_return(dep_three_metadata)
 
       expect{ is_expected.to run.with_params('my/module') }.to raise_error(%r('one-.+' does not satisfy)m)
     end

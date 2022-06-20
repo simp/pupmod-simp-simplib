@@ -26,95 +26,30 @@
     }
   ],
   "operatingsystem_support": [
-    {
-      "operatingsystem": "RedHat",
-      "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "OracleLinux",
-      "operatingsystemrelease": [
-        "7",
-        "8"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
-      "operatingsystem": "SLES",
-      "operatingsystemrelease": [
-        "11 SP1",
-        "12",
-        "15"
-      ]
-    },
-    {
-      "operatingsystem": "Debian",
-      "operatingsystemrelease": [
-        "8",
-        "9",
-        "10",
-        "11"
-      ]
-    },
-    {
-      "operatingsystem": "Ubuntu",
-      "operatingsystemrelease": [
-        "14.04",
-        "16.04",
-        "18.04",
-        "19.04",
-        "20.04"
-      ]
-    },
-    {
-      "operatingsystem": "Solaris",
-      "operatingsystemrelease": [
-        "11",
-        "12"
-      ]
-    },
-    {
-      "operatingsystem": "Windows",
-      "operatingsystemrelease": [
-        "Server 2008",
-        "Server 2008 R2",
-        "Server 2012",
-        "Server 2012 R2",
-        "2016",
-        "2019",
-        "7",
-        "8",
-        "10"
-      ]
-    },
-    {
-      "operatingsystem": "AIX",
-      "operatingsystemrelease": [
-        "6.1",
-        "7.1",
-        "7.2"
-      ]
-    },
-    {
-      "operatingsystem": "Amazon",
-      "operatingsystemrelease": [
-        "2"
-      ]
-    }
+    { "operatingsystem": "AIX" },
+    { "operatingsystem": "AlmaLinux" },
+    { "operatingsystem": "Amazon" },
+    { "operatingsystem": "Archlinux" },
+    { "operatingsystem": "CentOS" },
+    { "operatingsystem": "Darwin" },
+    { "operatingsystem": "Debian" },
+    { "operatingsystem": "Fedora" },
+    { "operatingsystem": "FreeBSD" },
+    { "operatingsystem": "Gentoo" },
+    { "operatingsystem": "Linux" },
+    { "operatingsystem": "LinuxMint" },
+    { "operatingsystem": "OpenBSD" },
+    { "operatingsystem": "OpenSUSE" },
+    { "operatingsystem": "OracleLinux" },
+    { "operatingsystem": "Pop!_OS" },
+    { "operatingsystem": "RedHat" },
+    { "operatingsystem": "Rocky" },
+    { "operatingsystem": "SLES" },
+    { "operatingsystem": "Scientific" },
+    { "operatingsystem": "Solaris" },
+    { "operatingsystem": "Ubuntu" },
+    { "operatingsystem": "VirtuozzoLinux" },
+    { "operatingsystem": "Windows" }
   ],
   "requirements": [
     {
