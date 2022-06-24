@@ -5,7 +5,15 @@ require 'spec_helper'
 describe 'simplib__mountpoints' do
   before :each do
     Facter.clear
-    allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
+
+    # mock out Facter method called when evaluating confine for :kernel
+    # Facter 4
+    if defined?(Facter::Resolvers::Uname)
+      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
+    else
+      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    end
+
     expect(File).to receive(:exist?).with('/proc/mounts').and_return(true)
 
     class EtcStub

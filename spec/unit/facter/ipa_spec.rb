@@ -57,8 +57,14 @@ describe "custom fact ipa" do
   before(:each) do
     Facter.clear
 
+
     # mock out Facter method called when evaluating confine for :kernel
-    expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    # Facter 4
+    if defined?(Facter::Resolvers::Uname)
+      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
+    else
+      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    end
   end
 
   context 'host is joined to IPA domain' do
@@ -80,6 +86,9 @@ describe "custom fact ipa" do
           allow_any_instance_of(Process::Status).to receive(:success?).and_return(true)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return(ipa_env)
           expect(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
+
+          # Have to set $? for Facter 4
+          %x{( exit 0 )}
           expect(Facter.fact('ipa').value).to eq({
             'connected' => true,
             'domain'    => 'example.com',

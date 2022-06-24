@@ -5,6 +5,8 @@ require 'spec_helper'
 describe 'init_systems' do
   before :each do
     Facter.clear
+
+    allow(Dir).to receive(:exist?).with(any_args).and_call_original
   end
 
   context 'when on a base system' do
