@@ -27,10 +27,10 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   #        * `1` => Add reasonably safe symbols
   #        * `2` => Printable ASCII
   #   * `user` => user for generated files/directories
-  #        * Defaults to the user compiling the catalog.
+  #        * Defaults to the Puppet user.
   #        * Only useful when running `puppet apply` as the `root` user.
   #   * `group => Group for generated files/directories
-  #        * Defaults to the group compiling the catalog.
+  #        * Defaults to the Puppet user.
   #        * Only useful when running `puppet apply` as the `root` user.
   #   **private options:**
   #   * `password` => contains the string representation of the password to hash (used for testing)
@@ -61,8 +61,8 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     scope = closure_scope
 
     settings = {}
-    settings['user'] = modifier_hash.key?('user') ? modifier_hash['user'] : Etc.getpwuid(Process.uid).name
-    settings['group'] = modifier_hash.key?('group') ? modifier_hash['group'] : Etc.getgrgid(Process.gid).name
+    settings['user'] = modifier_hash['user'] || Puppet.settings[:user]
+    settings['group'] = modifier_hash['group'] || Puppet.settings[:group]
     settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
       'environments', scope.lookupvar('::environment'),
       'simp_autofiles', 'gen_passwd'
@@ -321,13 +321,14 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     Find.find(settings['keydir']) do |file|
       file_stat = File.stat(file)
 
-      # Do we own this file?
+      # Does the Puppet user own this file?
       begin
         file_owner = Etc.getpwuid(file_stat.uid).name
+        file_group = Etc.getgrgid(file_stat.gid).name
 
-        unowned_files << file unless (file_owner == settings['user'])
+        unowned_files << file unless (file_owner == settings['user'] || file_group == settings['group'] )
       rescue ArgumentError => e
-        debug("simplib::passgen: Error getting UID for #{file}: #{e}")
+        debug("simplib::passgen: Error getting UID/GID for #{file}: #{e}")
 
         unowned_files << file
       end
@@ -335,9 +336,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       # Ignore any file/directory that we don't own
       Find.prune if unowned_files.last == file
 
-      FileUtils.chown(settings['user'],
-        settings['group'], file
-      )
+      FileUtils.chown(settings['user'], settings['group'], file)
 
       file_mode = file_stat.mode
       desired_mode = symbolic_mode_to_int('u+rwX,g+rX,o-rwx',file_mode,File.directory?(file))
@@ -357,4 +356,3 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     end
   end
 end
-# vim: set expandtab ts=2 sw=2:

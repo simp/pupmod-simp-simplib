@@ -1,3 +1,7 @@
+* Thu Dec 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.3
+- Fixed
+  - Permit root user to run `puppet lookup --compile` without borking passgen
+
 * Thu Dec 16 2021 ke5C2Fin <noreply@github.com> - 4.10.2
 - Fixed
   - Call `klist -s` instead of `klist` to properly handle cache issues
