@@ -1,9 +1,9 @@
-* Mon Jun 20 2022 Trevor Vaughan <tvaughan@sicura.us> - 4.10.3
+* Fir Jun 24 2022 Trevor Vaughan <tvaughan@sicura.us> - 4.10.3
 - Fixed
   - Allow `assert_optional_dependency` to handle extended version strings
     (Alpha, Beta, RC, 1.2.3.4, etc...)
 
-* Thu Dec 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.3
+* Fri Jun 24 2022 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.3
 - Fixed
   - Permit root user to run `puppet lookup --compile` without borking passgen
 
