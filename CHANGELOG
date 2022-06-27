@@ -1,4 +1,4 @@
-* Thu Dec 16 2021 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.3
+* Fri Jun 24 2022 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.3
 - Fixed
   - Permit root user to run `puppet lookup --compile` without borking passgen
 
