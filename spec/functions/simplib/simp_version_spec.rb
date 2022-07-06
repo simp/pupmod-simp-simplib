@@ -17,6 +17,7 @@ describe 'simplib::simp_version' do
       context 'a valid version exists in simp.version' do
         before(:each) do
           allow(File).to receive(:read).with(any_args).and_call_original
+          allow(File).to receive(:readable?).with(any_args).and_call_original
         end
 
         it 'should return the version with whitespace retained' do

@@ -6,7 +6,7 @@ describe 'simplib__auditd' do
 
     allow(Facter).to receive(:value).with(any_args).and_call_original
     allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
-    expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
     expect(Facter::Util::Resolution).to receive(:which).with('ps').and_return('/bin/ps')
   end
 

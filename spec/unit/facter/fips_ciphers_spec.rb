@@ -4,7 +4,7 @@ describe 'fips_ciphers' do
 
   before :each do
     Facter.clear
-    expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
   end
 
   context 'openssl command exists' do

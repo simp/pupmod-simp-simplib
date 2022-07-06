@@ -4,7 +4,14 @@ describe 'simplib__networkmanager' do
 
   before :each do
     Facter.clear
-    expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    # mock out Facter method called when evaluating confine for :kernel
+    # Facter 4
+    if defined?(Facter::Resolvers::Uname)
+      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
+    else
+      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    end
+
     expect(Facter::Util::Resolution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
 
     expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status').and_return(general_status)

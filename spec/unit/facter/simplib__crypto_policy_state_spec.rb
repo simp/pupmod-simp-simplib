@@ -7,7 +7,7 @@ describe 'simplib__crypto_policy_state' do
     Facter.clear
 
     # Mock out Facter method called when evaluating confine for :kernel
-    # expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
     expect(Facter.fact(:kernel)).to receive(:value).and_return('Linux')
 
     # Ensure that something sane is returned when finding the command

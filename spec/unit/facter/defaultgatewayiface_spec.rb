@@ -15,7 +15,7 @@ EOM
 
   context 'ip command exists' do
     before :each do
-      expect(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
       expect(Facter::Util::Resolution).to receive(:which).with('ip').and_return('/usr/bin/ip')
     end
 

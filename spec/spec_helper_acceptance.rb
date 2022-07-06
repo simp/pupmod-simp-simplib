@@ -67,28 +67,32 @@ RSpec.configure do |c|
   c.before :suite do
     begin
       nonwin = hosts.dup
-      nonwin.delete_if {|h| h[:platform] =~ /windows/ }
+      nonwin.delete_if { |h| h[:platform] =~ %r{windows} }
       # Install modules and dependencies from spec/fixtures/modules
-      copy_fixture_modules_to( nonwin )
-      begin
-        server = only_host_with_role(nonwin, 'server')
-      rescue ArgumentError => e
-        server = only_host_with_role(nonwin, 'default')
-      end
-      # Generate and install PKI certificates on each SUT
-      Dir.mktmpdir do |cert_dir|
-        run_fake_pki_ca_on(server, nonwin, cert_dir )
-        nonwin.each{ |sut| copy_pki_to( sut, cert_dir, '/etc/pki/simp-testing' )}
-      end
+      copy_fixture_modules_to(nonwin)
 
-      # add PKI keys
-      copy_keydist_to(server)
-    rescue StandardError, ScriptError => e
-      if ENV['PRY']
-        require 'pry'; binding.pry
-      else
-        raise e
+      unless nonwin.empty?
+        begin
+          server = only_host_with_role(nonwin, 'server')
+        rescue ArgumentError => e
+          server = only_host_with_role(nonwin, 'default')
+        end
+        # Generate and install PKI certificates on each SUT
+        Dir.mktmpdir do |cert_dir|
+          run_fake_pki_ca_on(server, nonwin, cert_dir)
+          nonwin.each { |sut| copy_pki_to(sut, cert_dir, '/etc/pki/simp-testing') }
+        end
+
+        # add PKI keys
+        copy_keydist_to(server)
       end
+    rescue StandardError, ScriptError => e
+      raise e unless ENV['PRY']
+
+      # rubocop:disable Lint/Debugger
+      require 'pry'
+      binding.pry
+      # rubocop:enable Lint/Debugger
     end
   end
 end

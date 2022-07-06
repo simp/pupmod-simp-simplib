@@ -4,10 +4,14 @@ require 'spec_helper'
 describe "custom fact puppet_settings" do
 
   before(:each) do
-    if Facter.collection.respond_to?(:load)
-      Facter.collection.load(:puppet_settings)
-    else
-      Facter.collection.loader.load(:puppet_settings)
+    begin
+      if Facter.collection.respond_to?(:load)
+        Facter.collection.load(:puppet_settings)
+      else
+        Facter.collection.loader.load(:puppet_settings)
+      end
+    rescue
+      # Facter 4 noop
     end
   end
 

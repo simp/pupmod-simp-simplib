@@ -72,6 +72,15 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
     return metadata_level[current_level]
   end
 
+  # Concept lifted from 'node-semver'
+  def coerce(version)
+    version
+      .split('-')
+      .first
+      .split('.')[0, 3]
+      .join('.')
+  end
+
   def check_dependency(module_name, module_dependency)
     require 'semantic_puppet'
 
@@ -103,7 +112,7 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
           return %(invalid version range '#{module_dependency['version_requirement']}' for '#{_module_name}')
         end
 
-        module_version = module_metadata['version']
+        module_version = coerce(module_metadata['version'])
 
         begin
           module_version = SemanticPuppet::Version.parse(module_version)

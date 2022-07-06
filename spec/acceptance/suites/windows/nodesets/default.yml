@@ -6,26 +6,18 @@
   end
 -%>
 HOSTS:
-  el7:
-    roles:
-      - default
-    platform: el-7-x86_64
-    box: centos/7
-    hypervisor: <%= hypervisor %>
-
   win:
     roles:
       - windows
     platform: windows-server-amd64
-    box: devopsgroup-io/windows_server-2012r2-standard-amd64-nocm
+    box: gusztavvargadr/windows-server
+    box_version: 2102.0.2205
     hypervisor: <%= hypervisor %>
     vagrant_memsize: 2048
     vagrant_cpus: 2
     user: vagrant
     communicator: winrm
     is_cygwin: false
-    ssh:
-      host_key: '+ssh-dss'
 
 CONFIG:
   log_level: verbose
@@ -33,3 +25,14 @@ CONFIG:
 <% if ENV['BEAKER_PUPPET_ENVIRONMENT'] -%>
   puppet_environment: <%= ENV['BEAKER_PUPPET_ENVIRONMENT'] %>
 <% end -%>
+  ssh:
+    keepalive: true
+    keepalive_interval: 10
+    host_key:
+      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:host_key].join("\n#{' '*6}- ") %>
+    kex:
+      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:kex].join("\n#{' '*6}- ") %>
+    encryption:
+      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:encryption].join("\n#{' '*6}- ") %>
+    hmac:
+      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:hmac].join("\n#{' '*6}- ") %>

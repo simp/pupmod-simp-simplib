@@ -5,12 +5,14 @@ describe "simplib__sshd_config" do
   before :each do
     Facter.clear
 
+    allow(File).to receive(:read).with(any_args).and_call_original
+    allow(File).to receive(:readable?).with(any_args).and_call_original
+
     expect(Facter::Util::Resolution).to receive(:which).with('sshd').and_return('/usr/bin/sshd')
     expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/sshd -. 2>&1', :on_fail => :failed).and_return(openssh_version['full_version'])
 
     expect(File).to receive(:exist?).with('/etc/ssh/sshd_config').and_return(true).at_least(:once)
     expect(File).to receive(:readable?).with('/etc/ssh/sshd_config').and_return(true)
-    allow(File).to receive(:read).with(any_args).and_call_original
     expect(File).to receive(:read).with('/etc/ssh/sshd_config').and_return(sshd_config_content)
   end
 
