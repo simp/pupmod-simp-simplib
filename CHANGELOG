@@ -1,3 +1,8 @@
+* Thu Jul 07 2022 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.10.4
+- Fixed
+  - If the user/group Puppet's settings doesn't exist on the OS,
+    passgen's file ownership falls back to the owner of the compiler's process
+
 * Fri Jun 24 2022 Trevor Vaughan <tvaughan@sicura.us> - 4.10.3
 - Fixed
   - Allow `assert_optional_dependency` to handle extended version strings
