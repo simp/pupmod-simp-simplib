@@ -61,8 +61,26 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     scope = closure_scope
 
     settings = {}
-    settings['user'] = modifier_hash['user'] || Puppet.settings[:user]
-    settings['group'] = modifier_hash['group'] || Puppet.settings[:group]
+
+    user = modifier_hash['user'] || Puppet.settings[:user]
+    group = modifier_hash['group'] || Puppet.settings[:group]
+    begin
+      Etc.getpwnam(user)
+    rescue ArgumentError
+      debug_msg = "simpkv::passgen (legacy): Puppet user '#{user}' not found on system, "
+      user = Etc.getpwuid(Process.uid).name
+      debug_msg += "defaulting to process owner uid (#{user})"
+    end
+    begin
+      Etc.getgrnam(group)
+    rescue ArgumentError
+      debug_msg = "simpkv::passgen (legacy): Puppet group '#{group}' not found on system, "
+      group = Etc.getgrgid(Process.gid).name
+      debug_msg += "defaulting to process owner gid (#{group})"
+    end
+    settings['user'] = user
+    settings['group'] = group
+
     settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
       'environments', scope.lookupvar('::environment'),
       'simp_autofiles', 'gen_passwd'
