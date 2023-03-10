@@ -1,43 +1,38 @@
-<%
-  if ENV['BEAKER_HYPERVISOR']
-    hypervisor = ENV['BEAKER_HYPERVISOR']
-  else
-    hypervisor = 'vagrant'
-  end
--%>
+---
 HOSTS:
   server-el7:
     roles:
-      - default
-      - no_fips
-      - server
+    - default
+    - no_fips
+    - server
     masterless: true
     platform: el-7-x86_64
     box: centos/7
-    hypervisor: <%= hypervisor %>
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     vagrant_memsize: 2048
     vagrant_cpus: 2
-
+    family: centos-cloud/centos-7
+    gce_machine_type: n1-standard-2
   client-el8:
     roles:
-      - client
+    - client
     masterless: true
     platform: el-8-x86_64
     box: generic/centos8
-    hypervisor: <%= hypervisor %>
-
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: centos-cloud/centos-stream-8
+    gce_machine_type: n1-standard-2
   client-el7:
     roles:
-      - client
+    - client
     masterless: true
-    platform:   el-7-x86_64
-    box:        centos/7
-    hypervisor: <%= hypervisor %>
-
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
+    family: centos-cloud/centos-7
+    gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
   type: aio
   vagrant_cpus: 1
-<% if ENV['BEAKER_PUPPET_COLLECTION'] -%>
-  puppet_collection: <%= ENV['BEAKER_PUPPET_COLLECTION'] %>
-<% end -%>
+  puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
