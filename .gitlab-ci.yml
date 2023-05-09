@@ -232,26 +232,26 @@ variables:
 # Puppet Versions
 #-----------------------------------------------------------------------
 
-.pup_6_x: &pup_6_x
-  image: 'ruby:2.5'
-  variables:
-    PUPPET_VERSION: '~> 6.0'
-    BEAKER_PUPPET_COLLECTION: 'puppet6'
-    MATRIX_RUBY_VERSION: '2.5'
-
-.pup_6_pe: &pup_6_pe
-  image: 'ruby:2.5'
-  variables:
-    PUPPET_VERSION: '6.22.1'
-    BEAKER_PUPPET_COLLECTION: 'puppet6'
-    MATRIX_RUBY_VERSION: '2.5'
-
 .pup_7_x: &pup_7_x
   image: 'ruby:2.7'
   variables:
     PUPPET_VERSION: '~> 7.0'
     BEAKER_PUPPET_COLLECTION: 'puppet7'
     MATRIX_RUBY_VERSION: '2.7'
+
+.pup_7_pe: &pup_7_pe
+  image: 'ruby:2.7'
+  variables:
+    PUPPET_VERSION: '7.21.0'
+    BEAKER_PUPPET_COLLECTION: 'puppet7'
+    MATRIX_RUBY_VERSION: '2.7'
+
+.pup_8_x: &pup_8_x
+  image: 'ruby:3.2'
+  variables:
+    PUPPET_VERSION: '~> 8.0'
+    BEAKER_PUPPET_COLLECTION: 'puppet8'
+    MATRIX_RUBY_VERSION: '3.2'
 
 
 
@@ -302,7 +302,7 @@ variables:
 #=======================================================================
 
 releng_checks:
-  <<: *pup_6_x
+  <<: *pup_7_x
   <<: *setup_bundler_env
   stage: 'validation'
   tags: ['docker']
@@ -325,23 +325,23 @@ releng_checks:
 #       different Puppet versions won't accomplish anything.
 
 pup-lint:
-  <<: *pup_6_x
+  <<: *pup_7_x
   <<: *lint_tests
 
 # Unit Tests
 #-----------------------------------------------------------------------
 
-pup6.x-unit:
-  <<: *pup_6_x
+pup7.x-unit:
+  <<: *pup_7_x
   <<: *unit_tests
   <<: *with_SIMP_SPEC_MATRIX_LEVEL_2
 
-pup6.pe-unit:
-  <<: *pup_6_pe
+pup7.pe-unit:
+  <<: *pup_7_pe
   <<: *unit_tests
 
-pup7.x-unit:
-  <<: *pup_7_x
+pup8.x-unit:
+  <<: *pup_8_x
   <<: *unit_tests
 
 # ------------------------------------------------------------------------------
@@ -354,71 +354,71 @@ pup7.x-unit:
 # Repo-specific content
 # ==============================================================================
 
-pup6.x:
+pup7.x:
   <<: *acceptance_base
-  <<: *pup_6_x
+  <<: *pup_7_x
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
-pup6.pe:
+pup7.pe:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
-pup6.pe-fips:
+pup7.pe-fips:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'BEAKER_fips=yes bundle exec rake beaker:suites[default,default]'
 
-pup6.pe-oel:
+pup7.pe-oel:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[default,oel]'
 
-pup6.pe-caller_function:
+pup7.pe-caller_function:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[caller_function,default]'
 
-pup6.pe-ipa_fact:
+pup7.pe-ipa_fact:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,default]'
 
-pup6.pe-ipa_fact-oel:
+pup7.pe-ipa_fact-oel:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   <<: *with_SIMP_ACCEPTANCE_MATRIX_LEVEL_3
   script:
     - 'bundle exec rake beaker:suites[ipa_fact,oel]'
 
-pup6.pe-prelink_fact:
+pup7.pe-prelink_fact:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[prelink_fact,default]'
 
-pup6.pe-windows:
+pup7.pe-windows:
   <<: *acceptance_base
-  <<: *pup_6_pe
+  <<: *pup_7_pe
   script:
     - 'bundle exec rake beaker:suites[windows,default]'
 
-pup7.x:
-  <<: *pup_7_x
+pup8.x:
+  <<: *pup_8_x
   <<: *acceptance_base
   script:
     - 'bundle exec rake beaker:suites[default,default]'
 
 # caller_function exercises code that depends upon Puppet-internals, so make
 # sure it is run for the latest version of Puppet
-pup7.pe-caller_function:
+pup8.pe-caller_function:
   <<: *acceptance_base
-  <<: *pup_7_x
+  <<: *pup_8_x
   script:
     - 'bundle exec rake beaker:suites[caller_function,default]'
