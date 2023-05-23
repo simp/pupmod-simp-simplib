@@ -5,14 +5,14 @@ HOSTS:
     - windows
     platform: windows-server-amd64
     box: gusztavvargadr/windows-server
-    box_version: '~> 2102'
+    box_version: "~> 2102"
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
     vagrant_memsize: 2048
     vagrant_cpus: 2
     user: vagrant
     communicator: winrm
     is_cygwin: false
-    family: windows-cloud/windows-2022
+    family: 
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
@@ -21,11 +21,55 @@ CONFIG:
     keepalive: true
     keepalive_interval: 10
     host_key:
-      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:host_key].join("\n#{' '*6}- ") %>
+    - ecdsa-sha2-nistp521-cert-v01@openssh.com
+    - ecdsa-sha2-nistp384-cert-v01@openssh.com
+    - ecdsa-sha2-nistp256-cert-v01@openssh.com
+    - ecdsa-sha2-nistp521
+    - ecdsa-sha2-nistp384
+    - ecdsa-sha2-nistp256
+    - ssh-rsa-cert-v01@openssh.com
+    - ssh-rsa-cert-v00@openssh.com
+    - ssh-rsa
+    - rsa-sha2-256
+    - rsa-sha2-512
+    - ssh-dss
     kex:
-      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:kex].join("\n#{' '*6}- ") %>
+    - ecdh-sha2-nistp521
+    - ecdh-sha2-nistp384
+    - ecdh-sha2-nistp256
+    - diffie-hellman-group-exchange-sha256
+    - diffie-hellman-group14-sha256
+    - diffie-hellman-group14-sha1
+    - diffie-hellman-group-exchange-sha1
+    - diffie-hellman-group1-sha1
     encryption:
-      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:encryption].join("\n#{' '*6}- ") %>
+    - aes256-ctr
+    - aes192-ctr
+    - aes128-ctr
+    - aes256-cbc
+    - aes192-cbc
+    - aes128-cbc
+    - rijndael-cbc@lysator.liu.se
+    - blowfish-ctr
+    - blowfish-cbc
+    - cast128-ctr
+    - cast128-cbc
+    - 3des-ctr
+    - 3des-cbc
+    - idea-cbc
+    - none
     hmac:
-      - <%= Net::SSH::Transport::Algorithms::ALGORITHMS[:hmac].join("\n#{' '*6}- ") %>
+    - hmac-sha2-512-etm@openssh.com
+    - hmac-sha2-256-etm@openssh.com
+    - hmac-sha2-512
+    - hmac-sha2-256
+    - hmac-sha1
+    - hmac-sha2-512-96
+    - hmac-sha2-256-96
+    - hmac-sha1-96
+    - hmac-ripemd160
+    - hmac-ripemd160@openssh.com
+    - hmac-md5
+    - hmac-md5-96
+    - none
   puppet_collection: "<%= ENV.fetch('BEAKER_PUPPET_COLLECTION', 'puppet7') %>"
