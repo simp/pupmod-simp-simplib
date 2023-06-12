@@ -1,6 +1,6 @@
 {
   "name": "simp-simplib",
-  "version": "4.10.4",
+  "version": "4.11.0",
   "author": "SIMP Team",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",
@@ -18,7 +18,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 6.6.0 < 8.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     },
     {
       "name": "simp/simpkv",
@@ -26,28 +26,72 @@
     }
   ],
   "operatingsystem_support": [
-    { "operatingsystem": "AlmaLinux" },
-    { "operatingsystem": "Amazon" },
-    { "operatingsystem": "Archlinux" },
-    { "operatingsystem": "CentOS" },
-    { "operatingsystem": "Darwin" },
-    { "operatingsystem": "Debian" },
-    { "operatingsystem": "Fedora" },
-    { "operatingsystem": "FreeBSD" },
-    { "operatingsystem": "Gentoo" },
-    { "operatingsystem": "LinuxMint" },
-    { "operatingsystem": "OpenBSD" },
-    { "operatingsystem": "OpenSUSE" },
-    { "operatingsystem": "OracleLinux" },
-    { "operatingsystem": "RedHat" },
-    { "operatingsystem": "Pop!_OS" },
-    { "operatingsystem": "Rocky" },
-    { "operatingsystem": "SLES" },
-    { "operatingsystem": "Scientific" },
-    { "operatingsystem": "Solaris" },
-    { "operatingsystem": "Ubuntu" },
-    { "operatingsystem": "VirtuozzoLinux" },
-    { "operatingsystem": "Windows" }
+    {
+      "operatingsystem": "AlmaLinux"
+    },
+    {
+      "operatingsystem": "Amazon"
+    },
+    {
+      "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "CentOS"
+    },
+    {
+      "operatingsystem": "Darwin"
+    },
+    {
+      "operatingsystem": "Debian"
+    },
+    {
+      "operatingsystem": "Fedora"
+    },
+    {
+      "operatingsystem": "FreeBSD"
+    },
+    {
+      "operatingsystem": "Gentoo"
+    },
+    {
+      "operatingsystem": "LinuxMint"
+    },
+    {
+      "operatingsystem": "OpenBSD"
+    },
+    {
+      "operatingsystem": "OpenSUSE"
+    },
+    {
+      "operatingsystem": "OracleLinux"
+    },
+    {
+      "operatingsystem": "RedHat"
+    },
+    {
+      "operatingsystem": "Pop!_OS"
+    },
+    {
+      "operatingsystem": "Rocky"
+    },
+    {
+      "operatingsystem": "SLES"
+    },
+    {
+      "operatingsystem": "Scientific"
+    },
+    {
+      "operatingsystem": "Solaris"
+    },
+    {
+      "operatingsystem": "Ubuntu"
+    },
+    {
+      "operatingsystem": "VirtuozzoLinux"
+    },
+    {
+      "operatingsystem": "Windows"
+    }
   ],
   "requirements": [
     {
