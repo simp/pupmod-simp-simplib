@@ -59,7 +59,7 @@ function simplib::module_metadata::assert (
     if $_options['blacklist_validation']['enable'] and $_options['blacklist'] {
       if simplib::module_metadata::os_blacklisted($_module_metadata, $_options['blacklist'], $_options['blacklist_validation']['options']) {
         $_caller = simplib::caller()
-        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported at '$_caller'")
+        fail("OS '${facts['os']['name']} ${facts['os']['release']['full']}' is not supported at '${_caller}'")
       }
     }
 

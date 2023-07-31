@@ -24,7 +24,7 @@
 #   returns $ldap_dn = 'dc=test,dc=local'
 #
 function simplib::ldap::domain_to_dn (
-  String $domain               = $facts['domain'],
+  String $domain               = $facts['networking']['domain'],
   Boolean $downcase_attributes = false
 ) {
   if $downcase_attributes {

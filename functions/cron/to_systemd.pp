@@ -60,8 +60,8 @@ function simplib::cron::to_systemd(
     }
 
     $_weekday = Array($_munged_weekday, true).map |$w| {
-      "${w}".split(',').map |$mw| {
-        "${mw}" ? {
+      $w.split(',').map |$mw| {
+        $mw ? {
           '*'     => undef,
           '0'     => 'Sun',
           '1'     => 'Mon',
