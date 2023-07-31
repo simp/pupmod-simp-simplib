@@ -3,10 +3,10 @@ require 'spec_helper'
 describe 'simplib::ldap::domain_to_dn' do
   on_supported_os.each do |os, os_facts|
     context 'with a regular domain' do
-      let(:facts) {{
+      let(:facts) {
         os_facts[:networking][:domain] = 'test.domain'
         os_facts
-      }}
+      }
 
       it do
         expect( subject.execute() ).to eq 'DC=test,DC=domain'
@@ -14,7 +14,10 @@ describe 'simplib::ldap::domain_to_dn' do
     end
 
     context 'with a short domain' do
-      let(:facts) {{ :domain => 'domain' }}
+      let(:facts) {
+        os_facts[:networking][:domain] = 'domain'
+        os_facts
+      }
 
       it do
         expect( subject.execute() ).to eq 'DC=domain'
