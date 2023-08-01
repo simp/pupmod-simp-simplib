@@ -6,12 +6,12 @@
 
 ### Classes
 
-* [`simplib::reboot_notify`](#simplibreboot_notify): This is a simple controller class for global settings related to the
-* [`simplib::stages`](#simplibstages): Expands on the `puppetlabs-stdlib` stages
+* [`simplib::reboot_notify`](#simplib--reboot_notify): This is a simple controller class for global settings related to the
+* [`simplib::stages`](#simplib--stages): Expands on the `puppetlabs-stdlib` stages
 
 ### Defined types
 
-* [`simplib::install`](#simplibinstall): Manage packages based on Hash input
+* [`simplib::install`](#simplib--install): Manage packages based on Hash input
 
 ### Resource types
 
@@ -25,154 +25,154 @@
 
 ### Functions
 
-* [`simplib::assert_metadata`](#simplibassert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`  NOTE: New capabilities will be added to the simplib
-* [`simplib::assert_optional_dependency`](#simplibassert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
-* [`simplib::bracketize`](#simplibbracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
-* [`simplib::caller`](#simplibcaller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
-* [`simplib::cron::expand_range`](#simplibcronexpand_range): Expand all ranges ('-') into a comma separated list
-* [`simplib::cron::to_systemd`](#simplibcronto_systemd): Convert a set of 'cron' native type parameters to a 'best effort' systemd calendar String
-* [`simplib::debug::classtrace`](#simplibdebugclasstrace): Prints out the stack of Puppet Classes and Defined Types that have been called up to this point  WARNING: Uses **EXPERIMENTAL** features from
-* [`simplib::debug::inspect`](#simplibdebuginspect): Prints out Puppet warning messages that display the passed variable, data type, and location.  WARNING: Uses **EXPERIMENTAL** features from P
-* [`simplib::debug::stacktrace`](#simplibdebugstacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
-* [`simplib::deprecation`](#simplibdeprecation): Function to print deprecation warnings, logging a warning once for a given key.
-* [`simplib::dlookup`](#simplibdlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
-* [`simplib::filtered`](#simplibfiltered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
-* [`simplib::gen_random_password`](#simplibgen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
-* [`simplib::hash_to_opts`](#simplibhash_to_opts): Turn a hash into a options string, for use in a shell command
-* [`simplib::host_is_me`](#simplibhost_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of  hostnames and/o
-* [`simplib::in_bolt`](#simplibin_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
-* [`simplib::inspect`](#simplibinspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
-* [`simplib::ip::family_hash`](#simplibipfamily_hash): Process an array of IP addresses and return them split by IP family and include metadata and/or processed versions.
-* [`simplib::ip_to_cron`](#simplibip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
-* [`simplib::ipaddresses`](#simplibipaddresses): Return an `Array` of all IPv4 addresses known to be associated with the client, optionally excluding local addresses.
-* [`simplib::join_mount_opts`](#simplibjoin_mount_opts): Merge two sets of `mount` options in a reasonable fashion, giving precedence to the second set.
-* [`simplib::knockout`](#simplibknockout): uses the knockout prefix of '--' to remove elements from an array.
-* [`simplib::ldap::domain_to_dn`](#simplibldapdomain_to_dn): Generates a LDAP Base DN from a domain
-* [`simplib::lookup`](#simpliblookup): A function for falling back to global scope variable lookups when the Puppet 4 ``lookup()`` function cannot find a value.  While ``lookup()``
-* [`simplib::mock_data`](#simplibmock_data): A mock data function
-* [`simplib::module_exist`](#simplibmodule_exist): Determines if a module exists in the current environment  If passed with an author, such as `simp/simplib` or `simp-simplib`, will return whe
-* [`simplib::module_metadata::assert`](#simplibmodule_metadataassert): Fails a compile if the client system is not compatible with the module's `metadata.json`
-* [`simplib::module_metadata::os_blacklisted`](#simplibmodule_metadataos_blacklisted): Returns whether or not the passed module is blacklisted per the module's metadata.json.  If a blacklist is passed, then it will return `false
-* [`simplib::module_metadata::os_supported`](#simplibmodule_metadataos_supported): Returns whether or not the passed module is supported per the module's metadata.json.
-* [`simplib::nets2cidr`](#simplibnets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
-* [`simplib::nets2ddq`](#simplibnets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
-* [`simplib::params2hash`](#simplibparams2hash): Returns a Hash of the parameters of the calling resource  This is meant to get the parameters of classes and defined types. The behavior when
-* [`simplib::parse_hosts`](#simplibparse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
-* [`simplib::passgen`](#simplibpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Supports 2 modes:   * simpkv     * Password info is stor
-* [`simplib::passgen::gen_password_and_salt`](#simplibpassgengen_password_and_salt): Generates a password and salt  * Password length, complexity and complex-only settings are specified by   the caller. * Salt length, complexi
-* [`simplib::passgen::gen_salt`](#simplibpassgengen_salt): Generates a salt  * Terminates catalog compilation if the salt cannot be created   in the allotted time.
-* [`simplib::passgen::get`](#simplibpassgenget): Retrieves a generated password and any stored attributes  * Supports 2 modes:   * simpkv     * Password info is stored in a key/value store a
-* [`simplib::passgen::legacy::common_settings`](#simplibpassgenlegacycommon_settings): Returns common settings used by simplib::passgen in legacy mode
-* [`simplib::passgen::legacy::get`](#simplibpassgenlegacyget): Retrieves a generated password and any stored attributes that have been stored in files on the local file system at `Puppet.settings[:vardir]
-* [`simplib::passgen::legacy::list`](#simplibpassgenlegacylist): Retrieves the list of generated passwords with attributes stored in files on the local files system at `Puppet.settings[:vardir]/simp/environ
-* [`simplib::passgen::legacy::passgen`](#simplibpassgenlegacypassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Password info is stored in files on the local file syste
-* [`simplib::passgen::legacy::remove`](#simplibpassgenlegacyremove): Removes a generated password, history and stored attributes  * Password info is stored in files on the local file system at   `Puppet.setting
-* [`simplib::passgen::legacy::set`](#simplibpassgenlegacyset): Stores a generated password and salt in files on the local filesystem at `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofi
-* [`simplib::passgen::list`](#simplibpassgenlist): Retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder.  * Folder specific
-* [`simplib::passgen::remove`](#simplibpassgenremove): Removes a generated password, history and stored attributes  * Supports 2 modes:   * simpkv     * Password info is stored in a key/value stor
-* [`simplib::passgen::set`](#simplibpassgenset): Sets a generated password with attributes  * Sets the password and salt, backs up the previous password and salt, and   depending upon mode s
-* [`simplib::passgen::simpkv::get`](#simplibpassgensimpkvget): Retrieves a generated password and stored attributes from a key/value store using simpkv  Terminates catalog compilation if any simpkv operat
-* [`simplib::passgen::simpkv::list`](#simplibpassgensimpkvlist): Using simpkv, retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder in a 
-* [`simplib::passgen::simpkv::passgen`](#simplibpassgensimpkvpassgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Password info is stored in a key/value store and accesse
-* [`simplib::passgen::simpkv::remove`](#simplibpassgensimpkvremove): Removes a generated password, history and stored attributes  * Password info is stored in a key/value store and removed using simpkv.   * sim
-* [`simplib::passgen::simpkv::root_dir`](#simplibpassgensimpkvroot_dir): Returns the root directory in simpkv for password info generated by simplib::passgen
-* [`simplib::passgen::simpkv::set`](#simplibpassgensimpkvset): Using simpkv, sets a generated password with attributes  * simpkv key is the identifier. * simpkv value is a Hash with 'password' and 'salt' 
-* [`simplib::passgen::simpkv::valid_password_info`](#simplibpassgensimpkvvalid_password_info): Returns whether password information retrieved from simpkv is valid
-* [`simplib::rand_cron`](#simplibrand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
-* [`simplib::safe_filename`](#simplibsafe_filename): Convert a string into a filename that is 'path safe'  The goal is to ensure that files do not contain characters that may accidentally turn i
-* [`simplib::simp_version`](#simplibsimp_version): Return the version of SIMP that this server is running or "unknown\n"
-* [`simplib::strip_ports`](#simplibstrip_ports): Extract list of unique hostnames and/or IP addresses from an `Array` of hosts, each of which may may contain protocols and/or port numbers  T
-* [`simplib::to_integer`](#simplibto_integer): Converts the argument into an `Integer`.  Terminates catalog compilation if the argument's class does not respond to the `to_i()` Ruby method
-* [`simplib::to_string`](#simplibto_string): Converts the argument into a `String`.
-* [`simplib::validate_array_member`](#simplibvalidate_array_member): Validate that an single input is a member of another `Array` or an `Array` input is a subset of another `Array`.  * The comparison can option
-* [`simplib::validate_between`](#simplibvalidate_between): Validate that the first value is between the second and third values numerically. The range is inclusive.  Terminates catalog compilation if 
-* [`simplib::validate_bool`](#simplibvalidate_bool): Validate that all passed values are either `true`, 'true', `false` or 'false'.  Terminates catalog compilation if validation fails.
-* [`simplib::validate_deep_hash`](#simplibvalidate_deep_hash): Perform a deep validation on two passed `Hashes`.  * All keys must be defined in the reference `Hash` that is being   validated against. * Un
-* [`simplib::validate_net_list`](#simplibvalidate_net_list): Validate that a passed list (`Array` or single `String`) of networks is filled with valid IP addresses, network addresses (CIDR notation), or
-* [`simplib::validate_port`](#simplibvalidate_port): Validates whether each passed argument contains valid port(s).  * Each element of each argument must, numerically, be in the   range [1, 6553
-* [`simplib::validate_re_array`](#simplibvalidate_re_array): Perform simple validation of a `String`, or `Array` of `Strings`, against one or more regular expressions.  * Derived from the Puppet Labs st
-* [`simplib::validate_sysctl_value`](#simplibvalidate_sysctl_value): Validate that the passed value is correct for the passed `sysctl` key.  * If a key is not known, assumes the value is valid. * Terminates cat
-* [`simplib::validate_uri_list`](#simplibvalidate_uri_list): Validate that a passed list (`Array` or single `String`) of URIs is valid according to Ruby's URI parser.  * *Caution*:  No scheme (protocol 
+* [`simplib::assert_metadata`](#simplib--assert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`  NOTE: New capabilities will be added to the simplib
+* [`simplib::assert_optional_dependency`](#simplib--assert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
+* [`simplib::bracketize`](#simplib--bracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
+* [`simplib::caller`](#simplib--caller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
+* [`simplib::cron::expand_range`](#simplib--cron--expand_range): Expand all ranges ('-') into a comma separated list
+* [`simplib::cron::to_systemd`](#simplib--cron--to_systemd): Convert a set of 'cron' native type parameters to a 'best effort' systemd calendar String
+* [`simplib::debug::classtrace`](#simplib--debug--classtrace): Prints out the stack of Puppet Classes and Defined Types that have been called up to this point  WARNING: Uses **EXPERIMENTAL** features from
+* [`simplib::debug::inspect`](#simplib--debug--inspect): Prints out Puppet warning messages that display the passed variable, data type, and location.  WARNING: Uses **EXPERIMENTAL** features from P
+* [`simplib::debug::stacktrace`](#simplib--debug--stacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
+* [`simplib::deprecation`](#simplib--deprecation): Function to print deprecation warnings, logging a warning once for a given key.
+* [`simplib::dlookup`](#simplib--dlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
+* [`simplib::filtered`](#simplib--filtered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
+* [`simplib::gen_random_password`](#simplib--gen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
+* [`simplib::hash_to_opts`](#simplib--hash_to_opts): Turn a hash into a options string, for use in a shell command
+* [`simplib::host_is_me`](#simplib--host_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of  hostnames and/o
+* [`simplib::in_bolt`](#simplib--in_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
+* [`simplib::inspect`](#simplib--inspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
+* [`simplib::ip::family_hash`](#simplib--ip--family_hash): Process an array of IP addresses and return them split by IP family and include metadata and/or processed versions.
+* [`simplib::ip_to_cron`](#simplib--ip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
+* [`simplib::ipaddresses`](#simplib--ipaddresses): Return an `Array` of all IPv4 addresses known to be associated with the client, optionally excluding local addresses.
+* [`simplib::join_mount_opts`](#simplib--join_mount_opts): Merge two sets of `mount` options in a reasonable fashion, giving precedence to the second set.
+* [`simplib::knockout`](#simplib--knockout): uses the knockout prefix of '--' to remove elements from an array.
+* [`simplib::ldap::domain_to_dn`](#simplib--ldap--domain_to_dn): Generates a LDAP Base DN from a domain
+* [`simplib::lookup`](#simplib--lookup): A function for falling back to global scope variable lookups when the Puppet 4 ``lookup()`` function cannot find a value.  While ``lookup()``
+* [`simplib::mock_data`](#simplib--mock_data): A mock data function
+* [`simplib::module_exist`](#simplib--module_exist): Determines if a module exists in the current environment  If passed with an author, such as `simp/simplib` or `simp-simplib`, will return whe
+* [`simplib::module_metadata::assert`](#simplib--module_metadata--assert): Fails a compile if the client system is not compatible with the module's `metadata.json`
+* [`simplib::module_metadata::os_blacklisted`](#simplib--module_metadata--os_blacklisted): Returns whether or not the passed module is blacklisted per the module's metadata.json.  If a blacklist is passed, then it will return `false
+* [`simplib::module_metadata::os_supported`](#simplib--module_metadata--os_supported): Returns whether or not the passed module is supported per the module's metadata.json.
+* [`simplib::nets2cidr`](#simplib--nets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
+* [`simplib::nets2ddq`](#simplib--nets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
+* [`simplib::params2hash`](#simplib--params2hash): Returns a Hash of the parameters of the calling resource  This is meant to get the parameters of classes and defined types. The behavior when
+* [`simplib::parse_hosts`](#simplib--parse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
+* [`simplib::passgen`](#simplib--passgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Supports 2 modes:   * simpkv     * Password info is stor
+* [`simplib::passgen::gen_password_and_salt`](#simplib--passgen--gen_password_and_salt): Generates a password and salt  * Password length, complexity and complex-only settings are specified by   the caller. * Salt length, complexi
+* [`simplib::passgen::gen_salt`](#simplib--passgen--gen_salt): Generates a salt  * Terminates catalog compilation if the salt cannot be created   in the allotted time.
+* [`simplib::passgen::get`](#simplib--passgen--get): Retrieves a generated password and any stored attributes  * Supports 2 modes:   * simpkv     * Password info is stored in a key/value store a
+* [`simplib::passgen::legacy::common_settings`](#simplib--passgen--legacy--common_settings): Returns common settings used by simplib::passgen in legacy mode
+* [`simplib::passgen::legacy::get`](#simplib--passgen--legacy--get): Retrieves a generated password and any stored attributes that have been stored in files on the local file system at `Puppet.settings[:vardir]
+* [`simplib::passgen::legacy::list`](#simplib--passgen--legacy--list): Retrieves the list of generated passwords with attributes stored in files on the local files system at `Puppet.settings[:vardir]/simp/environ
+* [`simplib::passgen::legacy::passgen`](#simplib--passgen--legacy--passgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Password info is stored in files on the local file syste
+* [`simplib::passgen::legacy::remove`](#simplib--passgen--legacy--remove): Removes a generated password, history and stored attributes  * Password info is stored in files on the local file system at   `Puppet.setting
+* [`simplib::passgen::legacy::set`](#simplib--passgen--legacy--set): Stores a generated password and salt in files on the local filesystem at `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofi
+* [`simplib::passgen::list`](#simplib--passgen--list): Retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder.  * Folder specific
+* [`simplib::passgen::remove`](#simplib--passgen--remove): Removes a generated password, history and stored attributes  * Supports 2 modes:   * simpkv     * Password info is stored in a key/value stor
+* [`simplib::passgen::set`](#simplib--passgen--set): Sets a generated password with attributes  * Sets the password and salt, backs up the previous password and salt, and   depending upon mode s
+* [`simplib::passgen::simpkv::get`](#simplib--passgen--simpkv--get): Retrieves a generated password and stored attributes from a key/value store using simpkv  Terminates catalog compilation if any simpkv operat
+* [`simplib::passgen::simpkv::list`](#simplib--passgen--simpkv--list): Using simpkv, retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder in a 
+* [`simplib::passgen::simpkv::passgen`](#simplib--passgen--simpkv--passgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Password info is stored in a key/value store and accesse
+* [`simplib::passgen::simpkv::remove`](#simplib--passgen--simpkv--remove): Removes a generated password, history and stored attributes  * Password info is stored in a key/value store and removed using simpkv.   * sim
+* [`simplib::passgen::simpkv::root_dir`](#simplib--passgen--simpkv--root_dir): Returns the root directory in simpkv for password info generated by simplib::passgen
+* [`simplib::passgen::simpkv::set`](#simplib--passgen--simpkv--set): Using simpkv, sets a generated password with attributes  * simpkv key is the identifier. * simpkv value is a Hash with 'password' and 'salt' 
+* [`simplib::passgen::simpkv::valid_password_info`](#simplib--passgen--simpkv--valid_password_info): Returns whether password information retrieved from simpkv is valid
+* [`simplib::rand_cron`](#simplib--rand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
+* [`simplib::safe_filename`](#simplib--safe_filename): Convert a string into a filename that is 'path safe'  The goal is to ensure that files do not contain characters that may accidentally turn i
+* [`simplib::simp_version`](#simplib--simp_version): Return the version of SIMP that this server is running or "unknown\n"
+* [`simplib::strip_ports`](#simplib--strip_ports): Extract list of unique hostnames and/or IP addresses from an `Array` of hosts, each of which may may contain protocols and/or port numbers  T
+* [`simplib::to_integer`](#simplib--to_integer): Converts the argument into an `Integer`.  Terminates catalog compilation if the argument's class does not respond to the `to_i()` Ruby method
+* [`simplib::to_string`](#simplib--to_string): Converts the argument into a `String`.
+* [`simplib::validate_array_member`](#simplib--validate_array_member): Validate that an single input is a member of another `Array` or an `Array` input is a subset of another `Array`.  * The comparison can option
+* [`simplib::validate_between`](#simplib--validate_between): Validate that the first value is between the second and third values numerically. The range is inclusive.  Terminates catalog compilation if 
+* [`simplib::validate_bool`](#simplib--validate_bool): Validate that all passed values are either `true`, 'true', `false` or 'false'.  Terminates catalog compilation if validation fails.
+* [`simplib::validate_deep_hash`](#simplib--validate_deep_hash): Perform a deep validation on two passed `Hashes`.  * All keys must be defined in the reference `Hash` that is being   validated against. * Un
+* [`simplib::validate_net_list`](#simplib--validate_net_list): Validate that a passed list (`Array` or single `String`) of networks is filled with valid IP addresses, network addresses (CIDR notation), or
+* [`simplib::validate_port`](#simplib--validate_port): Validates whether each passed argument contains valid port(s).  * Each element of each argument must, numerically, be in the   range [1, 6553
+* [`simplib::validate_re_array`](#simplib--validate_re_array): Perform simple validation of a `String`, or `Array` of `Strings`, against one or more regular expressions.  * Derived from the Puppet Labs st
+* [`simplib::validate_sysctl_value`](#simplib--validate_sysctl_value): Validate that the passed value is correct for the passed `sysctl` key.  * If a key is not known, assumes the value is valid. * Terminates cat
+* [`simplib::validate_uri_list`](#simplib--validate_uri_list): Validate that a passed list (`Array` or single `String`) of URIs is valid according to Ruby's URI parser.  * *Caution*:  No scheme (protocol 
 
 ### Data types
 
-* [`Simplib::Cron::Hour`](#simplibcronhour): Matches valid cron hour parameter
-* [`Simplib::Cron::Hour_entry`](#simplibcronhour_entry): Matches valid cron hour parameter  Tested with Rubular: https://rubular.com/r/y7jCmNCjgTl4kx
-* [`Simplib::Cron::Minute`](#simplibcronminute): Matches valid cron minute parameter
-* [`Simplib::Cron::Minute_entry`](#simplibcronminute_entry): Matches valid cron minute parameter  Tested with Rubular: https://rubular.com/r/kBrcbFmFldCR7q
-* [`Simplib::Cron::Month`](#simplibcronmonth): Matches valid cron month parameter
-* [`Simplib::Cron::MonthDay`](#simplibcronmonthday): Matches valid cron monthday parameter
-* [`Simplib::Cron::MonthDay_entry`](#simplibcronmonthday_entry): Matches valid cron monthday parameter  Tested with Rubular: https://rubular.com/r/ovqrYiCurMdQir
-* [`Simplib::Cron::Month_entry`](#simplibcronmonth_entry): Matches valid cron month parameter  Tested with Rubular: https://rubular.com/r/TSDNxt1rcWkb8U
-* [`Simplib::Cron::WeekDay`](#simplibcronweekday): Matches valid cron weekday parameter
-* [`Simplib::Cron::WeekDay_entry`](#simplibcronweekday_entry): Matches valid cron weekday parameter  Tested with Rubular: https://rubular.com/r/uuFFu5ISzdRL7l
-* [`Simplib::Domain`](#simplibdomain): Valid DNS domain names  Complies with TLD restrictions from Section 2 of RFC 3696:   * only ASCII alpha + numbers + hyphens are allowed  * la
-* [`Simplib::Domainlist`](#simplibdomainlist): List of valid domains (RFC 3696, Section 2)
-* [`Simplib::EmailAddress`](#simplibemailaddress): Matches valid email addresses
-* [`Simplib::Host`](#simplibhost): Matches a single IP Address or Hostname
-* [`Simplib::Host::Port`](#simplibhostport): Matches a single IP Address or Hostname with a Port
-* [`Simplib::Hostname`](#simplibhostname): Valid Hostnames - May not match Unicode and does not validate against TLD registry
-* [`Simplib::Hostname::Port`](#simplibhostnameport): Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
-* [`Simplib::IP`](#simplibip): Matches a single IP Address
-* [`Simplib::IP::CIDR`](#simplibipcidr): Matches valid CIDR IP addresses
-* [`Simplib::IP::Port`](#simplibipport): Matches valid IP addresses with Ports
-* [`Simplib::IP::V4`](#simplibipv4): Matches valid IPv4 addresses  Regex taken from Ruby core's Resolv::IPv4::Regex Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka Akira <kr
-* [`Simplib::IP::V4::CIDR`](#simplibipv4cidr): Matches valid IPv4 CIDR Mask addresses Base Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 T
-* [`Simplib::IP::V4::DDQ`](#simplibipv4ddq): Matches valid IPv4 Dotted Quad Mask addresses Base Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright
-* [`Simplib::IP::V4::Port`](#simplibipv4port): Matches valid IPv4 addresses with a Port Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tana
-* [`Simplib::IP::V6`](#simplibipv6): Matches valid IPv6 addresses
-* [`Simplib::IP::V6::Base`](#simplibipv6base): Matches valid IPv6 addresses Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka Akira <kr
-* [`Simplib::IP::V6::Bracketed`](#simplibipv6bracketed): Matches valid Bracketed IPv6 addresses Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka
-* [`Simplib::IP::V6::CIDR`](#simplibipv6cidr): Matches valid IPv6 addresses with CIDR netmasks Base Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyrig
-* [`Simplib::IP::V6::Port`](#simplibipv6port): Matches valid Bracketed IPv6 addresses with Port specification Base Regex taken from Ruby core's Resolv::IPv6::Regex Reference: ruby/lib/reso
-* [`Simplib::Libcrypt::BSDIExtendedDES`](#simpliblibcryptbsdiextendeddes): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::Bcrypt`](#simpliblibcryptbcrypt): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::Bigcrypt`](#simpliblibcryptbigcrypt): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::DES`](#simpliblibcryptdes): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::MD5_FreeBSD`](#simpliblibcryptmd5_freebsd): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::MD5_Sun`](#simpliblibcryptmd5_sun): Regular expression pulled from the crypt(5) man page lint:ignore:single_quote_string_with_variables
-* [`Simplib::Libcrypt::NTHASH`](#simpliblibcryptnthash): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::SHA1`](#simpliblibcryptsha1): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::SHA2_256`](#simpliblibcryptsha2_256): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::SHA2_512`](#simpliblibcryptsha2_512): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::Scrypt`](#simpliblibcryptscrypt): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::Yescrypt`](#simpliblibcryptyescrypt): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Macaddress`](#simplibmacaddress): Matches MAC addresses
-* [`Simplib::Netlist`](#simplibnetlist): Matches all possible lists of Network Addresses and Hostnames
-* [`Simplib::Netlist::Host`](#simplibnetlisthost): Matches an Array of Simplib::Hosts
-* [`Simplib::Netlist::IP`](#simplibnetlistip): Matches all possible lists of IP Network Addresses
-* [`Simplib::Netlist::IP::V4`](#simplibnetlistipv4): Matches all possible lists of IPv4 Network Addresses
-* [`Simplib::Netlist::IP::V6`](#simplibnetlistipv6): Matches all possible lists of IPv6 Network Addresses
-* [`Simplib::Netlist::Port`](#simplibnetlistport): Matches all possible lists of Network Addresses and Hostnames with Ports
-* [`Simplib::PackageEnsure`](#simplibpackageensure): Valid values for the `ensure` parameter of the `package` resource
-* [`Simplib::Port`](#simplibport): A valid port Type
-* [`Simplib::Port::Dynamic`](#simplibportdynamic): Corresponds to the usual unprivileged port range
-* [`Simplib::Port::Random`](#simplibportrandom): Corresponds to a port of ``0`` which has different behaviors but usually binds to a random port
-* [`Simplib::Port::System`](#simplibportsystem): Corresponds to the usual privileged port range
-* [`Simplib::Port::User`](#simplibportuser): Corresponds to the unprivileged port range
-* [`Simplib::Puppet::Metadata::OS_support`](#simplibpuppetmetadataos_support): The 'operating_support' data structure in metadata.json
-* [`Simplib::PuppetLogLevel`](#simplibpuppetloglevel): A valid log level Type
-* [`Simplib::Serverdistribution`](#simplibserverdistribution): Valid options for Serverdistribution
-* [`Simplib::ShadowPass`](#simplibshadowpass): Valid entries for the password field of the 'shadow' file  These items are recognized by recent versions of crypt but may not be exhaustive  
-* [`Simplib::Syslog::CFacility`](#simplibsyslogcfacility): Syslog facilities in `C` compatible format
-* [`Simplib::Syslog::CPriority`](#simplibsyslogcpriority): Syslog priorities in `C` compatible format
-* [`Simplib::Syslog::CSeverity`](#simplibsyslogcseverity): Syslog severities in `C` compatible format
-* [`Simplib::Syslog::Facility`](#simplibsyslogfacility): Syslog facilities
-* [`Simplib::Syslog::LowerFacility`](#simplibsysloglowerfacility): Valid lowercase versions of syslog facilities
-* [`Simplib::Syslog::LowerPriority`](#simplibsysloglowerpriority): Valid lowercase versions of syslog priorities
-* [`Simplib::Syslog::LowerSeverity`](#simplibsysloglowerseverity): Valid lowercase versions of syslog severities
-* [`Simplib::Syslog::Priority`](#simplibsyslogpriority): Syslog priorities
-* [`Simplib::Syslog::Severity`](#simplibsyslogseverity): Syslog severities
-* [`Simplib::Syslog::UpperFacility`](#simplibsyslogupperfacility): Valid uppercase bounds for syslog facilities
-* [`Simplib::Syslog::UpperPriority`](#simplibsyslogupperpriority): Valid uppercase versions of syslog priorities
-* [`Simplib::Syslog::UpperSeverity`](#simplibsyslogupperseverity): Valid uppercase versions of syslog severities
-* [`Simplib::Systemd::ServiceName`](#simplibsystemdservicename): Valid systemd service names
-* [`Simplib::URI`](#simpliburi): Matches URI strings
-* [`Simplib::Umask`](#simplibumask): Matches umask patterns
+* [`Simplib::Cron::Hour`](#Simplib--Cron--Hour): Matches valid cron hour parameter
+* [`Simplib::Cron::Hour_entry`](#Simplib--Cron--Hour_entry): Matches valid cron hour parameter  Tested with Rubular: https://rubular.com/r/y7jCmNCjgTl4kx
+* [`Simplib::Cron::Minute`](#Simplib--Cron--Minute): Matches valid cron minute parameter
+* [`Simplib::Cron::Minute_entry`](#Simplib--Cron--Minute_entry): Matches valid cron minute parameter  Tested with Rubular: https://rubular.com/r/kBrcbFmFldCR7q
+* [`Simplib::Cron::Month`](#Simplib--Cron--Month): Matches valid cron month parameter
+* [`Simplib::Cron::MonthDay`](#Simplib--Cron--MonthDay): Matches valid cron monthday parameter
+* [`Simplib::Cron::MonthDay_entry`](#Simplib--Cron--MonthDay_entry): Matches valid cron monthday parameter  Tested with Rubular: https://rubular.com/r/ovqrYiCurMdQir
+* [`Simplib::Cron::Month_entry`](#Simplib--Cron--Month_entry): Matches valid cron month parameter  Tested with Rubular: https://rubular.com/r/TSDNxt1rcWkb8U
+* [`Simplib::Cron::WeekDay`](#Simplib--Cron--WeekDay): Matches valid cron weekday parameter
+* [`Simplib::Cron::WeekDay_entry`](#Simplib--Cron--WeekDay_entry): Matches valid cron weekday parameter  Tested with Rubular: https://rubular.com/r/uuFFu5ISzdRL7l
+* [`Simplib::Domain`](#Simplib--Domain): Valid DNS domain names  Complies with TLD restrictions from Section 2 of RFC 3696:   * only ASCII alpha + numbers + hyphens are allowed  * la
+* [`Simplib::Domainlist`](#Simplib--Domainlist): List of valid domains (RFC 3696, Section 2)
+* [`Simplib::EmailAddress`](#Simplib--EmailAddress): Matches valid email addresses
+* [`Simplib::Host`](#Simplib--Host): Matches a single IP Address or Hostname
+* [`Simplib::Host::Port`](#Simplib--Host--Port): Matches a single IP Address or Hostname with a Port
+* [`Simplib::Hostname`](#Simplib--Hostname): Valid Hostnames - May not match Unicode and does not validate against TLD registry
+* [`Simplib::Hostname::Port`](#Simplib--Hostname--Port): Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
+* [`Simplib::IP`](#Simplib--IP): Matches a single IP Address
+* [`Simplib::IP::CIDR`](#Simplib--IP--CIDR): Matches valid CIDR IP addresses
+* [`Simplib::IP::Port`](#Simplib--IP--Port): Matches valid IP addresses with Ports
+* [`Simplib::IP::V4`](#Simplib--IP--V4): Matches valid IPv4 addresses  Regex taken from Ruby core's Resolv::IPv4::Regex Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka Akira <kr
+* [`Simplib::IP::V4::CIDR`](#Simplib--IP--V4--CIDR): Matches valid IPv4 CIDR Mask addresses Base Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 T
+* [`Simplib::IP::V4::DDQ`](#Simplib--IP--V4--DDQ): Matches valid IPv4 Dotted Quad Mask addresses Base Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright
+* [`Simplib::IP::V4::Port`](#Simplib--IP--V4--Port): Matches valid IPv4 addresses with a Port Regex taken from Ruby core's Resolv::IPv4::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tana
+* [`Simplib::IP::V6`](#Simplib--IP--V6): Matches valid IPv6 addresses
+* [`Simplib::IP::V6::Base`](#Simplib--IP--V6--Base): Matches valid IPv6 addresses Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka Akira <kr
+* [`Simplib::IP::V6::Bracketed`](#Simplib--IP--V6--Bracketed): Matches valid Bracketed IPv6 addresses Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyright 2010 Tanaka
+* [`Simplib::IP::V6::CIDR`](#Simplib--IP--V6--CIDR): Matches valid IPv6 addresses with CIDR netmasks Base Regex taken from Ruby core's Resolv::IPv6::Regex  Reference: ruby/lib/resolv.rb  Copyrig
+* [`Simplib::IP::V6::Port`](#Simplib--IP--V6--Port): Matches valid Bracketed IPv6 addresses with Port specification Base Regex taken from Ruby core's Resolv::IPv6::Regex Reference: ruby/lib/reso
+* [`Simplib::Libcrypt::BSDIExtendedDES`](#Simplib--Libcrypt--BSDIExtendedDES): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::Bcrypt`](#Simplib--Libcrypt--Bcrypt): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::Bigcrypt`](#Simplib--Libcrypt--Bigcrypt): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::DES`](#Simplib--Libcrypt--DES): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::MD5_FreeBSD`](#Simplib--Libcrypt--MD5_FreeBSD): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::MD5_Sun`](#Simplib--Libcrypt--MD5_Sun): Regular expression pulled from the crypt(5) man page lint:ignore:single_quote_string_with_variables
+* [`Simplib::Libcrypt::NTHASH`](#Simplib--Libcrypt--NTHASH): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::SHA1`](#Simplib--Libcrypt--SHA1): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::SHA2_256`](#Simplib--Libcrypt--SHA2_256): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::SHA2_512`](#Simplib--Libcrypt--SHA2_512): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::Scrypt`](#Simplib--Libcrypt--Scrypt): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::Yescrypt`](#Simplib--Libcrypt--Yescrypt): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Macaddress`](#Simplib--Macaddress): Matches MAC addresses
+* [`Simplib::Netlist`](#Simplib--Netlist): Matches all possible lists of Network Addresses and Hostnames
+* [`Simplib::Netlist::Host`](#Simplib--Netlist--Host): Matches an Array of Simplib::Hosts
+* [`Simplib::Netlist::IP`](#Simplib--Netlist--IP): Matches all possible lists of IP Network Addresses
+* [`Simplib::Netlist::IP::V4`](#Simplib--Netlist--IP--V4): Matches all possible lists of IPv4 Network Addresses
+* [`Simplib::Netlist::IP::V6`](#Simplib--Netlist--IP--V6): Matches all possible lists of IPv6 Network Addresses
+* [`Simplib::Netlist::Port`](#Simplib--Netlist--Port): Matches all possible lists of Network Addresses and Hostnames with Ports
+* [`Simplib::PackageEnsure`](#Simplib--PackageEnsure): Valid values for the `ensure` parameter of the `package` resource
+* [`Simplib::Port`](#Simplib--Port): A valid port Type
+* [`Simplib::Port::Dynamic`](#Simplib--Port--Dynamic): Corresponds to the usual unprivileged port range
+* [`Simplib::Port::Random`](#Simplib--Port--Random): Corresponds to a port of ``0`` which has different behaviors but usually binds to a random port
+* [`Simplib::Port::System`](#Simplib--Port--System): Corresponds to the usual privileged port range
+* [`Simplib::Port::User`](#Simplib--Port--User): Corresponds to the unprivileged port range
+* [`Simplib::Puppet::Metadata::OS_support`](#Simplib--Puppet--Metadata--OS_support): The 'operating_support' data structure in metadata.json
+* [`Simplib::PuppetLogLevel`](#Simplib--PuppetLogLevel): A valid log level Type
+* [`Simplib::Serverdistribution`](#Simplib--Serverdistribution): Valid options for Serverdistribution
+* [`Simplib::ShadowPass`](#Simplib--ShadowPass): Valid entries for the password field of the 'shadow' file  These items are recognized by recent versions of crypt but may not be exhaustive  
+* [`Simplib::Syslog::CFacility`](#Simplib--Syslog--CFacility): Syslog facilities in `C` compatible format
+* [`Simplib::Syslog::CPriority`](#Simplib--Syslog--CPriority): Syslog priorities in `C` compatible format
+* [`Simplib::Syslog::CSeverity`](#Simplib--Syslog--CSeverity): Syslog severities in `C` compatible format
+* [`Simplib::Syslog::Facility`](#Simplib--Syslog--Facility): Syslog facilities
+* [`Simplib::Syslog::LowerFacility`](#Simplib--Syslog--LowerFacility): Valid lowercase versions of syslog facilities
+* [`Simplib::Syslog::LowerPriority`](#Simplib--Syslog--LowerPriority): Valid lowercase versions of syslog priorities
+* [`Simplib::Syslog::LowerSeverity`](#Simplib--Syslog--LowerSeverity): Valid lowercase versions of syslog severities
+* [`Simplib::Syslog::Priority`](#Simplib--Syslog--Priority): Syslog priorities
+* [`Simplib::Syslog::Severity`](#Simplib--Syslog--Severity): Syslog severities
+* [`Simplib::Syslog::UpperFacility`](#Simplib--Syslog--UpperFacility): Valid uppercase bounds for syslog facilities
+* [`Simplib::Syslog::UpperPriority`](#Simplib--Syslog--UpperPriority): Valid uppercase versions of syslog priorities
+* [`Simplib::Syslog::UpperSeverity`](#Simplib--Syslog--UpperSeverity): Valid uppercase versions of syslog severities
+* [`Simplib::Systemd::ServiceName`](#Simplib--Systemd--ServiceName): Valid systemd service names
+* [`Simplib::URI`](#Simplib--URI): Matches URI strings
+* [`Simplib::Umask`](#Simplib--Umask): Matches umask patterns
 
 ## Classes
 
-### <a name="simplibreboot_notify"></a>`simplib::reboot_notify`
+### <a name="simplib--reboot_notify"></a>`simplib::reboot_notify`
 
 `reboot_notify` custom type
 
@@ -180,9 +180,9 @@
 
 The following parameters are available in the `simplib::reboot_notify` class:
 
-* [`log_level`](#log_level)
+* [`log_level`](#-simplib--reboot_notify--log_level)
 
-##### <a name="log_level"></a>`log_level`
+##### <a name="-simplib--reboot_notify--log_level"></a>`log_level`
 
 Data type: `Simplib::PuppetLogLevel`
 
@@ -197,7 +197,7 @@ the level you want.
 
 Default value: `'notice'`
 
-### <a name="simplibstages"></a>`simplib::stages`
+### <a name="simplib--stages"></a>`simplib::stages`
 
 Adds additional intermediate stages that we found necessary when developing
 various SIMP modules that had global ramifications.
@@ -213,7 +213,7 @@ Added Stages:
 
 ## Defined types
 
-### <a name="simplibinstall"></a>`simplib::install`
+### <a name="simplib--install"></a>`simplib::install`
 
 This has been created as a Defined Type so that it can be properly referenced
 in manifest ordering
@@ -222,10 +222,10 @@ in manifest ordering
 
 The following parameters are available in the `simplib::install` defined type:
 
-* [`packages`](#packages)
-* [`defaults`](#defaults)
+* [`packages`](#-simplib--install--packages)
+* [`defaults`](#-simplib--install--defaults)
 
-##### <a name="packages"></a>`packages`
+##### <a name="-simplib--install--packages"></a>`packages`
 
 Data type: `Hash[String[1], Optional[Hash]]`
 
@@ -240,7 +240,7 @@ Hash of the packages to install
 @example Adding a package to be installed
   simplib::install({ 'my_package' => undef })
 
-##### <a name="defaults"></a>`defaults`
+##### <a name="-simplib--install--defaults"></a>`defaults`
 
 Data type: `Hash[String[1], String[1]]`
 
@@ -287,23 +287,23 @@ Default value: `default`
 
 The following parameters are available in the `ftpusers` type.
 
-* [`always_deny`](#always_deny)
-* [`min_id`](#min_id)
-* [`name`](#name)
+* [`always_deny`](#-ftpusers--always_deny)
+* [`min_id`](#-ftpusers--min_id)
+* [`name`](#-ftpusers--name)
 
-##### <a name="always_deny"></a>`always_deny`
+##### <a name="-ftpusers--always_deny"></a>`always_deny`
 
 Entries to always add to the file
 
 Default value: `['nobody','nfsnobody']`
 
-##### <a name="min_id"></a>`min_id`
+##### <a name="-ftpusers--min_id"></a>`min_id`
 
 The UID below which all values will be considered system users
 
 Default value: `500`
 
-##### <a name="name"></a>`name`
+##### <a name="-ftpusers--name"></a>`name`
 
 namevar
 
@@ -388,13 +388,13 @@ The value to which to set the new limit.
 
 The following parameters are available in the `init_ulimit` type.
 
-* [`item`](#item)
-* [`limit_type`](#limit_type)
-* [`name`](#name)
-* [`provider`](#provider)
-* [`target`](#target)
+* [`item`](#-init_ulimit--item)
+* [`limit_type`](#-init_ulimit--limit_type)
+* [`name`](#-init_ulimit--name)
+* [`provider`](#-init_ulimit--provider)
+* [`target`](#-init_ulimit--target)
 
-##### <a name="item"></a>`item`
+##### <a name="-init_ulimit--item"></a>`item`
 
 namevar
 
@@ -402,7 +402,7 @@ The system limit resource to modify
 
 Default value: `max_open_files`
 
-##### <a name="limit_type"></a>`limit_type`
+##### <a name="-init_ulimit--limit_type"></a>`limit_type`
 
 Valid values: `soft`, `hard`, `both`
 
@@ -410,16 +410,16 @@ The limit type: hard|soft|both
 
 Default value: `both`
 
-##### <a name="name"></a>`name`
+##### <a name="-init_ulimit--name"></a>`name`
 
 A unique name for the resource
 
-##### <a name="provider"></a>`provider`
+##### <a name="-init_ulimit--provider"></a>`provider`
 
 The specific backend to use for this `init_ulimit` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="target"></a>`target`
+##### <a name="-init_ulimit--target"></a>`target`
 
 namevar
 
@@ -452,26 +452,26 @@ Default value: `present`
 
 The following parameters are available in the `prepend_file_line` type.
 
-* [`line`](#line)
-* [`name`](#name)
-* [`path`](#path)
-* [`provider`](#provider)
+* [`line`](#-prepend_file_line--line)
+* [`name`](#-prepend_file_line--name)
+* [`path`](#-prepend_file_line--path)
+* [`provider`](#-prepend_file_line--provider)
 
-##### <a name="line"></a>`line`
+##### <a name="-prepend_file_line--line"></a>`line`
 
 The line to be prepended to the path.
 
-##### <a name="name"></a>`name`
+##### <a name="-prepend_file_line--name"></a>`name`
 
 namevar
 
 arbitrary name used as identity
 
-##### <a name="path"></a>`path`
+##### <a name="-prepend_file_line--path"></a>`path`
 
 File to possibly prepend a line to.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-prepend_file_line--provider"></a>`provider`
 
 The specific backend to use for this `prepend_file_line` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
@@ -506,23 +506,23 @@ Default value: `present`
 
 The following parameters are available in the `reboot_notify` type.
 
-* [`control_only`](#control_only)
-* [`log_level`](#log_level)
-* [`name`](#name)
-* [`provider`](#provider)
-* [`reason`](#reason)
+* [`control_only`](#-reboot_notify--control_only)
+* [`log_level`](#-reboot_notify--log_level)
+* [`name`](#-reboot_notify--name)
+* [`provider`](#-reboot_notify--provider)
+* [`reason`](#-reboot_notify--reason)
 
-##### <a name="control_only"></a>`control_only`
+##### <a name="-reboot_notify--control_only"></a>`control_only`
 
-Valid values: ``true``, ``false``, `yes`, `no`
+Valid values: `true`, `false`, `yes`, `no`
 
 This resource is only for control and should not add an item to the notification list
 
 You may only have ONE resource with this set to `true` in your catalog
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="log_level"></a>`log_level`
+##### <a name="-reboot_notify--log_level"></a>`log_level`
 
 Valid values: `alert`, `crit`, `debug`, `notice`, `emerg`, `err`, `info`, `warning`
 
@@ -532,18 +532,18 @@ This is only active with :control_only set to `true`
 
 Default value: `notice`
 
-##### <a name="name"></a>`name`
+##### <a name="-reboot_notify--name"></a>`name`
 
 namevar
 
 The item that is being modified that requires a reboot
 
-##### <a name="provider"></a>`provider`
+##### <a name="-reboot_notify--provider"></a>`provider`
 
 The specific backend to use for this `reboot_notify` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### <a name="reason"></a>`reason`
+##### <a name="-reboot_notify--reason"></a>`reason`
 
 An optional reason for rebooting
 
@@ -578,7 +578,7 @@ Default value: `default`
 
 ##### `persist`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Whether or not to save the runlevel as default.
 
@@ -588,11 +588,11 @@ Default value: `true`
 
 The following parameters are available in the `runlevel` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
-* [`transition_timeout`](#transition_timeout)
+* [`name`](#-runlevel--name)
+* [`provider`](#-runlevel--provider)
+* [`transition_timeout`](#-runlevel--transition_timeout)
 
-##### <a name="name"></a>`name`
+##### <a name="-runlevel--name"></a>`name`
 
 Valid values: `/^[1-5]$/`, `rescue`, `multi-user`, `graphical`
 
@@ -600,12 +600,12 @@ namevar
 
 The target runlevel of the system
 
-##### <a name="provider"></a>`provider`
+##### <a name="-runlevel--provider"></a>`provider`
 
 The specific backend to use for this `runlevel` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### <a name="transition_timeout"></a>`transition_timeout`
+##### <a name="-runlevel--transition_timeout"></a>`transition_timeout`
 
 Valid values: `/^\d+$/`
 
@@ -633,16 +633,16 @@ Default value: `077`
 
 The following parameters are available in the `script_umask` type.
 
-* [`name`](#name)
-* [`provider`](#provider)
+* [`name`](#-script_umask--name)
+* [`provider`](#-script_umask--provider)
 
-##### <a name="name"></a>`name`
+##### <a name="-script_umask--name"></a>`name`
 
 namevar
 
 The file to alter.
 
-##### <a name="provider"></a>`provider`
+##### <a name="-script_umask--provider"></a>`provider`
 
 The specific backend to use for this `script_umask` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
@@ -692,58 +692,58 @@ Default value: `present`
 
 The following parameters are available in the `simp_file_line` type.
 
-* [`deconflict`](#deconflict)
-* [`line`](#line)
-* [`match`](#match)
-* [`name`](#name)
-* [`path`](#path)
-* [`prepend`](#prepend)
-* [`provider`](#provider)
+* [`deconflict`](#-simp_file_line--deconflict)
+* [`line`](#-simp_file_line--line)
+* [`match`](#-simp_file_line--match)
+* [`name`](#-simp_file_line--name)
+* [`path`](#-simp_file_line--path)
+* [`prepend`](#-simp_file_line--prepend)
+* [`provider`](#-simp_file_line--provider)
 
-##### <a name="deconflict"></a>`deconflict`
+##### <a name="-simp_file_line--deconflict"></a>`deconflict`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Do not execute this type if there is a file type that already manages the
 content of the target file unless $replace == false
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="line"></a>`line`
+##### <a name="-simp_file_line--line"></a>`line`
 
 The line to be added to the file located by the path parameter.
 
-##### <a name="match"></a>`match`
+##### <a name="-simp_file_line--match"></a>`match`
 
 An optional regular expression to run against existing lines in the file.
 If a match is found, we replace that line rather than adding a new line.
 
-##### <a name="name"></a>`name`
+##### <a name="-simp_file_line--name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### <a name="path"></a>`path`
+##### <a name="-simp_file_line--path"></a>`path`
 
 The file Puppet will ensure contains the line specified by the line parameter.
 
-##### <a name="prepend"></a>`prepend`
+##### <a name="-simp_file_line--prepend"></a>`prepend`
 
-Valid values: ``true``, ``false``
+Valid values: `true`, `false`
 
 Prepend the line to the file if not using match
 
-Default value: ``false``
+Default value: `false`
 
-##### <a name="provider"></a>`provider`
+##### <a name="-simp_file_line--provider"></a>`provider`
 
 The specific backend to use for this `simp_file_line` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
 ## Functions
 
-### <a name="simplibassert_metadata"></a>`simplib::assert_metadata`
+### <a name="simplib--assert_metadata"></a>`simplib::assert_metadata`
 
 Type: Puppet Language
 
@@ -781,7 +781,10 @@ The name of the module that should be checked
 
 ##### `options`
 
-Data type: `Optional[Struct[{
+Data type:
+
+```puppet
+Optional[Struct[{
     enable    => Optional[Boolean],
     os        => Optional[Struct[{
       validate => Optional[Boolean],
@@ -789,7 +792,8 @@ Data type: `Optional[Struct[{
         release_match => Enum['none','full','major']
       }]]
     }]]
-  }]]`
+  }]]
+```
 
 Behavior modifiers for the function
 * Can be set using `simplib::assert_metadata::options` in the `lookup`
@@ -806,7 +810,7 @@ Behavior modifiers for the function
           * full  -> Full release must match
           * major -> Only the major release must match
 
-### <a name="simplibassert_optional_dependency"></a>`simplib::assert_optional_dependency`
+### <a name="simplib--assert_optional_dependency"></a>`simplib::assert_optional_dependency`
 
 Type: Ruby 4.x API
 
@@ -911,7 +915,7 @@ contains the optional dependencies.
 
 * Nested levels should be separated by colons (`:`)
 
-### <a name="simplibbracketize"></a>`simplib::bracketize`
+### <a name="simplib--bracketize"></a>`simplib::bracketize`
 
 Type: Ruby 4.x API
 
@@ -976,7 +980,7 @@ Data type: `String`
 
 The string of IPv6 addresses to bracketize (comma, space, and/or semi-colon separated)
 
-### <a name="simplibcaller"></a>`simplib::caller`
+### <a name="simplib--caller"></a>`simplib::caller`
 
 Type: Ruby 4.x API
 
@@ -1013,7 +1017,7 @@ Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
 
-### <a name="simplibcronexpand_range"></a>`simplib::cron::expand_range`
+### <a name="simplib--cron--expand_range"></a>`simplib::cron::expand_range`
 
 Type: Puppet Language
 
@@ -1031,7 +1035,7 @@ Data type: `String`
 
 The range to convert
 
-### <a name="simplibcronto_systemd"></a>`simplib::cron::to_systemd`
+### <a name="simplib--cron--to_systemd"></a>`simplib::cron::to_systemd`
 
 Type: Puppet Language
 
@@ -1075,7 +1079,7 @@ Data type: `Optional[Simplib::Cron::Weekday]`
 
 The `weekday` parameter from the cron resource
 
-### <a name="simplibdebugclasstrace"></a>`simplib::debug::classtrace`
+### <a name="simplib--debug--classtrace"></a>`simplib::debug::classtrace`
 
 Type: Ruby 4.x API
 
@@ -1099,7 +1103,7 @@ Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
 
-### <a name="simplibdebuginspect"></a>`simplib::debug::inspect`
+### <a name="simplib--debug--inspect"></a>`simplib::debug::inspect`
 
 Type: Ruby 4.x API
 
@@ -1129,7 +1133,7 @@ Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
 
-### <a name="simplibdebugstacktrace"></a>`simplib::debug::stacktrace`
+### <a name="simplib--debug--stacktrace"></a>`simplib::debug::stacktrace`
 
 Type: Ruby 4.x API
 
@@ -1153,7 +1157,7 @@ Data type: `Optional[Boolean]`
 
 Whether or not to print to the visual output
 
-### <a name="simplibdeprecation"></a>`simplib::deprecation`
+### <a name="simplib--deprecation"></a>`simplib::deprecation`
 
 Type: Ruby 4.x API
 
@@ -1212,7 +1216,7 @@ Data type: `String`
 Message to be printed, to which file and line
 information will be appended, if available.
 
-### <a name="simplibdlookup"></a>`simplib::dlookup`
+### <a name="simplib--dlookup"></a>`simplib::dlookup`
 
 Type: Ruby 4.x API
 
@@ -1358,7 +1362,7 @@ Hash of options for regular ``lookup()``
 Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
 * No other formats are supported!
 
-### <a name="simplibfiltered"></a>`simplib::filtered`
+### <a name="simplib--filtered"></a>`simplib::filtered`
 
 Type: Ruby 4.x API
 
@@ -1441,7 +1445,7 @@ Data type: `Puppet::LookupContext`
 
 
 
-### <a name="simplibgen_random_password"></a>`simplib::gen_random_password`
+### <a name="simplib--gen_random_password"></a>`simplib::gen_random_password`
 
 Type: Ruby 4.x API
 
@@ -1491,7 +1495,7 @@ Data type: `Optional[Variant[Integer[0],Float[0]]]`
 Maximum time allotted to generate
 the password; a value of 0 disables the timeout
 
-### <a name="simplibhash_to_opts"></a>`simplib::hash_to_opts`
+### <a name="simplib--hash_to_opts"></a>`simplib::hash_to_opts`
 
 Type: Puppet Language
 
@@ -1569,12 +1573,16 @@ Numeric, Boolean, or Undef as a value.
 
 ##### `opts`
 
-Data type: `Struct[{
+Data type:
+
+```puppet
+Struct[{
     Optional[connector] => String[1],
     Optional[prefix]    => String[1],
     Optional[repeat]    => Enum['comma','repeat'],
     Optional[delimiter] => String[1],
-  }]`
+  }]
+```
 
 Options hash. It only takes 3 keys, none of them required:
 * ``connector``: String that joins each key and value pair. Defaults to '='
@@ -1584,7 +1592,7 @@ Options hash. It only takes 3 keys, none of them required:
 * ``repeat``: Whether to return array values as a deliminated string,
   or by repeating the option with each unique value
 
-### <a name="simplibhost_is_me"></a>`simplib::host_is_me`
+### <a name="simplib--host_is_me"></a>`simplib::host_is_me`
 
 Type: Ruby 4.x API
 
@@ -1620,7 +1628,7 @@ Data type: `Array[Simplib::Host]`
 Array of Hostnames and/or IPv4 addresses to compare
 against; `127.0.0.1` is never matched, use `localhost` instead
 
-### <a name="simplibin_bolt"></a>`simplib::in_bolt`
+### <a name="simplib--in_bolt"></a>`simplib::in_bolt`
 
 Type: Puppet Language
 
@@ -1640,7 +1648,7 @@ more than one module or hunt down code.
 
 Returns: `Boolean`
 
-### <a name="simplibinspect"></a>`simplib::inspect`
+### <a name="simplib--inspect"></a>`simplib::inspect`
 
 Type: Puppet Language
 
@@ -1708,7 +1716,7 @@ The format that you wish to use to display the output during the
 run. 'json' and 'yaml' result in multi-line message content.
 'oneline_json' results in single-line message content.
 
-### <a name="simplibipfamily_hash"></a>`simplib::ip::family_hash`
+### <a name="simplib--ip--family_hash"></a>`simplib::ip::family_hash`
 
 Type: Ruby 4.x API
 
@@ -1816,17 +1824,21 @@ ipv6:
 
 ##### `ip_addresses`
 
-Data type: `Variant[
+Data type:
+
+```puppet
+Variant[
       Simplib::Host,
       Simplib::IP::V4::DDQ,
       Simplib::IP::V4::CIDR,
       Simplib::IP::V6::CIDR,
       Simplib::Netlist
-    ]`
+    ]
+```
 
 The addresses to convert
 
-### <a name="simplibip_to_cron"></a>`simplib::ip_to_cron`
+### <a name="simplib--ip_to_cron"></a>`simplib::ip_to_cron`
 
 Type: Ruby 4.x API
 
@@ -1912,7 +1924,7 @@ Data type: `Optional[Simplib::IP]`
 The IP address to use as the basis for the generated values.
 When `nil`, the 'ipaddress' fact (IPv4) is used.
 
-### <a name="simplibipaddresses"></a>`simplib::ipaddresses`
+### <a name="simplib--ipaddresses"></a>`simplib::ipaddresses`
 
 Type: Ruby 4.x API
 
@@ -1933,7 +1945,7 @@ Data type: `Optional[Boolean]`
 Whether to exclude local addresses
 from the return value (e.g., '127.0.0.1').
 
-### <a name="simplibjoin_mount_opts"></a>`simplib::join_mount_opts`
+### <a name="simplib--join_mount_opts"></a>`simplib::join_mount_opts`
 
 Type: Ruby 4.x API
 
@@ -1961,7 +1973,7 @@ Data type: `Array[String]`
 New mount options, which will override
 `system_mount_opts` when there are conflicts
 
-### <a name="simplibknockout"></a>`simplib::knockout`
+### <a name="simplib--knockout"></a>`simplib::knockout`
 
 Type: Puppet Language
 
@@ -2013,7 +2025,7 @@ Data type: `Array`
 
 The array to knockout
 
-### <a name="simplibldapdomain_to_dn"></a>`simplib::ldap::domain_to_dn`
+### <a name="simplib--ldap--domain_to_dn"></a>`simplib::ldap::domain_to_dn`
 
 Type: Puppet Language
 
@@ -2080,7 +2092,7 @@ Whether to downcase the LDAP attributes
   * Different tools have bugs where they cannot, handle
     both upcased and downcased LDAP attribute elements
 
-### <a name="simpliblookup"></a>`simplib::lookup`
+### <a name="simplib--lookup"></a>`simplib::lookup`
 
 Type: Ruby 4.x API
 
@@ -2165,7 +2177,7 @@ Hash of options for regular ``lookup()``
 Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
 * No other formats are supported!
 
-### <a name="simplibmock_data"></a>`simplib::mock_data`
+### <a name="simplib--mock_data"></a>`simplib::mock_data`
 
 Type: Ruby 4.x API
 
@@ -2213,7 +2225,7 @@ Data type: `Puppet::LookupContext`
 
 
 
-### <a name="simplibmodule_exist"></a>`simplib::module_exist`
+### <a name="simplib--module_exist"></a>`simplib::module_exist`
 
 Type: Ruby 4.x API
 
@@ -2237,7 +2249,7 @@ Data type: `String[1]`
 
 The module name to check
 
-### <a name="simplibmodule_metadataassert"></a>`simplib::module_metadata::assert`
+### <a name="simplib--module_metadata--assert"></a>`simplib::module_metadata::assert`
 
 Type: Puppet Language
 
@@ -2274,7 +2286,10 @@ The name of the module that should be checked
 
 ##### `options`
 
-Data type: `Optional[Struct[{
+Data type:
+
+```puppet
+Optional[Struct[{
     enable => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
@@ -2289,14 +2304,15 @@ Data type: `Optional[Struct[{
         release_match => Enum['none','full','major']
       }]]
     }]]
-  }]]`
+  }]]
+```
 
 Options to control the assertion behavior
 
 @see $simplib::module_metadata::os_blacklist::options
 @see $simplib::module_metadata::os_supported::options
 
-### <a name="simplibmodule_metadataos_blacklisted"></a>`simplib::module_metadata::os_blacklisted`
+### <a name="simplib--module_metadata--os_blacklisted"></a>`simplib::module_metadata::os_blacklisted`
 
 Type: Puppet Language
 
@@ -2342,9 +2358,13 @@ An Array of Strings or Hashes
 
 ##### `options`
 
-Data type: `Optional[Struct[{
+Data type:
+
+```puppet
+Optional[Struct[{
     release_match => Enum['none','full','major']
-  }]]`
+  }]]
+```
 
 Options that determine the nature of OS matching
 
@@ -2354,7 +2374,7 @@ Attributes:
      * 'full'  -> Full release must match
      * 'major' -> Only the major release must match
 
-### <a name="simplibmodule_metadataos_supported"></a>`simplib::module_metadata::os_supported`
+### <a name="simplib--module_metadata--os_supported"></a>`simplib::module_metadata::os_supported`
 
 Type: Puppet Language
 
@@ -2381,9 +2401,13 @@ A Hash of the contents of the metadata.json for a puppet module.
 
 ##### `options`
 
-Data type: `Optional[Struct[{
+Data type:
+
+```puppet
+Optional[Struct[{
     release_match => Enum['none','full','major']
-  }]]`
+  }]]
+```
 
 Options that determine the nature of OS matching
 
@@ -2393,7 +2417,7 @@ Attributes:
      * 'full'  -> Full release must match
      * 'major' -> Only the major release must match
 
-### <a name="simplibnets2cidr"></a>`simplib::nets2cidr`
+### <a name="simplib--nets2cidr"></a>`simplib::nets2cidr`
 
 Type: Ruby 4.x API
 
@@ -2461,7 +2485,7 @@ Data type: `Array`
 
 Array of networks
 
-### <a name="simplibnets2ddq"></a>`simplib::nets2ddq`
+### <a name="simplib--nets2ddq"></a>`simplib::nets2ddq`
 
 Type: Ruby 4.x API
 
@@ -2539,7 +2563,7 @@ Data type: `String`
 String containing the list of networks to
 convert; list elements are separated by spaces, commas or semicolons.
 
-### <a name="simplibparams2hash"></a>`simplib::params2hash`
+### <a name="simplib--params2hash"></a>`simplib::params2hash`
 
 Type: Ruby 4.x API
 
@@ -2563,7 +2587,7 @@ Data type: `Optional[Array[String[1]]]`
 
 Parameters that you wish to exclude from the output
 
-### <a name="simplibparse_hosts"></a>`simplib::parse_hosts`
+### <a name="simplib--parse_hosts"></a>`simplib::parse_hosts`
 
 Type: Ruby 4.x API
 
@@ -2655,7 +2679,7 @@ Data type: `Array[String[1],1]`
 Array of host entries, where each entry may contain
 a protocol or both a protocol and port
 
-### <a name="simplibpassgen"></a>`simplib::passgen`
+### <a name="simplib--passgen"></a>`simplib::passgen`
 
 Type: Ruby 4.x API
 
@@ -2830,7 +2854,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgengen_password_and_salt"></a>`simplib::passgen::gen_password_and_salt`
+### <a name="simplib--passgen--gen_password_and_salt"></a>`simplib::passgen::gen_password_and_salt`
 
 Type: Ruby 4.x API
 
@@ -2892,7 +2916,7 @@ Data type: `Variant[Integer[0],Float[0]]`
 Maximum time allotted to generate the password or
 the salt; a value of 0 disables the timeout
 
-### <a name="simplibpassgengen_salt"></a>`simplib::passgen::gen_salt`
+### <a name="simplib--passgen--gen_salt"></a>`simplib::passgen::gen_salt`
 
 Type: Ruby 4.x API
 
@@ -2921,7 +2945,7 @@ Data type: `Optional[Variant[Integer[0],Float[0]]]`
 Maximum time allotted to generate the salt;
 a value of 0 disables the timeout
 
-### <a name="simplibpassgenget"></a>`simplib::passgen::get`
+### <a name="simplib--passgen--get"></a>`simplib::passgen::get`
 
 Type: Ruby 4.x API
 
@@ -3045,7 +3069,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgenlegacycommon_settings"></a>`simplib::passgen::legacy::common_settings`
+### <a name="simplib--passgen--legacy--common_settings"></a>`simplib::passgen::legacy::common_settings`
 
 Type: Ruby 4.x API
 
@@ -3058,7 +3082,7 @@ Returns common settings used by simplib::passgen in legacy mode
 Returns: `Hash` Settings Hash containing 'keydir', 'user', 'group',
 'dir_mode' and 'file_mode' attributes
 
-### <a name="simplibpassgenlegacyget"></a>`simplib::passgen::legacy::get`
+### <a name="simplib--passgen--legacy--get"></a>`simplib::passgen::legacy::get`
 
 Type: Ruby 4.x API
 
@@ -3102,7 +3126,7 @@ Must conform to the following:
   * 0-9
   * The following special characters:  `._:-`
 
-### <a name="simplibpassgenlegacylist"></a>`simplib::passgen::legacy::list`
+### <a name="simplib--passgen--legacy--list"></a>`simplib::passgen::legacy::list`
 
 Type: Ruby 4.x API
 
@@ -3140,7 +3164,7 @@ Raises:
 
 * `Exception` If password root directory cannot be accessed by the user.
 
-### <a name="simplibpassgenlegacypassgen"></a>`simplib::passgen::legacy::passgen`
+### <a name="simplib--passgen--legacy--passgen"></a>`simplib::passgen::legacy::passgen`
 
 Type: Ruby 4.x API
 
@@ -3197,17 +3221,17 @@ of the following options:
      * `1` => Add reasonably safe symbols
      * `2` => Printable ASCII
 * `user` => user for generated files/directories
-     * Defaults to the user compiling the catalog.
+     * Defaults to the Puppet user.
      * Only useful when running `puppet apply` as the `root` user.
 * `group => Group for generated files/directories
-     * Defaults to the group compiling the catalog.
+     * Defaults to the Puppet user.
      * Only useful when running `puppet apply` as the `root` user.
 **private options:**
 * `password` => contains the string representation of the password to hash (used for testing)
 * `salt` => contains the string literal salt to use (used for testing)
 * `complex_only` => use only the characters explicitly added by the complexity rules (used for testing)
 
-### <a name="simplibpassgenlegacyremove"></a>`simplib::passgen::legacy::remove`
+### <a name="simplib--passgen--legacy--remove"></a>`simplib::passgen::legacy::remove`
 
 Type: Ruby 4.x API
 
@@ -3256,7 +3280,7 @@ Must conform to the following:
     * `._:-/` for the simpkv-enabled implementation
 * Identifier may not contain '/./' or '/../' sequences.
 
-### <a name="simplibpassgenlegacyset"></a>`simplib::passgen::legacy::set`
+### <a name="simplib--passgen--legacy--set"></a>`simplib::passgen::legacy::set`
 
 Type: Ruby 4.x API
 
@@ -3328,7 +3352,7 @@ Group for generated files/directories
   * Defaults to the group compiling the catalog.
   * Only useful when running `puppet apply` as the `root` user.
 
-### <a name="simplibpassgenlist"></a>`simplib::passgen::list`
+### <a name="simplib--passgen--list"></a>`simplib::passgen::list`
 
 Type: Ruby 4.x API
 
@@ -3462,7 +3486,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgenremove"></a>`simplib::passgen::remove`
+### <a name="simplib--passgen--remove"></a>`simplib::passgen::remove`
 
 Type: Ruby 4.x API
 
@@ -3589,7 +3613,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgenset"></a>`simplib::passgen::set`
+### <a name="simplib--passgen--set"></a>`simplib::passgen::set`
 
 Type: Ruby 4.x API
 
@@ -3777,7 +3801,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvget"></a>`simplib::passgen::simpkv::get`
+### <a name="simplib--passgen--simpkv--get"></a>`simplib::passgen::simpkv::get`
 
 Type: Ruby 4.x API
 
@@ -3875,7 +3899,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvlist"></a>`simplib::passgen::simpkv::list`
+### <a name="simplib--passgen--simpkv--list"></a>`simplib::passgen::simpkv::list`
 
 Type: Ruby 4.x API
 
@@ -3981,7 +4005,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvpassgen"></a>`simplib::passgen::simpkv::passgen`
+### <a name="simplib--passgen--simpkv--passgen"></a>`simplib::passgen::simpkv::passgen`
 
 Type: Ruby 4.x API
 
@@ -4131,7 +4155,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvremove"></a>`simplib::passgen::simpkv::remove`
+### <a name="simplib--passgen--simpkv--remove"></a>`simplib::passgen::simpkv::remove`
 
 Type: Ruby 4.x API
 
@@ -4226,7 +4250,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvroot_dir"></a>`simplib::passgen::simpkv::root_dir`
+### <a name="simplib--passgen--simpkv--root_dir"></a>`simplib::passgen::simpkv::root_dir`
 
 Type: Ruby 4.x API
 
@@ -4241,7 +4265,7 @@ simplib::passgen
 Returns: `String` root directory in simpkv for password info generated by
 simplib::passgen
 
-### <a name="simplibpassgensimpkvset"></a>`simplib::passgen::simpkv::set`
+### <a name="simplib--passgen--simpkv--set"></a>`simplib::passgen::simpkv::set`
 
 Type: Ruby 4.x API
 
@@ -4379,7 +4403,7 @@ configuration to use via fuzzy name matching, in the absence of the
     failed.
   * Defaults to `false`.
 
-### <a name="simplibpassgensimpkvvalid_password_info"></a>`simplib::passgen::simpkv::valid_password_info`
+### <a name="simplib--passgen--simpkv--valid_password_info"></a>`simplib::passgen::simpkv::valid_password_info`
 
 Type: Ruby 4.x API
 
@@ -4402,7 +4426,7 @@ Hash of password information retrieved from simpkv
 * 'metadata' - Hash that should contain 'complexity', 'complex_only' and
     'history' attributes
 
-### <a name="simplibrand_cron"></a>`simplib::rand_cron`
+### <a name="simplib--rand_cron"></a>`simplib::rand_cron`
 
 Type: Ruby 4.x API
 
@@ -4520,7 +4544,7 @@ The maximum value for the interval.  The values generated will
 be in the inclusive range [0, max_value]. Defaults to `60` for
 use in the `minute` cron field.
 
-### <a name="simplibsafe_filename"></a>`simplib::safe_filename`
+### <a name="simplib--safe_filename"></a>`simplib::safe_filename`
 
 Type: Puppet Language
 
@@ -4562,7 +4586,7 @@ Data type: `String[1]`
 
 String that should be used to replace all instances of unsafe characters in `$input`
 
-### <a name="simplibsimp_version"></a>`simplib::simp_version`
+### <a name="simplib--simp_version"></a>`simplib::simp_version`
 
 Type: Ruby 4.x API
 
@@ -4583,7 +4607,7 @@ Whether to strip whitespace from the
 version string.  Without stripping, the string may end with
 a "\n"
 
-### <a name="simplibstrip_ports"></a>`simplib::strip_ports`
+### <a name="simplib--strip_ports"></a>`simplib::strip_ports`
 
 Type: Ruby 4.x API
 
@@ -4647,7 +4671,7 @@ Data type: `Array[String[1],1]`
 
 List of hosts which may contain protocols and port numbers.
 
-### <a name="simplibto_integer"></a>`simplib::to_integer`
+### <a name="simplib--to_integer"></a>`simplib::to_integer`
 
 Type: Ruby 4.x API
 
@@ -4675,7 +4699,7 @@ Data type: `Any`
 
 The argument to convert into an `Integer`
 
-### <a name="simplibto_string"></a>`simplib::to_string`
+### <a name="simplib--to_string"></a>`simplib::to_string`
 
 Type: Ruby 4.x API
 
@@ -4693,7 +4717,7 @@ Data type: `Any`
 
 The argument to convert into a `String`
 
-### <a name="simplibvalidate_array_member"></a>`simplib::validate_array_member`
+### <a name="simplib--validate_array_member"></a>`simplib::validate_array_member`
 
 Type: Ruby 4.x API
 
@@ -4777,7 +4801,7 @@ Modification to be made to the comparison
 operation.  Currently, 'i', string case invariance is the only
 supported modifier.
 
-### <a name="simplibvalidate_between"></a>`simplib::validate_between`
+### <a name="simplib--validate_between"></a>`simplib::validate_between`
 
 Type: Ruby 4.x API
 
@@ -4837,7 +4861,7 @@ Data type: `Numeric`
 
 Maximum value that is valid
 
-### <a name="simplibvalidate_bool"></a>`simplib::validate_bool`
+### <a name="simplib--validate_bool"></a>`simplib::validate_bool`
 
 Type: Ruby 4.x API
 
@@ -4909,7 +4933,7 @@ Data type: `Variant[String,Boolean]`
 
 One or more values to validate
 
-### <a name="simplibvalidate_deep_hash"></a>`simplib::validate_deep_hash`
+### <a name="simplib--validate_deep_hash"></a>`simplib::validate_deep_hash`
 
 Type: Ruby 4.x API
 
@@ -5069,7 +5093,7 @@ Data type: `Hash`
 
 Hash to be validated against the reference
 
-### <a name="simplibvalidate_net_list"></a>`simplib::validate_net_list`
+### <a name="simplib--validate_net_list"></a>`simplib::validate_net_list`
 
 Type: Ruby 4.x API
 
@@ -5174,7 +5198,7 @@ Data type: `Optional[String]`
 Stringified regular expression (regex without
 the `//` delimiters)
 
-### <a name="simplibvalidate_port"></a>`simplib::validate_port`
+### <a name="simplib--validate_port"></a>`simplib::validate_port`
 
 Type: Ruby 4.x API
 
@@ -5251,7 +5275,7 @@ Data type: `Variant[String[1],Integer,StringOrIntegerArray]`
 Arguments each of which contain either an
 individual port or an array of ports.
 
-### <a name="simplibvalidate_re_array"></a>`simplib::validate_re_array`
+### <a name="simplib--validate_re_array"></a>`simplib::validate_re_array`
 
 Type: Ruby 4.x API
 
@@ -5444,7 +5468,7 @@ Data type: `Optional[String]`
 
 Optional error message to emit upon failure
 
-### <a name="simplibvalidate_sysctl_value"></a>`simplib::validate_sysctl_value`
+### <a name="simplib--validate_sysctl_value"></a>`simplib::validate_sysctl_value`
 
 Type: Ruby 4.x API
 
@@ -5494,7 +5518,7 @@ Data type: `NotUndef`
 
 Value to be validated
 
-### <a name="simplibvalidate_uri_list"></a>`simplib::validate_uri_list`
+### <a name="simplib--validate_uri_list"></a>`simplib::validate_uri_list`
 
 Type: Ruby 4.x API
 
@@ -5567,17 +5591,13 @@ List of schemes (protocol types) allowed for the URI.
 
 ## Data types
 
-### <a name="simplibcronhour"></a>`Simplib::Cron::Hour`
+### <a name="Simplib--Cron--Hour"></a>`Simplib::Cron::Hour`
 
 Matches valid cron hour parameter
 
-Alias of
+Alias of `Variant[Simplib::Cron::Hour_entry, Array[Simplib::Cron::Hour_entry]]`
 
-```puppet
-Variant[Simplib::Cron::Hour_entry, Array[Simplib::Cron::Hour_entry]]
-```
-
-### <a name="simplibcronhour_entry"></a>`Simplib::Cron::Hour_entry`
+### <a name="Simplib--Cron--Hour_entry"></a>`Simplib::Cron::Hour_entry`
 
 Matches valid cron hour parameter
 
@@ -5592,17 +5612,13 @@ Variant[Integer[0,23], Pattern['^(?x)(?:\*|
 )$']]
 ```
 
-### <a name="simplibcronminute"></a>`Simplib::Cron::Minute`
+### <a name="Simplib--Cron--Minute"></a>`Simplib::Cron::Minute`
 
 Matches valid cron minute parameter
 
-Alias of
+Alias of `Variant[Simplib::Cron::Minute_entry, Array[Simplib::Cron::Minute_entry]]`
 
-```puppet
-Variant[Simplib::Cron::Minute_entry, Array[Simplib::Cron::Minute_entry]]
-```
-
-### <a name="simplibcronminute_entry"></a>`Simplib::Cron::Minute_entry`
+### <a name="Simplib--Cron--Minute_entry"></a>`Simplib::Cron::Minute_entry`
 
 Matches valid cron minute parameter
 
@@ -5617,27 +5633,19 @@ Variant[Integer[0,59], Pattern['^(?x)(?:\*|
 )$']]
 ```
 
-### <a name="simplibcronmonth"></a>`Simplib::Cron::Month`
+### <a name="Simplib--Cron--Month"></a>`Simplib::Cron::Month`
 
 Matches valid cron month parameter
 
-Alias of
+Alias of `Variant[Simplib::Cron::Month_entry, Array[Simplib::Cron::Month_entry]]`
 
-```puppet
-Variant[Simplib::Cron::Month_entry, Array[Simplib::Cron::Month_entry]]
-```
-
-### <a name="simplibcronmonthday"></a>`Simplib::Cron::MonthDay`
+### <a name="Simplib--Cron--MonthDay"></a>`Simplib::Cron::MonthDay`
 
 Matches valid cron monthday parameter
 
-Alias of
+Alias of `Variant[Simplib::Cron::MonthDay_entry, Array[Simplib::Cron::MonthDay_entry]]`
 
-```puppet
-Variant[Simplib::Cron::MonthDay_entry, Array[Simplib::Cron::MonthDay_entry]]
-```
-
-### <a name="simplibcronmonthday_entry"></a>`Simplib::Cron::MonthDay_entry`
+### <a name="Simplib--Cron--MonthDay_entry"></a>`Simplib::Cron::MonthDay_entry`
 
 Matches valid cron monthday parameter
 
@@ -5652,7 +5660,7 @@ Variant[Integer[1,31], Pattern['^(?x)(?:\*|
 )$']]
 ```
 
-### <a name="simplibcronmonth_entry"></a>`Simplib::Cron::Month_entry`
+### <a name="Simplib--Cron--Month_entry"></a>`Simplib::Cron::Month_entry`
 
 Matches valid cron month parameter
 
@@ -5668,17 +5676,13 @@ Variant[Integer[1,12], Pattern['^(?x)(?:\*|
 )$']]
 ```
 
-### <a name="simplibcronweekday"></a>`Simplib::Cron::WeekDay`
+### <a name="Simplib--Cron--WeekDay"></a>`Simplib::Cron::WeekDay`
 
 Matches valid cron weekday parameter
 
-Alias of
+Alias of `Variant[Simplib::Cron::WeekDay_entry, Array[Simplib::Cron::WeekDay_entry]]`
 
-```puppet
-Variant[Simplib::Cron::WeekDay_entry, Array[Simplib::Cron::WeekDay_entry]]
-```
-
-### <a name="simplibcronweekday_entry"></a>`Simplib::Cron::WeekDay_entry`
+### <a name="Simplib--Cron--WeekDay_entry"></a>`Simplib::Cron::WeekDay_entry`
 
 Matches valid cron weekday parameter
 
@@ -5694,7 +5698,7 @@ Variant[Integer[0,7], Pattern['^(?x)(?:\*|
 )$']]
 ```
 
-### <a name="simplibdomain"></a>`Simplib::Domain`
+### <a name="Simplib--Domain"></a>`Simplib::Domain`
 
 Valid DNS domain names
 
@@ -5708,103 +5712,63 @@ Complies with TLD restrictions from Section 2 of RFC 3696:
 
 RegEx developed and tested at http://rubular.com/r/4yZ7R8v42f
 
-Alias of
+Alias of `Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
 
-```puppet
-Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']
-```
-
-### <a name="simplibdomainlist"></a>`Simplib::Domainlist`
+### <a name="Simplib--Domainlist"></a>`Simplib::Domainlist`
 
 List of valid domains (RFC 3696, Section 2)
 
-Alias of
+Alias of `Array[Simplib::Domain]`
 
-```puppet
-Array[Simplib::Domain]
-```
-
-### <a name="simplibemailaddress"></a>`Simplib::EmailAddress`
+### <a name="Simplib--EmailAddress"></a>`Simplib::EmailAddress`
 
 Matches valid email addresses
 
-Alias of
+Alias of `Pattern['^.+@.+$']`
 
-```puppet
-Pattern['^.+@.+$']
-```
-
-### <a name="simplibhost"></a>`Simplib::Host`
+### <a name="Simplib--Host"></a>`Simplib::Host`
 
 Matches a single IP Address or Hostname
 
-Alias of
+Alias of `Variant[Simplib::IP, Simplib::Hostname]`
 
-```puppet
-Variant[Simplib::IP, Simplib::Hostname]
-```
-
-### <a name="simplibhostport"></a>`Simplib::Host::Port`
+### <a name="Simplib--Host--Port"></a>`Simplib::Host::Port`
 
 Matches a single IP Address or Hostname with a Port
 
-Alias of
+Alias of `Variant[Simplib::IP::Port, Simplib::Hostname::Port]`
 
-```puppet
-Variant[Simplib::IP::Port, Simplib::Hostname::Port]
-```
-
-### <a name="simplibhostname"></a>`Simplib::Hostname`
+### <a name="Simplib--Hostname"></a>`Simplib::Hostname`
 
 Valid Hostnames - May not match Unicode and does not validate against TLD registry
 
-Alias of
+Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?)$']`
 
-```puppet
-Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?)$']
-```
-
-### <a name="simplibhostnameport"></a>`Simplib::Hostname::Port`
+### <a name="Simplib--Hostname--Port"></a>`Simplib::Hostname::Port`
 
 Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
 
-Alias of
+Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$']`
 
-```puppet
-Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$']
-```
-
-### <a name="simplibip"></a>`Simplib::IP`
+### <a name="Simplib--IP"></a>`Simplib::IP`
 
 Matches a single IP Address
 
-Alias of
+Alias of `Variant[Simplib::IP::V4, Simplib::IP::V6]`
 
-```puppet
-Variant[Simplib::IP::V4, Simplib::IP::V6]
-```
-
-### <a name="simplibipcidr"></a>`Simplib::IP::CIDR`
+### <a name="Simplib--IP--CIDR"></a>`Simplib::IP::CIDR`
 
 Matches valid CIDR IP addresses
 
-Alias of
+Alias of `Variant[Simplib::IP::V4::CIDR, Simplib::IP::V6::CIDR]`
 
-```puppet
-Variant[Simplib::IP::V4::CIDR, Simplib::IP::V6::CIDR]
-```
-
-### <a name="simplibipport"></a>`Simplib::IP::Port`
+### <a name="Simplib--IP--Port"></a>`Simplib::IP::Port`
 
 Matches valid IP addresses with Ports
 
-Alias of
+Alias of `Variant[Simplib::IP::V4::Port, Simplib::IP::V6::Port]`
 
-```puppet
-Variant[Simplib::IP::V4::Port, Simplib::IP::V6::Port]
-```
-
-### <a name="simplibipv4"></a>`Simplib::IP::V4`
+### <a name="Simplib--IP--V4"></a>`Simplib::IP::V4`
 
 Matches valid IPv4 addresses
 
@@ -5815,13 +5779,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\z)$']`
 
-```puppet
-Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\z)$']
-```
-
-### <a name="simplibipv4cidr"></a>`Simplib::IP::V4::CIDR`
+### <a name="Simplib--IP--V4--CIDR"></a>`Simplib::IP::V4::CIDR`
 
 Matches valid IPv4 CIDR Mask addresses
 Base Regex taken from Ruby core's Resolv::IPv4::Regex
@@ -5832,13 +5792,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))/(3[012]|[12][0-9]|[0-9])\z)$']`
 
-```puppet
-Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))/(3[012]|[12][0-9]|[0-9])\z)$']
-```
-
-### <a name="simplibipv4ddq"></a>`Simplib::IP::V4::DDQ`
+### <a name="Simplib--IP--V4--DDQ"></a>`Simplib::IP::V4::DDQ`
 
 Matches valid IPv4 Dotted Quad Mask addresses
 Base Regex taken from Ruby core's Resolv::IPv4::Regex
@@ -5849,13 +5805,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))/(((0|128|192|224|240|248|252|254)\.0\.0\.0)|(255\.(0|128|192|224|240|248|252|254)\.0\.0)|(255\.255\.(0|128|192|224|240|248|252|254)\.0)|(255\.255\.255\.(0|128|192|224|240|248|252|254)))\z)$']`
 
-```puppet
-Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))/(((0|128|192|224|240|248|252|254)\.0\.0\.0)|(255\.(0|128|192|224|240|248|252|254)\.0\.0)|(255\.255\.(0|128|192|224|240|248|252|254)\.0)|(255\.255\.255\.(0|128|192|224|240|248|252|254)))\z)$']
-```
-
-### <a name="simplibipv4port"></a>`Simplib::IP::V4::Port`
+### <a name="Simplib--IP--V4--Port"></a>`Simplib::IP::V4::Port`
 
 Matches valid IPv4 addresses with a Port
 Regex taken from Ruby core's Resolv::IPv4::Regex
@@ -5866,23 +5818,15 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?)):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)$']`
 
-```puppet
-Pattern['^(?-mix:\A((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?))\.((?x-mi:0|1(?:[0-9][0-9]?)?|2(?:[0-4][0-9]?|5[0-5]?|[6-9])?|[3-9][0-9]?)):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)$']
-```
-
-### <a name="simplibipv6"></a>`Simplib::IP::V6`
+### <a name="Simplib--IP--V6"></a>`Simplib::IP::V6`
 
 Matches valid IPv6 addresses
 
-Alias of
+Alias of `Variant[Simplib::IP::V6::Base, Simplib::IP::V6::Bracketed]`
 
-```puppet
-Variant[Simplib::IP::V6::Base, Simplib::IP::V6::Bracketed]
-```
-
-### <a name="simplibipv6base"></a>`Simplib::IP::V6::Base`
+### <a name="Simplib--IP--V6--Base"></a>`Simplib::IP::V6::Base`
 
 Matches valid IPv6 addresses
 Regex taken from Ruby core's Resolv::IPv6::Regex
@@ -5893,13 +5837,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\z)))$']`
 
-```puppet
-Pattern['^(?x-mi:(?:(?x-mi:\A(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\z)))$']
-```
-
-### <a name="simplibipv6bracketed"></a>`Simplib::IP::V6::Bracketed`
+### <a name="Simplib--IP--V6--Bracketed"></a>`Simplib::IP::V6::Bracketed`
 
 Matches valid Bracketed IPv6 addresses
 Regex taken from Ruby core's Resolv::IPv6::Regex
@@ -5910,13 +5850,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]\z)))$']`
 
-```puppet
-Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]\z)))$']
-```
-
-### <a name="simplibipv6cidr"></a>`Simplib::IP::V6::CIDR`
+### <a name="Simplib--IP--V6--CIDR"></a>`Simplib::IP::V6::CIDR`
 
 Matches valid IPv6 addresses with CIDR netmasks
 Base Regex taken from Ruby core's Resolv::IPv6::Regex
@@ -5927,13 +5863,9 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z)))$']`
 
-```puppet
-Pattern['^(?x-mi:(?:(?x-mi:\A(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z))|(?:(?x-mi:\A((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)/(12[0-8]|1[01][0-9]|[0-9]?[0-9])\z)))$']
-```
-
-### <a name="simplibipv6port"></a>`Simplib::IP::V6::Port`
+### <a name="Simplib--IP--V6--Port"></a>`Simplib::IP::V6::Port`
 
 Matches valid Bracketed IPv6 addresses with Port specification
 Base Regex taken from Ruby core's Resolv::IPv6::Regex
@@ -5943,164 +5875,100 @@ Copyright 2010 Tanaka Akira <kr@fsij.org>
 Released under the guidance of the Ruby COPYING file section 2(a)
 Commit 4e3a98d383eb3c420df5208d83f9aba70b504e33
 
-Alias of
+Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)))$']`
 
-```puppet
-Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}:){6,6})(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z))|(?:(?x-mi:\A\[((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}:)*)(\d+)\.(\d+)\.(\d+)\.(\d+)\]:([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z)))$']
-```
-
-### <a name="simpliblibcryptbsdiextendeddes"></a>`Simplib::Libcrypt::BSDIExtendedDES`
+### <a name="Simplib--Libcrypt--BSDIExtendedDES"></a>`Simplib::Libcrypt::BSDIExtendedDES`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^_[./0-9A-Za-z]{19}$']`
 
-```puppet
-Pattern['^_[./0-9A-Za-z]{19}$']
-```
-
-### <a name="simpliblibcryptbcrypt"></a>`Simplib::Libcrypt::Bcrypt`
+### <a name="Simplib--Libcrypt--Bcrypt"></a>`Simplib::Libcrypt::Bcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}$']`
 
-```puppet
-Pattern['^\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}$']
-```
-
-### <a name="simpliblibcryptbigcrypt"></a>`Simplib::Libcrypt::Bigcrypt`
+### <a name="Simplib--Libcrypt--Bigcrypt"></a>`Simplib::Libcrypt::Bigcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^[./0-9A-Za-z]{13,178}$']`
 
-```puppet
-Pattern['^[./0-9A-Za-z]{13,178}$']
-```
-
-### <a name="simpliblibcryptdes"></a>`Simplib::Libcrypt::DES`
+### <a name="Simplib--Libcrypt--DES"></a>`Simplib::Libcrypt::DES`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^[./0-9A-Za-z]{13}$']`
 
-```puppet
-Pattern['^[./0-9A-Za-z]{13}$']
-```
-
-### <a name="simpliblibcryptmd5_freebsd"></a>`Simplib::Libcrypt::MD5_FreeBSD`
+### <a name="Simplib--Libcrypt--MD5_FreeBSD"></a>`Simplib::Libcrypt::MD5_FreeBSD`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$1\$[^$]{1,8}\$[./0-9A-Za-z]{22}$']`
 
-```puppet
-Pattern['^\$1\$[^$]{1,8}\$[./0-9A-Za-z]{22}$']
-```
-
-### <a name="simpliblibcryptmd5_sun"></a>`Simplib::Libcrypt::MD5_Sun`
+### <a name="Simplib--Libcrypt--MD5_Sun"></a>`Simplib::Libcrypt::MD5_Sun`
 
 Regular expression pulled from the crypt(5) man page
 lint:ignore:single_quote_string_with_variables
 
-Alias of
+Alias of `Pattern['^\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}$']`
 
-```puppet
-Pattern['^\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}$']
-```
-
-### <a name="simpliblibcryptnthash"></a>`Simplib::Libcrypt::NTHASH`
+### <a name="Simplib--Libcrypt--NTHASH"></a>`Simplib::Libcrypt::NTHASH`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$3\$\$[0-9a-f]{32}$']`
 
-```puppet
-Pattern['^\$3\$\$[0-9a-f]{32}$']
-```
-
-### <a name="simpliblibcryptsha1"></a>`Simplib::Libcrypt::SHA1`
+### <a name="Simplib--Libcrypt--SHA1"></a>`Simplib::Libcrypt::SHA1`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}$']`
 
-```puppet
-Pattern['^\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}$']
-```
-
-### <a name="simpliblibcryptsha2_256"></a>`Simplib::Libcrypt::SHA2_256`
+### <a name="Simplib--Libcrypt--SHA2_256"></a>`Simplib::Libcrypt::SHA2_256`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}$']`
 
-```puppet
-Pattern['^\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}$']
-```
-
-### <a name="simpliblibcryptsha2_512"></a>`Simplib::Libcrypt::SHA2_512`
+### <a name="Simplib--Libcrypt--SHA2_512"></a>`Simplib::Libcrypt::SHA2_512`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$']`
 
-```puppet
-Pattern['^\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$']
-```
-
-### <a name="simpliblibcryptscrypt"></a>`Simplib::Libcrypt::Scrypt`
+### <a name="Simplib--Libcrypt--Scrypt"></a>`Simplib::Libcrypt::Scrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}$']`
 
-```puppet
-Pattern['^\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}$']
-```
-
-### <a name="simpliblibcryptyescrypt"></a>`Simplib::Libcrypt::Yescrypt`
+### <a name="Simplib--Libcrypt--Yescrypt"></a>`Simplib::Libcrypt::Yescrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of
+Alias of `Pattern['^\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}$']`
 
-```puppet
-Pattern['^\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}$']
-```
-
-### <a name="simplibmacaddress"></a>`Simplib::Macaddress`
+### <a name="Simplib--Macaddress"></a>`Simplib::Macaddress`
 
 Matches MAC addresses
 
-Alias of
+Alias of `Pattern['^[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}$']`
 
-```puppet
-Pattern['^[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}$']
-```
-
-### <a name="simplibnetlist"></a>`Simplib::Netlist`
+### <a name="Simplib--Netlist"></a>`Simplib::Netlist`
 
 Matches all possible lists of Network Addresses and Hostnames
 
-Alias of
+Alias of `Array[Variant[Simplib::Host, Simplib::Host::Port, Simplib::IP::CIDR, Simplib::IP::V4::DDQ]]`
 
-```puppet
-Array[Variant[Simplib::Host, Simplib::Host::Port, Simplib::IP::CIDR, Simplib::IP::V4::DDQ]]
-```
-
-### <a name="simplibnetlisthost"></a>`Simplib::Netlist::Host`
+### <a name="Simplib--Netlist--Host"></a>`Simplib::Netlist::Host`
 
 Matches an Array of Simplib::Hosts
 
-Alias of
+Alias of `Array[Simplib::Host]`
 
-```puppet
-Array[Simplib::Host]
-```
-
-### <a name="simplibnetlistip"></a>`Simplib::Netlist::IP`
+### <a name="Simplib--Netlist--IP"></a>`Simplib::Netlist::IP`
 
 Matches all possible lists of IP Network Addresses
 
@@ -6118,7 +5986,7 @@ Array[Variant[
   ]]
 ```
 
-### <a name="simplibnetlistipv4"></a>`Simplib::Netlist::IP::V4`
+### <a name="Simplib--Netlist--IP--V4"></a>`Simplib::Netlist::IP::V4`
 
 Matches all possible lists of IPv4 Network Addresses
 
@@ -6133,7 +6001,7 @@ Array[Variant[
   ]]
 ```
 
-### <a name="simplibnetlistipv6"></a>`Simplib::Netlist::IP::V6`
+### <a name="Simplib--Netlist--IP--V6"></a>`Simplib::Netlist::IP::V6`
 
 Matches all possible lists of IPv6 Network Addresses
 
@@ -6147,77 +6015,49 @@ Array[Variant[
   ]]
 ```
 
-### <a name="simplibnetlistport"></a>`Simplib::Netlist::Port`
+### <a name="Simplib--Netlist--Port"></a>`Simplib::Netlist::Port`
 
 Matches all possible lists of Network Addresses and Hostnames with Ports
 
-Alias of
+Alias of `Array[Simplib::Host::Port]`
 
-```puppet
-Array[Simplib::Host::Port]
-```
-
-### <a name="simplibpackageensure"></a>`Simplib::PackageEnsure`
+### <a name="Simplib--PackageEnsure"></a>`Simplib::PackageEnsure`
 
 Valid values for the `ensure` parameter of the `package` resource
 
-Alias of
+Alias of `Enum['absent', 'held', 'installed', 'latest', 'present', 'purged']`
 
-```puppet
-Enum['absent', 'held', 'installed', 'latest', 'present', 'purged']
-```
-
-### <a name="simplibport"></a>`Simplib::Port`
+### <a name="Simplib--Port"></a>`Simplib::Port`
 
 A valid port Type
 
-Alias of
+Alias of `Variant[Simplib::Port::Random, Simplib::Port::System, Simplib::Port::User, Simplib::Port::Dynamic]`
 
-```puppet
-Variant[Simplib::Port::Random, Simplib::Port::System, Simplib::Port::User, Simplib::Port::Dynamic]
-```
-
-### <a name="simplibportdynamic"></a>`Simplib::Port::Dynamic`
+### <a name="Simplib--Port--Dynamic"></a>`Simplib::Port::Dynamic`
 
 Corresponds to the usual unprivileged port range
 
-Alias of
+Alias of `Integer[49152, 65535]`
 
-```puppet
-Integer[49152, 65535]
-```
-
-### <a name="simplibportrandom"></a>`Simplib::Port::Random`
+### <a name="Simplib--Port--Random"></a>`Simplib::Port::Random`
 
 Corresponds to a port of ``0`` which has different behaviors but usually binds to a random port
 
-Alias of
+Alias of `Integer[0, 0]`
 
-```puppet
-Integer[0, 0]
-```
-
-### <a name="simplibportsystem"></a>`Simplib::Port::System`
+### <a name="Simplib--Port--System"></a>`Simplib::Port::System`
 
 Corresponds to the usual privileged port range
 
-Alias of
+Alias of `Integer[1, 1024]`
 
-```puppet
-Integer[1, 1024]
-```
-
-### <a name="simplibportuser"></a>`Simplib::Port::User`
+### <a name="Simplib--Port--User"></a>`Simplib::Port::User`
 
 Corresponds to the unprivileged port range
 
-Alias of
+Alias of `Variant[Integer[1025,49151], Integer[49153,65534]]`
 
-```puppet
-Variant[Integer[1025,49151], Integer[49153,65534]]
-```
-
-### <a name="simplibpuppetmetadataos_support"></a>`Simplib::Puppet::Metadata::OS_support`
+### <a name="Simplib--Puppet--Metadata--OS_support"></a>`Simplib::Puppet::Metadata::OS_support`
 
 The 'operating_support' data structure in metadata.json
 
@@ -6230,27 +6070,19 @@ Struct[{
 }]
 ```
 
-### <a name="simplibpuppetloglevel"></a>`Simplib::PuppetLogLevel`
+### <a name="Simplib--PuppetLogLevel"></a>`Simplib::PuppetLogLevel`
 
 A valid log level Type
 
-Alias of
+Alias of `Enum['alert', 'crit', 'debug', 'emerg', 'err', 'info', 'notice', 'warning']`
 
-```puppet
-Enum['alert', 'crit', 'debug', 'emerg', 'err', 'info', 'notice', 'warning']
-```
-
-### <a name="simplibserverdistribution"></a>`Simplib::Serverdistribution`
+### <a name="Simplib--Serverdistribution"></a>`Simplib::Serverdistribution`
 
 Valid options for Serverdistribution
 
-Alias of
+Alias of `Enum['PC1', 'PE']`
 
-```puppet
-Enum['PC1', 'PE']
-```
-
-### <a name="simplibshadowpass"></a>`Simplib::ShadowPass`
+### <a name="Simplib--ShadowPass"></a>`Simplib::ShadowPass`
 
 Valid entries for the password field of the 'shadow' file
 
@@ -6262,13 +6094,9 @@ They are ordered of most to least commonly used for optimization.
 
 Just because they are allowed, does not mean that you should use them....
 
-Alias of
+Alias of `Variant[Enum['*','!','!!'], Pattern['^!.*'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]`
 
-```puppet
-Variant[Enum['*','!','!!'], Pattern['^!.*'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]
-```
-
-### <a name="simplibsyslogcfacility"></a>`Simplib::Syslog::CFacility`
+### <a name="Simplib--Syslog--CFacility"></a>`Simplib::Syslog::CFacility`
 
 Syslog facilities in `C` compatible format
 
@@ -6299,17 +6127,13 @@ Variant[Integer[0,23], Enum[
   ]]
 ```
 
-### <a name="simplibsyslogcpriority"></a>`Simplib::Syslog::CPriority`
+### <a name="Simplib--Syslog--CPriority"></a>`Simplib::Syslog::CPriority`
 
 Syslog priorities in `C` compatible format
 
-Alias of
+Alias of `Enum['LOG_KERN.LOG_EMERG', 'LOG_KERN.LOG_ALERT', 'LOG_KERN.LOG_CRIT', 'LOG_KERN.LOG_ERR', 'LOG_KERN.LOG_WARNING', 'LOG_KERN.LOG_NOTICE', 'LOG_KERN.LOG_INFO', 'LOG_KERN.LOG_DEBUG', 'LOG_USER.LOG_EMERG', 'LOG_USER.LOG_ALERT', 'LOG_USER.LOG_CRIT', 'LOG_USER.LOG_ERR', 'LOG_USER.LOG_WARNING', 'LOG_USER.LOG_NOTICE', 'LOG_USER.LOG_INFO', 'LOG_USER.LOG_DEBUG', 'LOG_MAIL.LOG_EMERG', 'LOG_MAIL.LOG_ALERT', 'LOG_MAIL.LOG_CRIT', 'LOG_MAIL.LOG_ERR', 'LOG_MAIL.LOG_WARNING', 'LOG_MAIL.LOG_NOTICE', 'LOG_MAIL.LOG_INFO', 'LOG_MAIL.LOG_DEBUG', 'LOG_DAEMON.LOG_EMERG', 'LOG_DAEMON.LOG_ALERT', 'LOG_DAEMON.LOG_CRIT', 'LOG_DAEMON.LOG_ERR', 'LOG_DAEMON.LOG_WARNING', 'LOG_DAEMON.LOG_NOTICE', 'LOG_DAEMON.LOG_INFO', 'LOG_DAEMON.LOG_DEBUG', 'LOG_AUTH.LOG_EMERG', 'LOG_AUTH.LOG_ALERT', 'LOG_AUTH.LOG_CRIT', 'LOG_AUTH.LOG_ERR', 'LOG_AUTH.LOG_WARNING', 'LOG_AUTH.LOG_NOTICE', 'LOG_AUTH.LOG_INFO', 'LOG_AUTH.LOG_DEBUG', 'LOG_SYSLOG.LOG_EMERG', 'LOG_SYSLOG.LOG_ALERT', 'LOG_SYSLOG.LOG_CRIT', 'LOG_SYSLOG.LOG_ERR', 'LOG_SYSLOG.LOG_WARNING', 'LOG_SYSLOG.LOG_NOTICE', 'LOG_SYSLOG.LOG_INFO', 'LOG_SYSLOG.LOG_DEBUG', 'LOG_LPR.LOG_EMERG', 'LOG_LPR.LOG_ALERT', 'LOG_LPR.LOG_CRIT', 'LOG_LPR.LOG_ERR', 'LOG_LPR.LOG_WARNING', 'LOG_LPR.LOG_NOTICE', 'LOG_LPR.LOG_INFO', 'LOG_LPR.LOG_DEBUG', 'LOG_NEWS.LOG_EMERG', 'LOG_NEWS.LOG_ALERT', 'LOG_NEWS.LOG_CRIT', 'LOG_NEWS.LOG_ERR', 'LOG_NEWS.LOG_WARNING', 'LOG_NEWS.LOG_NOTICE', 'LOG_NEWS.LOG_INFO', 'LOG_NEWS.LOG_DEBUG', 'LOG_UUCP.LOG_EMERG', 'LOG_UUCP.LOG_ALERT', 'LOG_UUCP.LOG_CRIT', 'LOG_UUCP.LOG_ERR', 'LOG_UUCP.LOG_WARNING', 'LOG_UUCP.LOG_NOTICE', 'LOG_UUCP.LOG_INFO', 'LOG_UUCP.LOG_DEBUG', 'LOG_AUTHPRIV.LOG_EMERG', 'LOG_AUTHPRIV.LOG_ALERT', 'LOG_AUTHPRIV.LOG_CRIT', 'LOG_AUTHPRIV.LOG_ERR', 'LOG_AUTHPRIV.LOG_WARNING', 'LOG_AUTHPRIV.LOG_NOTICE', 'LOG_AUTHPRIV.LOG_INFO', 'LOG_AUTHPRIV.LOG_DEBUG', 'LOG_FTP.LOG_EMERG', 'LOG_FTP.LOG_ALERT', 'LOG_FTP.LOG_CRIT', 'LOG_FTP.LOG_ERR', 'LOG_FTP.LOG_WARNING', 'LOG_FTP.LOG_NOTICE', 'LOG_FTP.LOG_INFO', 'LOG_FTP.LOG_DEBUG', 'LOG_CRON.LOG_EMERG', 'LOG_CRON.LOG_ALERT', 'LOG_CRON.LOG_CRIT', 'LOG_CRON.LOG_ERR', 'LOG_CRON.LOG_WARNING', 'LOG_CRON.LOG_NOTICE', 'LOG_CRON.LOG_INFO', 'LOG_CRON.LOG_DEBUG', 'LOG_LOCAL0.LOG_EMERG', 'LOG_LOCAL0.LOG_ALERT', 'LOG_LOCAL0.LOG_CRIT', 'LOG_LOCAL0.LOG_ERR', 'LOG_LOCAL0.LOG_WARNING', 'LOG_LOCAL0.LOG_NOTICE', 'LOG_LOCAL0.LOG_INFO', 'LOG_LOCAL0.LOG_DEBUG', 'LOG_LOCAL1.LOG_EMERG', 'LOG_LOCAL1.LOG_ALERT', 'LOG_LOCAL1.LOG_CRIT', 'LOG_LOCAL1.LOG_ERR', 'LOG_LOCAL1.LOG_WARNING', 'LOG_LOCAL1.LOG_NOTICE', 'LOG_LOCAL1.LOG_INFO', 'LOG_LOCAL1.LOG_DEBUG', 'LOG_LOCAL2.LOG_EMERG', 'LOG_LOCAL2.LOG_ALERT', 'LOG_LOCAL2.LOG_CRIT', 'LOG_LOCAL2.LOG_ERR', 'LOG_LOCAL2.LOG_WARNING', 'LOG_LOCAL2.LOG_NOTICE', 'LOG_LOCAL2.LOG_INFO', 'LOG_LOCAL2.LOG_DEBUG', 'LOG_LOCAL3.LOG_EMERG', 'LOG_LOCAL3.LOG_ALERT', 'LOG_LOCAL3.LOG_CRIT', 'LOG_LOCAL3.LOG_ERR', 'LOG_LOCAL3.LOG_WARNING', 'LOG_LOCAL3.LOG_NOTICE', 'LOG_LOCAL3.LOG_INFO', 'LOG_LOCAL3.LOG_DEBUG', 'LOG_LOCAL4.LOG_EMERG', 'LOG_LOCAL4.LOG_ALERT', 'LOG_LOCAL4.LOG_CRIT', 'LOG_LOCAL4.LOG_ERR', 'LOG_LOCAL4.LOG_WARNING', 'LOG_LOCAL4.LOG_NOTICE', 'LOG_LOCAL4.LOG_INFO', 'LOG_LOCAL4.LOG_DEBUG', 'LOG_LOCAL5.LOG_EMERG', 'LOG_LOCAL5.LOG_ALERT', 'LOG_LOCAL5.LOG_CRIT', 'LOG_LOCAL5.LOG_ERR', 'LOG_LOCAL5.LOG_WARNING', 'LOG_LOCAL5.LOG_NOTICE', 'LOG_LOCAL5.LOG_INFO', 'LOG_LOCAL5.LOG_DEBUG', 'LOG_LOCAL6.LOG_EMERG', 'LOG_LOCAL6.LOG_ALERT', 'LOG_LOCAL6.LOG_CRIT', 'LOG_LOCAL6.LOG_ERR', 'LOG_LOCAL6.LOG_WARNING', 'LOG_LOCAL6.LOG_NOTICE', 'LOG_LOCAL6.LOG_INFO', 'LOG_LOCAL6.LOG_DEBUG', 'LOG_LOCAL7.LOG_EMERG', 'LOG_LOCAL7.LOG_ALERT', 'LOG_LOCAL7.LOG_CRIT', 'LOG_LOCAL7.LOG_ERR', 'LOG_LOCAL7.LOG_WARNING', 'LOG_LOCAL7.LOG_NOTICE', 'LOG_LOCAL7.LOG_INFO', 'LOG_LOCAL7.LOG_DEBUG']`
 
-```puppet
-Enum['LOG_KERN.LOG_EMERG', 'LOG_KERN.LOG_ALERT', 'LOG_KERN.LOG_CRIT', 'LOG_KERN.LOG_ERR', 'LOG_KERN.LOG_WARNING', 'LOG_KERN.LOG_NOTICE', 'LOG_KERN.LOG_INFO', 'LOG_KERN.LOG_DEBUG', 'LOG_USER.LOG_EMERG', 'LOG_USER.LOG_ALERT', 'LOG_USER.LOG_CRIT', 'LOG_USER.LOG_ERR', 'LOG_USER.LOG_WARNING', 'LOG_USER.LOG_NOTICE', 'LOG_USER.LOG_INFO', 'LOG_USER.LOG_DEBUG', 'LOG_MAIL.LOG_EMERG', 'LOG_MAIL.LOG_ALERT', 'LOG_MAIL.LOG_CRIT', 'LOG_MAIL.LOG_ERR', 'LOG_MAIL.LOG_WARNING', 'LOG_MAIL.LOG_NOTICE', 'LOG_MAIL.LOG_INFO', 'LOG_MAIL.LOG_DEBUG', 'LOG_DAEMON.LOG_EMERG', 'LOG_DAEMON.LOG_ALERT', 'LOG_DAEMON.LOG_CRIT', 'LOG_DAEMON.LOG_ERR', 'LOG_DAEMON.LOG_WARNING', 'LOG_DAEMON.LOG_NOTICE', 'LOG_DAEMON.LOG_INFO', 'LOG_DAEMON.LOG_DEBUG', 'LOG_AUTH.LOG_EMERG', 'LOG_AUTH.LOG_ALERT', 'LOG_AUTH.LOG_CRIT', 'LOG_AUTH.LOG_ERR', 'LOG_AUTH.LOG_WARNING', 'LOG_AUTH.LOG_NOTICE', 'LOG_AUTH.LOG_INFO', 'LOG_AUTH.LOG_DEBUG', 'LOG_SYSLOG.LOG_EMERG', 'LOG_SYSLOG.LOG_ALERT', 'LOG_SYSLOG.LOG_CRIT', 'LOG_SYSLOG.LOG_ERR', 'LOG_SYSLOG.LOG_WARNING', 'LOG_SYSLOG.LOG_NOTICE', 'LOG_SYSLOG.LOG_INFO', 'LOG_SYSLOG.LOG_DEBUG', 'LOG_LPR.LOG_EMERG', 'LOG_LPR.LOG_ALERT', 'LOG_LPR.LOG_CRIT', 'LOG_LPR.LOG_ERR', 'LOG_LPR.LOG_WARNING', 'LOG_LPR.LOG_NOTICE', 'LOG_LPR.LOG_INFO', 'LOG_LPR.LOG_DEBUG', 'LOG_NEWS.LOG_EMERG', 'LOG_NEWS.LOG_ALERT', 'LOG_NEWS.LOG_CRIT', 'LOG_NEWS.LOG_ERR', 'LOG_NEWS.LOG_WARNING', 'LOG_NEWS.LOG_NOTICE', 'LOG_NEWS.LOG_INFO', 'LOG_NEWS.LOG_DEBUG', 'LOG_UUCP.LOG_EMERG', 'LOG_UUCP.LOG_ALERT', 'LOG_UUCP.LOG_CRIT', 'LOG_UUCP.LOG_ERR', 'LOG_UUCP.LOG_WARNING', 'LOG_UUCP.LOG_NOTICE', 'LOG_UUCP.LOG_INFO', 'LOG_UUCP.LOG_DEBUG', 'LOG_AUTHPRIV.LOG_EMERG', 'LOG_AUTHPRIV.LOG_ALERT', 'LOG_AUTHPRIV.LOG_CRIT', 'LOG_AUTHPRIV.LOG_ERR', 'LOG_AUTHPRIV.LOG_WARNING', 'LOG_AUTHPRIV.LOG_NOTICE', 'LOG_AUTHPRIV.LOG_INFO', 'LOG_AUTHPRIV.LOG_DEBUG', 'LOG_FTP.LOG_EMERG', 'LOG_FTP.LOG_ALERT', 'LOG_FTP.LOG_CRIT', 'LOG_FTP.LOG_ERR', 'LOG_FTP.LOG_WARNING', 'LOG_FTP.LOG_NOTICE', 'LOG_FTP.LOG_INFO', 'LOG_FTP.LOG_DEBUG', 'LOG_CRON.LOG_EMERG', 'LOG_CRON.LOG_ALERT', 'LOG_CRON.LOG_CRIT', 'LOG_CRON.LOG_ERR', 'LOG_CRON.LOG_WARNING', 'LOG_CRON.LOG_NOTICE', 'LOG_CRON.LOG_INFO', 'LOG_CRON.LOG_DEBUG', 'LOG_LOCAL0.LOG_EMERG', 'LOG_LOCAL0.LOG_ALERT', 'LOG_LOCAL0.LOG_CRIT', 'LOG_LOCAL0.LOG_ERR', 'LOG_LOCAL0.LOG_WARNING', 'LOG_LOCAL0.LOG_NOTICE', 'LOG_LOCAL0.LOG_INFO', 'LOG_LOCAL0.LOG_DEBUG', 'LOG_LOCAL1.LOG_EMERG', 'LOG_LOCAL1.LOG_ALERT', 'LOG_LOCAL1.LOG_CRIT', 'LOG_LOCAL1.LOG_ERR', 'LOG_LOCAL1.LOG_WARNING', 'LOG_LOCAL1.LOG_NOTICE', 'LOG_LOCAL1.LOG_INFO', 'LOG_LOCAL1.LOG_DEBUG', 'LOG_LOCAL2.LOG_EMERG', 'LOG_LOCAL2.LOG_ALERT', 'LOG_LOCAL2.LOG_CRIT', 'LOG_LOCAL2.LOG_ERR', 'LOG_LOCAL2.LOG_WARNING', 'LOG_LOCAL2.LOG_NOTICE', 'LOG_LOCAL2.LOG_INFO', 'LOG_LOCAL2.LOG_DEBUG', 'LOG_LOCAL3.LOG_EMERG', 'LOG_LOCAL3.LOG_ALERT', 'LOG_LOCAL3.LOG_CRIT', 'LOG_LOCAL3.LOG_ERR', 'LOG_LOCAL3.LOG_WARNING', 'LOG_LOCAL3.LOG_NOTICE', 'LOG_LOCAL3.LOG_INFO', 'LOG_LOCAL3.LOG_DEBUG', 'LOG_LOCAL4.LOG_EMERG', 'LOG_LOCAL4.LOG_ALERT', 'LOG_LOCAL4.LOG_CRIT', 'LOG_LOCAL4.LOG_ERR', 'LOG_LOCAL4.LOG_WARNING', 'LOG_LOCAL4.LOG_NOTICE', 'LOG_LOCAL4.LOG_INFO', 'LOG_LOCAL4.LOG_DEBUG', 'LOG_LOCAL5.LOG_EMERG', 'LOG_LOCAL5.LOG_ALERT', 'LOG_LOCAL5.LOG_CRIT', 'LOG_LOCAL5.LOG_ERR', 'LOG_LOCAL5.LOG_WARNING', 'LOG_LOCAL5.LOG_NOTICE', 'LOG_LOCAL5.LOG_INFO', 'LOG_LOCAL5.LOG_DEBUG', 'LOG_LOCAL6.LOG_EMERG', 'LOG_LOCAL6.LOG_ALERT', 'LOG_LOCAL6.LOG_CRIT', 'LOG_LOCAL6.LOG_ERR', 'LOG_LOCAL6.LOG_WARNING', 'LOG_LOCAL6.LOG_NOTICE', 'LOG_LOCAL6.LOG_INFO', 'LOG_LOCAL6.LOG_DEBUG', 'LOG_LOCAL7.LOG_EMERG', 'LOG_LOCAL7.LOG_ALERT', 'LOG_LOCAL7.LOG_CRIT', 'LOG_LOCAL7.LOG_ERR', 'LOG_LOCAL7.LOG_WARNING', 'LOG_LOCAL7.LOG_NOTICE', 'LOG_LOCAL7.LOG_INFO', 'LOG_LOCAL7.LOG_DEBUG']
-```
-
-### <a name="simplibsyslogcseverity"></a>`Simplib::Syslog::CSeverity`
+### <a name="Simplib--Syslog--CSeverity"></a>`Simplib::Syslog::CSeverity`
 
 Syslog severities in `C` compatible format
 
@@ -6328,17 +6152,13 @@ Variant[Integer[0,7], Enum[
   ]]
 ```
 
-### <a name="simplibsyslogfacility"></a>`Simplib::Syslog::Facility`
+### <a name="Simplib--Syslog--Facility"></a>`Simplib::Syslog::Facility`
 
 Syslog facilities
 
-Alias of
+Alias of `Variant[Simplib::Syslog::LowerFacility, Simplib::Syslog::UpperFacility, Simplib::Syslog::CFacility]`
 
-```puppet
-Variant[Simplib::Syslog::LowerFacility, Simplib::Syslog::UpperFacility, Simplib::Syslog::CFacility]
-```
-
-### <a name="simplibsysloglowerfacility"></a>`Simplib::Syslog::LowerFacility`
+### <a name="Simplib--Syslog--LowerFacility"></a>`Simplib::Syslog::LowerFacility`
 
 Valid lowercase versions of syslog facilities
 
@@ -6369,17 +6189,13 @@ Variant[Integer[0,23], Enum[
   ]]
 ```
 
-### <a name="simplibsysloglowerpriority"></a>`Simplib::Syslog::LowerPriority`
+### <a name="Simplib--Syslog--LowerPriority"></a>`Simplib::Syslog::LowerPriority`
 
 Valid lowercase versions of syslog priorities
 
-Alias of
+Alias of `Enum['kern.emerg', 'kern.alert', 'kern.crit', 'kern.err', 'kern.warning', 'kern.notice', 'kern.info', 'kern.debug', 'user.emerg', 'user.alert', 'user.crit', 'user.err', 'user.warning', 'user.notice', 'user.info', 'user.debug', 'mail.emerg', 'mail.alert', 'mail.crit', 'mail.err', 'mail.warning', 'mail.notice', 'mail.info', 'mail.debug', 'daemon.emerg', 'daemon.alert', 'daemon.crit', 'daemon.err', 'daemon.warning', 'daemon.notice', 'daemon.info', 'daemon.debug', 'auth.emerg', 'auth.alert', 'auth.crit', 'auth.err', 'auth.warning', 'auth.notice', 'auth.info', 'auth.debug', 'syslog.emerg', 'syslog.alert', 'syslog.crit', 'syslog.err', 'syslog.warning', 'syslog.notice', 'syslog.info', 'syslog.debug', 'lpr.emerg', 'lpr.alert', 'lpr.crit', 'lpr.err', 'lpr.warning', 'lpr.notice', 'lpr.info', 'lpr.debug', 'news.emerg', 'news.alert', 'news.crit', 'news.err', 'news.warning', 'news.notice', 'news.info', 'news.debug', 'uucp.emerg', 'uucp.alert', 'uucp.crit', 'uucp.err', 'uucp.warning', 'uucp.notice', 'uucp.info', 'uucp.debug', 'authpriv.emerg', 'authpriv.alert', 'authpriv.crit', 'authpriv.err', 'authpriv.warning', 'authpriv.notice', 'authpriv.info', 'authpriv.debug', 'ftp.emerg', 'ftp.alert', 'ftp.crit', 'ftp.err', 'ftp.warning', 'ftp.notice', 'ftp.info', 'ftp.debug', 'cron.emerg', 'cron.alert', 'cron.crit', 'cron.err', 'cron.warning', 'cron.notice', 'cron.info', 'cron.debug', 'local0.emerg', 'local0.alert', 'local0.crit', 'local0.err', 'local0.warning', 'local0.notice', 'local0.info', 'local0.debug', 'local1.emerg', 'local1.alert', 'local1.crit', 'local1.err', 'local1.warning', 'local1.notice', 'local1.info', 'local1.debug', 'local2.emerg', 'local2.alert', 'local2.crit', 'local2.err', 'local2.warning', 'local2.notice', 'local2.info', 'local2.debug', 'local3.emerg', 'local3.alert', 'local3.crit', 'local3.err', 'local3.warning', 'local3.notice', 'local3.info', 'local3.debug', 'local4.emerg', 'local4.alert', 'local4.crit', 'local4.err', 'local4.warning', 'local4.notice', 'local4.info', 'local4.debug', 'local5.emerg', 'local5.alert', 'local5.crit', 'local5.err', 'local5.warning', 'local5.notice', 'local5.info', 'local5.debug', 'local6.emerg', 'local6.alert', 'local6.crit', 'local6.err', 'local6.warning', 'local6.notice', 'local6.info', 'local6.debug', 'local7.emerg', 'local7.alert', 'local7.crit', 'local7.err', 'local7.warning', 'local7.notice', 'local7.info', 'local7.debug']`
 
-```puppet
-Enum['kern.emerg', 'kern.alert', 'kern.crit', 'kern.err', 'kern.warning', 'kern.notice', 'kern.info', 'kern.debug', 'user.emerg', 'user.alert', 'user.crit', 'user.err', 'user.warning', 'user.notice', 'user.info', 'user.debug', 'mail.emerg', 'mail.alert', 'mail.crit', 'mail.err', 'mail.warning', 'mail.notice', 'mail.info', 'mail.debug', 'daemon.emerg', 'daemon.alert', 'daemon.crit', 'daemon.err', 'daemon.warning', 'daemon.notice', 'daemon.info', 'daemon.debug', 'auth.emerg', 'auth.alert', 'auth.crit', 'auth.err', 'auth.warning', 'auth.notice', 'auth.info', 'auth.debug', 'syslog.emerg', 'syslog.alert', 'syslog.crit', 'syslog.err', 'syslog.warning', 'syslog.notice', 'syslog.info', 'syslog.debug', 'lpr.emerg', 'lpr.alert', 'lpr.crit', 'lpr.err', 'lpr.warning', 'lpr.notice', 'lpr.info', 'lpr.debug', 'news.emerg', 'news.alert', 'news.crit', 'news.err', 'news.warning', 'news.notice', 'news.info', 'news.debug', 'uucp.emerg', 'uucp.alert', 'uucp.crit', 'uucp.err', 'uucp.warning', 'uucp.notice', 'uucp.info', 'uucp.debug', 'authpriv.emerg', 'authpriv.alert', 'authpriv.crit', 'authpriv.err', 'authpriv.warning', 'authpriv.notice', 'authpriv.info', 'authpriv.debug', 'ftp.emerg', 'ftp.alert', 'ftp.crit', 'ftp.err', 'ftp.warning', 'ftp.notice', 'ftp.info', 'ftp.debug', 'cron.emerg', 'cron.alert', 'cron.crit', 'cron.err', 'cron.warning', 'cron.notice', 'cron.info', 'cron.debug', 'local0.emerg', 'local0.alert', 'local0.crit', 'local0.err', 'local0.warning', 'local0.notice', 'local0.info', 'local0.debug', 'local1.emerg', 'local1.alert', 'local1.crit', 'local1.err', 'local1.warning', 'local1.notice', 'local1.info', 'local1.debug', 'local2.emerg', 'local2.alert', 'local2.crit', 'local2.err', 'local2.warning', 'local2.notice', 'local2.info', 'local2.debug', 'local3.emerg', 'local3.alert', 'local3.crit', 'local3.err', 'local3.warning', 'local3.notice', 'local3.info', 'local3.debug', 'local4.emerg', 'local4.alert', 'local4.crit', 'local4.err', 'local4.warning', 'local4.notice', 'local4.info', 'local4.debug', 'local5.emerg', 'local5.alert', 'local5.crit', 'local5.err', 'local5.warning', 'local5.notice', 'local5.info', 'local5.debug', 'local6.emerg', 'local6.alert', 'local6.crit', 'local6.err', 'local6.warning', 'local6.notice', 'local6.info', 'local6.debug', 'local7.emerg', 'local7.alert', 'local7.crit', 'local7.err', 'local7.warning', 'local7.notice', 'local7.info', 'local7.debug']
-```
-
-### <a name="simplibsysloglowerseverity"></a>`Simplib::Syslog::LowerSeverity`
+### <a name="Simplib--Syslog--LowerSeverity"></a>`Simplib::Syslog::LowerSeverity`
 
 Valid lowercase versions of syslog severities
 
@@ -6398,27 +6214,19 @@ Variant[Integer[0,7], Enum[
   ]]
 ```
 
-### <a name="simplibsyslogpriority"></a>`Simplib::Syslog::Priority`
+### <a name="Simplib--Syslog--Priority"></a>`Simplib::Syslog::Priority`
 
 Syslog priorities
 
-Alias of
+Alias of `Variant[Simplib::Syslog::LowerPriority, Simplib::Syslog::UpperPriority, Simplib::Syslog::CPriority]`
 
-```puppet
-Variant[Simplib::Syslog::LowerPriority, Simplib::Syslog::UpperPriority, Simplib::Syslog::CPriority]
-```
-
-### <a name="simplibsyslogseverity"></a>`Simplib::Syslog::Severity`
+### <a name="Simplib--Syslog--Severity"></a>`Simplib::Syslog::Severity`
 
 Syslog severities
 
-Alias of
+Alias of `Variant[Simplib::Syslog::LowerSeverity, Simplib::Syslog::UpperSeverity, Simplib::Syslog::CSeverity]`
 
-```puppet
-Variant[Simplib::Syslog::LowerSeverity, Simplib::Syslog::UpperSeverity, Simplib::Syslog::CSeverity]
-```
-
-### <a name="simplibsyslogupperfacility"></a>`Simplib::Syslog::UpperFacility`
+### <a name="Simplib--Syslog--UpperFacility"></a>`Simplib::Syslog::UpperFacility`
 
 Valid uppercase bounds for syslog facilities
 
@@ -6449,17 +6257,13 @@ Variant[Integer[0,23], Enum[
   ]]
 ```
 
-### <a name="simplibsyslogupperpriority"></a>`Simplib::Syslog::UpperPriority`
+### <a name="Simplib--Syslog--UpperPriority"></a>`Simplib::Syslog::UpperPriority`
 
 Valid uppercase versions of syslog priorities
 
-Alias of
+Alias of `Enum['KERN.EMERG', 'KERN.ALERT', 'KERN.CRIT', 'KERN.ERR', 'KERN.WARNING', 'KERN.NOTICE', 'KERN.INFO', 'KERN.DEBUG', 'USER.EMERG', 'USER.ALERT', 'USER.CRIT', 'USER.ERR', 'USER.WARNING', 'USER.NOTICE', 'USER.INFO', 'USER.DEBUG', 'MAIL.EMERG', 'MAIL.ALERT', 'MAIL.CRIT', 'MAIL.ERR', 'MAIL.WARNING', 'MAIL.NOTICE', 'MAIL.INFO', 'MAIL.DEBUG', 'DAEMON.EMERG', 'DAEMON.ALERT', 'DAEMON.CRIT', 'DAEMON.ERR', 'DAEMON.WARNING', 'DAEMON.NOTICE', 'DAEMON.INFO', 'DAEMON.DEBUG', 'AUTH.EMERG', 'AUTH.ALERT', 'AUTH.CRIT', 'AUTH.ERR', 'AUTH.WARNING', 'AUTH.NOTICE', 'AUTH.INFO', 'AUTH.DEBUG', 'SYSLOG.EMERG', 'SYSLOG.ALERT', 'SYSLOG.CRIT', 'SYSLOG.ERR', 'SYSLOG.WARNING', 'SYSLOG.NOTICE', 'SYSLOG.INFO', 'SYSLOG.DEBUG', 'LPR.EMERG', 'LPR.ALERT', 'LPR.CRIT', 'LPR.ERR', 'LPR.WARNING', 'LPR.NOTICE', 'LPR.INFO', 'LPR.DEBUG', 'NEWS.EMERG', 'NEWS.ALERT', 'NEWS.CRIT', 'NEWS.ERR', 'NEWS.WARNING', 'NEWS.NOTICE', 'NEWS.INFO', 'NEWS.DEBUG', 'UUCP.EMERG', 'UUCP.ALERT', 'UUCP.CRIT', 'UUCP.ERR', 'UUCP.WARNING', 'UUCP.NOTICE', 'UUCP.INFO', 'UUCP.DEBUG', 'AUTHPRIV.EMERG', 'AUTHPRIV.ALERT', 'AUTHPRIV.CRIT', 'AUTHPRIV.ERR', 'AUTHPRIV.WARNING', 'AUTHPRIV.NOTICE', 'AUTHPRIV.INFO', 'AUTHPRIV.DEBUG', 'FTP.EMERG', 'FTP.ALERT', 'FTP.CRIT', 'FTP.ERR', 'FTP.WARNING', 'FTP.NOTICE', 'FTP.INFO', 'FTP.DEBUG', 'CRON.EMERG', 'CRON.ALERT', 'CRON.CRIT', 'CRON.ERR', 'CRON.WARNING', 'CRON.NOTICE', 'CRON.INFO', 'CRON.DEBUG', 'LOCAL0.EMERG', 'LOCAL0.ALERT', 'LOCAL0.CRIT', 'LOCAL0.ERR', 'LOCAL0.WARNING', 'LOCAL0.NOTICE', 'LOCAL0.INFO', 'LOCAL0.DEBUG', 'LOCAL1.EMERG', 'LOCAL1.ALERT', 'LOCAL1.CRIT', 'LOCAL1.ERR', 'LOCAL1.WARNING', 'LOCAL1.NOTICE', 'LOCAL1.INFO', 'LOCAL1.DEBUG', 'LOCAL2.EMERG', 'LOCAL2.ALERT', 'LOCAL2.CRIT', 'LOCAL2.ERR', 'LOCAL2.WARNING', 'LOCAL2.NOTICE', 'LOCAL2.INFO', 'LOCAL2.DEBUG', 'LOCAL3.EMERG', 'LOCAL3.ALERT', 'LOCAL3.CRIT', 'LOCAL3.ERR', 'LOCAL3.WARNING', 'LOCAL3.NOTICE', 'LOCAL3.INFO', 'LOCAL3.DEBUG', 'LOCAL4.EMERG', 'LOCAL4.ALERT', 'LOCAL4.CRIT', 'LOCAL4.ERR', 'LOCAL4.WARNING', 'LOCAL4.NOTICE', 'LOCAL4.INFO', 'LOCAL4.DEBUG', 'LOCAL5.EMERG', 'LOCAL5.ALERT', 'LOCAL5.CRIT', 'LOCAL5.ERR', 'LOCAL5.WARNING', 'LOCAL5.NOTICE', 'LOCAL5.INFO', 'LOCAL5.DEBUG', 'LOCAL6.EMERG', 'LOCAL6.ALERT', 'LOCAL6.CRIT', 'LOCAL6.ERR', 'LOCAL6.WARNING', 'LOCAL6.NOTICE', 'LOCAL6.INFO', 'LOCAL6.DEBUG', 'LOCAL7.EMERG', 'LOCAL7.ALERT', 'LOCAL7.CRIT', 'LOCAL7.ERR', 'LOCAL7.WARNING', 'LOCAL7.NOTICE', 'LOCAL7.INFO', 'LOCAL7.DEBUG']`
 
-```puppet
-Enum['KERN.EMERG', 'KERN.ALERT', 'KERN.CRIT', 'KERN.ERR', 'KERN.WARNING', 'KERN.NOTICE', 'KERN.INFO', 'KERN.DEBUG', 'USER.EMERG', 'USER.ALERT', 'USER.CRIT', 'USER.ERR', 'USER.WARNING', 'USER.NOTICE', 'USER.INFO', 'USER.DEBUG', 'MAIL.EMERG', 'MAIL.ALERT', 'MAIL.CRIT', 'MAIL.ERR', 'MAIL.WARNING', 'MAIL.NOTICE', 'MAIL.INFO', 'MAIL.DEBUG', 'DAEMON.EMERG', 'DAEMON.ALERT', 'DAEMON.CRIT', 'DAEMON.ERR', 'DAEMON.WARNING', 'DAEMON.NOTICE', 'DAEMON.INFO', 'DAEMON.DEBUG', 'AUTH.EMERG', 'AUTH.ALERT', 'AUTH.CRIT', 'AUTH.ERR', 'AUTH.WARNING', 'AUTH.NOTICE', 'AUTH.INFO', 'AUTH.DEBUG', 'SYSLOG.EMERG', 'SYSLOG.ALERT', 'SYSLOG.CRIT', 'SYSLOG.ERR', 'SYSLOG.WARNING', 'SYSLOG.NOTICE', 'SYSLOG.INFO', 'SYSLOG.DEBUG', 'LPR.EMERG', 'LPR.ALERT', 'LPR.CRIT', 'LPR.ERR', 'LPR.WARNING', 'LPR.NOTICE', 'LPR.INFO', 'LPR.DEBUG', 'NEWS.EMERG', 'NEWS.ALERT', 'NEWS.CRIT', 'NEWS.ERR', 'NEWS.WARNING', 'NEWS.NOTICE', 'NEWS.INFO', 'NEWS.DEBUG', 'UUCP.EMERG', 'UUCP.ALERT', 'UUCP.CRIT', 'UUCP.ERR', 'UUCP.WARNING', 'UUCP.NOTICE', 'UUCP.INFO', 'UUCP.DEBUG', 'AUTHPRIV.EMERG', 'AUTHPRIV.ALERT', 'AUTHPRIV.CRIT', 'AUTHPRIV.ERR', 'AUTHPRIV.WARNING', 'AUTHPRIV.NOTICE', 'AUTHPRIV.INFO', 'AUTHPRIV.DEBUG', 'FTP.EMERG', 'FTP.ALERT', 'FTP.CRIT', 'FTP.ERR', 'FTP.WARNING', 'FTP.NOTICE', 'FTP.INFO', 'FTP.DEBUG', 'CRON.EMERG', 'CRON.ALERT', 'CRON.CRIT', 'CRON.ERR', 'CRON.WARNING', 'CRON.NOTICE', 'CRON.INFO', 'CRON.DEBUG', 'LOCAL0.EMERG', 'LOCAL0.ALERT', 'LOCAL0.CRIT', 'LOCAL0.ERR', 'LOCAL0.WARNING', 'LOCAL0.NOTICE', 'LOCAL0.INFO', 'LOCAL0.DEBUG', 'LOCAL1.EMERG', 'LOCAL1.ALERT', 'LOCAL1.CRIT', 'LOCAL1.ERR', 'LOCAL1.WARNING', 'LOCAL1.NOTICE', 'LOCAL1.INFO', 'LOCAL1.DEBUG', 'LOCAL2.EMERG', 'LOCAL2.ALERT', 'LOCAL2.CRIT', 'LOCAL2.ERR', 'LOCAL2.WARNING', 'LOCAL2.NOTICE', 'LOCAL2.INFO', 'LOCAL2.DEBUG', 'LOCAL3.EMERG', 'LOCAL3.ALERT', 'LOCAL3.CRIT', 'LOCAL3.ERR', 'LOCAL3.WARNING', 'LOCAL3.NOTICE', 'LOCAL3.INFO', 'LOCAL3.DEBUG', 'LOCAL4.EMERG', 'LOCAL4.ALERT', 'LOCAL4.CRIT', 'LOCAL4.ERR', 'LOCAL4.WARNING', 'LOCAL4.NOTICE', 'LOCAL4.INFO', 'LOCAL4.DEBUG', 'LOCAL5.EMERG', 'LOCAL5.ALERT', 'LOCAL5.CRIT', 'LOCAL5.ERR', 'LOCAL5.WARNING', 'LOCAL5.NOTICE', 'LOCAL5.INFO', 'LOCAL5.DEBUG', 'LOCAL6.EMERG', 'LOCAL6.ALERT', 'LOCAL6.CRIT', 'LOCAL6.ERR', 'LOCAL6.WARNING', 'LOCAL6.NOTICE', 'LOCAL6.INFO', 'LOCAL6.DEBUG', 'LOCAL7.EMERG', 'LOCAL7.ALERT', 'LOCAL7.CRIT', 'LOCAL7.ERR', 'LOCAL7.WARNING', 'LOCAL7.NOTICE', 'LOCAL7.INFO', 'LOCAL7.DEBUG']
-```
-
-### <a name="simplibsyslogupperseverity"></a>`Simplib::Syslog::UpperSeverity`
+### <a name="Simplib--Syslog--UpperSeverity"></a>`Simplib::Syslog::UpperSeverity`
 
 Valid uppercase versions of syslog severities
 
@@ -6478,33 +6282,21 @@ Variant[Integer[0,7], Enum[
   ]]
 ```
 
-### <a name="simplibsystemdservicename"></a>`Simplib::Systemd::ServiceName`
+### <a name="Simplib--Systemd--ServiceName"></a>`Simplib::Systemd::ServiceName`
 
 Valid systemd service names
 
-Alias of
+Alias of `Pattern['^(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}$']`
 
-```puppet
-Pattern['^(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}$']
-```
-
-### <a name="simpliburi"></a>`Simplib::URI`
+### <a name="Simplib--URI"></a>`Simplib::URI`
 
 Matches URI strings
 
-Alias of
+Alias of `Pattern['^[a-zA-Z][a-zA-Z0-9+-.]*://.*$']`
 
-```puppet
-Pattern['^[a-zA-Z][a-zA-Z0-9+-.]*://.*$']
-```
-
-### <a name="simplibumask"></a>`Simplib::Umask`
+### <a name="Simplib--Umask"></a>`Simplib::Umask`
 
 Matches umask patterns
 
-Alias of
-
-```puppet
-Pattern['^[0-7]{3,4}$']
-```
+Alias of `Pattern['^[0-7]{3,4}$']`
 
