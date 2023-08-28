@@ -26,7 +26,7 @@ describe 'simplib::validate_net_list' do
       end
 
       it 'rejects CIDR missing network mask' do
-        pending "IPAddr allows empty network mask '1.2.3.4/'"
+        pending "IPAddr allows empty network mask '1.2.3.4/'" if Gem::Version.new(Puppet.version) < Gem::Version.new('8')
         is_expected.to run.with_params('1.2.3.4/').and_raise_error(RuntimeError)
       end
 
@@ -73,7 +73,7 @@ describe 'simplib::validate_net_list' do
       end
 
       it 'rejects CIDR missing network mask' do
-        pending "IPAddr allows empty network mask '2001:db8:a::/'"
+        pending "IPAddr allows empty network mask '2001:db8:a::/'" if Gem::Version.new(Puppet.version) < Gem::Version.new('8')
         is_expected.to run.with_params('2001:db8:a::/').and_raise_error(RuntimeError)
       end
 

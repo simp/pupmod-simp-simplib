@@ -11,7 +11,7 @@ ENV['PDK_DISABLE_ANALYTICS'] ||= 'true'
 gem_sources.each { |gem_source| source gem_source }
 
 group :test do
-  puppet_version = ENV['PUPPET_VERSION'] || '~> 7'
+  puppet_version = ENV['PUPPET_VERSION'] || '~> 8'
   major_puppet_version = puppet_version.scan(/(\d+)(?:\.|\Z)/).flatten.first.to_i
   gem 'rake'
   gem 'puppet', puppet_version
@@ -24,8 +24,8 @@ group :test do
   gem 'puppet-lint-trailing_comma-check', :require => false
   gem 'simp-rspec-puppet-facts', ENV['SIMP_RSPEC_PUPPET_FACTS_VERSION'] || '~> 3.1'
   gem 'simp-rake-helpers', ENV['SIMP_RAKE_HELPERS_VERSION'] || ['>= 5.12.1', '< 6']
-  gem( 'pdk', ENV['PDK_VERSION'] || '~> 2.0', :require => false) if major_puppet_version > 5
-  gem 'pathspec', '~> 0.2' if Gem::Requirement.create('< 2.6').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
+  gem( 'pdk', ENV['PDK_VERSION'] || ['>= 2.0', '<= 4.0'], :require => false) if major_puppet_version > 5
+  gem 'pathspec', '~> 1.0' if Gem::Requirement.create('< 2.6').satisfied_by?(Gem::Version.new(RUBY_VERSION.dup))
 end
 
 group :development do

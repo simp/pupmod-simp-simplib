@@ -85,7 +85,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
     FileUtils.mv(files["#{source_prefix}password"], files["#{dest_prefix}password"],
       :force => true)
 
-    if File.exists?(files["#{source_prefix}salt"])
+    if File.exist?(files["#{source_prefix}salt"])
       FileUtils.mv(files["#{source_prefix}salt"], files["#{dest_prefix}salt"],
         :force => true)
     else
@@ -104,7 +104,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
   # @raise RuntimeError if fails to create or set permissions on keydir
   def set_up_keydir(settings)
     begin
-      FileUtils.mkdir_p(settings['keydir'], {:mode => settings['dir_mode']})
+      FileUtils.mkdir_p(settings['keydir'], mode: settings['dir_mode'])
       FileUtils.chown(settings['user'], settings['group'], settings['keydir'])
     rescue SystemCallError => e
       err_msg = "simplib::passgen::legacy::set: Could not make directory" +

@@ -9,9 +9,9 @@ Facter.add(:simplib__networkmanager) do
 
     nmcli_cmd = @nmcli_cmd + ' -t'
 
-    general_status = Facter::Core::Execution.execute(%(#{nmcli_cmd} -m multiline general status))
+    general_status = Puppet::Util::Execution.execute(%(#{nmcli_cmd} -m multiline general status))
 
-    if $?.success?
+    if general_status.exitstatus.zero?
       general_status = general_status.lines.map{|line| line.strip.split(':') }
 
       info['enabled'] = true
@@ -22,17 +22,17 @@ Facter.add(:simplib__networkmanager) do
       }
     end
 
-    general_hostname = Facter::Core::Execution.execute(%{#{nmcli_cmd} general hostname})
+    general_hostname = Puppet::Util::Execution.execute(%{#{nmcli_cmd} general hostname})
 
-    if $?.success?
+    if general_hostname.exitstatus.zero?
       info['enabled'] = true
       info['general'] ||= {}
       info['general']['hostname'] = general_hostname.strip
     end
 
-    connections = Facter::Core::Execution.execute(%(#{nmcli_cmd} connection show))
+    connections = Puppet::Util::Execution.execute(%(#{nmcli_cmd} connection show))
 
-    if $?.success?
+    if connections.exitstatus.zero?
       info['enabled'] = true
       info['connection'] = {}
 
@@ -48,5 +48,7 @@ Facter.add(:simplib__networkmanager) do
     end
 
     info
+  rescue => e
+    Facter.warn(e)
   end
 end

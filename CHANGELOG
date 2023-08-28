@@ -1,3 +1,9 @@
+* Mon Aug 28 2023 Steven Pritchard <steve@sicura.us> - 4.12.0
+- Fixed
+  - Ruby 3 support
+  - puppetlabs-stdlib 9 support
+  - Updated gem dependencies
+
 * Mon Jun 12 2023 Chris Tessmer <chris.tessmer@onyxpoint.com> - 4.11.0
 - Add RockyLinux 8 support
 
