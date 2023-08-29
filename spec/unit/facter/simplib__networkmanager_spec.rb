@@ -12,20 +12,21 @@ describe 'simplib__networkmanager' do
       allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
     end
 
-    expect(Facter::Util::Resolution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
+    allow(Facter::Util::Resolution).to receive(:which).and_call_original
+    allow(Facter::Util::Resolution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
 
-    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status').and_return(general_status)
-    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname').and_return(general_hostname)
-    expect(Facter::Core::Execution).to receive(:execute).with('/usr/sbin/nmcli -t connection show').and_return(connections)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status').and_return(general_status)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname').and_return(general_hostname)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t connection show').and_return(connections)
   end
 
   context 'nmcli fails' do
-    let(:general_status){ '' }
-    let(:general_hostname){ '' }
-    let(:connections){ '' }
+    let(:general_status){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
+    let(:general_hostname){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
+    let(:connections){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
 
     it 'returns "enabled" = false' do
-      allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
+      # allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
 
       expect(Facter.fact('simplib__networkmanager').value).to eq({'enabled' => false})
     end
@@ -33,7 +34,7 @@ describe 'simplib__networkmanager' do
 
   context 'nmcli succeeds' do
     let(:general_status){
-      <<~EOM
+      output = <<~EOM
         STATE:connected
         CONNECTIVITY:full
         WIFI-HW:enabled
@@ -41,15 +42,17 @@ describe 'simplib__networkmanager' do
         WWAN-HW:enabled
         WWAN:enabled
         EOM
+      Puppet::Util::Execution::ProcessOutput.new(output, 0)
     }
 
-    let(:general_hostname){ "foo.bar.baz\n" }
+    let(:general_hostname){ Puppet::Util::Execution::ProcessOutput.new("foo.bar.baz\n", 0) }
 
     let(:connections){
-      <<~EOM
+      output = <<~EOM
         Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
         Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
         EOM
+      Puppet::Util::Execution::ProcessOutput.new(output, 0)
     }
 
     let(:expected){{

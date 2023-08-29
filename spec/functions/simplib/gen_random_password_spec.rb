@@ -64,7 +64,7 @@ describe 'simplib::gen_random_password' do
     # This test is timing sensitive.  It may not fail if the test machine
     # processes faster than the dev machine.
     it 'raises timeout error if password cannot be generated in specified interval' do
-      is_expected.to run.with_params(10**20, 2, false, 0.01).and_raise_error(TimeoutError)
+      is_expected.to run.with_params(10**20, 2, false, 0.01).and_raise_error(Timeout::Error)
     end
 
     it 'fails if length is outside of specified range' do

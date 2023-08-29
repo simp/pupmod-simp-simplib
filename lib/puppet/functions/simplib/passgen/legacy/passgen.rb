@@ -107,7 +107,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
     unless File.directory?(settings['keydir'])
       begin
-        FileUtils.mkdir_p(settings['keydir'],{:mode => 0750})
+        FileUtils.mkdir_p(settings['keydir'], mode: 0750)
         # This chown is applicable as long as it is applied
         # by puppet, not puppetserver.
         FileUtils.chown(settings['user'],
@@ -294,7 +294,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   # 'password' in options or had to generate a password.
   def get_last_password(identifier, options, settings)
     toread = nil
-    if File.exists?("#{settings['keydir']}/#{identifier}.last")
+    if File.exist?("#{settings['keydir']}/#{identifier}.last")
       toread = "#{settings['keydir']}/#{identifier}.last"
     else
       toread = "#{settings['keydir']}/#{identifier}"
@@ -302,7 +302,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
     passwd = ''
     salt = ''
-    if File.exists?(toread)
+    if File.exist?(toread)
       passwd = IO.readlines(toread)[0].to_s.chomp
       sf = "#{File.dirname(toread)}/#{File.basename(toread,'.last')}.salt.last"
       saltfile = File.open(sf,'a+',0640)
