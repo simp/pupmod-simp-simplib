@@ -39,7 +39,8 @@ Facter.add(:simplib__networkmanager) do
       connections.lines.each do |conn|
         name, uuid, type, device = conn.strip.split(':')
 
-        info['connection'][device] = {
+        info['connection'][name] = {
+          'device' => device,
           'uuid' => uuid,
           'type' => type,
           'name' => name
