@@ -1,3 +1,8 @@
+* Thu Oct 12 2023 Steven Pritchard <steve@sicura.us> - 4.12.1
+- Update Gemfile
+- Fix GHA release workflow
+- Work around rspec-puppet 4 changes in spec_helper.rb
+
 * Mon Aug 28 2023 Steven Pritchard <steve@sicura.us> - 4.12.0
 - Fixed
   - Ruby 3 support
