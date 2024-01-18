@@ -37,7 +37,7 @@ Facter.add('simplib__crypto_policy_state') do
 
       # This is everything past EL8.0
       global_policies = Dir.glob('/usr/share/crypto-policies/policies/*.pol')
-      user_policies = Dir.glob('/usr/share/crypto-policies/policies/*.pol')
+      user_policies = Dir.glob('/etc/crypto-policies/policies/*.pol')
       combined_policies = global_policies + user_policies
 
       # Fallback for 8.0
