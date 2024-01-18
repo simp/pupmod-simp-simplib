@@ -37,13 +37,15 @@ Facter.add('simplib__crypto_policy_state') do
 
       # This is everything past EL8.0
       global_policies = Dir.glob('/usr/share/crypto-policies/policies/*.pol')
+      user_policies = Dir.glob('/usr/share/crypto-policies/policies/*.pol')
+      combined_policies = global_policies + user_policies
 
       # Fallback for 8.0
-      if global_policies.empty?
-        global_policies = Dir.glob('/usr/share/crypto-policies/*').select{|x| File.directory?(x)}
+      if combined_policies.empty?
+        combined_policies = Dir.glob('/usr/share/crypto-policies/*').select{|x| File.directory?(x)}
       end
 
-      system_state['global_policies_available'] = global_policies.map{|x| File.basename(x, '.pol')}
+      system_state['global_policies_available'] = combined_policies.map{|x| File.basename(x, '.pol')}
     end
 
     system_state
