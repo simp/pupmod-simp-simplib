@@ -41,7 +41,7 @@ Facter.add('simplib__crypto_policy_state') do
       combined_policies = global_policies + user_policies
 
       # Fallback for 8.0
-      if combined_policies.empty?
+      if global_policies.empty?
         combined_policies = Dir.glob('/usr/share/crypto-policies/*').select{|x| File.directory?(x)}
       end
 
