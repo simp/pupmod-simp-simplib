@@ -19,12 +19,14 @@ describe 'simplib__crypto_policy_state' do
       expect(Facter::Core::Execution).to receive(:execute).with('update-crypto-policies --no-reload --show', on_fail: false).and_return("DEFAULT\n")
 
 
-      expect(Dir).to receive(:glob).with(:'/usr/share/crypto-policies/policies/*.pol',:'/etc/crypto-policies/policies/*.pol').and_return(
+      expect(Dir).to receive(:glob).with('/usr/share/crypto-policies/policies/*.pol').and_return(
         [
           '/usr/share/crypto-policies/policies/DEFAULT.pol',
           '/usr/share/crypto-policies/policies/LEGACY.pol'
         ]
       )
+
+      expect(Dir).to receive(:glob).with('/etc/crypto-policies/policies/*.pol').and_return([])
     end
 
     context 'when applied' do
