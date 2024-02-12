@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Provides the state of the configured crypto policies
+# @summary Provides the state of the configured crypto policies
 #
 # @see update-crypto-policy(8)
 #
@@ -36,16 +36,14 @@ Facter.add('simplib__crypto_policy_state') do
       system_state['global_policy_applied'] = !Array(output).grep(%r{is applied}).empty? if output
 
       # This is everything past EL8.0
-      global_policies = Dir.glob('/usr/share/crypto-policies/policies/*.pol')
-      user_policies = Dir.glob('/etc/crypto-policies/policies/*.pol')
-      combined_policies = global_policies + user_policies
+      global_policies = Dir.glob(['/usr/share/crypto-policies/policies/*.pol', '/etc/crypto-policies/policies/*.pol'])
 
       # Fallback for 8.0
       if global_policies.empty?
-        combined_policies = Dir.glob('/usr/share/crypto-policies/*').select{|x| File.directory?(x)}
+        global_policies = Dir.glob('/usr/share/crypto-policies/*').select { |x| File.directory?(x) }
       end
 
-      system_state['global_policies_available'] = combined_policies.map{|x| File.basename(x, '.pol')}
+      system_state['global_policies_available'] = global_policies.map { |x| File.basename(x, '.pol') }.uniq
     end
 
     system_state
