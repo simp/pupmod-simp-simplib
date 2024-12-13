@@ -1,5 +1,5 @@
 require 'spec_helper'
-$: << File.join(File.dirname(__FILE__), '..', '..', 'lib')
+$LOAD_PATH << File.join(File.dirname(__FILE__), '..', '..', 'lib')
 
 require 'puppetx/simp/simplib'
 
@@ -139,7 +139,7 @@ describe 'PuppetX::SIMP::Simplib' do
       expect(PuppetX::SIMP::Simplib.split_port('[2001:0db8:85a3:0000:0000:8a2e:0370]:7334')).to eq ['[2001:0db8:85a3:0000:0000:8a2e:0370]', '7334']
     end
 
-    it 'extracts IPv6 address and port' do
+    it 'extracts IPv6 address and empty port' do
       expect(PuppetX::SIMP::Simplib.split_port('[2001:0db8:85a3:0000:0000:8a2e:0370]:')).to eq ['[2001:0db8:85a3:0000:0000:8a2e:0370]', nil]
     end
 

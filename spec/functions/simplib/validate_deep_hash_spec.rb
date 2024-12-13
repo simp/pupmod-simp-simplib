@@ -1,16 +1,15 @@
 require 'spec_helper'
 
 describe 'simplib::validate_deep_hash' do
-
   context 'with valid 1-level input' do
-   let(:ref_hash) do
-     {
-        'string_value'        => '^\w+$',
-        'boolean_true_value'  => '^true|false$',
-        'boolean_false_value' => '^true|false$',
-        'numeric_value_1'     => '^\d+$',
-        'numeric_value_2'     => '^\d+\.\d+$',
-        'unused_key'          => '^\w+$'
+    let(:ref_hash) do
+      {
+        'string_value' => '^\w+$',
+         'boolean_true_value'  => '^true|false$',
+         'boolean_false_value' => '^true|false$',
+         'numeric_value_1'     => '^\d+$',
+         'numeric_value_2'     => '^\d+\.\d+$',
+         'unused_key'          => '^\w+$'
       }
     end
 
@@ -34,7 +33,7 @@ describe 'simplib::validate_deep_hash' do
 
     it 'validates input containing arrays' do
       test_hash_with_array = test_hash.dup
-     test_hash_with_array['numeric_value_1'] = [1, 2, 34]
+      test_hash_with_array['numeric_value_1'] = [1, 2, 34]
       is_expected.to run.with_params(ref_hash, test_hash_with_array)
     end
 
@@ -57,7 +56,7 @@ describe 'simplib::validate_deep_hash' do
               'level4' => {
                 'boolean_false_value' => '^true|false$',
               },
-              'numeric_value_1'=> '^\d+$',
+              'numeric_value_1' => '^\d+$',
             },
             'numeric_value_2' => '^\d+\.\d+$'
           }
@@ -72,13 +71,13 @@ describe 'simplib::validate_deep_hash' do
           'string_value_1' => 'value1',
           'level2' => {
             'level3' => {
-              'boolean_true_value'  => true,
+              'boolean_true_value' => true,
               'level4' => {
                 'boolean_false_value' => false,
               },
-              'numeric_value_1'     => '23'
+              'numeric_value_1' => '23'
             },
-            'numeric_value_2'     => 4.56
+            'numeric_value_2' => 4.56
           }
         },
         'string_value_2' => 'string value 2'
@@ -113,7 +112,7 @@ describe 'simplib::validate_deep_hash' do
         'string_value'  => '^\w+$',
         'boolean_value' => '^true|false$',
         'numeric_value' => '^\d+\.\d+$'
-       }
+      }
     end
 
     let(:test_hash) do
@@ -128,16 +127,18 @@ describe 'simplib::validate_deep_hash' do
       invalid_ref_hash = ref_hash.dup
       invalid_ref_hash['string_value'] = ['a', 'bad', 'ref', 'value']
       is_expected.to run.with_params(invalid_ref_hash, test_hash).and_raise_error(
-        /Check for TOP-->string_value has invalid type 'Array'/ )
+        %r{Check for TOP-->string_value has invalid type 'Array'},
+      )
     end
 
     it 'rejects input having keys not found in reference hash' do
       input_extra_key = test_hash.dup
       input_extra_key['extra_key'] = 'extra value'
-      err_msg = "simplib::validate_deep_hash failed validation:\n" +
-        "  TOP-->extra_key not in reference hash"
+      err_msg = "simplib::validate_deep_hash failed validation:\n" \
+                '  TOP-->extra_key not in reference hash'
       is_expected.to run.with_params(ref_hash, input_extra_key).and_raise_error(
-        err_msg)
+        err_msg,
+      )
     end
 
     it 'rejects input not matching reference and reports all failures' do
@@ -145,12 +146,13 @@ describe 'simplib::validate_deep_hash' do
       invalid_input['string_value'] = 1
       invalid_input['boolean_value'] = 'TRUE'
       invalid_input['numeric_value'] = 'infinity'
-      err_msg = "simplib::validate_deep_hash failed validation:\n" +
-        "  TOP-->boolean_value 'TRUE' must validate against '/^true|false$/'\n" +
-        "  TOP-->numeric_value 'infinity' must validate against '/^\\d+\\.\\d+$/'"
+      err_msg = "simplib::validate_deep_hash failed validation:\n" \
+                "  TOP-->boolean_value 'TRUE' must validate against '/^true|false$/'\n" \
+                "  TOP-->numeric_value 'infinity' must validate against '/^\\d+\\.\\d+$/'"
 
       is_expected.to run.with_params(ref_hash, invalid_input).and_raise_error(
-        err_msg )
+        err_msg,
+      )
     end
   end
 
@@ -165,7 +167,7 @@ describe 'simplib::validate_deep_hash' do
               'level4' => {
                 'boolean_false_value' => '^true|false$',
               },
-              'numeric_value_1'=> '^\d+$',
+              'numeric_value_1' => '^\d+$',
             },
             'numeric_value_2' => '^\d+\.\d+$'
           }
@@ -180,13 +182,13 @@ describe 'simplib::validate_deep_hash' do
           'string_value_1' => 'value1',
           'level2' => {
             'level3' => {
-              'boolean_true_value'  => true,
+              'boolean_true_value' => true,
               'level4' => {
                 'boolean_false_value' => false,
               },
-              'numeric_value_1'     => '23'
+              'numeric_value_1' => '23'
             },
-            'numeric_value_2'     => 4.56
+            'numeric_value_2' => 4.56
           }
         },
         'string_value_2' => 'string value 2'
@@ -197,34 +199,36 @@ describe 'simplib::validate_deep_hash' do
       invalid_ref_hash = ref_hash.dup
       invalid_ref_hash['level1']['string_value_1'] = ['a', 'bad', 'ref', 'value']
       is_expected.to run.with_params(invalid_ref_hash, test_hash).and_raise_error(
-        /Check for TOP-->level1-->string_value_1 has invalid type 'Array'/ )
+        %r{Check for TOP-->level1-->string_value_1 has invalid type 'Array'},
+      )
     end
 
     it 'rejects input having keys not found in reference hash' do
       input_extra_key = test_hash.dup
       input_extra_key['level1']['level2']['extra_key'] = 'extra value'
-      err_msg = "simplib::validate_deep_hash failed validation:\n" +
-        "  TOP-->level1-->level2-->extra_key not in reference hash"
+      err_msg = "simplib::validate_deep_hash failed validation:\n" \
+                '  TOP-->level1-->level2-->extra_key not in reference hash'
       is_expected.to run.with_params(ref_hash, input_extra_key).and_raise_error(
-        err_msg)
+        err_msg,
+      )
     end
 
     it 'rejects input not matching reference and reports all failures' do
       invalid_input = test_hash.dup
-      invalid_input['level1']['string_value_1'] = {'unexpected' => 'hash'}
+      invalid_input['level1']['string_value_1'] = { 'unexpected' => 'hash' }
       invalid_input['level1']['level2']['numeric_value_2'] = 'not a numeric'
       invalid_input['level1']['level2']['level3']['boolean_true_value'] = 'TRUE'
       invalid_input['level1']['level2']['level3']['level4']['boolean_false_value'] = 'FALSE'
 
-      err_msg = "simplib::validate_deep_hash failed validation:\n" +
-        "  TOP-->level1-->string_value_1 should not be a Hash\n" +
-        "  TOP-->level1-->level2-->level3-->boolean_true_value 'TRUE' must validate against '/^true|false$/'\n" +
-        "  TOP-->level1-->level2-->level3-->level4-->boolean_false_value 'FALSE' must validate against '/^true|false$/'\n" +
-        "  TOP-->level1-->level2-->numeric_value_2 'not a numeric' must validate against '/^\\d+\\.\\d+$/'"
+      err_msg = "simplib::validate_deep_hash failed validation:\n" \
+                "  TOP-->level1-->string_value_1 should not be a Hash\n" \
+                "  TOP-->level1-->level2-->level3-->boolean_true_value 'TRUE' must validate against '/^true|false$/'\n" \
+                "  TOP-->level1-->level2-->level3-->level4-->boolean_false_value 'FALSE' must validate against '/^true|false$/'\n" \
+                "  TOP-->level1-->level2-->numeric_value_2 'not a numeric' must validate against '/^\\d+\\.\\d+$/'"
 
       is_expected.to run.with_params(ref_hash, invalid_input).and_raise_error(
-        err_msg )
+        err_msg,
+      )
     end
   end
-
 end

@@ -20,7 +20,6 @@
 #   characters.
 #
 Puppet::Functions.create_function(:'simplib::passgen') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -153,18 +152,16 @@ Puppet::Functions.create_function(:'simplib::passgen') do
     optional_param 'Hash',      :simpkv_options
   end
 
-  def passgen(identifier, password_options={}, simpkv_options={'app_id' => 'simplib::passgen'})
+  def passgen(identifier, password_options = {}, simpkv_options = { 'app_id' => 'simplib::passgen' })
     use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
       { 'default_value' => false })
-
-    password = nil
-    if use_simpkv
-      password = call_function('simplib::passgen::simpkv::passgen', identifier,
-        password_options, simpkv_options)
-    else
-      password = call_function('simplib::passgen::legacy::passgen', identifier,
-        password_options)
-    end
+    password = if use_simpkv
+                 call_function('simplib::passgen::simpkv::passgen', identifier,
+                   password_options, simpkv_options)
+               else
+                 call_function('simplib::passgen::legacy::passgen', identifier,
+                   password_options)
+               end
     password
   end
 end

@@ -3,9 +3,9 @@
 #
 # Return the current system runlevel
 #
-Facter.add("runlevel") do
-  confine :kernel => 'Linux'
+Facter.add('runlevel') do
+  confine kernel: 'Linux'
   setcode do
-    %x{"/sbin/runlevel"}.split.last
+    `"/sbin/runlevel"`.split.last
   end
 end

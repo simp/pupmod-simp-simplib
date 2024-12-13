@@ -8,7 +8,7 @@ describe 'running facts' do
       it do
         result = on(host, 'puppet facts').output.strip.lines
 
-        expect(result.grep(/Error/).grep(/Facter/)).to be_empty
+        expect(result.grep(%r{Error}).grep(%r{Facter})).to be_empty
       end
     end
   end

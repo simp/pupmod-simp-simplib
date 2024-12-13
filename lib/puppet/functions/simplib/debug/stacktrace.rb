@@ -3,24 +3,23 @@
 #
 # WARNING: Uses **EXPERIMENTAL** features from Puppet, may break at any time.
 Puppet::Functions.create_function(:'simplib::debug::stacktrace', Puppet::Functions::InternalFunction) do
-
   # @param print
   #   Whether or not to print to the visual output
   #
   # @return [Array]
   #   The stack trace
   dispatch :stacktrace do
-    scope_param()
+    scope_param
     optional_param 'Boolean', :print
   end
 
-  def stacktrace(scope, print=true)
-    stack_trace = Puppet::Pops::PuppetStack.stacktrace.map{|x| x.join(':')}
+  def stacktrace(_scope, print = true)
+    stack_trace = Puppet::Pops::PuppetStack.stacktrace.map { |x| x.join(':') }
 
     if print
       msg = [
-        "Simplib::Debug::Stacktrace:",
-        '    => ' + stack_trace.join("\n    => ")
+        'Simplib::Debug::Stacktrace:',
+        '    => ' + stack_trace.join("\n    => "),
       ].join("\n")
 
       # This is only required when rspec is loaded
@@ -31,6 +30,6 @@ Puppet::Functions.create_function(:'simplib::debug::stacktrace', Puppet::Functio
       Puppet.warning(msg)
     end
 
-    return stack_trace
+    stack_trace
   end
 end

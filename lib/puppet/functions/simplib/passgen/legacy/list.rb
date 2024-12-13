@@ -8,7 +8,6 @@
 #   accessed by the user.
 #
 Puppet::Functions.create_function(:'simplib::passgen::legacy::list') do
-
   # @return [Hash]  Hash of results or {} if folder does not exist
   #
   #   * 'keys' = Hash of password information
@@ -34,17 +33,15 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::list') do
         ids = Dir.glob('*').delete_if do |id|
           # Exclude sub-directories (which legacy simplib::passgen doesn't
           # create), salt files and backup files
-          File.directory?(id) || !(id =~ /(\.salt|\.last)$/).nil?
+          File.directory?(id) || !(id =~ %r{(\.salt|\.last)$}).nil?
         end
 
         results = { 'keys' => {}, 'folders' => [] }
         ids.each do |id|
-          begin
-            info = call_function('simplib::passgen::legacy::get', id)
-            results['keys'][id] = info unless info.empty?
-          rescue Exception =>e
-            Puppet.warning("Ignoring file for simplib::passgen id '#{id}': #{e.message}")
-          end
+          info = call_function('simplib::passgen::legacy::get', id)
+          results['keys'][id] = info unless info.empty?
+        rescue => e
+          Puppet.warning("Ignoring file for simplib::passgen id '#{id}': #{e.message}")
         end
       end
     end

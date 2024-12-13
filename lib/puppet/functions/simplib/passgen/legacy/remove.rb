@@ -10,7 +10,6 @@
 #   removed by the user.
 #
 Puppet::Functions.create_function(:'simplib::passgen::legacy::remove') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -39,23 +38,21 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::remove') do
       File.join(keydir, "#{identifier}.last"),
       File.join(keydir, "#{identifier}.salt.last"),
       File.join(keydir, "#{identifier}.last.last"),
-      File.join(keydir, "#{identifier}.salt.last.last")
+      File.join(keydir, "#{identifier}.salt.last.last"),
     ]
 
     failures = []
     password_files.each do |file|
-      if File.exist?(file)
-        begin
-          File.unlink(file)
-        rescue Exception => e
-          failures << "#{file}: #{e.message}"
-        end
+      next unless File.exist?(file)
+      begin
+        File.unlink(file)
+      rescue => e
+        failures << "#{file}: #{e.message}"
       end
     end
 
-    unless failures.empty?
-      msg = "Unable to remove all files:\n#{failures.join("\n")}"
-      raise("simplib::passgen::legacy::delete failed: #{msg}")
-    end
+    return if failures.empty?
+    msg = "Unable to remove all files:\n#{failures.join("\n")}"
+    raise("simplib::passgen::legacy::delete failed: #{msg}")
   end
 end

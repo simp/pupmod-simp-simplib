@@ -11,7 +11,6 @@
 #   user are present in the password storage directory.
 #
 Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
-
   # @param identifier Unique `String` to identify the password usage.
   #
   # @param modifier_hash Options `Hash`. May include any
@@ -51,10 +50,10 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
     require 'puppet/util/symbolic_file_mode'
     # mixin Puppet::Util::SymbolicFileMode module for symbolic_mode_to_int()
-    self.extend(Puppet::Util::SymbolicFileMode)
+    extend(Puppet::Util::SymbolicFileMode)
   end
 
-  def passgen(identifier, modifier_hash={})
+  def passgen(identifier, modifier_hash = {})
     require 'etc'
     require 'timeout'
 
@@ -69,22 +68,21 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     rescue ArgumentError
       debug_msg = "simpkv::passgen (legacy): Puppet user '#{user}' not found on system, "
       user = Etc.getpwuid(Process.uid).name
-      debug_msg += "defaulting to process owner uid (#{user})"
+      debug_msg + "defaulting to process owner uid (#{user})"
     end
     begin
       Etc.getgrnam(group)
     rescue ArgumentError
       debug_msg = "simpkv::passgen (legacy): Puppet group '#{group}' not found on system, "
       group = Etc.getgrgid(Process.gid).name
-      debug_msg += "defaulting to process owner gid (#{group})"
+      debug_msg + "defaulting to process owner gid (#{group})"
     end
     settings['user'] = user
     settings['group'] = group
 
     settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
       'environments', scope.lookupvar('::environment'),
-      'simp_autofiles', 'gen_passwd'
-    )
+      'simp_autofiles', 'gen_passwd')
     settings['min_password_length'] = 8
     settings['default_password_length'] = 32
     settings['crypt_map'] = {
@@ -107,39 +105,35 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
     unless File.directory?(settings['keydir'])
       begin
-        FileUtils.mkdir_p(settings['keydir'], mode: 0750)
+        FileUtils.mkdir_p(settings['keydir'], mode: 0o750)
         # This chown is applicable as long as it is applied
         # by puppet, not puppetserver.
         FileUtils.chown(settings['user'],
-         settings['group'], settings['keydir']
-       )
+         settings['group'], settings['keydir'])
       rescue SystemCallError => e
-        err_msg = "simplib::passgen: Could not make directory" +
-         " #{settings['keydir']}:  #{e.message}. Ensure that" +
-         " #{File.dirname(settings['keydir'])} is writable by" +
-         " '#{settings['user']}'"
-        fail(err_msg)
+        err_msg = 'simplib::passgen: Could not make directory' \
+                  " #{settings['keydir']}:  #{e.message}. Ensure that" \
+                  " #{File.dirname(settings['keydir'])} is writable by" \
+                  " '#{settings['user']}'"
+        raise(err_msg)
       end
     end
 
     if options['last']
-      passwd,salt = get_last_password(identifier, options, settings)
+      passwd, salt = get_last_password(identifier, options, settings)
     else
-      passwd,salt = get_current_password(identifier, options, settings)
+      passwd, salt = get_current_password(identifier, options, settings)
     end
 
     lockdown_stored_password_perms(settings)
 
     # Return the hash, not the password
-    if options['hash']
-      return passwd.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}")
-    else
-      return passwd
-    end
-  rescue Timeout::Error => e
-    fail("simplib::passgen timed out for #{identifier}!")
-  end
+    return passwd.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
 
+    passwd
+  rescue Timeout::Error
+    raise("simplib::passgen timed out for #{identifier}!")
+  end
 
   # Build a merged options hash and validate the options
   # raises ArgumentError if any option in the modifier_hash is invalid
@@ -152,7 +146,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
 
     options.merge!(modifier_hash)
 
-    if options['length'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['length'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Length '#{options['length']}' must be an integer!"
     else
@@ -164,14 +158,14 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       end
     end
 
-    if options['complexity'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['complexity'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Complexity '#{options['complexity']}' must be an integer!"
     else
       options['complexity'] = options['complexity'].to_i
     end
 
-    if options['gen_timeout_seconds'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['gen_timeout_seconds'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Password generation timeout '#{options['gen_timeout_seconds']}' must be an integer!"
     else
@@ -182,11 +176,11 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     if options['hash'] == true
       options['hash'] = 'sha256'
     end
-    if options['hash'] and !settings['crypt_map'].keys.include?(options['hash'])
+    if options['hash'] && !settings['crypt_map'].keys.include?(options['hash'])
       raise ArgumentError,
        "simplib::passgen: Error: '#{options['hash']}' is not a valid hash."
     end
-    return options
+    options
   end
 
   # Generate a password
@@ -195,15 +189,13 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       options['length'],
       options['complexity'],
       options['complex_only'],
-      options['gen_timeout_seconds']
-    )
+      options['gen_timeout_seconds'])
   end
 
   # Generate the salt to be used to encrypt a password
   def gen_salt(options)
     call_function('simplib::passgen::gen_salt',
-      options['gen_timeout_seconds']
-    )
+      options['gen_timeout_seconds'])
   end
 
   # Retrieve or generate a current password
@@ -223,50 +215,50 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   def get_current_password(identifier, options, settings)
     # Open the file in append + read mode to prepare for what is to
     # come.
-    tgt = File.new("#{settings['keydir']}/#{identifier}","a+")
-    tgt_hash = File.new("#{tgt.path}.salt","a+")
+    tgt = File.new("#{settings['keydir']}/#{identifier}", 'a+')
+    tgt_hash = File.new("#{tgt.path}.salt", 'a+')
 
     # These chowns are applicable as long as they are applied
     # by puppet, not puppetserver.
-    FileUtils.chown(settings['user'],settings['group'],tgt.path)
-    FileUtils.chown(settings['user'],settings['group'],tgt_hash.path)
+    FileUtils.chown(settings['user'], settings['group'], tgt.path)
+    FileUtils.chown(settings['user'], settings['group'], tgt_hash.path)
 
     passwd = ''
     salt = ''
 
     # Create salt file if not there, no matter what, just in case we have an
     # upgraded system.
-    if tgt_hash.stat.size.zero?
-      if options.key?('salt')
-        salt = options['salt']
-      else
-        salt = gen_salt(options)
-      end
+    if tgt_hash.stat.size.zero? # rubocop:disable Style/ZeroLengthPredicate
+      salt = if options.key?('salt')
+               options['salt']
+             else
+               gen_salt(options)
+             end
       tgt_hash.puts(salt)
       tgt_hash.rewind
     end
 
-    if tgt.stat.size.zero?
-      if options.key?('password')
-        passwd = options['password']
-      else
-        passwd = gen_password(options)
-      end
+    if tgt.stat.size.zero? # rubocop:disable Style/ZeroLengthPredicate
+      passwd = if options.key?('password')
+                 options['password']
+               else
+                 gen_password(options)
+               end
       tgt.puts(passwd)
     else
       passwd = tgt.gets.chomp
       salt = tgt_hash.gets.chomp
 
-      if !options['return_current'] and passwd.length != options['length']
-        tgt_last = File.new("#{tgt.path}.last","w+")
+      if !options['return_current'] && (passwd.length != options['length'])
+        tgt_last = File.new("#{tgt.path}.last", 'w+')
         tgt_last.puts(passwd)
-        tgt_last.chmod(0640)
+        tgt_last.chmod(0o640)
         tgt_last.flush
         tgt_last.close
 
-        tgt_hash_last = File.new("#{tgt_hash.path}.last","w+")
+        tgt_hash_last = File.new("#{tgt_hash.path}.last", 'w+')
         tgt_hash_last.puts(salt)
-        tgt_hash_last.chmod(0640)
+        tgt_hash_last.chmod(0o640)
         tgt_hash_last.flush
         tgt_hash_last.close
 
@@ -280,7 +272,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       end
     end
 
-    tgt.chmod(0640)
+    tgt.chmod(0o640)
     tgt.flush
     tgt.close
 
@@ -293,40 +285,39 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   # user about manifest ordering problems, if we had to use the
   # 'password' in options or had to generate a password.
   def get_last_password(identifier, options, settings)
-    toread = nil
-    if File.exist?("#{settings['keydir']}/#{identifier}.last")
-      toread = "#{settings['keydir']}/#{identifier}.last"
-    else
-      toread = "#{settings['keydir']}/#{identifier}"
-    end
+    toread = if File.exist?("#{settings['keydir']}/#{identifier}.last")
+               "#{settings['keydir']}/#{identifier}.last"
+             else
+               "#{settings['keydir']}/#{identifier}"
+             end
 
     passwd = ''
     salt = ''
     if File.exist?(toread)
       passwd = IO.readlines(toread)[0].to_s.chomp
-      sf = "#{File.dirname(toread)}/#{File.basename(toread,'.last')}.salt.last"
-      saltfile = File.open(sf,'a+',0640)
-      if saltfile.stat.size.zero?
-        if options.key?('salt')
-          salt = options['salt']
-        else
-          salt = gen_salt(options)
-        end
+      sf = "#{File.dirname(toread)}/#{File.basename(toread, '.last')}.salt.last"
+      saltfile = File.open(sf, 'a+', 0o640)
+      if saltfile.stat.size.zero? # rubocop:disable Style/ZeroLengthPredicate
+        salt = if options.key?('salt')
+                 options['salt']
+               else
+                 gen_salt(options)
+               end
         saltfile.puts(salt)
         saltfile.close
       end
       salt = IO.readlines(sf)[0].to_s.chomp
     else
-      warn_msg = "Could not find a primary or 'last' file for " +
-        "#{identifier}, please ensure that you have included this" +
-        " function in the proper order in your manifest!"
+      warn_msg = "Could not find a primary or 'last' file for " \
+                 "#{identifier}, please ensure that you have included this" \
+                 ' function in the proper order in your manifest!'
       Puppet.warning warn_msg
-      if options.key?('password')
-        passwd = options['password']
-      else
-        #FIXME?  Why doesn't this persist the password?
-        passwd = gen_password(options)
-      end
+      passwd = if options.key?('password')
+                 options['password']
+               else
+                 # FIXME?  Why doesn't this persist the password?
+                 gen_password(options)
+               end
     end
     [passwd, salt]
   end
@@ -344,7 +335,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
         file_owner = Etc.getpwuid(file_stat.uid).name
         file_group = Etc.getgrgid(file_stat.gid).name
 
-        unowned_files << file unless (file_owner == settings['user'] || file_group == settings['group'] )
+        unowned_files << file unless file_owner == settings['user'] || file_group == settings['group']
       rescue ArgumentError => e
         debug("simplib::passgen: Error getting UID/GID for #{file}: #{e}")
 
@@ -357,20 +348,19 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       FileUtils.chown(settings['user'], settings['group'], file)
 
       file_mode = file_stat.mode
-      desired_mode = symbolic_mode_to_int('u+rwX,g+rX,o-rwx',file_mode,File.directory?(file))
+      desired_mode = symbolic_mode_to_int('u+rwX,g+rX,o-rwx', file_mode, File.directory?(file))
 
-      unless (file_mode & 007777) == desired_mode
-        FileUtils.chmod(desired_mode,file)
+      unless (file_mode & 0o07777) == desired_mode
+        FileUtils.chmod(desired_mode, file)
       end
     end
 
-    unless unowned_files.empty?
-      err_msg = <<-EOM.gsub(/^\s+/,'')
+    return if unowned_files.empty?
+    err_msg = <<-EOM.gsub(%r{^\s+}, '')
         simplib::passgen: Error: Could not verify ownership by '#{settings['user']}' on the following files:
         * #{unowned_files.join("\n* ")}
       EOM
 
-      fail(err_msg)
-    end
+    raise(err_msg)
   end
 end

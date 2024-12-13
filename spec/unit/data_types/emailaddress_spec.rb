@@ -2,15 +2,17 @@ require 'spec_helper'
 
 describe 'Simplib::EmailAddress', type: :class do
   describe 'valid handling' do
-    let(:pre_condition) {%(
-      class #{class_name} (
-        Simplib::EmailAddress $param
-      ){ }
+    let(:pre_condition) do
+      <<~END
+        class #{class_name} (
+          Simplib::EmailAddress $param,
+        ) { }
 
-      class { '#{class_name}':
-        param => '#{param}'
-      }
-    )}
+        class { '#{class_name}':
+          param => '#{param}',
+        }
+      END
+    end
 
     context 'with valid addresses' do
       [
@@ -19,11 +21,11 @@ describe 'Simplib::EmailAddress', type: :class do
         'foo@bar-baz.com',
         'foobar@bar-baz.com',
         'foo+bar@bar-baz.com',
-        'foo.bar@bar-baz.com'
+        'foo.bar@bar-baz.com',
       ].each do |param|
-        let(:param){ param }
+        let(:param) { param }
 
-        it "should accept #{param}" do
+        it "accepts #{param}" do
           is_expected.to compile
         end
       end
@@ -31,10 +33,10 @@ describe 'Simplib::EmailAddress', type: :class do
 
     context 'with invalid addresses' do
       [ 'foo' ].each do |param|
-        let(:param){ param }
+        let(:param) { param }
 
-        it "should accept #{param}" do
-          is_expected.to compile.and_raise_error(/parameter 'param' expects/)
+        it "accepts #{param}" do
+          is_expected.to compile.and_raise_error(%r{parameter 'param' expects})
         end
       end
     end

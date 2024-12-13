@@ -10,12 +10,11 @@ else
 end
 
 describe 'fips_enabled fact' do
-
   hosts.each do |host|
     context "when FIPS is #{fips_state} on #{host}" do
       it "fips_enabled fact should be #{expected_fips_enabled}" do
         results = on(host, 'puppet facts')
-        expect(results.output).to match(/"fips_enabled": #{expected_fips_enabled}/)
+        expect(results.output).to match(%r{"fips_enabled": #{expected_fips_enabled}})
       end
     end
   end

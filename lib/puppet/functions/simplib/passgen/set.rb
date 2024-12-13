@@ -30,7 +30,6 @@
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 #
 Puppet::Functions.create_function(:'simplib::passgen::set') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -155,7 +154,7 @@ Puppet::Functions.create_function(:'simplib::passgen::set') do
   end
 
   def set(identifier, password, salt, password_options,
-      simpkv_options={'app_id' => 'simplib::passgen'})
+          simpkv_options = { 'app_id' => 'simplib::passgen' })
 
     use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
       { 'default_value' => false })
@@ -163,12 +162,12 @@ Puppet::Functions.create_function(:'simplib::passgen::set') do
     if use_simpkv
       unless password_options.key?('complexity')
         msg = "simplib::passgen::set: password_options must contain 'complexity' in simpkv mode"
-        raise ArgumentError.new(msg)
+        raise ArgumentError, msg
       end
 
       unless password_options.key?('complex_only')
         msg = "simplib::passgen::set: password_options must contain 'complex_only' in simpkv mode"
-        raise ArgumentError.new(msg)
+        raise ArgumentError, msg
       end
 
       call_function('simplib::passgen::simpkv::set', identifier, password, salt,

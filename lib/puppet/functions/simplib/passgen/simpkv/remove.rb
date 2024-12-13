@@ -5,7 +5,6 @@
 # * Terminates catalog compilation if any simpkv operation fails.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::remove') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -87,11 +86,10 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::remove') do
     optional_param 'Hash',      :simpkv_options
   end
 
-  def remove(identifier, simpkv_options={'app_id' => 'simplib::passgen'})
+  def remove(identifier, simpkv_options = { 'app_id' => 'simplib::passgen' })
     key_root_dir = call_function('simplib::passgen::simpkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
-    if call_function('simpkv::exists', key, simpkv_options)
-      call_function('simpkv::delete', key, simpkv_options)
-    end
+    return unless call_function('simpkv::exists', key, simpkv_options)
+    call_function('simpkv::delete', key, simpkv_options)
   end
 end

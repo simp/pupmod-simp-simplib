@@ -5,15 +5,19 @@ describe 'simplib::passgen::remove' do
   let(:key_root_dir) { 'gen_passwd' }
   let(:id) { 'my_id' }
   let(:key) { "#{key_root_dir}/#{id}" }
-  let(:passwords) { [
-    'password for my_id 1',
-    'password for my_id 0'
-  ] }
+  let(:passwords) do
+    [
+      'password for my_id 1',
+      'password for my_id 0',
+    ]
+  end
 
-  let(:salts) { [
-    'salt for my_id 1',
-    'salt for my_id 0'
-  ] }
+  let(:salts) do
+    [
+      'salt for my_id 1',
+      'salt for my_id 0',
+    ]
+  end
 
   # The bulk of simplib::passgen::remove testing is done in tests for
   # simplib::passgen::legacy::remove and simplib::passgen::simpkv::remove.
@@ -21,7 +25,6 @@ describe 'simplib::passgen::remove' do
   # function is called and failures are appropriately reported.
 
   context 'legacy passgen::remove' do
-
     # DEBUG NOTES:
     #   Puppet[:vardir] is dynamically created as a tmpdir by the test
     #   framework, when the subject is first created. So if you want
@@ -40,12 +43,12 @@ describe 'simplib::passgen::remove' do
     #
     # end
     context 'success cases' do
-      it 'should succeed when no password files exist' do
+      it 'succeeds when no password files exist' do
         is_expected.to run.with_params(id)
       end
 
-      it 'should remove all password-related files' do
-        subject()
+      it 'removes all password-related files' do
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
         password_file = File.join(settings['keydir'], id)
@@ -60,16 +63,16 @@ describe 'simplib::passgen::remove' do
 
         is_expected.to run.with_params(id)
 
-        expect( File.exist?(password_file) ).to be false
-        expect( File.exist?(password_file_last) ).to be false
-        expect( File.exist?(salt_file) ).to be false
-        expect( File.exist?(salt_file_last) ).to be false
+        expect(File.exist?(password_file)).to be false
+        expect(File.exist?(password_file_last)).to be false
+        expect(File.exist?(salt_file)).to be false
+        expect(File.exist?(salt_file_last)).to be false
       end
     end
 
     context 'error cases' do
       it 'fails when a password/salt file cannot be removed' do
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
         password_file = File.join(settings['keydir'], id)
@@ -77,14 +80,14 @@ describe 'simplib::passgen::remove' do
 
         expect(File).to receive(:unlink).with(password_file).and_raise(Errno::EACCES, 'file unlink failed')
 
-        is_expected.to run.with_params(id).and_raise_error( RuntimeError,
-          /Unable to remove all files:.*#{id}: Permission denied - file unlink failed/m)
+        is_expected.to run.with_params(id).and_raise_error(RuntimeError,
+          %r{Unable to remove all files:.*#{id}: Permission denied - file unlink failed}m)
       end
     end
   end
 
   context 'simpkv passgen::remove' do
-    let(:hieradata){ 'simplib_passgen_simpkv' }
+    let(:hieradata) { 'simplib_passgen_simpkv' }
 
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
@@ -105,15 +108,15 @@ describe 'simplib::passgen::remove' do
     end
 
     context 'successful operation' do
-      it 'should succeed when password key does not exist' do
+      it 'succeeds when password key does not exist' do
         is_expected.to run.with_params(id)
       end
 
-      it 'should remove password key when it exists' do
+      it 'removes password key when it exists' do
         # call subject() to make sure test Puppet environment is created
         # before we try to pre-populate the default key/value store with
         # a password
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         value = { 'password' => passwords[0], 'salt' => salts[0] }
         meta = {
           'complexity' => 0,
@@ -123,7 +126,7 @@ describe 'simplib::passgen::remove' do
         call_function('simpkv::put', key, value, meta)
 
         is_expected.to run.with_params(id)
-        expect( call_function('simpkv::exists', key) ).to be false
+        expect(call_function('simpkv::exists', key)).to be false
       end
     end
 
@@ -132,15 +135,15 @@ describe 'simplib::passgen::remove' do
         simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
-            'oops'  => {
+            'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
             }
           }
         }
 
-        is_expected.to run.with_params( id, simpkv_options).
-          and_raise_error(ArgumentError, /simpkv Configuration Error/)
+        is_expected.to run.with_params(id, simpkv_options)
+                          .and_raise_error(ArgumentError, %r{simpkv Configuration Error})
       end
     end
   end

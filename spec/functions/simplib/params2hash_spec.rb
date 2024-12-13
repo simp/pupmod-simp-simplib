@@ -1,76 +1,19 @@
 require 'spec_helper'
 
 describe 'simplib::params2hash' do
-  let(:pre_condition) {%{
-    class foo(
-      $param1 = 'foo',
-      $prune_me = 'bar',
-      $array = ['one', 'two'],
-      $hash = { 'key' => 'value' }
-    ){
-      $random_var = 'should be ignored'
-
-      notify { 'test': message => 'this is a test'}
-
-      $_params = simplib::params2hash()
-
-      notify { 'class_json': message => $_params.to_json }
-    }
-
-    include 'foo'
-
-    define bar (
-      $param1 = 'foo',
-      $prune_me = 'bar',
-      $array = ['one', 'two'],
-      $hash = { 'key' => 'value' }
-    ){
-      notify { 'test2': message => 'this is another test'}
-
-      $_params = simplib::params2hash()
-
-      notify { 'define_json': message => $_params.to_json }
-    }
-
-    bar{ 'baz': }
-  }}
-
-  it {
-    class_output = JSON.load(catalogue.resource('Notify[class_json]')[:message])
-
-    expect(class_output).to match(
-      {
-        'param1'   => 'foo',
-        'prune_me' => 'bar',
-        'array'    => ['one', 'two'],
-        'hash'     => {'key' => 'value'}
-      }
-    )
-
-    define_output = JSON.load(catalogue.resource('Notify[define_json]')[:message])
-
-    expect(define_output).to match(
-      {
-        'name'     => 'baz',
-        'param1'   => 'foo',
-        'prune_me' => 'bar',
-        'array'    => ['one', 'two'],
-        'hash'     => {'key' => 'value'}
-      }
-    )
-  }
-
-  context 'when pruning values' do
-    let(:pre_condition) {%{
-      class foo(
+  let(:pre_condition) do
+    <<~END
+      class foo (
         $param1 = 'foo',
         $prune_me = 'bar',
         $array = ['one', 'two'],
-        $hash = { 'key' => 'value' }
-      ){
+        $hash = { 'key' => 'value' },
+      ) {
+        $random_var = 'should be ignored'
+
         notify { 'test': message => 'this is a test'}
 
-        $_params = simplib::params2hash(['prune_me'])
+        $_params = simplib::params2hash()
 
         notify { 'class_json': message => $_params.to_json }
       }
@@ -81,38 +24,99 @@ describe 'simplib::params2hash' do
         $param1 = 'foo',
         $prune_me = 'bar',
         $array = ['one', 'two'],
-        $hash = { 'key' => 'value' }
-      ){
+        $hash = { 'key' => 'value' },
+      ) {
         notify { 'test2': message => 'this is another test'}
 
-        $_params = simplib::params2hash(['prune_me'])
+        $_params = simplib::params2hash()
 
         notify { 'define_json': message => $_params.to_json }
       }
 
-      bar{ 'baz': }
-    }}
+      bar { 'baz': }
+    END
+  end
+
+  it {
+    class_output = JSON.parse(catalogue.resource('Notify[class_json]')[:message])
+
+    expect(class_output).to match(
+      {
+        'param1'   => 'foo',
+        'prune_me' => 'bar',
+        'array'    => ['one', 'two'],
+        'hash'     => { 'key' => 'value' },
+      },
+    )
+
+    define_output = JSON.parse(catalogue.resource('Notify[define_json]')[:message])
+
+    expect(define_output).to match(
+      {
+        'name'     => 'baz',
+        'param1'   => 'foo',
+        'prune_me' => 'bar',
+        'array'    => ['one', 'two'],
+        'hash'     => { 'key' => 'value' },
+      },
+    )
+  }
+
+  context 'when pruning values' do
+    let(:pre_condition) do
+      <<~END
+        class foo (
+          $param1 = 'foo',
+          $prune_me = 'bar',
+          $array = ['one', 'two'],
+          $hash = { 'key' => 'value' },
+        ) {
+          notify { 'test': message => 'this is a test'}
+
+          $_params = simplib::params2hash(['prune_me'])
+
+          notify { 'class_json': message => $_params.to_json }
+        }
+
+        include 'foo'
+
+        define bar (
+          $param1 = 'foo',
+          $prune_me = 'bar',
+          $array = ['one', 'two'],
+          $hash = { 'key' => 'value' },
+        ) {
+          notify { 'test2': message => 'this is another test'}
+
+          $_params = simplib::params2hash(['prune_me'])
+
+          notify { 'define_json': message => $_params.to_json }
+        }
+
+        bar { 'baz': }
+      END
+    end
 
     it {
-      class_output = JSON.load(catalogue.resource('Notify[class_json]')[:message])
+      class_output = JSON.parse(catalogue.resource('Notify[class_json]')[:message])
 
       expect(class_output).to match(
         {
           'param1'   => 'foo',
           'array'    => ['one', 'two'],
-          'hash'     => {'key' => 'value'}
-        }
+          'hash'     => { 'key' => 'value' },
+        },
       )
 
-      define_output = JSON.load(catalogue.resource('Notify[define_json]')[:message])
+      define_output = JSON.parse(catalogue.resource('Notify[define_json]')[:message])
 
       expect(define_output).to match(
         {
           'name'     => 'baz',
           'param1'   => 'foo',
           'array'    => ['one', 'two'],
-          'hash'     => {'key' => 'value'}
-        }
+          'hash'     => { 'key' => 'value' },
+        },
       )
     }
   end

@@ -13,12 +13,10 @@ Facter.add('reboot_required') do
   setcode do
     retval = {}
 
-    Dir.glob("/var/run/puppet/reboot_triggers/*").each do |trigger|
-      begin
-        retval[File.basename(trigger)] = File.read(trigger).strip
-      rescue => details
-        Facter.warn("Could not read #{trigger}: #{details.message}")
-      end
+    Dir.glob('/var/run/puppet/reboot_triggers/*').each do |trigger|
+      retval[File.basename(trigger)] = File.read(trigger).strip
+    rescue => details
+      Facter.warn("Could not read #{trigger}: #{details.message}")
     end
 
     retval = false if retval.empty?

@@ -6,41 +6,45 @@ describe 'cmdline' do
     allow(File).to receive(:read).with(any_args).and_call_original
   end
 
-  let(:unique_line) {
+  let(:unique_line) do
     'root=/dev/mapper/VolGroup00-RootVol ro console=ttyS1,57600 rd.lvm.lv=VolGroup00/RootVol rhgb quiet rd.shell=0'
-  }
-  let(:dup_line) {
+  end
+  let(:dup_line) do
     'root=/dev/mapper/VolGroup00-RootVol ro console=ttyS1,57600 rd.lvm.lv=VolGroup00/RootVol rd.lvm.lv=VolGroup00/SwapVol rhgb quiet rd.shell=0'
-  }
+  end
 
   context '/proc/cmdline exists' do
     it 'and has no duplicate entries' do
       expect(File).to receive(:read).with('/proc/cmdline').and_return(unique_line)
-      expect(Facter.fact(:cmdline).value).to eq({
-        'root'      => '/dev/mapper/VolGroup00-RootVol',
-        'ro'        => nil,
-        'console'   => 'ttyS1,57600',
-        'rd.lvm.lv' => 'VolGroup00/RootVol',
-        'rhgb'      => nil,
-        'quiet'     => nil,
-        'rd.shell'  => '0'
-      })
+      expect(Facter.fact(:cmdline).value).to eq(
+        {
+          'root'      => '/dev/mapper/VolGroup00-RootVol',
+          'ro'        => nil,
+          'console'   => 'ttyS1,57600',
+          'rd.lvm.lv' => 'VolGroup00/RootVol',
+          'rhgb'      => nil,
+          'quiet'     => nil,
+          'rd.shell'  => '0',
+        },
+      )
     end
 
     it 'and has duplicate entries' do
       expect(File).to receive(:read).with('/proc/cmdline').and_return(dup_line)
-      expect(Facter.fact(:cmdline).value).to eq({
-        'root'      => '/dev/mapper/VolGroup00-RootVol',
-        'ro'        => nil,
-        'console'   => 'ttyS1,57600',
-        'rd.lvm.lv' => [
-          'VolGroup00/RootVol',
-          'VolGroup00/SwapVol'
-        ],
-        'rhgb'      => nil,
-        'quiet'     => nil,
-        'rd.shell'  => '0'
-      })
+      expect(Facter.fact(:cmdline).value).to eq(
+        {
+          'root'      => '/dev/mapper/VolGroup00-RootVol',
+          'ro'        => nil,
+          'console'   => 'ttyS1,57600',
+          'rd.lvm.lv' => [
+            'VolGroup00/RootVol',
+            'VolGroup00/SwapVol',
+          ],
+          'rhgb'      => nil,
+          'quiet'     => nil,
+          'rd.shell'  => '0',
+        },
+      )
     end
   end
 

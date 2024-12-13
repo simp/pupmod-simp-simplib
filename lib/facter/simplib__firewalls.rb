@@ -20,7 +20,7 @@ Facter.add('simplib__firewalls') do
       'ipfw'      => nil,
       'nft'       => nil,
       'pf'        => {
-        :command => 'pfctl'
+        command: 'pfctl'
       }
     }
 

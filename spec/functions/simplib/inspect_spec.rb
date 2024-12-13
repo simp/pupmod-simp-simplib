@@ -6,49 +6,55 @@ end
 
 describe 'simplib::inspect' do
   context 'when default output_type is used' do
-    let(:pre_condition) {%{
-      $foo = 'test_value'
-    }}
+    let(:pre_condition) do
+      <<~END
+        $foo = 'test_value'
+      END
+    end
 
     it {
       is_expected.to run.with_params('foo')
       expect(catalogue.resource('Notify[DEBUG_INSPECT_foo]')).not_to be_nil
 
       resource = catalogue.resource('Notify[DEBUG_INSPECT_foo]')
-      expected_msg = <<EOM
-Type => String
-Content =>
-"test_value"
-EOM
+      expected_msg = <<~EOM
+        Type => String
+        Content =>
+        "test_value"
+      EOM
       expect(resource[:message]).to eq expected_msg.chomp
     }
   end
 
   context 'when yaml output_type is used' do
-    let(:pre_condition) {%{
-      $foo = ['a', {'b' => 'c'} ]
-    }}
+    let(:pre_condition) do
+      <<~END
+        $foo = ['a', {'b' => 'c'} ]
+      END
+    end
 
     it {
       is_expected.to run.with_params('foo', 'yaml')
 
       resource = catalogue.resource('Notify[DEBUG_INSPECT_foo]')
 
-      expected_msg= <<EOM
-Type => Array
-Content =>
----
-- a
-- b: c
-EOM
+      expected_msg = <<~EOM
+        Type => Array
+        Content =>
+        ---
+        - a
+        - b: c
+      EOM
       expect(resource[:message]).to eq expected_msg
     }
   end
 
   context 'when oneline_json output_type is used' do
-    let(:pre_condition) {%{
-      $foo = ['a', {'b' => 'c'} ]
-    }}
+    let(:pre_condition) do
+      <<~END
+        $foo = ['a', {'b' => 'c'} ]
+      END
+    end
 
     it {
       is_expected.to run.with_params('foo', 'oneline_json')

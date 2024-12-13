@@ -49,8 +49,8 @@ describe 'Simplib::Domain' do
   context 'with silly things' do
     it { is_expected.not_to allow_value([]) }
     it { is_expected.not_to allow_value('.') }
-    it { is_expected.not_to allow_value('' ) }
-    it { is_expected.not_to allow_value("test.c m") }
+    it { is_expected.not_to allow_value('') }
+    it { is_expected.not_to allow_value('test.c m') }
     it { is_expected.not_to allow_value("test.com\n") }
     it { is_expected.not_to allow_value(:undef) }
   end

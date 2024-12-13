@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-describe "simplib__firewalls" do
-
+describe 'simplib__firewalls' do
   before :each do
     Facter.clear
     allow(Facter::Util::Resolution).to receive(:which).with(any_args).and_call_original
@@ -11,5 +10,5 @@ describe "simplib__firewalls" do
     expect(Facter::Util::Resolution).to receive(:which).with('pfctl').and_return('/bin/pfctl')
   end
 
-  it { expect(Facter.fact('simplib__firewalls').value).to eq(['firewalld','nft','pf']) }
+  it { expect(Facter.fact('simplib__firewalls').value).to eq(['firewalld', 'nft', 'pf']) }
 end

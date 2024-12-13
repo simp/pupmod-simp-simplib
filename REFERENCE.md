@@ -39,7 +39,7 @@
 * [`simplib::filtered`](#simplib--filtered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplib--gen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplib--hash_to_opts): Turn a hash into a options string, for use in a shell command
-* [`simplib::host_is_me`](#simplib--host_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of  hostnames and/o
+* [`simplib::host_is_me`](#simplib--host_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of hostnames and/or
 * [`simplib::in_bolt`](#simplib--in_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
 * [`simplib::inspect`](#simplib--inspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
 * [`simplib::ip::family_hash`](#simplib--ip--family_hash): Process an array of IP addresses and return them split by IP family and include metadata and/or processed versions.
@@ -295,7 +295,7 @@ The following parameters are available in the `ftpusers` type.
 
 Entries to always add to the file
 
-Default value: `['nobody','nfsnobody']`
+Default value: `['nobody', 'nfsnobody']`
 
 ##### <a name="-ftpusers--min_id"></a>`min_id`
 
@@ -380,7 +380,7 @@ Default value: `present`
 
 ##### `value`
 
-Valid values: `hard`, `soft`, `unlimited`, `/^\d+$/`
+Valid values: `hard`, `soft`, `unlimited`, `%r{^\d+$}`
 
 The value to which to set the new limit.
 
@@ -570,7 +570,7 @@ The following properties are available in the `runlevel` type.
 
 ##### `level`
 
-Valid values: `/^[1-5]$/`, `rescue`, `multi-user`, `graphical`, `default`
+Valid values: `%r{^[1-5]$}`, `rescue`, `multi-user`, `graphical`, `default`
 
 The target runlevel of the system. Defaults to what is specified in :name
 
@@ -594,7 +594,7 @@ The following parameters are available in the `runlevel` type.
 
 ##### <a name="-runlevel--name"></a>`name`
 
-Valid values: `/^[1-5]$/`, `rescue`, `multi-user`, `graphical`
+Valid values: `%r{^[1-5]$}`, `rescue`, `multi-user`, `graphical`
 
 namevar
 
@@ -607,7 +607,7 @@ discover the appropriate provider for your platform.
 
 ##### <a name="-runlevel--transition_timeout"></a>`transition_timeout`
 
-Valid values: `/^\d+$/`
+Valid values: `%r{^\d+$}`
 
 How many seconds to wait for a runlevel switch before failing
 
@@ -623,7 +623,7 @@ The following properties are available in the `script_umask` type.
 
 ##### `umask`
 
-Valid values: `/^[0-7]{3,4}$/`
+Valid values: `%r{^[0-7]{3,4}$}`
 
 The umask that should be set in the target file.
 
@@ -1597,7 +1597,7 @@ Options hash. It only takes 3 keys, none of them required:
 Type: Ruby 4.x API
 
 Detect if a local system identifier hostname/IPv4 address matches
-a specified hostname/IPv4 address or an entry in a list of 
+a specified hostname/IPv4 address or an entry in a list of
 hostnames and/or IPv4 addresses
 
 #### `simplib::host_is_me(Simplib::Host $host)`
@@ -1729,11 +1729,13 @@ include metadata and/or processed versions.
 
 ```puppet
 
-simplib::ip::family_hash([
-  '1.2.3.4',
-  '2.3.4.5/8',
-  '::1'
-])
+simplib::ip::family_hash(
+  [
+    '1.2.3.4',
+    '2.3.4.5/8',
+    '::1',
+  ]
+)
 
 Returns (YAML Formatted for clarity)
 
@@ -1794,11 +1796,13 @@ ipv6:
 
 ```puppet
 
-simplib::ip::family_hash([
-  '1.2.3.4',
-  '2.3.4.5/8',
-  '::1'
-])
+simplib::ip::family_hash(
+  [
+    '1.2.3.4',
+    '2.3.4.5/8',
+    '::1',
+  ]
+)
 
 Returns (YAML Formatted for clarity)
 
@@ -2051,7 +2055,7 @@ $ldap_dn = simplib::ldap::domain_to_dn('test.local', true)
 returns $ldap_dn = 'dc=test,dc=local'
 ```
 
-#### `simplib::ldap::domain_to_dn(String $domain = $facts['domain'], Boolean $downcase_attributes = false)`
+#### `simplib::ldap::domain_to_dn(String $domain = $facts['networking']['domain'], Boolean $downcase_attributes = false)`
 
 Generates a LDAP Base DN from a domain
 
@@ -2608,11 +2612,13 @@ into a structured `Hash` of host information.
 
 ```puppet
 
-simplib::parse_hosts([
-  '1.2.3.4',
-  'http://1.2.3.4',
-  'https://1.2.3.4:443'
-])
+simplib::parse_hosts(
+  [
+    '1.2.3.4',
+    'http://1.2.3.4',
+    'https://1.2.3.4:443',
+  ]
+)
 
 Returns:
 
@@ -2621,9 +2627,9 @@ Returns:
     :ports     => ['443'],
     :protocols => {
       'http'  => [],
-      'https' => ['443']
-    }
-  }
+      'https' => ['443'],
+    },
+  },
 }
 ```
 
@@ -2653,11 +2659,13 @@ Raises:
 
 ```puppet
 
-simplib::parse_hosts([
-  '1.2.3.4',
-  'http://1.2.3.4',
-  'https://1.2.3.4:443'
-])
+simplib::parse_hosts(
+  [
+    '1.2.3.4',
+    'http://1.2.3.4',
+    'https://1.2.3.4:443',
+  ]
+)
 
 Returns:
 
@@ -2666,9 +2674,9 @@ Returns:
     :ports     => ['443'],
     :protocols => {
       'http'  => [],
-      'https' => ['443']
-    }
-  }
+      'https' => ['443'],
+    },
+  },
 }
 ```
 

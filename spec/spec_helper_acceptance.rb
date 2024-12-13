@@ -24,7 +24,7 @@ end
 hosts.each do |host|
   # https://petersouter.co.uk/testing-windows-puppet-with-beaker/
   case host['platform']
-  when /windows/
+  when %r{windows}
     GEOTRUST_GLOBAL_CA = <<-EOM.freeze
 -----BEGIN CERTIFICATE-----
 MIIDVDCCAjygAwIBAgIDAjRWMA0GCSqGSIb3DQEBBQUAMEIxCzAJBgNVBAYTAlVT
@@ -51,7 +51,6 @@ hw4EbNX/3aBd7YdStysVAq45pmp06drE57xNNB6pXE0zX5IJL4hmXXeXxx12E6nV
   end
 end
 
-
 RSpec.configure do |c|
   # ensure that environment OS is ready on each host
   fix_errata_on(hosts)
@@ -65,34 +64,32 @@ RSpec.configure do |c|
 
   # Configure all nodes in nodeset
   c.before :suite do
-    begin
-      nonwin = hosts.dup
-      nonwin.delete_if { |h| h[:platform] =~ %r{windows} }
-      # Install modules and dependencies from spec/fixtures/modules
-      copy_fixture_modules_to(nonwin)
+    nonwin = hosts.dup
+    nonwin.delete_if { |h| h[:platform].include?('windows') }
+    # Install modules and dependencies from spec/fixtures/modules
+    copy_fixture_modules_to(nonwin)
 
-      unless nonwin.empty?
-        begin
-          server = only_host_with_role(nonwin, 'server')
-        rescue ArgumentError => e
-          server = only_host_with_role(nonwin, 'default')
-        end
-        # Generate and install PKI certificates on each SUT
-        Dir.mktmpdir do |cert_dir|
-          run_fake_pki_ca_on(server, nonwin, cert_dir)
-          nonwin.each { |sut| copy_pki_to(sut, cert_dir, '/etc/pki/simp-testing') }
-        end
-
-        # add PKI keys
-        copy_keydist_to(server)
+    unless nonwin.empty?
+      begin
+        server = only_host_with_role(nonwin, 'server')
+      rescue ArgumentError => e
+        server = only_host_with_role(nonwin, 'default')
       end
-    rescue StandardError, ScriptError => e
-      raise e unless ENV['PRY']
+      # Generate and install PKI certificates on each SUT
+      Dir.mktmpdir do |cert_dir|
+        run_fake_pki_ca_on(server, nonwin, cert_dir)
+        nonwin.each { |sut| copy_pki_to(sut, cert_dir, '/etc/pki/simp-testing') }
+      end
 
-      # rubocop:disable Lint/Debugger
-      require 'pry'
-      binding.pry
-      # rubocop:enable Lint/Debugger
+      # add PKI keys
+      copy_keydist_to(server)
     end
+  rescue StandardError, ScriptError => e
+    raise e unless ENV['PRY']
+
+    # rubocop:disable Lint/Debugger
+    require 'pry'
+    binding.pry
+    # rubocop:enable Lint/Debugger
   end
 end

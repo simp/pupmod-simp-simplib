@@ -4,7 +4,6 @@
 #   in the allotted time.
 #
 Puppet::Functions.create_function(:'simplib::passgen::gen_salt') do
-
   # @param timeout_seconds Maximum time allotted to generate the salt;
   #   a value of 0 disables the timeout
   #
@@ -23,10 +22,8 @@ Puppet::Functions.create_function(:'simplib::passgen::gen_salt') do
       16,    # length
       0,     # complexity
       false, # complex_only
-      timeout_seconds
-    )
+      timeout_seconds)
 
     salt
   end
 end
-

@@ -4,7 +4,6 @@
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
-
   # @param key sysctl setting whose value is to be validated
   # @param value Value to be validated
   # @return [Nil]
@@ -13,15 +12,14 @@ Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
   #   validate_sysctl_value('kernel.core_pattern','/var/core/%u_%g_%p_%t_%h_%e.core')
 
   dispatch :validate_sysctl_value do
-    required_param 'String',:key
-    required_param 'NotUndef',:value
+    required_param 'String', :key
+    required_param 'NotUndef', :value
   end
 
   def validate_sysctl_value(key, value)
+    key_method_name = key.to_s.gsub('.', '__')
 
-    key_method_name = key.to_s.gsub('.','__')
-
-    self.send(key_method_name, key, value) if self.respond_to?(key_method_name)
+    send(key_method_name, key, value) if respond_to?(key_method_name)
   end
 
   # Below are the recognized validation methods
@@ -35,12 +33,10 @@ Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
       validate_sysctl_err("Values for #{key} must be less than 129 characters")
     end
 
-    if value =~ /\|\s*(\S*)/
-      require 'puppet/util'
-      unless  Puppet::Util.absolute_path?($1, :posix)
-        validate_sysctl_err("Piped commands for #{key} must have an absolute path")
-      end
-    end
+    return unless value =~ %r{\|\s*(\S*)}
+    require 'puppet/util'
+    return if Puppet::Util.absolute_path?(Regexp.last_match(1), :posix)
+    validate_sysctl_err("Piped commands for #{key} must have an absolute path")
   end
 
   def fs__inotify__max_user_watches(key, value)
@@ -50,21 +46,19 @@ Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
 
     system_ram_mb = closure_scope['facts']['memorysize_mb']
 
-    if system_ram_mb
-      system_ram_mb = system_ram_mb.to_i
+    return unless system_ram_mb
+    system_ram_mb = system_ram_mb.to_i
 
-      size_multiplier = 512
-      size_multiplier = 1024 if (closure_scope['facts']['architecture'] == 'x86_64')
+    size_multiplier = 512
+    size_multiplier = 1024 if closure_scope['facts']['architecture'] == 'x86_64'
 
-      inode_ram_mb = (value.to_i * size_multiplier)/1024/1024
+    inode_ram_mb = (value.to_i * size_multiplier) / 1024 / 1024
 
-      if inode_ram_mb >= system_ram_mb
-        validate_sysctl_err("#{key} set to #{value} would exceed system RAM")
-      end
-    end
+    return unless inode_ram_mb >= system_ram_mb
+    validate_sysctl_err("#{key} set to #{value} would exceed system RAM")
   end
 
   def validate_sysctl_err(msg)
-    fail("simplib::validate_sysctl_value(): #{msg}")
+    raise("simplib::validate_sysctl_value(): #{msg}")
   end
 end

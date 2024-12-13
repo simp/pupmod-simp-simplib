@@ -15,8 +15,8 @@ Facter.add(:puppet_settings) do
         retval[section.to_s] ||= {}
         section_values  = Puppet.settings.values(nil, section)
         loader_settings = {
-          :environmentpath => section_values.interpolate(:environmentpath),
-          :basemodulepath  => section_values.interpolate(:basemodulepath)
+          environmentpath: section_values.interpolate(:environmentpath),
+          basemodulepath: section_values.interpolate(:basemodulepath)
         }
 
         # Temporarily override Puppet's run_mode to evaluate this session:
@@ -27,7 +27,7 @@ Facter.add(:puppet_settings) do
         # (in particular, $vardir), and won't agree with `puppet config --section`
         Puppet.override(
           Puppet.base_context(loader_settings),
-          "New loader for facter to inspect section '#{section}' ."
+          "New loader for facter to inspect section '#{section}' .",
         ) do
           # NOW we can lookup values as configured from the section:
           values = Puppet.settings.values(Puppet[:environment].to_sym, section)

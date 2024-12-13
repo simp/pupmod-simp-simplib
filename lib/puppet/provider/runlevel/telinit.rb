@@ -1,23 +1,23 @@
 Puppet::Type.type(:runlevel).provide(:telinit) do
-  desc <<-EOM
+  desc <<~EOM
     Set the system runlevel using telinit
   EOM
 
-  commands :telinit => '/sbin/telinit'
+  commands telinit: '/sbin/telinit'
 
   def level
     Facter.value(:runlevel)
   end
 
   def level_insync?(should, is)
-    return should == is
+    should == is
   end
 
-  def level=(should)
+  def level=(_should)
     require 'timeout'
 
     begin
-      Timeout::timeout(@resource[:transition_timeout]) do
+      Timeout.timeout(@resource[:transition_timeout]) do
         execute([command(:telinit), @resource[:name]])
       end
     rescue Timeout::Error
@@ -31,12 +31,11 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
     if @resource[:persist] == :true
       inittab = File.open('/etc/inittab', 'r')
       inittab.each_line do |line|
-        if line =~ /^\s*id/
-          # We have the initdefault line
-          current_value = line.split(':').at(1)
-          if current_value.eql?(@resource[:name])
-            retval = :true
-          end
+        next unless %r{^\s*id}.match?(line)
+        # We have the initdefault line
+        current_value = line.split(':').at(1)
+        if current_value.eql?(@resource[:name])
+          retval = :true
         end
       end
       inittab.close
@@ -45,15 +44,15 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
     retval
   end
 
-  def persist=(should)
+  def persist=(_should)
     # Essentially do the same as the read, but save contents to new file
-    newfile = String.new
+    newfile = ''
     inittab = File.open('/etc/inittab', 'r')
 
     found_line = false
 
     inittab.each_line do |line|
-      if line =~ /^\s*id/
+      if %r{^\s*id}.match?(line)
         # We've found the default line, so rewrite
         found_line = true
         newfile << "id:#{@resource[:name]}:initdefault:nil\n"

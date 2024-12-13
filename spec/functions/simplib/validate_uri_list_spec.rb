@@ -1,17 +1,18 @@
 require 'spec_helper'
 
 describe 'simplib::validate_uri_list' do
-
   context 'Valid URIs with hostnames' do
     it { is_expected.to run.with_params('fuu.bar.baz') }
     it { is_expected.to run.with_params(['fuu.bar.baz', 'my.example.net:900']) }
-    it {
-      is_expected.to run.with_params([
-        'http://some.domain.net',
-        'https://some.domain.net',
-        'ldaps://localhost.my.domain:8989'
-      ])
-    }
+    it do
+      is_expected.to run.with_params(
+        [
+          'http://some.domain.net',
+          'https://some.domain.net',
+          'ldaps://localhost.my.domain:8989',
+        ],
+      )
+    end
 
     # unexpected behavior: really need to specify scheme_list or fat-finger mistakes
     # will not be caught
@@ -23,7 +24,7 @@ describe 'simplib::validate_uri_list' do
     it {
       is_expected.to run.with_params(
         ['ldap://1.2.3.4', 'ldaps://1.2.3.4'],
-        ['ldap', 'ldaps']
+        ['ldap', 'ldaps'],
       )
     }
   end
@@ -33,9 +34,9 @@ describe 'simplib::validate_uri_list' do
       is_expected.to run.with_params(
         [
           'ldap://[2001:db8:1f70::999:de8:7648:001]:100',
-          'ldaps://[2001:db8:1f70::999:de8:7648:002]'
+          'ldaps://[2001:db8:1f70::999:de8:7648:002]',
         ],
-        ['ldap', 'ldaps']
+        ['ldap', 'ldaps'],
       )
     }
   end
@@ -43,21 +44,21 @@ describe 'simplib::validate_uri_list' do
   context 'Invalid URIs' do
     it { is_expected.to run.with_params('').and_raise_error(ArgumentError) }
     it { is_expected.to run.with_params([]).and_raise_error(ArgumentError) }
-    it { is_expected.to run.with_params('ldap://1.2.3.4:567:oops').and_raise_error(/is not a valid URI/) }
+    it { is_expected.to run.with_params('ldap://1.2.3.4:567:oops').and_raise_error(%r{is not a valid URI}) }
     it {
       is_expected.to run.with_params(
         [ 'ldap://1.2.3.4', 'ldaps://1.2.3.4' ], [ 'http', 'https' ]
-      ).and_raise_error(/'ldap' must be one of \["http", "https"\]/)
+      ).and_raise_error(%r{'ldap' must be one of \["http", "https"\]})
     }
 
     it {
-      is_expected.to run.with_params('ldap://[2001:db8:1f70::999:de8:7648:]').and_raise_error(/is not a valid URI/)
+      is_expected.to run.with_params('ldap://[2001:db8:1f70::999:de8:7648:]').and_raise_error(%r{is not a valid URI})
     }
 
     it {
       is_expected.to run.with_params(
           [ 'http://1.2.3.4', 'ldaps://[2001:db8:1f70::999:de8:7648:002]' ], [ 'http' ]
-      ).and_raise_error(/'ldaps' must be one of \["http"\]/)
+        ).and_raise_error(%r{'ldaps' must be one of \["http"\]})
     }
   end
 end
