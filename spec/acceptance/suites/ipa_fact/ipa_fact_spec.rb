@@ -35,8 +35,17 @@ describe 'ipa fact' do
       on(host, 'puppet resource package ipa-client ensure=present')
     end
 
+    it 'enables ipv6' do
+      on(host, 'puppet resource sysctl net.ipv6.conf.all.disable_ipv6 ensure=present value=0 target=/etc/sysctl.conf')
+      on(host, 'puppet resource sysctl net.ipv6.conf.lo.disable_ipv6 ensure=present value=0 target=/etc/sysctl.conf')
+    end
+
+    it 'configures the firewall' do
+      on(host, 'systemctl is-active firewalld.service && firewall-cmd --add-port={{80,443,389,636,88,464,53}/tcp,{88,464,53,123}/udp} --permanent')
+    end
+
     it 'should ensure hostname is set to the FQDN' do
-      hostname = pfact_on(host, 'fqdn')
+      hostname = pfact_on(host, 'networking.fqdn')
       on(host, "hostnamectl set-hostname #{hostname}")
 
       # DBus may need to be restarted after updating, and a reboot is the only way
@@ -52,7 +61,7 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        expect(pfact_on(server, 'ipa')).to be_empty
+        expect(pfact_on(server, 'ipa')).to be_nil.or be_empty
       end
     end
 
@@ -65,7 +74,7 @@ describe 'ipa fact' do
         results = apply_manifest_on(server, manifest)
         expect(results.output).to match(/Notice: Type => NilClass Content => null/)
 
-        expect(pfact_on(server, 'ipa')).to be_empty
+        expect(pfact_on(server, 'ipa')).to be_nil.or be_empty
       end
     end
 
@@ -74,7 +83,7 @@ describe 'ipa fact' do
       it 'ipa fact should contain domain and IPA server' do
         # ipa-server-install installs both the IPA server and client.
         # The fact uses the client env.
-        fqdn = pfact_on(server, 'fqdn')
+        fqdn = pfact_on(server, 'networking.fqdn')
 
         cmd = [
           'umask 0022 &&',
@@ -96,7 +105,8 @@ describe 'ipa fact' do
 
         results = pfact_on(server, 'ipa')
 
-        expect(results).to_not be_empty
+        expect(results).to be_a(Hash)
+        expect(results).not_to be_empty
         expect(results['connected']).to eq true
         expect(results['server']).to eq fqdn
         expect(results['domain']).to eq ipa_domain
@@ -109,7 +119,8 @@ describe 'ipa fact' do
 
         results = pfact_on(server, 'ipa')
 
-        expect(results).to_not be_empty
+        expect(results).to be_a(Hash)
+        expect(results).not_to be_empty
         expect(results['connected']).to eq false
       end
 
@@ -126,16 +137,17 @@ describe 'ipa fact' do
 
       context 'prior to registration' do
         it 'should not have an IPA fact' do
-          expect(pfact_on(client, 'ipa')).to be_empty
+          expect(pfact_on(client, 'ipa')).to be_nil.or be_empty
         end
       end
 
       context 'after registration' do
         let(:ipa_server) {
-          pfact_on(hosts_with_role(hosts, 'server').first, 'fqdn')
+          pfact_on(hosts_with_role(hosts, 'server').first, 'networking.fqdn')
         }
 
         it 'should register with the IPA server' do
+          os = fact_on(client, 'os')
           ipa_command = [
             # Unattended installation
             'ipa-client-install -U',
@@ -152,6 +164,8 @@ describe 'ipa fact' do
             # Admin password
             "--password='#{admin_password}'",
           ].join(' ')
+          # Force ntpd support on EL7
+          ipa_command += ' --force-ntpd' if os.dig('release', 'major') == '7'
 
           on(client, ipa_command)
         end
@@ -159,7 +173,8 @@ describe 'ipa fact' do
         it 'should have the IPA fact populated' do
           results = pfact_on(client, 'ipa')
 
-          expect(results).to_not be_empty
+          expect(results).to be_a(Hash)
+          expect(results).not_to be_empty
           expect(results['connected']).to eq true
           expect(results['server']).to eq ipa_server
           expect(results['domain']).to eq ipa_domain
@@ -174,7 +189,8 @@ describe 'ipa fact' do
 
           results = pfact_on(client, 'ipa')
 
-          expect(results).to_not be_empty
+          expect(results).to be_a(Hash)
+          expect(results).not_to be_empty
           expect(results['connected']).to eq false
         end
 
