@@ -81,7 +81,7 @@ describe "custom fact ipa" do
         before(:each) do
           allow(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           allow(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf.dup)
-          allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s').and_return(Puppet::Util::Execution::ProcessOutput.new('', 0))
+          allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s', fail_on_fail: false).and_return(Puppet::Util::Execution::ProcessOutput.new('', 0))
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return(ipa_env)
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
         end
@@ -103,7 +103,7 @@ describe "custom fact ipa" do
         before(:each) do
           allow(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
           allow(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
-          allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s').and_return(Puppet::Util::Execution::ProcessOutput.new('', 1))
+          allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s', fail_on_fail: false).and_return(Puppet::Util::Execution::ProcessOutput.new('', 1))
           allow(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('')
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return(ipa_env)
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
@@ -125,7 +125,7 @@ describe "custom fact ipa" do
       before(:each) do
         allow(File).to receive(:exist?).with('/etc/ipa/default.conf').and_return(true)
         allow(File).to receive(:read).with('/etc/ipa/default.conf').and_return(default_conf)
-        allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s').and_return(Puppet::Util::Execution::ProcessOutput.new('', 1))
+        allow(Puppet::Util::Execution).to receive(:execute).with('/usr/bin/klist -s', fail_on_fail: false).and_return(Puppet::Util::Execution::ProcessOutput.new('', 1))
         allow(Facter::Core::Execution).to receive(:execute).with('/usr/bin/kinit -k 2>&1', kinit_query_options).and_return('some error message')
         allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return('')
       end
