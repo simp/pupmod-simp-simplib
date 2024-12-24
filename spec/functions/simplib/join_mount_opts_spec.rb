@@ -2,16 +2,16 @@
 require 'spec_helper'
 
 describe 'simplib::join_mount_opts' do
-# "tmp_mount_dev_shm": "rw,seclabel,nosuid,nodev,noexec,relatime"
-# "tmp_mount_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
-# "tmp_mount_var_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
+  # "tmp_mount_dev_shm": "rw,seclabel,nosuid,nodev,noexec,relatime"
+  # "tmp_mount_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
+  # "tmp_mount_var_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
   context 'without selinux mount options specified' do
-    let(:facts) {{ :selinux_current_mode => 'enforcing' }}
+    let(:facts) { { selinux_current_mode: 'enforcing' } }
 
     context 'with no mount options overlap' do
       it 'concatenates system and new options' do
         sys_opts = ['bind']
-        new_opts = ['noexec','nodev','nosuid']
+        new_opts = ['noexec', 'nodev', 'nosuid']
         exp_out = 'bind,nodev,noexec,nosuid'
         is_expected.to run.with_params(sys_opts, new_opts).and_return(exp_out)
       end
@@ -26,7 +26,7 @@ describe 'simplib::join_mount_opts' do
       end
 
       it "removes 'no<option>' system options when enabled in new options" do
-        sys_opts = ['noexec','nodev','nosuid']
+        sys_opts = ['noexec', 'nodev', 'nosuid']
         new_opts = ['rw', 'exec', 'suid']
         exp_out = 'exec,nodev,rw,suid'
         is_expected.to run.with_params(sys_opts, new_opts).and_return(exp_out)
@@ -34,7 +34,7 @@ describe 'simplib::join_mount_opts' do
 
       it "removes system options when disabled with 'no<option>' in new options" do
         sys_opts = ['rw', 'exec', 'suid']
-        new_opts = ['noexec','nodev','nosuid']
+        new_opts = ['noexec', 'nodev', 'nosuid']
         exp_out = 'nodev,noexec,nosuid,rw'
         is_expected.to run.with_params(sys_opts, new_opts).and_return(exp_out)
       end
@@ -56,10 +56,9 @@ describe 'simplib::join_mount_opts' do
   end
 
   context 'with selinux mount options specified' do
-
     ['enforcing', 'permissive'].each do |selinux_mode|
       context "with selinux '#{selinux_mode}'" do
-        let(:facts) {{ :selinux_current_mode => selinux_mode }}
+        let(:facts) { { selinux_current_mode: selinux_mode } }
 
         ['context', 'fscontext', 'defcontext', 'rootcontext'].each do |context_opt|
           it "removes #{context_opt} when seclabel exits in system options" do
@@ -72,10 +71,9 @@ describe 'simplib::join_mount_opts' do
       end
     end
 
-
     ['disabled', nil].each do |selinux_mode|
       context "with selinux '#{selinux_mode}'" do
-        let(:facts) {{ :selinux_current_mode => selinux_mode }}
+        let(:facts) { { selinux_current_mode: selinux_mode } }
 
         ['context', 'fscontext', 'defcontext', 'rootcontext'].each do |context_opt|
           it "removes #{context_opt}" do
@@ -95,5 +93,4 @@ describe 'simplib::join_mount_opts' do
       end
     end
   end
-
 end

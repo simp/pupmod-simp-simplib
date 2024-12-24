@@ -11,12 +11,12 @@ describe 'simplib::assert_metadata' do
       {
         'operatingsystem' => 'Ubuntu',
         'operatingsystemrelease' => ['14.04']
-      }
+      },
     ]
   }.to_json
 
   valid_facts = {
-    :os => {
+    os: {
       'name' => 'Ubuntu',
       'release' => {
         'major' => '14',
@@ -26,7 +26,7 @@ describe 'simplib::assert_metadata' do
   }
 
   bad_os = {
-    :os => {
+    os: {
       'name' => 'Foo',
       'release' => {
         'major' => '14',
@@ -36,7 +36,7 @@ describe 'simplib::assert_metadata' do
   }
 
   bad_version = {
-    :os => {
+    os: {
       'name' => 'Ubuntu',
       'release' => {
         'major' => '10',
@@ -110,19 +110,19 @@ describe 'simplib::assert_metadata' do
       context 'at the OS' do
         let(:facts) { bad_os }
 
-        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
 
       context 'at the major version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
 
       context 'at the full version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
     end
   end

@@ -4,7 +4,6 @@
 # Terminates catalog compilation if any simpkv operation fails.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::get') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -91,7 +90,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::get') do
     optional_param 'Hash',      :simpkv_options
   end
 
-  def get(identifier, simpkv_options={'app_id' => 'simplib::passgen'})
+  def get(identifier, simpkv_options = { 'app_id' => 'simplib::passgen' })
     key_root_dir = call_function('simplib::passgen::simpkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
     password_info = {}

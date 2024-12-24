@@ -2,7 +2,6 @@
 require 'spec_helper'
 
 def store_valid_legacy_passwords(id_base, password_base, salt_base)
-
   expected = { 'keys' => {}, 'folders' => [] }
 
   # add passwords
@@ -30,29 +29,29 @@ describe 'simplib::passgen::legacy::list' do
   let(:salt_base) { 'salt for my_id' }
 
   context 'successes' do
-    it 'should return {} when the root folder does not exist' do
-      is_expected.to run.with_params().and_return( {} )
+    it 'returns {} when the root folder does not exist' do
+      is_expected.to run.with_params.and_return({})
     end
 
-    it 'should return empty password and folder results when the root folder is empty' do
+    it 'returns empty password and folder results when the root folder is empty' do
       # call subject() to make sure test Puppet environment is created
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
 
       expected = { 'keys' => {}, 'folders' => [] }
-      is_expected.to run.with_params().and_return( expected )
+      is_expected.to run.with_params.and_return(expected)
     end
 
-    it 'should return password info and folders when root folder is not empty' do
-      subject()
+    it 'returns password info and folders when root folder is not empty' do
+      subject # rubocop:disable RSpec/NamedSubject
       expected = store_valid_legacy_passwords(id_base, password_base, salt_base)
 
-      is_expected.to run.with_params().and_return( expected )
+      is_expected.to run.with_params.and_return(expected)
     end
 
-    it 'should skip bad entries' do
-      subject()
+    it 'skips bad entries' do
+      subject # rubocop:disable RSpec/NamedSubject
       # store valid passwords
       expected = store_valid_legacy_passwords(id_base, password_base, salt_base)
 
@@ -61,19 +60,19 @@ describe 'simplib::passgen::legacy::list' do
       FileUtils.mkdir_p(settings['keydir'])
       FileUtils.touch(File.join(settings['keydir'], 'bad_key'))
 
-      is_expected.to run.with_params().and_return( expected )
+      is_expected.to run.with_params.and_return(expected)
     end
   end
 
   context 'failures' do
     it 'fails when the password root directory cannot be accessed' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
-      expect(Dir).to receive(:chdir).with(settings['keydir']).
-        and_raise(Errno::EACCES, 'chdir failed')
+      expect(Dir).to receive(:chdir).with(settings['keydir'])
+                                    .and_raise(Errno::EACCES, 'chdir failed')
 
-      is_expected.to run.with_params().and_raise_error(Errno::EACCES,
+      is_expected.to run.with_params.and_raise_error(Errno::EACCES,
         'Permission denied - chdir failed')
     end
   end

@@ -25,15 +25,15 @@ describe 'simplib::passgen::simpkv::remove' do
   end
 
   context 'successful operation' do
-    it 'should succeed when password key does not exist' do
+    it 'succeeds when password key does not exist' do
       is_expected.to run.with_params(id)
     end
 
-    it 'should remove password key when it exists' do
+    it 'removes password key when it exists' do
       # call subject() to make sure test Puppet environment is created
       # before we try to pre-populate the default key/value store with
       # a password
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       value = { 'password' => 'the password', 'salt' => 'the salt' }
       meta = {
         'complexity' => 0,
@@ -43,7 +43,7 @@ describe 'simplib::passgen::simpkv::remove' do
       call_function('simpkv::put', key, value, meta)
 
       is_expected.to run.with_params(id)
-      expect( call_function('simpkv::exists', key) ).to be false
+      expect(call_function('simpkv::exists', key)).to be false
     end
   end
 
@@ -52,15 +52,15 @@ describe 'simplib::passgen::simpkv::remove' do
       simpkv_options = {
         'backend'  => 'oops',
         'backends' => {
-          'oops'  => {
+          'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
           }
         }
       }
 
-      is_expected.to run.with_params( id, simpkv_options).
-        and_raise_error(ArgumentError, /simpkv Configuration Error/)
+      is_expected.to run.with_params(id, simpkv_options)
+                        .and_raise_error(ArgumentError, %r{simpkv Configuration Error})
     end
   end
 end

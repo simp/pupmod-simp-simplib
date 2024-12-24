@@ -1,15 +1,13 @@
 Puppet::Type.newtype(:prepend_file_line) do
+  desc <<~EOT
+    Type that can prepend whole a line to a file if it does not already contain it.
 
-  desc <<-EOT
-  Type that can prepend whole a line to a file if it does not already contain it.
+    Example:
 
-  Example:
-
-  file_prepend_line { 'sudo_rule':
-    path => '/etc/sudoers',
-    line => '%admin ALL=(ALL) ALL',
-  }
-
+    file_prepend_line { 'sudo_rule':
+      path => '/etc/sudoers',
+      line => '%admin ALL=(ALL) ALL',
+    }
   EOT
 
   ensurable do
@@ -20,7 +18,7 @@ Puppet::Type.newtype(:prepend_file_line) do
     end
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'arbitrary name used as identity'
   end
 
@@ -31,15 +29,15 @@ Puppet::Type.newtype(:prepend_file_line) do
   newparam(:path) do
     desc 'File to possibly prepend a line to.'
     validate do |value|
-      unless (Puppet.features.posix? and value =~ /^\//) or (Puppet.features.microsoft_windows? and (value =~ /^.:\// or value =~ /^\/\/[^\/]+\/[^\/]+/))
+      unless (Puppet.features.posix? && value =~ (%r{^/})) || (Puppet.features.microsoft_windows? && (value =~ (%r{^.:/}) || value =~ (%r{^//[^/]+/[^/]+})))
         raise(Puppet::Error, "File paths must be fully qualified, not '#{value}'")
       end
     end
   end
 
   validate do
-    unless self[:line] and self[:path]
-      raise(Puppet::Error, "Both line and path are required attributes")
+    unless self[:line] && self[:path]
+      raise(Puppet::Error, 'Both line and path are required attributes')
     end
   end
 end

@@ -1,12 +1,11 @@
 # Validate that a passed list (`Array` or single `String`) of URIs is
 # valid according to Ruby's URI parser.
-# 
+#
 # * *Caution*:  No scheme (protocol type) validation is done if the
 #    `scheme_list` parameter is not set.
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_uri_list') do
-
   # @param uri URI to be validated.
   # @param scheme_list List of schemes (protocol types) allowed for the URI.
   # @return [Nil]
@@ -39,25 +38,22 @@ Puppet::Functions.create_function(:'simplib::validate_uri_list') do
     optional_param 'Array[String]',      :scheme_list
   end
 
-  def validate_uri(uri, scheme_list=[])
+  def validate_uri(uri, scheme_list = [])
     validate_uri_list(Array(uri), scheme_list)
   end
 
-  def validate_uri_list(uri_list, scheme_list=[])
+  def validate_uri_list(uri_list, scheme_list = [])
     uri_list.each do |uri|
+      require 'uri'
+      uri_obj = URI(uri)
 
-      begin
-        require 'uri'
-        uri_obj = URI(uri)
-
-        unless scheme_list.empty?
-          unless scheme_list.include?(uri_obj.scheme)
-            fail("simplib::validate_uri_list(): Scheme '#{uri_obj.scheme}' must be one of #{scheme_list.to_s}")
-          end
+      unless scheme_list.empty?
+        unless scheme_list.include?(uri_obj.scheme)
+          raise("simplib::validate_uri_list(): Scheme '#{uri_obj.scheme}' must be one of #{scheme_list}")
         end
-      rescue URI::InvalidURIError
-        fail("simplib::validate_uri_list(): '#{uri}' is not a valid URI")
       end
+    rescue URI::InvalidURIError
+      raise("simplib::validate_uri_list(): '#{uri}' is not a valid URI")
     end
   end
 end

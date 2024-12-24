@@ -2,7 +2,6 @@
 # for a given key.
 #
 Puppet::Functions.create_function(:'simplib::deprecation') do
-
   # @param key Uniqueness key, which is used to dedupe messages.
   # @param message Message to be printed, to which file and line
   #   information will be appended, if available.
@@ -22,13 +21,13 @@ Puppet::Functions.create_function(:'simplib::deprecation') do
   end
 
   def deprecation(key, message)
-    if defined? Puppet::Pops::PuppetStack.stacktrace()
-      stacktrace = Puppet::Pops::PuppetStack.stacktrace()
+    if defined? Puppet::Pops::PuppetStack.stacktrace
+      stacktrace = Puppet::Pops::PuppetStack.stacktrace
       file = stacktrace[0]
       line = stacktrace[1]
       message = "#{message} at #{file}:#{line}"
     end
 
-    Puppet.deprecation_warning(message, key) unless ENV['SIMPLIB_NOLOG_DEPRECATIONS'] 
+    Puppet.deprecation_warning(message, key) unless ENV['SIMPLIB_NOLOG_DEPRECATIONS']
   end
 end

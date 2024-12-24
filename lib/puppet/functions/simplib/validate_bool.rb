@@ -4,7 +4,6 @@
 # Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_bool') do
-
   # @param values_to_validate One or more values to validate
   # @return [Nil]
   # @raise [RuntimeError] if validation fails
@@ -29,8 +28,8 @@ Puppet::Functions.create_function(:'simplib::validate_bool') do
   def validate_bool(*values_to_validate)
     valid_entries = [true, false, 'true', 'false']
     values_to_validate.each do |value|
-      unless valid_entries.include?(value) then
-        fail("simplib::validate_bool: '#{value}' is not a boolean.")
+      unless valid_entries.include?(value)
+        raise("simplib::validate_bool: '#{value}' is not a boolean.")
       end
     end
   end

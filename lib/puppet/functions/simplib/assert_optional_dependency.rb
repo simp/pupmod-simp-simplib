@@ -56,20 +56,18 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
   end
 
   def get_module_dependencies(dependency_tree_levels, module_metadata)
-    _levels = Array(dependency_tree_levels.dup)
-    current_level = _levels.shift
+    levels = Array(dependency_tree_levels.dup)
+    current_level = levels.shift
     metadata_level = module_metadata
 
-    while !_levels.empty?
-      if metadata_level[current_level]
-        metadata_level = metadata_level[current_level]
-        current_level = _levels.shift
-      else
-        return nil
-      end
+    until levels.empty?
+      return nil unless metadata_level[current_level]
+      metadata_level = metadata_level[current_level]
+      current_level = levels.shift
+
     end
 
-    return metadata_level[current_level]
+    metadata_level[current_level]
   end
 
   # Concept lifted from 'node-semver'
@@ -84,47 +82,44 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
   def check_dependency(module_name, module_dependency)
     require 'semantic_puppet'
 
-    _module_author, _module_name = module_name.split('/')
+    author, name = module_name.split('/')
 
-    unless _module_name
-      _module_name = _module_author.dup
-      _module_author = nil
+    unless name
+      name = author.dup
+      author = nil
     end
 
-    unless call_function('simplib::module_exist', _module_name)
-      return "optional dependency '#{_module_name}' not found"
+    unless call_function('simplib::module_exist', name)
+      return "optional dependency '#{name}' not found"
     end
 
-    if module_dependency
-      module_metadata = call_function('load_module_metadata', _module_name)
+    return unless module_dependency
+    module_metadata = call_function('load_module_metadata', name)
 
-      if _module_author
-        cmp_author = module_metadata['name'].strip.gsub('-','/').split('/').first
-        unless _module_author.strip == cmp_author
-          return %('#{module_name}' does not match '#{module_metadata['name']}')
-        end
-      end
-
-      if module_dependency['version_requirement']
-        begin
-          version_requirement = SemanticPuppet::VersionRange.parse(module_dependency['version_requirement'])
-        rescue ArgumentError
-          return %(invalid version range '#{module_dependency['version_requirement']}' for '#{_module_name}')
-        end
-
-        module_version = coerce(module_metadata['version'])
-
-        begin
-          module_version = SemanticPuppet::Version.parse(module_version)
-        rescue ArgumentError
-          return %(invalid version '#{module_version}' found for '#{_module_name}')
-        end
-
-        unless version_requirement.include?(module_version)
-          return %('#{_module_name}-#{module_version}' does not satisfy '#{version_requirement}')
-        end
+    if author
+      cmp_author = module_metadata['name'].strip.tr('-', '/').split('/').first
+      unless author.strip == cmp_author
+        return %('#{module_name}' does not match '#{module_metadata['name']}')
       end
     end
+
+    return unless module_dependency['version_requirement']
+    begin
+      version_requirement = SemanticPuppet::VersionRange.parse(module_dependency['version_requirement'])
+    rescue ArgumentError
+      return %(invalid version range '#{module_dependency['version_requirement']}' for '#{name}')
+    end
+
+    module_version = coerce(module_metadata['version'])
+
+    begin
+      module_version = SemanticPuppet::Version.parse(module_version)
+    rescue ArgumentError
+      return %(invalid version '#{module_version}' found for '#{name}')
+    end
+
+    return if version_requirement.include?(module_version)
+    %('#{name}-#{module_version}' does not satisfy '#{version_requirement}')
   end
 
   def raise_error(msg, env)
@@ -143,38 +138,37 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
       dependency_tree.split(':'),
       call_function(
         'load_module_metadata',
-        source_module
-      )
+        source_module,
+      ),
     )
 
-    if module_dependencies
-      if target_module
-        tgt = target_module.gsub('-','/')
+    return unless module_dependencies
+    if target_module
+      tgt = target_module.tr('-', '/')
 
-        if tgt.include?('/')
-          target_dependency = module_dependencies.find {|d| d['name'].gsub('-','/') == tgt}
-        else
-          target_dependency = module_dependencies.find {|d| d['name'] =~ %r((/|-)#{tgt}$)}
-        end
+      target_dependency = if tgt.include?('/')
+                            module_dependencies.find { |d| d['name'].tr('-', '/') == tgt }
+                          else
+                            module_dependencies.find { |d| d['name'] =~ %r{(/|-)#{tgt}$} }
+                          end
 
-        if target_dependency
-          result = check_dependency(tgt, target_dependency)
+      if target_dependency
+        result = check_dependency(tgt, target_dependency)
 
-          raise_error(result, current_environment) if result
-        else
-          raise_error(%(module '#{target_module}' not found in metadata.json for '#{source_module}'), current_environment)
-        end
+        raise_error(result, current_environment) if result
       else
-        results = []
+        raise_error(%(module '#{target_module}' not found in metadata.json for '#{source_module}'), current_environment)
+      end
+    else
+      results = []
 
-        module_dependencies.each do |dependency|
-          result = check_dependency(dependency['name'].gsub('-','/'), dependency)
-          results << result if result
-        end
+      module_dependencies.each do |dependency|
+        result = check_dependency(dependency['name'].tr('-', '/'), dependency)
+        results << result if result
+      end
 
-        unless results.empty?
-          raise_error(%(\n* #{results.join("\n* ")}\n), current_environment)
-        end
+      unless results.empty?
+        raise_error(%(\n* #{results.join("\n* ")}\n), current_environment)
       end
     end
   end

@@ -6,32 +6,32 @@ describe 'simplib::bracketize' do
     it 'converts an Array of networks' do
       input = [
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/24',
       ]
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
 
       input = '2001:0db8:85a3:0000:0000:8a2e:0370:7334 2001:0db8:85a3:0000:0000:8a2e:0370:7334/24'
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
 
       input = '2001:0db8:85a3:0000:0000:8a2e:0370:7334, 2001:0db8:85a3:0000:0000:8a2e:0370:7334/24'
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
 
       input = '2001:0db8:85a3:0000:0000:8a2e:0370:7334; 2001:0db8:85a3:0000:0000:8a2e:0370:7334/24'
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
 
@@ -40,7 +40,7 @@ describe 'simplib::bracketize' do
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
         '[3456:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[1274:0db8:85a3:0000:0000:8a2e:0370:7334]'
+        '[1274:0db8:85a3:0000:0000:8a2e:0370:7334]',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
     end
@@ -58,18 +58,18 @@ describe 'simplib::bracketize' do
     it 'returns same input if ipv6 is already in brackets' do
       input_string = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input_string).and_return(expected_output)
 
       input_string = '[2001:0db8:85a3:0000:0000:8a2e:0370:7334] [2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
       expected_output = [
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24'
+        '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]/24',
       ]
       is_expected.to run.with_params(input_string).and_return(expected_output)
     end
@@ -80,7 +80,7 @@ describe 'simplib::bracketize' do
         'still',
         'correct',
         '[2001:0db8:85a3:0000:0000:8a2e:0370:7334]',
-        '127.0.0.1'
+        '127.0.0.1',
       ]
       is_expected.to run.with_params(input_string).and_return(expected_output)
     end

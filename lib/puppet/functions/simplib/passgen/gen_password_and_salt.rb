@@ -9,7 +9,6 @@
 #   in the allotted time.
 #
 Puppet::Functions.create_function(:'simplib::passgen::gen_password_and_salt') do
-
   # @param length Length of the new password.
   #
   # @param complexity Specifies the types of characters to be used in the
@@ -40,12 +39,10 @@ Puppet::Functions.create_function(:'simplib::passgen::gen_password_and_salt') do
       length,
       complexity,
       complex_only,
-      timeout_seconds
-    )
+      timeout_seconds)
 
     salt = call_function('simplib::passgen::gen_salt', timeout_seconds)
 
     [password, salt]
   end
 end
-

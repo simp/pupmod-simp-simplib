@@ -3,19 +3,23 @@ require 'spec_helper'
 
 describe 'simplib::passgen::legacy::set' do
   let(:id) { 'my_id' }
-  let(:passwords) { [
-    'password for my_id 3',
-    'password for my_id 2',
-    'password for my_id 1',
-    'password for my_id 0'
-  ] }
+  let(:passwords) do
+    [
+      'password for my_id 3',
+      'password for my_id 2',
+      'password for my_id 1',
+      'password for my_id 0',
+    ]
+  end
 
-  let(:salts) { [
-    'salt for my_id 3',
-    'salt for my_id 2',
-    'salt for my_id 1',
-    'salt for my_id 0'
-  ] }
+  let(:salts) do
+    [
+      'salt for my_id 3',
+      'salt for my_id 2',
+      'salt for my_id 1',
+      'salt for my_id 0',
+    ]
+  end
 
   # DEBUG NOTES:
   #   Puppet[:vardir] is dynamically created as a tmpdir by the test
@@ -35,28 +39,28 @@ describe 'simplib::passgen::legacy::set' do
   #
   # end
   context 'success cases' do
-    it 'should create password and salt files when password does not exist' do
+    it 'creates password and salt files when password does not exist' do
       is_expected.to run.with_params(id, passwords[0], salts[0])
 
       settings = call_function('simplib::passgen::legacy::common_settings')
       password_file = File.join(settings['keydir'], id)
       salt_file = File.join(settings['keydir'], "#{id}.salt")
-      expect( Dir.exist?(settings['keydir']) ).to be true
-      expect( File.exist?(password_file) ).to be true
-      expect( IO.read(password_file).chomp ).to eq passwords[0]
-      expect( File.stat(password_file).mode & 0777 ).to eq(settings['file_mode'])
-      expect( File.exist?(salt_file) ).to be true
-      expect( IO.read(salt_file).chomp ).to eq salts[0]
-      expect( File.stat(salt_file).mode & 0777 ).to eq(settings['file_mode'])
+      expect(Dir.exist?(settings['keydir'])).to be true
+      expect(File.exist?(password_file)).to be true
+      expect(IO.read(password_file).chomp).to eq passwords[0]
+      expect(File.stat(password_file).mode & 0o777).to eq(settings['file_mode'])
+      expect(File.exist?(salt_file)).to be true
+      expect(IO.read(salt_file).chomp).to eq salts[0]
+      expect(File.stat(salt_file).mode & 0o777).to eq(settings['file_mode'])
 
-      expect( File.exist?("#{password_file}.last") ).to be false
-      expect( File.exist?("#{salt_file}.last") ).to be false
-      expect( File.exist?("#{password_file}.last.last") ).to be false
-      expect( File.exist?("#{salt_file}.last.last") ).to be false
+      expect(File.exist?("#{password_file}.last")).to be false
+      expect(File.exist?("#{salt_file}.last")).to be false
+      expect(File.exist?("#{password_file}.last.last")).to be false
+      expect(File.exist?("#{salt_file}.last.last")).to be false
     end
 
-    it 'should backup existing password and salt files and create current ones' do
-      subject()
+    it 'backups existing password and salt files and create current ones' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -66,17 +70,17 @@ describe 'simplib::passgen::legacy::set' do
 
       is_expected.to run.with_params(id, passwords[0], salts[0])
 
-      expect( IO.read(password_file).chomp ).to eq passwords[0]
-      expect( IO.read(salt_file).chomp ).to eq salts[0]
+      expect(IO.read(password_file).chomp).to eq passwords[0]
+      expect(IO.read(salt_file).chomp).to eq salts[0]
 
       password_file_last = "#{password_file}.last"
       salt_file_last = "#{salt_file}.last"
-      expect( IO.read(password_file_last).chomp ).to eq passwords[1]
-      expect( IO.read(salt_file_last).chomp ).to eq salts[1]
+      expect(IO.read(password_file_last).chomp).to eq passwords[1]
+      expect(IO.read(salt_file_last).chomp).to eq salts[1]
     end
 
-    it 'should backup existing backup files' do
-      subject()
+    it 'backups existing backup files' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -95,16 +99,16 @@ describe 'simplib::passgen::legacy::set' do
 
       is_expected.to run.with_params(id, passwords[0], salts[0])
 
-      expect( IO.read(password_file).chomp ).to eq passwords[0]
-      expect( IO.read(salt_file).chomp ).to eq salts[0]
-      expect( IO.read(password_file_last).chomp ).to eq passwords[1]
-      expect( IO.read(salt_file_last).chomp ).to eq salts[1]
-      expect( IO.read(password_file_last_last).chomp ).to eq passwords[2]
-      expect( IO.read(salt_file_last_last).chomp ).to eq salts[2]
+      expect(IO.read(password_file).chomp).to eq passwords[0]
+      expect(IO.read(salt_file).chomp).to eq salts[0]
+      expect(IO.read(password_file_last).chomp).to eq passwords[1]
+      expect(IO.read(salt_file_last).chomp).to eq salts[1]
+      expect(IO.read(password_file_last_last).chomp).to eq passwords[2]
+      expect(IO.read(salt_file_last_last).chomp).to eq salts[2]
     end
 
-    it 'should remove backup salt if existing salt missing' do
-      subject()
+    it 'removes backup salt if existing salt missing' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -118,14 +122,14 @@ describe 'simplib::passgen::legacy::set' do
 
       is_expected.to run.with_params(id, passwords[0], salts[0])
 
-      expect( File.exist?(password_file) ).to be true
-      expect( File.exist?(password_file_last) ).to be true
-      expect( File.exist?(salt_file) ).to be true
-      expect( File.exist?(salt_file_last) ).to be false
+      expect(File.exist?(password_file)).to be true
+      expect(File.exist?(password_file_last)).to be true
+      expect(File.exist?(salt_file)).to be true
+      expect(File.exist?(salt_file_last)).to be false
     end
 
-    it 'should remove backup of backup files if backup files missing' do
-      subject()
+    it 'removes backup of backup files if backup files missing' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -142,37 +146,37 @@ describe 'simplib::passgen::legacy::set' do
 
       is_expected.to run.with_params(id, passwords[0], salts[0])
 
-      expect( File.exist?(password_file) ).to be true
-      expect( File.exist?(password_file_last) ).to be true
-      expect( File.exist?(password_file_last_last) ).to be false
-      expect( File.exist?(salt_file) ).to be true
-      expect( File.exist?(salt_file_last) ).to be true
-      expect( File.exist?(salt_file_last_last) ).to be false
+      expect(File.exist?(password_file)).to be true
+      expect(File.exist?(password_file_last)).to be true
+      expect(File.exist?(password_file_last_last)).to be false
+      expect(File.exist?(salt_file)).to be true
+      expect(File.exist?(salt_file_last)).to be true
+      expect(File.exist?(salt_file_last_last)).to be false
     end
   end
 
   context 'error cases' do
     it 'fails when the key directory cannot be created' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       expect(FileUtils).to receive(:mkdir_p).with(
-          settings['keydir'], {:mode => settings['dir_mode']}
+          settings['keydir'], { mode: settings['dir_mode'] }
         ).and_raise(Errno::EACCES, 'dir create failed')
 
-      is_expected.to run.with_params(id, passwords[0], salts[0]).
-        and_raise_error(RuntimeError, /Could not make directory/)
+      is_expected.to run.with_params(id, passwords[0], salts[0])
+                        .and_raise_error(RuntimeError, %r{Could not make directory})
     end
 
     it 'fails when a password/salt file cannot be created' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       password_file = File.join(settings['keydir'], id)
       allow(File).to receive(:chmod).with(any_args).and_call_original
-      expect(File).to receive(:chmod).with(settings['file_mode'], password_file).
-        and_raise(Errno::EACCES, 'file chmod failed')
+      expect(File).to receive(:chmod).with(settings['file_mode'], password_file)
+                                     .and_raise(Errno::EACCES, 'file chmod failed')
 
-      is_expected.to run.with_params(id, passwords[0], salts[0]).
-        and_raise_error( Errno::EACCES, 'Permission denied - file chmod failed')
+      is_expected.to run.with_params(id, passwords[0], salts[0])
+                        .and_raise_error(Errno::EACCES, 'Permission denied - file chmod failed')
     end
   end
 end

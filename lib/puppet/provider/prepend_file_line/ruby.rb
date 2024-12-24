@@ -1,5 +1,5 @@
 Puppet::Type.type(:prepend_file_line).provide(:ruby) do
-  desc <<-EOM
+  desc <<~EOM
     Prepend a line to a file.
   EOM
 
@@ -13,19 +13,19 @@ Puppet::Type.type(:prepend_file_line).provide(:ruby) do
     tmpfile = "#{File.dirname(resource[:path])}/.~puppet_#{File.basename(resource[:path])}"
     begin
       File.exist?(tmpfile) and File.unlink(tmpfile)
-      tmp_fh = File.open(tmpfile,'w')
+      tmp_fh = File.open(tmpfile, 'w')
 
       tmp_fh.puts(resource[:line])
-      orig_fh = File.open(resource[:path],'r')
+      orig_fh = File.open(resource[:path], 'r')
       orig_fh.each_line do |ln|
         tmp_fh.puts(ln)
       end
       orig_fh.close
       tmp_fh.close
 
-      FileUtils.mv(tmpfile,resource[:path])
+      FileUtils.mv(tmpfile, resource[:path])
     rescue
-      fail(Puppet::Error,"Error when prepending line to #{resource[:path]}")
+      raise(Puppet::Error, "Error when prepending line to #{resource[:path]}")
     end
   end
 end

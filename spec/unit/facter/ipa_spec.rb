@@ -1,27 +1,36 @@
 require 'spec_helper'
 
-describe "custom fact ipa" do
+describe 'custom fact ipa' do
   before :each do
     allow(File).to receive(:read).with(any_args).and_call_original
+    Facter.clear
+
+    # mock out Facter method called when evaluating confine for :kernel
+    # Facter 4
+    if defined?(Facter::Resolvers::Uname)
+      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
+    else
+      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
+    end
   end
 
-  let (:ipa_query_options) {
-    {:timeout => 30}
-  }
+  let(:ipa_query_options) do
+    { timeout: 30 }
+  end
 
-  let (:kinit_query_options) {
-    {:timeout => 10}
-  }
+  let(:kinit_query_options) do
+    { timeout: 10 }
+  end
 
-  let (:ipa_env_query) {
+  let(:ipa_env_query) do
     '/bin/true && LC_ALL=en_US.UTF-8 /usr/bin/ipa env domain server realm basedn tls_ca_cert'
-  }
+  end
 
-  let (:ipa_env_server_query) {
+  let(:ipa_env_server_query) do
     '/bin/true && LC_ALL=en_US.UTF-8 /usr/bin/ipa env --server host'
-  }
+  end
 
-  let (:default_conf) {
+  let(:default_conf) do
     [
       '#host = client.example.com',
       'host=client.example.com',
@@ -34,11 +43,11 @@ describe "custom fact ipa" do
       'enable_ra = True',
       'ra_plugin = dogtag',
       'dogtag_version = 10',
-      'mode = production'
+      'mode = production',
     ].join("\n")
-  }
+  end
 
-  let (:ipa_env) {
+  let(:ipa_env) do
     [
       '  domain: example.com',
       '  server: ipaserver.example.com',
@@ -46,28 +55,15 @@ describe "custom fact ipa" do
       '  basedn: dc=example,dc=com',
       '-----------',
       '4 variables',
-      '-----------'
+      '-----------',
     ].join("\n")
-  }
+  end
 
-  let (:ipa_server_env) {
+  let(:ipa_server_env) do
     'host: ipaserver.example.com'
-  }
-
-  before(:each) do
-    Facter.clear
-
-    # mock out Facter method called when evaluating confine for :kernel
-    # Facter 4
-    if defined?(Facter::Resolvers::Uname)
-      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
-    else
-      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
-    end
   end
 
   context 'host is joined to IPA domain' do
-
     before(:each) do
       allow(ENV).to receive(:fetch).with('LANG', 'en_US.UTF-8').and_return('en_US.UTF-8')
       allow(Facter::Core::Execution).to receive(:which).with('kinit').and_return('/usr/bin/kinit')
@@ -86,16 +82,18 @@ describe "custom fact ipa" do
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
         end
 
-        it 'should execute only ipa commands and report local env + connected status' do
+        it 'executes only ipa commands and report local env + connected status' do
           # Have to set $? for Facter 4
-          %x{( exit 0 )}
-          expect(Facter.fact('ipa').value).to eq({
-            'connected' => true,
-            'domain'    => 'example.com',
-            'server'    => 'ipaserver.example.com',
-            'realm'     => 'EXAMPLE.COM',
-            'basedn'    => 'dc=example,dc=com'
-          })
+          `( exit 0 )`
+          expect(Facter.fact('ipa').value).to eq(
+            {
+              'connected' => true,
+              'domain'    => 'example.com',
+              'server'    => 'ipaserver.example.com',
+              'realm'     => 'EXAMPLE.COM',
+              'basedn'    => 'dc=example,dc=com',
+            },
+          )
         end
       end
 
@@ -109,14 +107,16 @@ describe "custom fact ipa" do
           allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_server_query, ipa_query_options).and_return(ipa_server_env)
         end
 
-        it 'should execute kinit + ipa commands and return local env + connected status' do
-          expect(Facter.fact('ipa').value).to eq({
-            'connected' => true,
-            'domain'    => 'example.com',
-            'server'    => 'ipaserver.example.com',
-            'realm'     => 'EXAMPLE.COM',
-            'basedn'    => 'dc=example,dc=com'
-          })
+        it 'executes kinit + ipa commands and return local env + connected status' do
+          expect(Facter.fact('ipa').value).to eq(
+            {
+              'connected' => true,
+              'domain'    => 'example.com',
+              'server'    => 'ipaserver.example.com',
+              'realm'     => 'EXAMPLE.COM',
+              'basedn'    => 'dc=example,dc=com',
+            },
+          )
         end
       end
     end
@@ -130,14 +130,16 @@ describe "custom fact ipa" do
         allow(Facter::Core::Execution).to receive(:execute).with(ipa_env_query, ipa_query_options).and_return('')
       end
 
-      it 'should return defaults from /etc/ipa/default.conf and disconnected status' do
-        expect(Facter.fact('ipa').value).to eq({
-          'connected' => false,
-          'domain'    => 'example.com',
-          'server'    => 'ipaserver.example.com',
-          'realm'     => 'EXAMPLE.COM',
-          'basedn'    => 'dc=example,dc=com'
-        })
+      it 'returns defaults from /etc/ipa/default.conf and disconnected status' do
+        expect(Facter.fact('ipa').value).to eq(
+          {
+            'connected' => false,
+            'domain'    => 'example.com',
+            'server'    => 'ipaserver.example.com',
+            'realm'     => 'EXAMPLE.COM',
+            'basedn'    => 'dc=example,dc=com',
+          },
+        )
       end
     end
   end

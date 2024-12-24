@@ -6,12 +6,14 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
   let(:salt) { 'salt for my_id 2' }
   let(:complexity) { 0 }
   let(:complex_only) { false }
-  let(:history) { [
-    [ 'password for my_id 1', 'salt for my_id 1'],
-    [ 'password for my_id 0', 'salt for my_id 0']
-  ] }
+  let(:history) do
+    [
+      [ 'password for my_id 1', 'salt for my_id 1'],
+      [ 'password for my_id 0', 'salt for my_id 0'],
+    ]
+  end
 
-  it 'should return true when password info is complete' do
+  it 'returns true when password info is complete' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
@@ -28,7 +30,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
+        'complexity' => complexity,
       'complex_only' => complex_only,
       'history' => history
       }
@@ -41,7 +43,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password },
       'metadata' => {
-      'complexity' => complexity,
+        'complexity' => complexity,
       'complex_only' => complex_only,
       'history' => history
       }
@@ -62,7 +64,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complex_only' => complex_only,
+        'complex_only' => complex_only,
       'history' => history
       }
     }
@@ -74,7 +76,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
+        'complexity' => complexity,
       'history' => history
       }
     }
@@ -86,7 +88,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
+        'complexity' => complexity,
       'complex_only' => complex_only
       }
     }

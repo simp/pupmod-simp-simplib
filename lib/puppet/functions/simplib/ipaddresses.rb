@@ -2,7 +2,6 @@
 # client, optionally excluding local addresses.
 #
 Puppet::Functions.create_function(:'simplib::ipaddresses') do
-
   # @param only_remote Whether to exclude local addresses
   #   from the return value (e.g., '127.0.0.1').
   #
@@ -20,10 +19,10 @@ Puppet::Functions.create_function(:'simplib::ipaddresses') do
       interfaces.split(',').each do |iface|
         iface_addr = scope['facts']["ipaddress_#{iface}"]
 
-        retval << iface_addr unless (iface_addr.nil? or iface_addr.strip.empty?)
+        retval << iface_addr unless iface_addr.nil? || iface_addr.strip.empty?
       end
 
-      retval.delete_if{|x| x =~ /^127/} if only_remote
+      retval.delete_if { |x| x =~ %r{^127} } if only_remote
     end
 
     retval

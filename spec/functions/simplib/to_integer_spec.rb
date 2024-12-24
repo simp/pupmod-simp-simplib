@@ -18,7 +18,7 @@ describe 'simplib::to_integer' do
   end
 
   context 'should fail when conversion is not possible' do
-   it { is_expected.to run.with_params([1, 2]).and_raise_error(/cannot be converted to an Integer/) }
-   it { is_expected.to run.with_params({1 =>  2}).and_raise_error(/cannot be converted to an Integer/) }
+    it { is_expected.to run.with_params([1, 2]).and_raise_error(%r{cannot be converted to an Integer}) }
+    it { is_expected.to run.with_params({ 1 => 2 }).and_raise_error(%r{cannot be converted to an Integer}) }
   end
 end

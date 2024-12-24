@@ -10,7 +10,6 @@
 #     * Any input item that contains a port specifies an invalid port.
 #
 Puppet::Functions.create_function(:'simplib::parse_hosts') do
-
   # @param hosts Array of host entries, where each entry may contain
   #   a protocol or both a protocol and port
   # @return [Hash] Structured Hash of the host information
@@ -20,11 +19,13 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
   #   specifies an invalid port
   # @example Input with multiple host formats:
   #
-  #   simplib::parse_hosts([
-  #     '1.2.3.4',
-  #     'http://1.2.3.4',
-  #     'https://1.2.3.4:443'
-  #   ])
+  #   simplib::parse_hosts(
+  #     [
+  #       '1.2.3.4',
+  #       'http://1.2.3.4',
+  #       'https://1.2.3.4:443',
+  #     ]
+  #   )
   #
   #   Returns:
   #
@@ -33,9 +34,9 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
   #       :ports     => ['443'],
   #       :protocols => {
   #         'http'  => [],
-  #         'https' => ['443']
-  #       }
-  #     }
+  #         'https' => ['443'],
+  #       },
+  #     },
   #   }
   dispatch :parse_hosts do
     required_param 'Array[String[1],1]', :hosts
@@ -45,15 +46,12 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
     # Parse!
     parsed_hosts = {}
     hosts.each do |host|
-
       host = host.strip
 
       next if host.nil? || host.empty?
-      tmp_host = host
 
       # Initialize.
       protocol = nil
-      port = nil
       hostname = nil
 
       # Get the protocol.
@@ -68,14 +66,14 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
       # Validate with the protocol stripped off
       call_function('simplib::validate_net_list', Array(hostname))
 
-      hostname,port = PuppetX::SIMP::Simplib.split_port(hostname)
-      call_function('simplib::validate_port', Array(port)) if (port && !port.empty?)
+      hostname, port = PuppetX::SIMP::Simplib.split_port(hostname)
+      call_function('simplib::validate_port', Array(port)) if port && !port.empty?
 
       # Build a unique list of parsed hosts.
       unless parsed_hosts.key?(hostname)
         parsed_hosts[hostname] = {
-          :ports     => [],
-          :protocols => {}
+          ports: [],
+          protocols: {}
         }
       end
 
@@ -83,15 +81,14 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
         parsed_hosts[hostname][:ports] << port
       end
 
-      if protocol
-        parsed_hosts[hostname][:protocols] = {} unless parsed_hosts[hostname][:protocols]
-        parsed_hosts[hostname][:protocols][protocol] = [] unless parsed_hosts[hostname][:protocols][protocol]
+      next unless protocol
+      parsed_hosts[hostname][:protocols] = {} unless parsed_hosts[hostname][:protocols]
+      parsed_hosts[hostname][:protocols][protocol] = [] unless parsed_hosts[hostname][:protocols][protocol]
 
-        parsed_hosts[hostname][:protocols][protocol] << port if port
-      end
+      parsed_hosts[hostname][:protocols][protocol] << port if port
     end
 
-    parsed_hosts.keys.each do |host|
+    parsed_hosts.each_key do |host|
       unless parsed_hosts[host][:ports].empty?
         parsed_hosts[host][:ports].uniq!
         parsed_hosts[host][:ports].sort!

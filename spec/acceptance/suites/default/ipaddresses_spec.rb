@@ -3,7 +3,6 @@ require 'spec_helper_acceptance'
 test_name 'simplib::ipaddresses function'
 
 describe 'simplib::ipaddresses function' do
-
   hosts.each do |server|
     let(:all_ips) do
       ifaces = fact_on(server, 'interfaces').split(',').map(&:strip)
@@ -25,31 +24,31 @@ describe 'simplib::ipaddresses function' do
       retval = all_ips.dup
 
       retval.delete_if do |ip|
-        ip =~ /^127\./
+        ip =~ %r{^127\.}
       end
 
       retval
     end
 
     context "when simplib::ipaddresses called with/without arguments on #{server}" do
-      let (:manifest) {
-        <<-EOS
-        $var1 = simplib::ipaddresses()
-        $var2 = simplib::ipaddresses(true)
+      let(:manifest) do
+        <<~EOS
+          $var1 = simplib::ipaddresses()
+          $var2 = simplib::ipaddresses(true)
 
-        simplib::inspect('var1')
-        simplib::inspect('var2')
+          simplib::inspect('var1')
+          simplib::inspect('var2')
         EOS
-      }
+      end
 
-      it 'should return IP addresses' do
+      it 'returns IP addresses' do
         results = apply_manifest_on(server, manifest).output.lines.map(&:strip)
 
-        ip_matches = all_ips.map do |ip|
+        ip_matches = all_ips.map { |ip|
           results.grep(Regexp.new(Regexp.escape(ip)))
-        end.flatten.compact
+        }.flatten.compact
 
-        expect(ip_matches).to_not be_empty
+        expect(ip_matches).not_to be_empty
       end
     end
   end

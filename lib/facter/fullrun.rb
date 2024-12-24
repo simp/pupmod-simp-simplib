@@ -6,10 +6,9 @@
 # which it was created.
 #
 
-Facter.add("fullrun") do
-	confine :kernel => :linux
-        setcode do
-                %x{if [ -f /root/.fullrun ]; then echo "true"; else echo "false"; fi}.chomp
-        end
+Facter.add('fullrun') do
+  confine kernel: :linux
+  setcode do
+    `if [ -f /root/.fullrun ]; then echo "true"; else echo "false"; fi`.chomp
+  end
 end
-

@@ -4,7 +4,7 @@
 # and a memory mapping layout
 #
 Facter.add('simplib__numa') do
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
   confine { File.exist? '/sys/devices/system/node' }
 
   setcode do
@@ -22,16 +22,16 @@ Facter.add('simplib__numa') do
     end
 
     require 'pathname'
-    Dir.glob('/sys/devices/system/node/node*').each do | file |
+    Dir.glob('/sys/devices/system/node/node*').each do |file|
       meminfo_file = Pathname.new(File.join(file, 'meminfo'))
       next unless meminfo_file.exist?
       nodename = File.basename(file)
       result['nodes'].push(nodename)
 
-      File.foreach(meminfo_file) do | text |
-        if text =~ /\sMemTotal:\s+(\d+)/
+      File.foreach(meminfo_file) do |text|
+        if text =~ %r{\sMemTotal:\s+(\d+)}
           result[nodename] ||= {}
-          result[nodename]['MemTotalBytes'] = ($1.to_i * 1024)
+          result[nodename]['MemTotalBytes'] = (Regexp.last_match(1).to_i * 1024)
         end
       end
     end

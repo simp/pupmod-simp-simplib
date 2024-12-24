@@ -5,7 +5,7 @@
 # if it's not present.
 if Facter.value('fips_enabled').nil?
   Facter.add('fips_enabled') do
-    confine :kernel => 'Linux'
+    confine kernel: 'Linux'
 
     setcode do
       status_file = '/proc/sys/crypto/fips_enabled'

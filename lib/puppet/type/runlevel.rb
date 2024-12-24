@@ -1,5 +1,4 @@
 Puppet::Type.newtype(:runlevel) do
-
   @doc = "Changes the system runlevel by re-evaluating the inittab or systemd link.
     Arguments:
 
@@ -15,32 +14,32 @@ Puppet::Type.newtype(:runlevel) do
   "
 
   def initialize(*args)
-    super(*args)
+    super
 
     found_resource = nil
 
-    if not catalog.resources.find_all { |r|
-      r.is_a?(Puppet::Type.type(:runlevel)) and found_resource = r
-    }.empty? then
+    unless catalog.resources.none? do |r|
+      r.is_a?(Puppet::Type.type(:runlevel)) && (found_resource = r)
+    end
 
       msg = "Duplicate declaration: Runlevel is already declared in file #{found_resource.file} at line #{found_resource.line}. Can not declare more than one instance of Runlevel."
 
-      raise Puppet::Resource::Catalog::DuplicateResourceError.new(msg)
+      raise Puppet::Resource::Catalog::DuplicateResourceError, msg
     end
   end
 
   def runlevel_xlat(value)
     case value
-      when 'rescue' then '1'
-      when 'multi-user' then '3'
-      when 'graphical' then '5'
-      else value
+    when 'rescue' then '1'
+    when 'multi-user' then '3'
+    when 'graphical' then '5'
+    else value
     end
   end
 
-  newparam(:name, :namevar => true) do
+  newparam(:name, namevar: true) do
     desc 'The target runlevel of the system'
-    newvalues(/^[1-5]$/, 'rescue', 'multi-user', 'graphical')
+    newvalues(%r{^[1-5]$}, 'rescue', 'multi-user', 'graphical')
 
     munge do |value|
       @resource.runlevel_xlat(value)
@@ -49,18 +48,18 @@ Puppet::Type.newtype(:runlevel) do
 
   newparam(:transition_timeout) do
     desc 'How many seconds to wait for a runlevel switch before failing'
-    newvalues(/^\d+$/)
+    newvalues(%r{^\d+$})
 
     defaultto 60
 
     munge do |value|
-      "#{value}".to_i
+      value.to_s.to_i
     end
   end
 
   newproperty(:level) do
     desc 'The target runlevel of the system. Defaults to what is specified in :name'
-    newvalues(/^[1-5]$/, 'rescue', 'multi-user', 'graphical', 'default')
+    newvalues(%r{^[1-5]$}, 'rescue', 'multi-user', 'graphical', 'default')
 
     defaultto 'default'
 

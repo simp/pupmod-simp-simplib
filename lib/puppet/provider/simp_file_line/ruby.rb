@@ -1,14 +1,14 @@
 Puppet::Type.type(:simp_file_line).provide(:ruby) do
-  desc <<-EOM
+  desc <<~EOM
     Provides the ability to prepend, append, or simply add lines to a file.
 
     Will create the file if it doesn't exist.
   EOM
 
   def exists?
-    if file_managed? then
+    if file_managed?
       Puppet.debug("Skipping #{resource.ref} due to deconflict = :true")
-      return true
+      true
     else
       lines.find do |line|
         line.chomp == resource[:line].chomp
@@ -18,20 +18,21 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
 
   def create
     if resource[:match]
-      handle_create_with_match()
+      handle_create_with_match
     else
-      handle_create_without_match()
+      handle_create_without_match
     end
   end
 
   def destroy
     local_lines = lines
-    File.open(resource[:path],'w') do |fh|
-      fh.write(local_lines.reject{|l| l.chomp == resource[:line] }.join(''))
+    File.open(resource[:path], 'w') do |fh|
+      fh.write(local_lines.reject { |l| l.chomp == resource[:line] }.join(''))
     end
   end
 
   private
+
   def file_managed?
     # Return true/false based on whether or not the target file already has its
     # content managed by a File resource.
@@ -39,21 +40,19 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
 
     file_resource = resource.catalog.resource("File[#{resource[:path]}]")
 
-    if file_resource and file_resource[:replace] and
-       ( file_resource[:source] or file_resource[:content] )
-    then
-      if resource[:deconflict] == :true then
-        return true
-      else
-        raise Puppet::Error, "'#{resource.ref}' conflicts with #{file_resource.ref}" +
-                             " resource in file #{file_resource.file} at line" +
-                             "  #{file_resource.line}. If you wish to have the File" +
-                             " resource win, use the 'deconflict' option in #{resource.ref}" +
-                             " in #{resource.file}:#{resource.line}."
-      end
+    if file_resource && file_resource[:replace] &&
+       (file_resource[:source] || file_resource[:content])
+      return true if resource[:deconflict] == :true
+
+      raise Puppet::Error, "'#{resource.ref}' conflicts with #{file_resource.ref}" \
+                           " resource in file #{file_resource.file} at line" \
+                           "  #{file_resource.line}. If you wish to have the File" \
+                           " resource win, use the 'deconflict' option in #{resource.ref}" \
+                           " in #{resource.file}:#{resource.line}."
+
     end
 
-    return false
+    false
   end
 
   def lines
@@ -65,9 +64,9 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
     @lines ||= File.readlines(resource[:path])
   end
 
-  def handle_create_with_match()
+  def handle_create_with_match
     regex = resource[:match] ? Regexp.new(resource[:match]) : nil
-    match_count = lines.select { |l| regex.match(l) }.count
+    match_count = lines.count { |l| regex.match(l) }
     if match_count > 1
       raise Puppet::Error, "More than one line in file '#{resource[:path]}' matches pattern '#{resource[:match]}'"
     end
@@ -78,7 +77,7 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
         newlines << (regex.match(l) ? resource[:line] : l)
       end
 
-      if (match_count == 0)
+      if match_count == 0
         if resource[:prepend] != :true
           newlines << newlines.shift
         end
@@ -91,7 +90,7 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
   end
 
   def handle_create_without_match
-    if resource[:prepend] != :true then
+    if resource[:prepend] != :true
       File.open(resource[:path], 'a') do |fh|
         fh.puts resource[:line]
       end
@@ -103,5 +102,4 @@ Puppet::Type.type(:simp_file_line).provide(:ruby) do
       end
     end
   end
-
 end

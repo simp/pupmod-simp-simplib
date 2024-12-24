@@ -4,7 +4,6 @@
 # Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_between') do
-
   # @param value Value to validate
   # @param min_value Minimum value that is valid
   # @param max_value Maximum value that is valid
@@ -29,12 +28,11 @@ Puppet::Functions.create_function(:'simplib::validate_between') do
 
   def validate_between(value, min_value, max_value)
     numeric_value = value.to_f
-    unless numeric_value >= min_value and numeric_value <= max_value
-      # The original method was used in SIMP modules as if it raised an
-      # exception, so this implementation will work as expected.
-      err_msg = "simplib::validate_between: '#{value}' is not between" +
-        " '#{min_value}' and '#{max_value}'"
-      fail(err_msg)
-    end
+    return if (numeric_value >= min_value) && (numeric_value <= max_value)
+    # The original method was used in SIMP modules as if it raised an
+    # exception, so this implementation will work as expected.
+    err_msg = "simplib::validate_between: '#{value}' is not between" \
+              " '#{min_value}' and '#{max_value}'"
+    raise(err_msg)
   end
 end

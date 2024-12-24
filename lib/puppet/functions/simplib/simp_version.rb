@@ -1,6 +1,5 @@
 # Return the version of SIMP that this server is running or "unknown\n"
 Puppet::Functions.create_function(:'simplib::simp_version') do
-
   # @param strip_whitespace Whether to strip whitespace from the
   #   version string.  Without stripping, the string may end with
   #   a "\n"
@@ -19,15 +18,15 @@ Puppet::Functions.create_function(:'simplib::simp_version') do
     version_file = 'C:\ProgramData\SIMP\simp.version' if is_windows
 
     if File.readable?(version_file)
-      # TODO Figure out under what circumstances the version string is prefaced
+      # TODO: Figure out under what circumstances the version string is prefaced
       # with 'simp-'. This is not true for SIMP 6.x
-      version = File.read(version_file).gsub('simp-','')
+      version = File.read(version_file).gsub('simp-', '')
 
       retval = version unless version.strip.empty?
     elsif !is_windows
-      rpm_query = %q{PATH='/usr/local/bin:/usr/bin:/bin' rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp 2>/dev/null}
+      rpm_query = %q(PATH='/usr/local/bin:/usr/bin:/bin' rpm -q --qf '%{VERSION}-%{RELEASE}\n' simp 2>/dev/null)
       begin
-        version = Puppet::Util::Execution.execute(rpm_query, :failonfail => true)
+        version = Puppet::Util::Execution.execute(rpm_query, failonfail: true)
       rescue
         version = nil
       end

@@ -6,7 +6,6 @@
 # * Terminates catalog compilation if any simpkv operation fails.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::list') do
-
   # @param folder Unique `String` to identify the password sub-folder
   #   of the root folder for simplib::passgen
   #   * When unset or '', the list operation will be for the root folder
@@ -96,7 +95,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::list') do
     optional_param 'Hash',   :simpkv_options
   end
 
-  def list(folder='/', simpkv_options={'app_id' => 'simplib::passgen'})
+  def list(folder = '/', simpkv_options = { 'app_id' => 'simplib::passgen' })
     root_dir = call_function('simplib::passgen::simpkv::root_dir')
     keydir = File.join(root_dir, folder)
 
@@ -104,7 +103,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::list') do
     if call_function('simpkv::exists', keydir, simpkv_options)
       raw_results = call_function('simpkv::list', keydir, simpkv_options)
       results = { 'keys' => {}, 'folders' => raw_results['folders'] }
-      raw_results['keys'].each do |id,info|
+      raw_results['keys'].each do |id, info|
         if call_function('simplib::passgen::simpkv::valid_password_info', info)
           results['keys'][id] = info
         else
@@ -118,4 +117,3 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::list') do
     results
   end
 end
-

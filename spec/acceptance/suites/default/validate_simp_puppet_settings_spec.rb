@@ -13,7 +13,7 @@ describe 'validate simp puppet_settings fact' do
   end
 
   hosts.each do |host|
-    context "when [main] and [master] have different vardirs in puppet.conf" do
+    context 'when [main] and [master] have different vardirs in puppet.conf' do
       it 'master.server_datadir should start with the [master] vardir' do
         tmp_dir = create_tmpdir_on(host, 'validate_simp_puppet_settings_spec')
         tmp_puppet_conf_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--puppet.conf"

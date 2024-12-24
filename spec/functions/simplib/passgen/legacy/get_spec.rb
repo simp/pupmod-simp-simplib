@@ -5,9 +5,11 @@ describe 'simplib::passgen::legacy::get' do
   let(:id) { 'my_id' }
   let(:password) { 'password for my_id 1' }
   let(:salt) { 'salt for my_id 1' }
-  let(:history) { [
-    [ 'password for my_id 0', 'salt for my_id 0']
-  ] }
+  let(:history) do
+    [
+      [ 'password for my_id 0', 'salt for my_id 0' ],
+    ]
+  end
 
   # DEBUG NOTES:
   #   Puppet[:vardir] is dynamically created as a tmpdir by the test
@@ -27,12 +29,12 @@ describe 'simplib::passgen::legacy::get' do
   #
   # end
   context 'success cases' do
-    it 'should return {} when password does not exist' do
+    it 'returns {} when password does not exist' do
       is_expected.to run.with_params(id).and_return({})
     end
 
-    it 'should return current password and empty history when only current password exists' do
-      subject()
+    it 'returns current password and empty history when only current password exists' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -42,13 +44,13 @@ describe 'simplib::passgen::legacy::get' do
 
       expected = {
         'value'    => { 'password' => password, 'salt' => salt },
-        'metadata' => { 'history' => [] }
+        'metadata' => { 'history' => [] },
       }
       is_expected.to run.with_params(id).and_return(expected)
     end
 
-    it 'should return current password and history when both current and last passwords exist' do
-      subject()
+    it 'returns current password and history when both current and last passwords exist' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -63,13 +65,13 @@ describe 'simplib::passgen::legacy::get' do
 
       expected = {
         'value'    => { 'password' => password, 'salt' => salt },
-        'metadata' => { 'history' => history }
+        'metadata' => { 'history' => history },
       }
       is_expected.to run.with_params(id).and_return(expected)
     end
 
-    it 'should disregard a current password that is empty even when current salt is not empty' do
-      subject()
+    it 'disregards a current password that is empty even when current salt is not empty' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -85,8 +87,8 @@ describe 'simplib::passgen::legacy::get' do
       is_expected.to run.with_params(id).and_return({})
     end
 
-    it 'should disregard a previous password that is empty even when previous salt is not empty' do
-      subject()
+    it 'disregards a previous password that is empty even when previous salt is not empty' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -101,13 +103,13 @@ describe 'simplib::passgen::legacy::get' do
 
       expected = {
         'value'    => { 'password' => password, 'salt' => salt },
-        'metadata' => { 'history' => [] }
+        'metadata' => { 'history' => [] },
       }
       is_expected.to run.with_params(id).and_return(expected)
     end
 
-    it 'should disregard a missing current password even when current salt is present' do
-      subject()
+    it 'disregards a missing current password even when current salt is present' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       salt_file = File.join(settings['keydir'], "#{id}.salt")
@@ -121,8 +123,8 @@ describe 'simplib::passgen::legacy::get' do
       is_expected.to run.with_params(id).and_return({})
     end
 
-    it 'should disregard a missing previous password even when previous salt is present' do
-      subject()
+    it 'disregards a missing previous password even when previous salt is present' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -135,7 +137,7 @@ describe 'simplib::passgen::legacy::get' do
 
       expected = {
         'value'    => { 'password' => password, 'salt' => salt },
-        'metadata' => { 'history' => [] }
+        'metadata' => { 'history' => [] },
       }
       is_expected.to run.with_params(id).and_return(expected)
     end
@@ -143,7 +145,7 @@ describe 'simplib::passgen::legacy::get' do
 
   context 'error cases' do
     it 'fails when a password file cannot be read' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -151,10 +153,10 @@ describe 'simplib::passgen::legacy::get' do
       salt_file = File.join(settings['keydir'], "#{id}.salt")
       File.open(salt_file, 'w') { |file| file.puts salt }
 
-      expect(IO).to receive(:readlines).with(password_file).
-        and_raise(Errno::EACCES, 'read failed')
-      is_expected.to run.with_params(id).and_raise_error(Errno::EACCES,
-        'Permission denied - read failed')
+      expect(IO).to receive(:readlines).with(password_file)
+                                       .and_raise(Errno::EACCES, 'read failed')
+      is_expected.to run.with_params(id)
+                        .and_raise_error(Errno::EACCES, 'Permission denied - read failed')
     end
   end
 end

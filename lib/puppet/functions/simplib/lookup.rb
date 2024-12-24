@@ -82,10 +82,8 @@ Puppet::Functions.create_function(:'simplib::lookup') do
 
     return global_param if global_param
 
-    if options
-      return call_function('lookup', param, options )
-    else
-      return call_function('lookup', param )
-    end
+    return call_function('lookup', param, options) if options
+
+    call_function('lookup', param)
   end
 end

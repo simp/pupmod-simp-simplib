@@ -6,11 +6,14 @@ Facter.add('login_defs') do
   end
 
   setcode do
-
-    attribute_hash = File.read('/etc/login.defs').lines.
-      delete_if{|x| x =~ /^\s*(#|$)/}.
-      map{|x| x = x.split(/\s+/); x[0].downcase!; x}.
-      to_h
+    attribute_hash = File.read('/etc/login.defs').lines
+                         .delete_if { |x| x =~ %r{^\s*(#|$)} }
+                         .map { |x|
+                           x = x.split(%r{\s+})
+                           x[0].downcase!
+                           x
+                         }
+                         .to_h
 
     attribute_hash.each do |k, v|
       # We have a few special cases to take care of
@@ -23,7 +26,7 @@ Facter.add('login_defs') do
         attribute_hash[k] = true
       elsif v == 'no'
         attribute_hash[k] = false
-      elsif v =~ /^\d+$/
+      elsif %r{^\d+$}.match?(v)
         attribute_hash[k] = v.to_i
       end
     end

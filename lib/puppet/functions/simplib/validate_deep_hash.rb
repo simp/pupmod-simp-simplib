@@ -11,7 +11,6 @@
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
-
   # @param reference Hash to validate against. Keys at all levels of
   #   the hash define the structure of the hash and the value at each
   #   final leaf in the hash tree contains a regular expression string,
@@ -84,18 +83,18 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
   def validate_deep_hash(reference, to_check)
     invalid = deep_validate(reference, to_check)
 
-    if invalid.size > 0 then
-      err_msg = "simplib::validate_deep_hash failed validation:\n  "
-      err_msg += invalid.join("\n  ")
-      fail(err_msg)
-    end
+    return unless !invalid.empty?
+
+    err_msg = "simplib::validate_deep_hash failed validation:\n  "
+    err_msg += invalid.join("\n  ")
+    raise(err_msg)
   end
 
   def valid_value(value)
     [String, TrueClass, FalseClass, Numeric, NilClass].each do |allowed_class|
       return true if value.is_a?(allowed_class)
     end
-    return false
+    false
   end
 
   def compare(ref_value, to_check_value)
@@ -107,20 +106,20 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
       return :invalid_check_type unless value.respond_to?(:to_s)
       return :failed_check unless Regexp.new(ref_string).match(value.to_s)
     end
-    return :success
+    :success
   end
 
-  def deep_validate(reference, to_check, level="TOP", invalid = Array.new)
-    to_check.each do |key,value|
-      if reference.has_key?(key)
+  def deep_validate(reference, to_check, level = 'TOP', invalid = [])
+    to_check.each do |key, value|
+      if reference.key?(key)
         # skip over keys for which further validation has been disabled
-        next if reference[key].nil? or reference[key] == 'nil'
+        next if reference[key].nil? || (reference[key] == 'nil')
 
         # Step down a level if value is another hash
         if value.is_a?(Hash)
           if reference[key].is_a?(Hash)
             ref_key_hash = reference[key]
-            deep_validate(ref_key_hash, value, level+"-->#{key}", invalid)
+            deep_validate(ref_key_hash, value, level + "-->#{key}", invalid)
           else
             invalid << level + "-->#{key} should not be a Hash"
           end
@@ -130,23 +129,23 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
           result = compare(reference[key], to_check[key])
           case result
           when :invalid_ref_type
-            err_msg = "simplib::validate_deep_hash(): Check for " +
-              level + "-->#{key} has invalid type '#{reference[key].class}'"
-            raise ArgumentError.new(err_msg)
+            err_msg = 'simplib::validate_deep_hash(): Check for ' +
+                      level + "-->#{key} has invalid type '#{reference[key].class}'"
+            raise ArgumentError, err_msg
 
           when :invalid_check_type
-            invalid << level + "-->#{key} #{to_check[key].class} cannot" +
-              " be converted to string for comparison"
+            invalid << level + "-->#{key} #{to_check[key].class} cannot" \
+                       ' be converted to string for comparison'
 
           when :failed_check
-            invalid << level + "-->#{key} '#{to_check[key]}' must" +
-              " validate against '/#{reference[key]}/'"
+            invalid << level + "-->#{key} '#{to_check[key]}' must" \
+                       " validate against '/#{reference[key]}/'"
           end
         end
       else
-        invalid << (level+"-->#{key} not in reference hash")
+        invalid << (level + "-->#{key} not in reference hash")
       end
     end
-    return invalid
+    invalid
   end
 end

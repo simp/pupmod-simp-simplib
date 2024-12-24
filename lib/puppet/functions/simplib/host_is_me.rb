@@ -1,9 +1,8 @@
 # Detect if a local system identifier hostname/IPv4 address matches
-# a specified hostname/IPv4 address or an entry in a list of 
+# a specified hostname/IPv4 address or an entry in a list of
 # hostnames and/or IPv4 addresses
 #
 Puppet::Functions.create_function(:'simplib::host_is_me') do
-
   # @param host Hostname/IPv4 address to compare against;
   #   `127.0.0.1` is never matched, use `localhost` instead
   # @return [Boolean] true if a local system hostname/IPv4 address matches
@@ -32,7 +31,7 @@ Puppet::Functions.create_function(:'simplib::host_is_me') do
       scope['facts']['fqdn'],
       scope['facts']['hostname'],
       'localhost',
-      'localhost.localdomain'
+      'localhost.localdomain',
     ]
 
     # add non-local IPv4 addresses

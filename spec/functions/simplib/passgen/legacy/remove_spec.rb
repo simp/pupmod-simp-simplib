@@ -3,17 +3,21 @@ require 'spec_helper'
 
 describe 'simplib::passgen::legacy::remove' do
   let(:id) { 'my_id' }
-  let(:passwords) { [
-    'password for my_id 2',
-    'password for my_id 1',
-    'password for my_id 0'
-  ] }
+  let(:passwords) do
+    [
+      'password for my_id 2',
+      'password for my_id 1',
+      'password for my_id 0',
+    ]
+  end
 
-  let(:salts) { [
-    'salt for my_id 2',
-    'salt for my_id 1',
-    'salt for my_id 0'
-  ] }
+  let(:salts) do
+    [
+      'salt for my_id 2',
+      'salt for my_id 1',
+      'salt for my_id 0',
+    ]
+  end
 
   # DEBUG NOTES:
   #   Puppet[:vardir] is dynamically created as a tmpdir by the test
@@ -33,12 +37,12 @@ describe 'simplib::passgen::legacy::remove' do
   #
   # end
   context 'success cases' do
-    it 'should succeed when no password files exist' do
+    it 'succeeds when no password files exist' do
       is_expected.to run.with_params(id)
     end
 
-    it 'should remove all password-related files' do
-      subject()
+    it 'removes all password-related files' do
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -57,18 +61,18 @@ describe 'simplib::passgen::legacy::remove' do
 
       is_expected.to run.with_params(id)
 
-      expect( File.exist?(password_file) ).to be false
-      expect( File.exist?(password_file_last) ).to be false
-      expect( File.exist?(password_file_last_last) ).to be false
-      expect( File.exist?(salt_file) ).to be false
-      expect( File.exist?(salt_file_last) ).to be false
-      expect( File.exist?(salt_file_last_last) ).to be false
+      expect(File.exist?(password_file)).to be false
+      expect(File.exist?(password_file_last)).to be false
+      expect(File.exist?(password_file_last_last)).to be false
+      expect(File.exist?(salt_file)).to be false
+      expect(File.exist?(salt_file_last)).to be false
+      expect(File.exist?(salt_file_last_last)).to be false
     end
   end
 
   context 'error cases' do
     it 'fails when a password/salt file cannot be removed' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -76,12 +80,12 @@ describe 'simplib::passgen::legacy::remove' do
 
       expect(File).to receive(:unlink).with(password_file).and_raise(Errno::EACCES, 'file unlink failed')
 
-      is_expected.to run.with_params(id).and_raise_error( RuntimeError,
-        /Unable to remove all files:.*#{id}: Permission denied - file unlink failed/m)
+      is_expected.to run.with_params(id).and_raise_error(RuntimeError,
+        %r{Unable to remove all files:.*#{id}: Permission denied - file unlink failed}m)
     end
 
     it 'reports all failures' do
-      subject()
+      subject # rubocop:disable RSpec/NamedSubject
       settings = call_function('simplib::passgen::legacy::common_settings')
       FileUtils.mkdir_p(settings['keydir'])
       password_file = File.join(settings['keydir'], id)
@@ -111,10 +115,10 @@ describe 'simplib::passgen::legacy::remove' do
         password_file_last_last,
         salt_file,
         salt_file_last,
-        salt_file_last_last
+        salt_file_last_last,
       ].each do |file|
-        is_expected.to run.with_params(id).and_raise_error( RuntimeError,
-          /#{Regexp.escape(file)}: Permission denied - file unlink failed/m)
+        is_expected.to run.with_params(id).and_raise_error(RuntimeError,
+          %r{#{Regexp.escape(file)}: Permission denied - file unlink failed}m)
       end
     end
   end

@@ -4,7 +4,6 @@
 # does not respond to the `to_i()` Ruby method.
 #
 Puppet::Functions.create_function(:'simplib::to_integer') do
-
   # @param input The argument to convert into an `Integer`
   # @return [Integer] Converted input
   # @raise [RuntimeError] if ``input`` does not implement a ``to_i()``
@@ -16,10 +15,8 @@ Puppet::Functions.create_function(:'simplib::to_integer') do
   def to_integer(input)
     return input if input.is_a?(Integer)
 
-    if input.respond_to?(:to_i)
-      return input.to_i
-    else
-      fail("simplib::to_integer(): Object type '#{input.class}' cannot be converted to an Integer")
-    end
+    return input.to_i if input.respond_to?(:to_i)
+
+    raise("simplib::to_integer(): Object type '#{input.class}' cannot be converted to an Integer")
   end
 end

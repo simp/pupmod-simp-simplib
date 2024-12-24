@@ -5,7 +5,6 @@
 # Terminates catalog compilation if a legacy password file is inaccessible by
 # the user.
 Puppet::Functions.create_function(:'simplib::passgen::legacy::get') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -66,11 +65,11 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::get') do
       if password.empty?
         password = nil
       else
-        if File.exist?(salt_file)
-          salt = IO.readlines(salt_file)[0].to_s.chomp
-        else
-          salt = ''
-        end
+        salt = if File.exist?(salt_file)
+                 IO.readlines(salt_file)[0].to_s.chomp
+               else
+                 ''
+               end
       end
     end
     [ password, salt ]

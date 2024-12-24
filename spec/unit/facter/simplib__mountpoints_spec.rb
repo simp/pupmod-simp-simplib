@@ -20,13 +20,13 @@ describe 'simplib__mountpoints' do
       attr_accessor :name
 
       def initialize
-        @name= 'read_proc'
+        @name = 'read_proc'
       end
     end
 
     expect(Etc).to receive(:getgrgid).with(953).and_return(EtcStub.new)
 
-    expect(Facter::Core::Execution).to receive(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('cat /proc/mounts 2> /dev/null', on_fail: nil).and_return(
       <<~EL7_PROC_MOUNTS,
       rootfs / rootfs rw 0 0
       sysfs /sys sysfs rw,seclabel,nosuid,nodev,noexec,relatime 0 0
@@ -64,26 +64,26 @@ describe 'simplib__mountpoints' do
     )
 
     # Standard systemd tmp.mount
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /tmp', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /tmp', on_fail: nil).and_return(
       <<~EL7_FINDMNT_TMP,
       TARGET SOURCE FSTYPE OPTIONS
       /tmp   tmpfs  tmpfs  rw,seclabel
       EL7_FINDMNT_TMP
     )
     # Bind mounted onto itself
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /var/tmp', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /var/tmp', on_fail: nil).and_return(
       <<~EL7_FINDMNT_VAR_TMP,
       TARGET   SOURCE              FSTYPE OPTIONS
       /var/tmp /dev/sda1[/var/tmp] xfs    rw,relatime,seclabel,attr2,inode64,noquota
       EL7_FINDMNT_VAR_TMP
     )
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /dev/shm', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /dev/shm', on_fail: nil).and_return(
       <<~EL7_FINDMNT_DEV_SHM,
       TARGET   SOURCE FSTYPE OPTIONS
       /dev/shm tmpfs  tmpfs  rw,nosuid,nodev,seclabel
       EL7_FINDMNT_DEV_SHM
     )
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /proc', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /proc', on_fail: nil).and_return(
       <<~EL7_FINDMNT_PROC,
       TARGET SOURCE FSTYPE OPTIONS
       /proc  proc   proc   rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953

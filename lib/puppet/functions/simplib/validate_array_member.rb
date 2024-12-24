@@ -5,7 +5,6 @@
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_array_member') do
-
   local_types do
     type 'SimpleTypes = Variant[String,Numeric,Boolean]'
   end
@@ -31,39 +30,36 @@ Puppet::Functions.create_function(:'simplib::validate_array_member') do
   #   validate_array_member(['foo','bar'],['FOO','BAR','BAZ'], 'i') # succeeds
   #
   dispatch :validate_array_member do
-    required_param 'Variant[SimpleTypes,Array[SimpleTypes]]',:input
-    required_param 'Array[SimpleTypes]',:target
+    required_param 'Variant[SimpleTypes,Array[SimpleTypes]]', :input
+    required_param 'Array[SimpleTypes]', :target
     optional_param "Enum['i']", :modifier
   end
 
-  def validate_array_member(input, target, modifier=nil)
+  def validate_array_member(input, target, modifier = nil)
     to_compare = Array(input).dup
     target_array = target.dup
 
     if modifier
       if modifier == 'i'
-        to_compare.map!{ |x|
-         if x.is_a?(String)
-           x.downcase
-         else
-           x
-         end
-        }
+        to_compare.map! do |x|
+          if x.is_a?(String)
+            x.downcase
+          else
+            x
+          end
+        end
 
-        target_array.map!{ |x|
-         if x.is_a?(String)
-           x.downcase
-         else
-           x
-         end
-        }
+        target_array.map! do |x|
+          if x.is_a?(String)
+            x.downcase
+          else
+            x
+          end
+        end
       end
     end
 
-    unless (to_compare - target_array).empty?
-      fail("simplib::validate_array_member(): '#{target}' does not contain '#{input}'")
-    end
-
+    return if (to_compare - target_array).empty?
+    raise("simplib::validate_array_member(): '#{target}' does not contain '#{input}'")
   end
-
 end

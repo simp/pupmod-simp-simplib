@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-
-describe "defaultgateway" do
+describe 'defaultgateway' do
   before :each do
     Facter.clear
   end
 
-  let(:ipv4route) { <<EOM
-192.168.221.0/24 dev eth0  proto kernel  scope link  src 192.168.221.200 
-169.254.0.0/16 dev eth0  scope link  metric 1002 
-default via 192.168.221.1 dev eth0 
-EOM
-  }
+  let(:ipv4route) do
+    <<~EOM
+      192.168.221.0/24 dev eth0  proto kernel  scope link  src 192.168.221.200#{' '}
+      169.254.0.0/16 dev eth0  scope link  metric 1002#{' '}
+      default via 192.168.221.1 dev eth0#{' '}
+    EOM
+  end
 
   context 'ip command exists' do
     before :each do
@@ -25,7 +25,7 @@ EOM
     end
 
     it 'returns IP address of last valid default route' do
-      multiple_defaults = ipv4route + "default via 10.0.2.1 dev eth1"
+      multiple_defaults = ipv4route + 'default via 10.0.2.1 dev eth1'
       expect(Facter::Core::Execution).to receive(:exec).with('/usr/bin/ip route').and_return(multiple_defaults)
       expect(Facter.fact(:defaultgateway).value).to eq('10.0.2.1')
     end

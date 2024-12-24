@@ -6,7 +6,6 @@
 #
 # WARNING: Uses **EXPERIMENTAL** features from Puppet, may break at any time.
 Puppet::Functions.create_function(:'simplib::caller', Puppet::Functions::InternalFunction) do
-
   # @param depth
   #   The level to walk backwards in the stack. May be useful for popping out
   #   of known function nesting
@@ -17,13 +16,12 @@ Puppet::Functions.create_function(:'simplib::caller', Puppet::Functions::Interna
   # @return [Array]
   #   The caller
   dispatch :caller do
-    scope_param()
+    scope_param
     optional_param 'Integer[0]', :depth
     optional_param 'Boolean', :print
   end
 
-  def caller(scope, depth=1, print=false)
-
+  def caller(_scope, depth = 1, print = false)
     calling_file = 'TOPSCOPE'
 
     stack_trace = call_function('simplib::debug::stacktrace', print)
@@ -32,6 +30,6 @@ Puppet::Functions.create_function(:'simplib::caller', Puppet::Functions::Interna
       calling_file = stack_trace[-depth] if stack_trace[-depth]
     end
 
-    return calling_file
+    calling_file
   end
 end

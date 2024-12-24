@@ -15,7 +15,7 @@ describe 'setting up services' do
     "'15', '14', '1', '*', '*'",
     "'0', '22', '*', '*', '1-5'",
     "'23', '0-20/2', '*', '*', '*'",
-    "'5', '4', '*', '*', 'sun'"
+    "'5', '4', '*', '*', 'sun'",
   ]
 
   hosts.each do |host|
@@ -44,12 +44,12 @@ describe 'setting up services' do
             }
           MANIFEST
 
-          it 'should run successfully' do
-            apply_manifest_on(host, manifest, :catch_failures => true)
+          it 'runs successfully' do
+            apply_manifest_on(host, manifest, catch_failures: true)
           end
 
-          it 'should be idempotent' do
-            apply_manifest_on(host, manifest, :catch_changes => true)
+          it 'is idempotent' do
+            apply_manifest_on(host, manifest, catch_changes: true)
           end
         end
       end

@@ -7,7 +7,6 @@
 #   valid network or hostname.
 #
 Puppet::Functions.create_function(:'simplib::nets2ddq') do
-
   # @param networks The networks to convert
   # @return [Array[String]] Converted input
   # @raise [RuntimeError] if any input item is not a valid network
@@ -59,7 +58,7 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
   end
 
   def nets2ddq_string_input(networks_string)
-    networks = networks_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
+    networks = networks_string.split(%r{\s|,|;}).delete_if { |y| y.empty? }
     nets2ddq(networks)
   end
 
@@ -67,27 +66,27 @@ Puppet::Functions.create_function(:'simplib::nets2ddq') do
     require 'ipaddr'
     require File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
 
-    retval = Array.new
+    retval = []
     networks.each do |lnet|
       begin
         ipaddr = IPAddr.new(lnet)
       rescue
-        if PuppetX::SIMP::Simplib.hostname?(lnet) then
+        if PuppetX::SIMP::Simplib.hostname?(lnet)
           retval << lnet
           next
         end
-        fail("simplib::nets2ddq(): '#{lnet}' is not a valid network.")
+        raise("simplib::nets2ddq(): '#{lnet}' is not a valid network.")
       end
 
       # Just add it without touching if it is an ipv6 addr
-      if ipaddr.ipv6?()
-        retval << lnet
-      # Just add it if it doesn't have a specified netmask.
-      elsif lnet =~ /\//
-        retval << "#{ipaddr.to_s}/#{ipaddr.inspect.split('/').last.chop}"
-      else
-        retval << lnet
-      end
+      retval << if ipaddr.ipv6?
+                  lnet
+                # Just add it if it doesn't have a specified netmask.
+                elsif lnet.include?('/')
+                  "#{ipaddr}/#{ipaddr.inspect.split('/').last.chop}"
+                else
+                  lnet
+                end
     end
     retval
   end

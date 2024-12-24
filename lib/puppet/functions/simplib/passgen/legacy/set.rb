@@ -9,7 +9,6 @@
 # * Terminates catalog compilation if any password files cannot be created/modified by the user.
 #
 Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -46,7 +45,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
     optional_param 'String[1]', :group
   end
 
-  def set(identifier, password, salt, user=nil, group=nil)
+  def set(identifier, password, salt, user = nil, group = nil)
     settings = call_function('simplib::passgen::legacy::common_settings')
 
     # override settings for user and group when those parameters are set
@@ -83,11 +82,11 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
 
   def move_files(files, source_prefix, dest_prefix)
     FileUtils.mv(files["#{source_prefix}password"], files["#{dest_prefix}password"],
-      :force => true)
+      force: true)
 
     if File.exist?(files["#{source_prefix}salt"])
       FileUtils.mv(files["#{source_prefix}salt"], files["#{dest_prefix}salt"],
-        :force => true)
+        force: true)
     else
       # make sure we are clean for manual transaction rollback if needed
       FileUtils.rm_f(files["#{dest_prefix}salt"])
@@ -103,16 +102,14 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
   # Create keydir and set permissions
   # @raise RuntimeError if fails to create or set permissions on keydir
   def set_up_keydir(settings)
-    begin
-      FileUtils.mkdir_p(settings['keydir'], mode: settings['dir_mode'])
-      FileUtils.chown(settings['user'], settings['group'], settings['keydir'])
-    rescue SystemCallError => e
-      err_msg = "simplib::passgen::legacy::set: Could not make directory" +
-       " #{settings['keydir']}:  #{e.message}. Ensure that" +
-       " #{File.dirname(settings['keydir'])} is writable by" +
-       " '#{settings['user']}'"
-      fail(err_msg)
-    end
+    FileUtils.mkdir_p(settings['keydir'], mode: settings['dir_mode'])
+    FileUtils.chown(settings['user'], settings['group'], settings['keydir'])
+  rescue SystemCallError => e
+    err_msg = 'simplib::passgen::legacy::set: Could not make directory' \
+              " #{settings['keydir']}:  #{e.message}. Ensure that" \
+              " #{File.dirname(settings['keydir'])} is writable by" \
+              " '#{settings['user']}'"
+    raise(err_msg)
   end
 
   def transaction_filenames(keydir, identifier)
@@ -121,14 +118,14 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
       'salt'               => File.join(keydir, "#{identifier}.salt"),
       'prev_password'      => File.join(keydir, "#{identifier}.last"),
       'prev_salt'          => File.join(keydir, "#{identifier}.salt.last"),
-       # for manual transaction rollback
+      # for manual transaction rollback
       'prev_prev_password' => File.join(keydir, "#{identifier}.last.last"),
       'prev_prev_salt'     => File.join(keydir, "#{identifier}.salt.last.last")
     }
   end
 
   def write_file(file, content, settings)
-    File.open(file, 'w') { |file| file.puts content }
+    File.open(file, 'w') { |fh| fh.puts content }
     File.chmod(settings['file_mode'], file)
     FileUtils.chown(settings['user'], settings['group'], file)
   end

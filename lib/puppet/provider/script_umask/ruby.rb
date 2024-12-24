@@ -1,21 +1,21 @@
 Puppet::Type.type(:script_umask).provide(:ruby) do
-  desc <<-EOM
+  desc <<~EOM
     Set the ``umask`` at the top of a shell script
   EOM
 
   def umask
     # Just skip it all if the file doesn't exist.
-    if not File.exist?(@resource[:name]) then
+    unless File.exist?(@resource[:name])
       return @resource[:umask]
     end
 
     umasks = []
-    fh = File.open(@resource[:name],'r')
+    fh = File.open(@resource[:name], 'r')
     fh.each_line do |line|
-      next if line =~ /\s*#/
+      next if %r{\s*#}.match?(line)
 
-      if line =~ /^\s*umask\s+(\d{3,4})/ then
-        umasks << $1
+      if line =~ %r{^\s*umask\s+(\d{3,4})}
+        umasks << Regexp.last_match(1)
       end
     end
     fh.close
@@ -28,16 +28,16 @@ Puppet::Type.type(:script_umask).provide(:ruby) do
   def umask=(should)
     output = []
     File.read(@resource[:name]).each_line do |line|
-      if line =~ /^(\s*umask\s+)(\d{3,4})(.*)/ then
-        output << "#{$1}#{should}#{$3}"
-      else
-        output << line.chomp
-      end
+      output << if line =~ %r{^(\s*umask\s+)(\d{3,4})(.*)}
+                  "#{Regexp.last_match(1)}#{should}#{Regexp.last_match(3)}"
+                else
+                  line.chomp
+                end
     end
 
-    File.open(@resource[:name],'w') { |fh|
+    File.open(@resource[:name], 'w') do |fh|
       fh.rewind
       fh.puts(output.join("\n"))
-    }
+    end
   end
 end

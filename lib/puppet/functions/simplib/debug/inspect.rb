@@ -3,7 +3,6 @@
 #
 # WARNING: Uses **EXPERIMENTAL** features from Puppet, may break at any time.
 Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions::InternalFunction) do
-
   # @param to_inspect
   #   The parameter that you wish to inspect
   #
@@ -13,15 +12,15 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
   # @return [Hash]
   #   Hash of the data that is printed
   dispatch :inspect do
-    scope_param()
+    scope_param
     required_param 'NotUndef', :to_inspect
     optional_param 'Boolean', :print
   end
 
-  def inspect(scope, to_inspect, print=true)
+  def inspect(scope, to_inspect, print = true)
     data = {
-      :type     => to_inspect.class,
-      :content  => to_inspect.to_json
+      type: to_inspect.class,
+      content: to_inspect.to_json
     }
 
     if scope
@@ -34,12 +33,11 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
       end
     end
 
-
     if print
       msg = [
         'Simplib::Debug::Inspect:',
         "Type => '#{data[:type]}'",
-        "Content => '#{data[:content]}'"
+        "Content => '#{data[:content]}'",
       ]
 
       if data[:module_name] && !data[:module_name].empty?
@@ -64,6 +62,6 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
       Puppet.warning(msg)
     end
 
-    return data
+    data
   end
 end
