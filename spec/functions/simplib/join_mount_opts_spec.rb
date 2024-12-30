@@ -6,7 +6,7 @@ describe 'simplib::join_mount_opts' do
   # "tmp_mount_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
   # "tmp_mount_var_tmp": "rw,seclabel,nosuid,nodev,noexec,relatime,attr2,inode64,noquota"
   context 'without selinux mount options specified' do
-    let(:facts) { { selinux_current_mode: 'enforcing' } }
+    let(:facts) { { os: { selinux: { current_mode: 'enforcing' } } } }
 
     context 'with no mount options overlap' do
       it 'concatenates system and new options' do
@@ -58,7 +58,7 @@ describe 'simplib::join_mount_opts' do
   context 'with selinux mount options specified' do
     ['enforcing', 'permissive'].each do |selinux_mode|
       context "with selinux '#{selinux_mode}'" do
-        let(:facts) { { selinux_current_mode: selinux_mode } }
+        let(:facts) { { os: { selinux: { current_mode: selinux_mode } } } }
 
         ['context', 'fscontext', 'defcontext', 'rootcontext'].each do |context_opt|
           it "removes #{context_opt} when seclabel exits in system options" do
@@ -73,7 +73,7 @@ describe 'simplib::join_mount_opts' do
 
     ['disabled', nil].each do |selinux_mode|
       context "with selinux '#{selinux_mode}'" do
-        let(:facts) { { selinux_current_mode: selinux_mode } }
+        let(:facts) { { os: { selinux: { current_mode: selinux_mode } } } }
 
         ['context', 'fscontext', 'defcontext', 'rootcontext'].each do |context_opt|
           it "removes #{context_opt}" do

@@ -13,14 +13,14 @@
 #     data_hash: "yaml_data"  # Use the built-in YAML backend.
 #   hierarchy: # Each hierarchy consists of multiple levels
 #     - name: "OSFamily"
-#       path: "osfamily/%{facts.osfamily}.yaml"
+#       path: "osfamily/%{facts.os.family}.yaml"
 #     - name: "datamodules"
 #       data_hash: simplib::filtered
 #       datadir: "delegated-data"
 #       paths:
-#         - "%{facts.sitename}/osfamily/%{facts.osfamily}.yaml"
-#         - "%{facts.sitename}/os/%{facts.operatingsystem}.yaml"
-#         - "%{facts.sitename}/host/%{facts.fqdn}.yaml"
+#         - "%{facts.sitename}/osfamily/%{facts.os.family}.yaml"
+#         - "%{facts.sitename}/os/%{facts.os.name}.yaml"
+#         - "%{facts.sitename}/host/%{facts.networking.fqdn}.yaml"
 #         - "%{facts.sitename}/common.yaml"
 #       options:
 #         function: yaml_data

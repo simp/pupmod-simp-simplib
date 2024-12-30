@@ -5,7 +5,6 @@ describe 'custom fact login_defs' do
     Facter.clear
 
     allow(Facter).to receive(:value).with(any_args).and_call_original
-    allow(Facter).to receive(:value).with(:operatingsystem).and_return('Linux')
     allow(File).to receive(:read).with(any_args).and_call_original
     allow(File).to receive(:readable?).with(any_args).and_call_original
   end

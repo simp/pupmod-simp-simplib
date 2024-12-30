@@ -15,14 +15,7 @@ Facter.add('uid_min') do
       uid_min = uid_min.first.to_s.chomp.split.last
     end
 
-    unless uid_min.empty?
-      uid_min = if ['RedHat', 'CentOS', 'OracleLinux', 'Scientific'].include?(Facter.value(:operatingsystem)) &&
-                   Facter.value(:operatingsystemmajrelease) < '7'
-                  '500'
-                else
-                  '1000'
-                end
-    end
+    uid_min = '1000' unless uid_min.empty?
 
     uid_min
   end

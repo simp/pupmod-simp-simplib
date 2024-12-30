@@ -6,7 +6,8 @@ describe 'simplib::ipaddresses' do
     let(:result) { subject.execute }
 
     it 'returns an Array' do
-      expect(result.is_a?(Array)).to be true
+      expect(result).to be_a(Array)
+      expect(result).not_to be_empty
     end
 
     it 'returns an Array with no nil values' do
@@ -22,10 +23,13 @@ describe 'simplib::ipaddresses' do
   context 'All Interfaces Have IP Addresses' do
     let(:facts) do
       {
-        interfaces: 'eth0,eth1,lo',
-        ipaddress_eth0: '1.2.3.4',
-        ipaddress_eth1: '5.6.7.8',
-        ipaddress_lo: '127.0.0.1',
+        networking: {
+          interfaces: {
+            eth0: { ip: '1.2.3.4' },
+            eth1: { ip: '5.6.7.8' },
+            lo: { ip: '127.0.0.1' },
+          },
+        },
       }
     end
 
@@ -35,9 +39,12 @@ describe 'simplib::ipaddresses' do
   context 'All Interfaces Do Not Have IP Addresses' do
     let(:facts) do
       {
-        interfaces: 'eth0,eth1,lo',
-        ipaddress_eth0: '1.2.3.4',
-        ipaddress_lo: '127.0.0.1',
+        networking: {
+          interfaces: {
+            eth0: { ip: '1.2.3.4' },
+            lo: { ip: '127.0.0.1' },
+          },
+        },
       }
     end
 
@@ -49,6 +56,12 @@ describe 'simplib::ipaddresses' do
 
     it 'does not raise an error' do
       expect { subject.execute }.not_to raise_error # rubocop:disable RSpec/NamedSubject
+    end
+
+    it 'returns an empty Array' do
+      result = subject.execute # rubocop:disable RSpec/NamedSubject
+      expect(result).to be_a(Array)
+      expect(result).to be_empty
     end
   end
 end

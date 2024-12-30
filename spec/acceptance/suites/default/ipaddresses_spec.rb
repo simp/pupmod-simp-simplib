@@ -5,19 +5,9 @@ test_name 'simplib::ipaddresses function'
 describe 'simplib::ipaddresses function' do
   hosts.each do |server|
     let(:all_ips) do
-      ifaces = fact_on(server, 'interfaces').split(',').map(&:strip)
-
-      ipaddresses = []
-
-      ifaces.each do |iface|
-        ipaddress = fact_on(server, "ipaddress_#{iface}")
-
-        if ipaddress && !ipaddress.strip.empty?
-          ipaddresses << ipaddress
-        end
-      end
-
-      ipaddresses
+      fact_on(server, 'networking.interfaces')
+        .select { |_, v| v['ip'].is_a?(String) && !v['ip'].empty? }
+        .map { |_, v| v['ip'] }
     end
 
     let(:remote_ips) do
