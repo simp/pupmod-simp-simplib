@@ -112,9 +112,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
     optional_param 'Hash',         :simpkv_options
   end
 
-  def set(identifier, password, salt, complexity, complex_only,
-          simpkv_options = { 'app_id' => 'simplib::passgen' })
-
+  def set(identifier, password, salt, complexity, complex_only, simpkv_options = { 'app_id' => 'simplib::passgen' })
     key_root_dir = call_function('simplib::passgen::simpkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
     key_info = { 'password' => password, 'salt' => salt }
@@ -131,8 +129,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
   end
 
   def get_history(identifier, simpkv_options)
-    last_password_info = call_function('simplib::passgen::simpkv::get', identifier,
-      simpkv_options)
+    last_password_info = call_function('simplib::passgen::simpkv::get', identifier, simpkv_options)
 
     history = []
     unless last_password_info.empty?

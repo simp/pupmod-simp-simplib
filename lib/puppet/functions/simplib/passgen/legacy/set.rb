@@ -81,12 +81,10 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
   end
 
   def move_files(files, source_prefix, dest_prefix)
-    FileUtils.mv(files["#{source_prefix}password"], files["#{dest_prefix}password"],
-      force: true)
+    FileUtils.mv(files["#{source_prefix}password"], files["#{dest_prefix}password"], force: true)
 
     if File.exist?(files["#{source_prefix}salt"])
-      FileUtils.mv(files["#{source_prefix}salt"], files["#{dest_prefix}salt"],
-        force: true)
+      FileUtils.mv(files["#{source_prefix}salt"], files["#{dest_prefix}salt"], force: true)
     else
       # make sure we are clean for manual transaction rollback if needed
       FileUtils.rm_f(files["#{dest_prefix}salt"])

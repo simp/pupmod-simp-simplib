@@ -156,8 +156,7 @@ Puppet::Functions.create_function(:'simplib::passgen::set') do
   def set(identifier, password, salt, password_options,
           simpkv_options = { 'app_id' => 'simplib::passgen' })
 
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
 
     if use_simpkv
       unless password_options.key?('complexity')

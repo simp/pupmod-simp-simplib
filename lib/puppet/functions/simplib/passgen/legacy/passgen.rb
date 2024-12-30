@@ -80,9 +80,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     settings['user'] = user
     settings['group'] = group
 
-    settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp',
-      'environments', scope.lookupvar('::environment'),
-      'simp_autofiles', 'gen_passwd')
+    settings['keydir'] = File.join(Puppet.settings[:vardir], 'simp', 'environments', scope.lookupvar('::environment'), 'simp_autofiles', 'gen_passwd')
     settings['min_password_length'] = 8
     settings['default_password_length'] = 32
     settings['crypt_map'] = {
@@ -108,8 +106,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
         FileUtils.mkdir_p(settings['keydir'], mode: 0o750)
         # This chown is applicable as long as it is applied
         # by puppet, not puppetserver.
-        FileUtils.chown(settings['user'],
-         settings['group'], settings['keydir'])
+        FileUtils.chown(settings['user'], settings['group'], settings['keydir'])
       rescue SystemCallError => e
         err_msg = 'simplib::passgen: Could not make directory' \
                   " #{settings['keydir']}:  #{e.message}. Ensure that" \

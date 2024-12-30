@@ -112,11 +112,9 @@ Puppet::Functions.create_function(:'simplib::passgen::list') do
   end
 
   def list(folder = '/', simpkv_options = { 'app_id' => 'simplib::passgen' })
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
     results = if use_simpkv
-                call_function('simplib::passgen::simpkv::list', folder,
-                  simpkv_options)
+                call_function('simplib::passgen::simpkv::list', folder, simpkv_options)
               else
                 call_function('simplib::passgen::legacy::list')
               end

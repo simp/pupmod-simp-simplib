@@ -310,8 +310,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     password = nil
     salt = nil
 
-    password_info = call_function('simplib::passgen::simpkv::get', identifier,
-      simpkv_options)
+    password_info = call_function('simplib::passgen::simpkv::get', identifier, simpkv_options)
 
     if password_info.empty?
       warn_msg = 'Could not retrieve a last or current value for' \

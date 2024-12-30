@@ -58,7 +58,6 @@ Puppet::Functions.create_function(:'simplib::gen_random_password') do
                       digit_charlist,
                       symbol_charlist,
                     ]
-
                   end
 
       last_list_rand = nil

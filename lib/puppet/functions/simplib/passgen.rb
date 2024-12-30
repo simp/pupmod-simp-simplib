@@ -153,14 +153,11 @@ Puppet::Functions.create_function(:'simplib::passgen') do
   end
 
   def passgen(identifier, password_options = {}, simpkv_options = { 'app_id' => 'simplib::passgen' })
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
     password = if use_simpkv
-                 call_function('simplib::passgen::simpkv::passgen', identifier,
-                   password_options, simpkv_options)
+                 call_function('simplib::passgen::simpkv::passgen', identifier, password_options, simpkv_options)
                else
-                 call_function('simplib::passgen::legacy::passgen', identifier,
-                   password_options)
+                 call_function('simplib::passgen::legacy::passgen', identifier, password_options)
                end
     password
   end

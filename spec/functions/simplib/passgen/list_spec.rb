@@ -96,8 +96,7 @@ describe 'simplib::passgen::list' do
           # before we try to pre-populate the default key/value store with
           # passwords
           subject # rubocop:disable RSpec/NamedSubject
-          call_function('simplib::passgen::simpkv::set', id, password, salt, 1,
-            true)
+          call_function('simplib::passgen::simpkv::set', id, password, salt, 1, true)
           call_function('simplib::passgen::simpkv::remove', id)
 
           expected = { 'keys' => {}, 'folders' => [] }
@@ -106,8 +105,7 @@ describe 'simplib::passgen::list' do
 
         it 'returns password info and folders when root folder is not empty' do
           subject # rubocop:disable RSpec/NamedSubject
-          call_function('simplib::passgen::simpkv::set', id, password, salt, 1,
-            true)
+          call_function('simplib::passgen::simpkv::set', id, password, salt, 1, true)
           expected = {
             'keys' => {
               id => {
@@ -132,8 +130,7 @@ describe 'simplib::passgen::list' do
           # before we try to pre-populate the default key/value store with
           # passwords
           subject # rubocop:disable RSpec/NamedSubject
-          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}",
-            'password', 'salt', 1, true)
+          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", 'password', 'salt', 1, true)
           call_function('simplib::passgen::simpkv::remove', "#{sub_folder}/#{id}")
 
           expected = { 'keys' => {}, 'folders' => [] }
@@ -142,8 +139,7 @@ describe 'simplib::passgen::list' do
 
         it 'returns password info and folders when sub-folder is not empty' do
           subject # rubocop:disable RSpec/NamedSubject
-          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", password,
-            salt, 1, true)
+          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", password, salt, 1, true)
           expected = {
             'keys' => {
               id => {

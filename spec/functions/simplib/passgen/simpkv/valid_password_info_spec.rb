@@ -30,9 +30,9 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'salt' => salt },
       'metadata' => {
-        'complexity' => complexity,
-      'complex_only' => complex_only,
-      'history' => history,
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
+        'history'      => history,
       },
     }
 
@@ -43,9 +43,9 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password },
       'metadata' => {
-        'complexity' => complexity,
-      'complex_only' => complex_only,
-      'history' => history,
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
+        'history'      => history,
       },
     }
 
@@ -65,7 +65,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
         'complex_only' => complex_only,
-      'history' => history,
+        'history'      => history,
       },
     }
 
@@ -77,7 +77,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
         'complexity' => complexity,
-      'history' => history,
+        'history'    => history,
       },
     }
 
@@ -88,8 +88,8 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-        'complexity' => complexity,
-      'complex_only' => complex_only,
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
       },
     }
 

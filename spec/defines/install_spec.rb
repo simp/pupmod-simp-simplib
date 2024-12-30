@@ -42,9 +42,9 @@ describe 'simplib::install', type: :define do
               packages: {
                 'foo' => :undef,
               },
-           defaults: {
-             'ensure' => 'latest',
-           },
+              defaults: {
+                'ensure' => 'latest',
+              },
             }
           end
 
@@ -61,9 +61,9 @@ describe 'simplib::install', type: :define do
                   'ensure' => 'installed',
                 },
               },
-           defaults: {
-             'ensure' => 'latest',
-           },
+              defaults: {
+                'ensure' => 'latest',
+              },
             }
           end
 

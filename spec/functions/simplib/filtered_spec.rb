@@ -44,8 +44,13 @@ if puppetver > requiredver
             },
             "with path = '/path/1'" => {
               'path' => '/path/1',
-              'retval' => { 'profiles::test1::variable' => 'goodvar', 'profiles::test2::variable' => 'badvar', 'profiles::test::test1::variable' => 'goodvar', 'apache::sync' => 'badvar',
-'user::root_password' => 'badvar' },
+              'retval' => {
+                'profiles::test1::variable' => 'goodvar',
+                'profiles::test2::variable' => 'badvar',
+                'profiles::test::test1::variable' => 'goodvar',
+                'apache::sync' => 'badvar',
+                'user::root_password' => 'badvar',
+              },
             },
             "with path = '/path/2'" => {
               'path' => '/path/2',

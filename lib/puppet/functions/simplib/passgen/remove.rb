@@ -104,8 +104,7 @@ Puppet::Functions.create_function(:'simplib::passgen::remove') do
   end
 
   def remove(identifier, simpkv_options = { 'app_id' => 'simplib::passgen' })
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
 
     if use_simpkv
       call_function('simplib::passgen::simpkv::remove', identifier, simpkv_options)

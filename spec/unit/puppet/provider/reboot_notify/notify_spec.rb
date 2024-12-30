@@ -270,10 +270,10 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
             'reason' => 'Old',
             'updated' => 12_345,
           },
-        'ToKeep' => {
-          'reason' => 'New',
-          'updated' => Time.now.tv_sec,
-        },
+          'ToKeep' => {
+            'reason' => 'New',
+            'updated' => Time.now.tv_sec,
+          },
         }
       end
 
