@@ -131,7 +131,6 @@ Puppet::Functions.create_function(:'simplib::assert_optional_dependency') do
     target_module = nil,
     dependency_tree = 'simp:optional_dependencies'
   )
-
     current_environment = closure_scope.compiler.environment.to_s
 
     module_dependencies = get_module_dependencies(
