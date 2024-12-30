@@ -13,11 +13,11 @@ describe 'simplib::debug::classtrace' do
     END
   end
 
-  it {
+  it do
     expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Classtrace:\n    => Class[main]\n    => Class[Baz]\n    => Bar[test]\n    => Class[Foo])).once
 
     retval = scope.call_function('simplib::debug::classtrace', false)
 
     expect(retval).to eq(['Class[main]'])
-  }
+  end
 end

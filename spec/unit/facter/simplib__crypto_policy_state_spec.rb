@@ -38,7 +38,7 @@ describe 'simplib__crypto_policy_state' do
           {
             'global_policy' => 'DEFAULT',
             'global_policy_applied' => true,
-            'global_policies_available' => ['DEFAULT', 'LEGACY', 'CUSTOM']
+            'global_policies_available' => ['DEFAULT', 'LEGACY', 'CUSTOM'],
           },
         )
       end
@@ -54,7 +54,7 @@ describe 'simplib__crypto_policy_state' do
           {
             'global_policy' => 'DEFAULT',
             'global_policy_applied' => false,
-            'global_policies_available' => ['DEFAULT', 'LEGACY', 'CUSTOM']
+            'global_policies_available' => ['DEFAULT', 'LEGACY', 'CUSTOM'],
           },
         )
       end

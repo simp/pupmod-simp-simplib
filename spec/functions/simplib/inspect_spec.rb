@@ -12,7 +12,7 @@ describe 'simplib::inspect' do
       END
     end
 
-    it {
+    it do
       is_expected.to run.with_params('foo')
       expect(catalogue.resource('Notify[DEBUG_INSPECT_foo]')).not_to be_nil
 
@@ -23,7 +23,7 @@ describe 'simplib::inspect' do
         "test_value"
       EOM
       expect(resource[:message]).to eq expected_msg.chomp
-    }
+    end
   end
 
   context 'when yaml output_type is used' do
@@ -33,7 +33,7 @@ describe 'simplib::inspect' do
       END
     end
 
-    it {
+    it do
       is_expected.to run.with_params('foo', 'yaml')
 
       resource = catalogue.resource('Notify[DEBUG_INSPECT_foo]')
@@ -46,7 +46,7 @@ describe 'simplib::inspect' do
         - b: c
       EOM
       expect(resource[:message]).to eq expected_msg
-    }
+    end
   end
 
   context 'when oneline_json output_type is used' do
@@ -56,14 +56,14 @@ describe 'simplib::inspect' do
       END
     end
 
-    it {
+    it do
       is_expected.to run.with_params('foo', 'oneline_json')
 
       resource = catalogue.resource('Notify[DEBUG_INSPECT_foo]')
 
       expected_msg = 'Type => Array Content => ["a",{"b":"c"}]'
       expect(resource[:message]).to eq expected_msg.chomp
-    }
+    end
   end
 end
 # vim: set expandtab ts=2 sw=2:

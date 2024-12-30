@@ -38,7 +38,7 @@ describe 'simplib::passgen::simpkv::remove' do
       meta = {
         'complexity' => 0,
         'complex_only' => false,
-        'history' => []
+        'history' => [],
       }
       call_function('simpkv::put', key, value, meta)
 
@@ -55,8 +55,8 @@ describe 'simplib::passgen::simpkv::remove' do
           'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
-          }
-        }
+          },
+        },
       }
 
       is_expected.to run.with_params(id, simpkv_options)

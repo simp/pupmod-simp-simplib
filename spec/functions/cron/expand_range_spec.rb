@@ -13,7 +13,7 @@ describe 'simplib::cron::expand_range' do
     ['1-10'] => '1,2,3,4,5,6,7,8,9,10',
     ['Bob 1-3 Alice'] => 'Bob 1,2,3 Alice',
     ['Bob 0:4-6/2 Alice 2-3/2:3-4/1 Cheese'] => 'Bob 0:4,5,6/2 Alice 2,3/2:3,4/1 Cheese',
-    [' * *:4-6/2 2-3/2:6-4/1 '] => '* *:4,5,6/2 2,3/2:4,5,6/1'
+    [' * *:4-6/2 2-3/2:6-4/1 '] => '* *:4,5,6/2 2,3/2:4,5,6/1',
   }
 
   test_hash.each_pair do |input, output|

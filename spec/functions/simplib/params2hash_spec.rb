@@ -37,7 +37,7 @@ describe 'simplib::params2hash' do
     END
   end
 
-  it {
+  it do
     class_output = JSON.parse(catalogue.resource('Notify[class_json]')[:message])
 
     expect(class_output).to match(
@@ -60,7 +60,7 @@ describe 'simplib::params2hash' do
         'hash'     => { 'key' => 'value' },
       },
     )
-  }
+  end
 
   context 'when pruning values' do
     let(:pre_condition) do
@@ -97,7 +97,7 @@ describe 'simplib::params2hash' do
       END
     end
 
-    it {
+    it do
       class_output = JSON.parse(catalogue.resource('Notify[class_json]')[:message])
 
       expect(class_output).to match(
@@ -118,6 +118,6 @@ describe 'simplib::params2hash' do
           'hash'     => { 'key' => 'value' },
         },
       )
-    }
+    end
   end
 end

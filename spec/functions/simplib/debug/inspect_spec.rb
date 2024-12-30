@@ -17,7 +17,7 @@ describe 'simplib::debug::inspect' do
     END
   end
 
-  it {
+  it do
     expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"test_value"' Scope: 'Scope(Class[main])'))
     expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"other value"' Location: ':5' Scope: 'Scope(Class[Test])'))
     expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Inspect: Type => 'String' Content => '"foo"' Scope: 'Scope(Class[main])'))
@@ -34,5 +34,5 @@ describe 'simplib::debug::inspect' do
         line: nil,
       },
     )
-  }
+  end
 end

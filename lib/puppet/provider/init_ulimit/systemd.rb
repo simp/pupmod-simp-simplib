@@ -43,7 +43,7 @@ Puppet::Type.type(:init_ulimit).provide(:systemd) do
       't' => 'LimitCPU',
       'u' => 'LimitNPROC',
       'v' => 'LimitAS',
-      'x' => 'LimitLOCKS'
+      'x' => 'LimitLOCKS',
     }
 
     @item = @systemd_xlat[@resource[:item]]

@@ -20,7 +20,7 @@ Puppet::Functions.create_function(:'simplib::debug::inspect', Puppet::Functions:
   def inspect(scope, to_inspect, print = true)
     data = {
       type: to_inspect.class,
-      content: to_inspect.to_json
+      content: to_inspect.to_json,
     }
 
     if scope

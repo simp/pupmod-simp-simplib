@@ -55,7 +55,7 @@ describe 'simplib::passgen::get' do
 
         expected = {
           'value'    => { 'password' => password, 'salt' => salt },
-          'metadata' => { 'history' => [] }
+          'metadata' => { 'history' => [] },
         }
         is_expected.to run.with_params(id).and_return(expected)
       end
@@ -76,7 +76,7 @@ describe 'simplib::passgen::get' do
 
         expected = {
           'value'    => { 'password' => password, 'salt' => salt },
-          'metadata' => { 'history' => [ history[0] ] }
+          'metadata' => { 'history' => [ history[0] ] },
         }
         is_expected.to run.with_params(id).and_return(expected)
       end
@@ -135,7 +135,7 @@ describe 'simplib::passgen::get' do
         meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => history
+          'history' => history,
         }
         call_function('simpkv::put', key, value, meta)
 
@@ -151,7 +151,7 @@ describe 'simplib::passgen::get' do
         meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => history
+          'history' => history,
         }
         call_function('simpkv::put', key, value, meta)
 
@@ -166,8 +166,8 @@ describe 'simplib::passgen::get' do
             'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
-            }
-          }
+            },
+          },
         }
 
         is_expected.to run.with_params(id, simpkv_options)

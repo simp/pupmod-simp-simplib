@@ -7,9 +7,9 @@ describe 'simplib::module_metadata::os_supported' do
         'name' => 'Ubuntu',
         'release' => {
           'major' => '14',
-          'full'  => '14.999'
-        }
-      }
+          'full'  => '14.999',
+        },
+      },
     }
 
     let(:facts) { facts }
@@ -17,21 +17,21 @@ describe 'simplib::module_metadata::os_supported' do
     let(:module_metadata) do
       {
         'name' => 'test-module',
-     'version' => '0.0.1',
-     'operatingsystem_support' => [
-       {
-         'operatingsystem'        => 'Aardvark',
-         'operatingsystemrelease' => [ '14.999' ]
-       },
-       {
-         'operatingsystem'        => 'Ubuntu',
-         'operatingsystemrelease' => [ '14.999' ]
-       },
-       {
-         'operatingsystem'        => 'Banana',
-         'operatingsystemrelease' => [ '1.2', '2.3' ]
-       },
-     ]
+        'version' => '0.0.1',
+        'operatingsystem_support' => [
+          {
+            'operatingsystem'        => 'Aardvark',
+            'operatingsystemrelease' => [ '14.999' ],
+          },
+          {
+            'operatingsystem'        => 'Ubuntu',
+            'operatingsystemrelease' => [ '14.999' ],
+          },
+          {
+            'operatingsystem'        => 'Banana',
+            'operatingsystemrelease' => [ '1.2', '2.3' ],
+          },
+        ],
       }
     end
 
@@ -46,17 +46,17 @@ describe 'simplib::module_metadata::os_supported' do
         let(:module_metadata) do
           {
             'name' => 'test-module',
-         'version' => '0.0.1',
-         'operatingsystem_support' => [
-           {
-             'operatingsystem'        => 'Aardvark',
-             'operatingsystemrelease' => [ '14.999' ]
-           },
-           {
-             'operatingsystem'        => 'Banana',
-             'operatingsystemrelease' => [ '15.123' ]
-           },
-         ]
+            'version' => '0.0.1',
+            'operatingsystem_support' => [
+              {
+                'operatingsystem'        => 'Aardvark',
+                'operatingsystemrelease' => [ '14.999' ],
+              },
+              {
+                'operatingsystem'        => 'Banana',
+                'operatingsystemrelease' => [ '15.123' ],
+              },
+            ],
           }
         end
 
@@ -79,21 +79,21 @@ describe 'simplib::module_metadata::os_supported' do
           let(:module_metadata) do
             {
               'name' => 'test-module',
-           'version' => '0.0.1',
-           'operatingsystem_support' => [
-             {
-               'operatingsystem'        => 'Aardvark',
-               'operatingsystemrelease' => [ '14.999' ]
-             },
-             {
-               'operatingsystem'        => 'Ubuntu',
-               'operatingsystemrelease' => [ '14.111' ]
-             },
-             {
-               'operatingsystem'        => 'Banana',
-               'operatingsystemrelease' => [ '1.2', '2.3' ]
-             },
-           ]
+              'version' => '0.0.1',
+              'operatingsystem_support' => [
+                {
+                  'operatingsystem'        => 'Aardvark',
+                  'operatingsystemrelease' => [ '14.999' ],
+                },
+                {
+                  'operatingsystem'        => 'Ubuntu',
+                  'operatingsystemrelease' => [ '14.111' ],
+                },
+                {
+                  'operatingsystem'        => 'Banana',
+                  'operatingsystemrelease' => [ '1.2', '2.3' ],
+                },
+              ],
             }
           end
 
@@ -121,21 +121,21 @@ describe 'simplib::module_metadata::os_supported' do
         let(:module_metadata) do
           {
             'name' => 'test-module',
-         'version' => '0.0.1',
-         'operatingsystem_support' => [
-           {
-             'operatingsystem'        => 'Aardvark',
-             'operatingsystemrelease' => [ '14.999' ]
-           },
-           {
-             'operatingsystem'        => 'Ubuntu',
-             'operatingsystemrelease' => [ '15.999' ]
-           },
-           {
-             'operatingsystem'        => 'Banana',
-             'operatingsystemrelease' => [ '1.2', '2.3' ]
-           },
-         ]
+            'version' => '0.0.1',
+            'operatingsystem_support' => [
+              {
+                'operatingsystem'        => 'Aardvark',
+                'operatingsystemrelease' => [ '14.999' ],
+              },
+              {
+                'operatingsystem'        => 'Ubuntu',
+                'operatingsystemrelease' => [ '15.999' ],
+              },
+              {
+                'operatingsystem'        => 'Banana',
+                'operatingsystemrelease' => [ '1.2', '2.3' ],
+              },
+            ],
           }
         end
 

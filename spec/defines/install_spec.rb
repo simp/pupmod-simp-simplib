@@ -13,8 +13,8 @@ describe 'simplib::install', type: :define do
         let(:params) do
           {
             packages: {
-              'foo' => :undef
-            }
+              'foo' => :undef,
+            },
           }
         end
 
@@ -26,8 +26,8 @@ describe 'simplib::install', type: :define do
         let(:params) do
           {
             packages: {
-              'foo' => {}
-            }
+              'foo' => {},
+            },
           }
         end
 
@@ -40,11 +40,11 @@ describe 'simplib::install', type: :define do
           let(:params) do
             {
               packages: {
-                'foo' => :undef
+                'foo' => :undef,
               },
            defaults: {
-             'ensure' => 'latest'
-           }
+             'ensure' => 'latest',
+           },
             }
           end
 
@@ -58,12 +58,12 @@ describe 'simplib::install', type: :define do
               packages: {
                 'foo' => :undef,
                 'bar' => {
-                  'ensure' => 'installed'
-                }
+                  'ensure' => 'installed',
+                },
               },
            defaults: {
-             'ensure' => 'latest'
-           }
+             'ensure' => 'latest',
+           },
             }
           end
 

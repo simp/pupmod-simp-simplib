@@ -82,7 +82,7 @@ Puppet::Type.newtype(:init_ulimit) do
     'max_num_procs'         => 'u',
     'max_virt_memory'       => 'v',
     'max_file_locks'        => 'x',
-    'max_threads'           => 'T'
+    'max_threads'           => 'T',
   }
 
   ensurable

@@ -75,8 +75,8 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
         'address' => addr,
         'netmask' => {
           'ddq'  => nil,
-          'cidr' => nil
-        }
+          'cidr' => nil,
+        },
       }
 
       begin

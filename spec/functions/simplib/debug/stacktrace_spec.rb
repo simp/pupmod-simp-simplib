@@ -13,12 +13,12 @@ describe 'simplib::debug::stacktrace' do
     END
   end
 
-  it {
+  it do
     expect(Puppet).to receive(:warning).with(%(Simplib::Debug::Stacktrace:\n    => unknown:1\n    => unknown:3))
 
     retval = scope.call_function('simplib::debug::stacktrace', false)
 
     # Topscope gets nothing
     expect(retval).to eq([])
-  }
+  end
 end

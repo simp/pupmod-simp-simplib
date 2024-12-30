@@ -160,8 +160,8 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
       orig_data = {
         'PreExisting' => {
           'reason' => 'Condition',
-          'updated' => 12_345
-        }
+          'updated' => 12_345,
+        },
       }
 
       File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(orig_data)) }
@@ -268,12 +268,12 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
         {
           'ToDelete' => {
             'reason' => 'Old',
-            'updated' => 12_345
+            'updated' => 12_345,
           },
         'ToKeep' => {
           'reason' => 'New',
-          'updated' => Time.now.tv_sec
-        }
+          'updated' => Time.now.tv_sec,
+        },
         }
       end
 

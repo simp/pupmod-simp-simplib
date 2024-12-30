@@ -120,7 +120,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::set') do
       'prev_salt'          => File.join(keydir, "#{identifier}.salt.last"),
       # for manual transaction rollback
       'prev_prev_password' => File.join(keydir, "#{identifier}.last.last"),
-      'prev_prev_salt'     => File.join(keydir, "#{identifier}.salt.last.last")
+      'prev_prev_salt'     => File.join(keydir, "#{identifier}.salt.last.last"),
     }
   end
 

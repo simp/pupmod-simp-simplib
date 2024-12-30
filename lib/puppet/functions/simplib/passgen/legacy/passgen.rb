@@ -88,7 +88,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     settings['crypt_map'] = {
       'md5'     => '1',
       'sha256'  => '5',
-      'sha512'  => '6'
+      'sha512'  => '6',
     }
 
     base_options = {
@@ -98,7 +98,7 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
       'hash'                => false,
       'complexity'          => 0,
       'complex_only'        => false,
-      'gen_timeout_seconds' => 30
+      'gen_timeout_seconds' => 30,
     }
 
     options = build_options(base_options, modifier_hash, settings)

@@ -65,7 +65,7 @@ Facter.add('simplib__mountpoints') do
         'device' => dev,
         'filesystem' => fs,
         # Split on commas that are not in quotes
-        'options' => opts.gsub(%r{'|"}, '').split(%r{,(?=(?:(?:[^'"]*(?:'|")){2})*[^'"]*$)}).map(&:strip)
+        'options' => opts.gsub(%r{'|"}, '').split(%r{,(?=(?:(?:[^'"]*(?:'|")){2})*[^'"]*$)}).map(&:strip),
       }
 
       if facter_mountpoints[path]

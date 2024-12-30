@@ -9,7 +9,7 @@ describe 'simplib::validate_deep_hash' do
          'boolean_false_value' => '^true|false$',
          'numeric_value_1'     => '^\d+$',
          'numeric_value_2'     => '^\d+\.\d+$',
-         'unused_key'          => '^\w+$'
+         'unused_key'          => '^\w+$',
       }
     end
 
@@ -19,7 +19,7 @@ describe 'simplib::validate_deep_hash' do
         'boolean_true_value'  => true,
         'boolean_false_value' => false,
         'numeric_value_1'     => 23,
-        'numeric_value_2'     => '4.56'
+        'numeric_value_2'     => '4.56',
       }
     end
 
@@ -58,10 +58,10 @@ describe 'simplib::validate_deep_hash' do
               },
               'numeric_value_1' => '^\d+$',
             },
-            'numeric_value_2' => '^\d+\.\d+$'
-          }
+            'numeric_value_2' => '^\d+\.\d+$',
+          },
         },
-        'string_value_2' => 'value'
+        'string_value_2' => 'value',
       }
     end
 
@@ -75,12 +75,12 @@ describe 'simplib::validate_deep_hash' do
               'level4' => {
                 'boolean_false_value' => false,
               },
-              'numeric_value_1' => '23'
+              'numeric_value_1' => '23',
             },
-            'numeric_value_2' => 4.56
-          }
+            'numeric_value_2' => 4.56,
+          },
         },
-        'string_value_2' => 'string value 2'
+        'string_value_2' => 'string value 2',
       }
     end
 
@@ -111,7 +111,7 @@ describe 'simplib::validate_deep_hash' do
       {
         'string_value'  => '^\w+$',
         'boolean_value' => '^true|false$',
-        'numeric_value' => '^\d+\.\d+$'
+        'numeric_value' => '^\d+\.\d+$',
       }
     end
 
@@ -119,7 +119,7 @@ describe 'simplib::validate_deep_hash' do
       {
         'string_value'  => 'value',
         'boolean_value' => true,
-        'numeric_value' => 4.56
+        'numeric_value' => 4.56,
       }
     end
 
@@ -169,10 +169,10 @@ describe 'simplib::validate_deep_hash' do
               },
               'numeric_value_1' => '^\d+$',
             },
-            'numeric_value_2' => '^\d+\.\d+$'
-          }
+            'numeric_value_2' => '^\d+\.\d+$',
+          },
         },
-        'string_value_2' => 'value'
+        'string_value_2' => 'value',
       }
     end
 
@@ -186,12 +186,12 @@ describe 'simplib::validate_deep_hash' do
               'level4' => {
                 'boolean_false_value' => false,
               },
-              'numeric_value_1' => '23'
+              'numeric_value_1' => '23',
             },
-            'numeric_value_2' => 4.56
-          }
+            'numeric_value_2' => 4.56,
+          },
         },
-        'string_value_2' => 'string value 2'
+        'string_value_2' => 'string value 2',
       }
     end
 

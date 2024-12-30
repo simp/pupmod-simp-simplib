@@ -159,8 +159,8 @@ describe 'simplib::passgen::simpkv::list' do
           'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
-          }
-        }
+          },
+        },
       }
 
       is_expected.to run.with_params('/', simpkv_options)

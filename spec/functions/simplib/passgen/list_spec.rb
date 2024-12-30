@@ -37,10 +37,10 @@ describe 'simplib::passgen::list' do
           'keys' => {
             id => {
               'value'    => { 'password' => password, 'salt' => salt },
-              'metadata' => { 'history' => [] }
-            }
+              'metadata' => { 'history' => [] },
+            },
           },
-          'folders' => []
+          'folders' => [],
         }
 
         is_expected.to run.with_params.and_return(expected)
@@ -112,10 +112,10 @@ describe 'simplib::passgen::list' do
             'keys' => {
               id => {
                 'value'    => { 'password' => password, 'salt' => salt },
-                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] }
-              }
+                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] },
+              },
             },
-            'folders' => []
+            'folders' => [],
           }
 
           is_expected.to run.with_params.and_return(expected)
@@ -148,10 +148,10 @@ describe 'simplib::passgen::list' do
             'keys' => {
               id => {
                 'value'    => { 'password' => password, 'salt' => salt },
-                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] }
-              }
+                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] },
+              },
             },
-            'folders' => []
+            'folders' => [],
           }
 
           is_expected.to run.with_params(sub_folder).and_return(expected)
@@ -167,8 +167,8 @@ describe 'simplib::passgen::list' do
             'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
-            }
-          }
+            },
+          },
         }
 
         is_expected.to run.with_params('/', simpkv_options)

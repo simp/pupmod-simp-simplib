@@ -75,9 +75,9 @@ describe 'simplib::nets2ddq' do
   end
 
   context 'should fail when conversion is not possible' do
-    it {
+    it do
       input = ['myhost', '-bad.']
       is_expected.to run.with_params(input).and_raise_error(%r{'-bad.' is not a valid network.})
-    }
+    end
   end
 end

@@ -10,9 +10,9 @@ describe 'simplib::module_metadata::os_blacklisted' do
           'name' => 'Ubuntu',
           'release' => {
             'major' => '14',
-            'full' => '14.999'
-          }
-        }
+            'full' => '14.999',
+          },
+        },
       }
     end
 

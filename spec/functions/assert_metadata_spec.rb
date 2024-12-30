@@ -10,9 +10,9 @@ describe 'simplib::assert_metadata' do
     'operatingsystem_support' => [
       {
         'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => ['14.04']
+        'operatingsystemrelease' => ['14.04'],
       },
-    ]
+    ],
   }.to_json
 
   valid_facts = {
@@ -20,9 +20,9 @@ describe 'simplib::assert_metadata' do
       'name' => 'Ubuntu',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_os = {
@@ -30,9 +30,9 @@ describe 'simplib::assert_metadata' do
       'name' => 'Foo',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_version = {
@@ -40,35 +40,35 @@ describe 'simplib::assert_metadata' do
       'name' => 'Ubuntu',
       'release' => {
         'major' => '10',
-        'full'  => '10.04'
-      }
-    }
+        'full'  => '10.04',
+      },
+    },
   }
 
   options_major = {
     'os' => {
       'options' => {
-        'release_match' => 'major'
-      }
-    }
+        'release_match' => 'major',
+      },
+    },
   }
 
   options_full = {
     'os' => {
       'options' => {
-        'release_match' => 'full'
-      }
-    }
+        'release_match' => 'full',
+      },
+    },
   }
 
   options_disable_global = {
-    'enable' => false
+    'enable' => false,
   }
 
   options_disable_validation = {
     'os' => {
-      'validate' => false
-    }
+      'validate' => false,
+    },
   }
 
   let(:pre_condition) do

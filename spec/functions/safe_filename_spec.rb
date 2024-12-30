@@ -17,7 +17,7 @@ describe 'simplib::safe_filename' do
       'foo/bar*baz|foo?bar' => 'foo__bar__baz__foo__bar',
       'foo/bar*baz|foo?bar<baz' => 'foo__bar__baz__foo__bar__baz',
       'foo/bar*baz|foo?bar<baz>foo' => 'foo__bar__baz__foo__bar__baz__foo',
-      'foo/bar*baz|foo?bar<baz>foo\bar' => 'foo__bar__baz__foo__bar__baz__foo__bar'
+      'foo/bar*baz|foo?bar<baz>foo\bar' => 'foo__bar__baz__foo__bar__baz__foo__bar',
     }
 
     test_hash.each_pair do |input, output|

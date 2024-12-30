@@ -120,7 +120,7 @@ describe 'simplib::passgen::set' do
     let(:password_options) do
       {
         'complexity' => complexity,
-      'complex_only' => complex_only
+        'complex_only' => complex_only,
       }
     end
 
@@ -153,7 +153,7 @@ describe 'simplib::passgen::set' do
         expected_meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => []
+          'history' => [],
         }
         expect(stored_info['metadata']).to eq(expected_meta)
       end
@@ -179,7 +179,7 @@ describe 'simplib::passgen::set' do
         expected_meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => expected_history
+          'history' => expected_history,
         }
         expect(stored_info['metadata']).to eq(expected_meta)
       end
@@ -217,8 +217,8 @@ describe 'simplib::passgen::set' do
             'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
-            }
-          }
+            },
+          },
         }
 
         is_expected.to run.with_params(

@@ -102,8 +102,8 @@ describe 'simplib__mountpoints' do
         ],
         'options_hash' => {
           'rw' => nil,
-          'seclabel' => nil
-        }
+          'seclabel' => nil,
+        },
       },
       '/var/tmp' => {
         'device' => '/var/tmp',
@@ -124,8 +124,8 @@ describe 'simplib__mountpoints' do
           'attr2' => nil,
           'inode64' => nil,
           'noquota' => nil,
-          'bind' => nil
-        }
+          'bind' => nil,
+        },
       },
       '/dev/shm' => {
         'device' => 'tmpfs',
@@ -140,8 +140,8 @@ describe 'simplib__mountpoints' do
           'rw' => nil,
           'seclabel' => nil,
           'nosuid' => nil,
-          'nodev' => nil
-        }
+          'nodev' => nil,
+        },
       },
       '/proc' => {
         'device' => 'proc',
@@ -163,9 +163,9 @@ describe 'simplib__mountpoints' do
           'nodev' => nil,
           'noexec' => nil,
           'relatime' => nil,
-          '_gid__group' => 'read_proc'
-        }
-      }
+          '_gid__group' => 'read_proc',
+        },
+      },
     }
   end
 
@@ -200,7 +200,7 @@ describe 'simplib__mountpoints' do
           'size' => '39.98 GiB',
           'size_bytes' => 42_927_656_960,
           'used' => '3.32 GiB',
-          'used_bytes' => 3_568_381_952
+          'used_bytes' => 3_568_381_952,
         },
         '/dev' => {
           'available' => '2.83 GiB',
@@ -219,7 +219,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_035_959_296,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/dev/hugepages' => {
           'available' => '0 bytes',
@@ -235,7 +235,7 @@ describe 'simplib__mountpoints' do
           'size' => '0 bytes',
           'size_bytes' => 0,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/dev/shm' => {
           'available' => '2.83 GiB',
@@ -252,7 +252,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_043_655_680,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/tmp' => {
           'available' => '2.83 GiB',
@@ -267,7 +267,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_043_655_680,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/var/tmp' => {
           'available' => '36.66 GiB',
@@ -286,8 +286,8 @@ describe 'simplib__mountpoints' do
           'size' => '39.98 GiB',
           'size_bytes' => 42_927_656_960,
           'used' => '3.32 GiB',
-          'used_bytes' => 3_568_381_952
-        }
+          'used_bytes' => 3_568_381_952,
+        },
       }
     end
 

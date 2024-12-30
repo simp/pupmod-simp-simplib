@@ -231,7 +231,7 @@ describe 'simplib::passgen::simpkv::passgen' do
         'code' => '6',
         'bits' => 512,
         'end_hash' => '$6$badsalt$hk7dh/Mz.oPuPZgDkPrNU/WSQOOq6T8PA8FO4mmLkfGdgvyEvqd8HyD5UeD2aYysmczplpo5qkU8RYjX1R6LS0',
-      }
+      },
     }.each do |hash_selection, object|
       context "when hash == #{hash_selection}" do
         let(:shared_options) do
@@ -289,8 +289,8 @@ describe 'simplib::passgen::simpkv::passgen' do
           'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
-          }
-        }
+          },
+        },
       }
 
       is_expected.to run.with_params('spectest', {}, simpkv_options)

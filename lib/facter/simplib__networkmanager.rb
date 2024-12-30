@@ -17,8 +17,8 @@ Facter.add(:simplib__networkmanager) do
       info['enabled'] = true
       info = {
         'general' => {
-          'status' => Hash[general_status]
-        }
+          'status' => Hash[general_status],
+        },
       }
     end
 
@@ -42,7 +42,7 @@ Facter.add(:simplib__networkmanager) do
         info['connection'][device] = {
           'uuid' => uuid,
           'type' => type,
-          'name' => name
+          'name' => name,
         }
       end
     end

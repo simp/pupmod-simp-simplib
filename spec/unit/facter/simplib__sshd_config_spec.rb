@@ -48,9 +48,9 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact('simplib__sshd_config').value).to eq(openssh_version.merge({ 'AuthorizedKeysFile' => '/etc/ssh/local_keys/%u' }))
-    }
+    end
   end
 
   context 'with a default /etc/ssh/sshd_config' do
@@ -78,9 +78,9 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge({ 'AuthorizedKeysFile' => '.ssh/authorized_keys' }))
-    }
+    end
 
     context 'when the SSH daemon does not return a version string' do
       let(:openssh_version) do
@@ -90,9 +90,9 @@ describe 'simplib__sshd_config' do
         }
       end
 
-      it {
+      it do
         expect(Facter.fact(:simplib__sshd_config).value).to eq({ 'AuthorizedKeysFile' => '.ssh/authorized_keys' })
-      }
+      end
     end
 
     context 'when the SSH daemon does not return a valid version string' do
@@ -103,9 +103,9 @@ describe 'simplib__sshd_config' do
         }
       end
 
-      it {
+      it do
         expect(Facter.fact(:simplib__sshd_config).value).to eq({ 'AuthorizedKeysFile' => '.ssh/authorized_keys' })
-      }
+      end
     end
   end
 
@@ -131,17 +131,17 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge({ 'AuthorizedKeysFile' => '.ssh/authorized_keys' }))
-    }
+    end
   end
 
   context 'with empty /etc/ssh/sshd_config' do
     let(:sshd_config_content) { '' }
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge({ 'AuthorizedKeysFile' => '.ssh/authorized_keys' }))
-    }
+    end
   end
 
   context 'with multiple matching entries' do
@@ -167,11 +167,11 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge(
         { 'AuthorizedKeysFile' => ['/etc/ssh/local_keys/%u', '/foo/bar/baz'] },
       ))
-    }
+    end
   end
 
   context 'with multiple entries in a Match block' do
@@ -198,7 +198,7 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge(
         {
           'AuthorizedKeysFile' => '.ssh/authorized_keys',
@@ -207,7 +207,7 @@ describe 'simplib__sshd_config' do
           },
         },
       ))
-    }
+    end
   end
 
   context 'with global and Match block entries' do
@@ -236,7 +236,7 @@ describe 'simplib__sshd_config' do
       EOM
     end
 
-    it {
+    it do
       expect(Facter.fact(:simplib__sshd_config).value).to eq(openssh_version.merge(
         {
           'AuthorizedKeysFile' => '/global/time',
@@ -245,6 +245,6 @@ describe 'simplib__sshd_config' do
           },
         },
       ))
-    }
+    end
   end
 end

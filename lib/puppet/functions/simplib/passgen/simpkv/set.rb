@@ -121,7 +121,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
     metadata = {
       'complexity'   => complexity,
       'complex_only' => complex_only,
-      'history'      => get_history(identifier, simpkv_options)
+      'history'      => get_history(identifier, simpkv_options),
     }
 
     # TODO: If simpkv is updated to allow transaction locks, lock prior to

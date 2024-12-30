@@ -10,9 +10,9 @@ describe 'simplib::module_metadata::assert' do
     'operatingsystem_support' => [
       {
         'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => ['14.04']
+        'operatingsystemrelease' => ['14.04'],
       },
-    ]
+    ],
   }.to_json
 
   valid_facts = {
@@ -20,9 +20,9 @@ describe 'simplib::module_metadata::assert' do
       'name' => 'Ubuntu',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_os = {
@@ -30,9 +30,9 @@ describe 'simplib::module_metadata::assert' do
       'name' => 'Foo',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_version = {
@@ -40,69 +40,69 @@ describe 'simplib::module_metadata::assert' do
       'name' => 'Ubuntu',
       'release' => {
         'major' => '10',
-        'full'  => '10.04'
-      }
-    }
+        'full'  => '10.04',
+      },
+    },
   }
 
   options_disable_global = {
-    'enable' => false
+    'enable' => false,
   }
 
   options_disable_blacklist = {
     'blacklist_validation' => {
-      'enable' => false
-    }
+      'enable' => false,
+    },
   }
 
   options_disable_os = {
     'os_validation' => {
-      'enable' => false
-    }
+      'enable' => false,
+    },
   }
 
   options_major = {
     'os_validation' => {
       'options' => {
-        'release_match' => 'major'
-      }
-    }
+        'release_match' => 'major',
+      },
+    },
   }
 
   options_full = {
     'os_validation' => {
       'options' => {
-        'release_match' => 'full'
-      }
-    }
+        'release_match' => 'full',
+      },
+    },
   }
 
   blacklist_no_match = {
-    'blacklist' => [ 'Foo', { 'Bar' => '1.1.1' } ]
+    'blacklist' => [ 'Foo', { 'Bar' => '1.1.1' } ],
   }
 
   blacklist_base = {
-    'blacklist' => [ 'Ubuntu' ]
+    'blacklist' => [ 'Ubuntu' ],
   }
 
   blacklist_advanced = {
-    'blacklist' => [ { 'Ubuntu' => '14.04' } ]
+    'blacklist' => [ { 'Ubuntu' => '14.04' } ],
   }
 
   blacklist_major = {
     'blacklist_validation' => {
       'options' => {
-        'release_match' => 'major'
-      }
-    }
+        'release_match' => 'major',
+      },
+    },
   }
 
   blacklist_full = {
     'blacklist_validation' => {
       'options' => {
-        'release_match' => 'full'
-      }
-    }
+        'release_match' => 'full',
+      },
+    },
   }
 
   let(:pre_condition) do
@@ -199,11 +199,11 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the major version' do
-          it {
+          it do
             expect {
               is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_major))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
-          }
+          end
 
           context 'when disabled globally' do
             it { is_expected.to run.with_params('simplib', blacklist_base.merge(options_disable_global)) }
@@ -215,11 +215,11 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the full version' do
-          it {
+          it do
             expect {
               is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_full))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
-          }
+          end
 
           context 'when disabled globally' do
             it { is_expected.to run.with_params('simplib', blacklist_base.merge(options_disable_global)) }
@@ -243,11 +243,11 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the major version' do
-          it {
+          it do
             expect {
               is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_major))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
-          }
+          end
 
           context 'when disabled globally' do
             it { is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_major.merge(options_disable_global))) }
@@ -259,11 +259,11 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the full version' do
-          it {
+          it do
             expect {
               is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_full))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
-          }
+          end
 
           context 'when disabled globally' do
             it { is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_full.merge(options_disable_global))) }

@@ -16,7 +16,7 @@ Facter.add(:puppet_settings) do
         section_values  = Puppet.settings.values(nil, section)
         loader_settings = {
           environmentpath: section_values.interpolate(:environmentpath),
-          basemodulepath: section_values.interpolate(:basemodulepath)
+          basemodulepath: section_values.interpolate(:basemodulepath),
         }
 
         # Temporarily override Puppet's run_mode to evaluate this session:

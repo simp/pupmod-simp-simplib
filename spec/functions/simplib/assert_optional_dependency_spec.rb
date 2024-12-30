@@ -11,52 +11,52 @@ describe 'simplib::assert_optional_dependency' do
         'optional_dependencies' => [
           {
             'name'                => 'dep-one',
-            'version_requirement' => '>= 0.0.1 < 2.0.0'
+            'version_requirement' => '>= 0.0.1 < 2.0.0',
           },
           {
-            'name'                => 'dep/two'
+            'name'                => 'dep/two',
           },
           {
             'name'                => 'dep-three',
-            'version_requirement' => '>= 1.2.3 < 2.0.0'
+            'version_requirement' => '>= 1.2.3 < 2.0.0',
           },
-        ]
-      }
+        ],
+      },
     }
   end
 
   let(:dep_one_metadata) do
     {
       'name'    => 'dep/one',
-      'version' => '1.0.0'
+      'version' => '1.0.0',
     }
   end
 
   let(:dep_two_metadata) do
     {
       'name'    => 'dep-two',
-      'version' => '3.4.5'
+      'version' => '3.4.5',
     }
   end
 
   let(:dep_three_metadata) do
     {
       'name'    => 'dep-three',
-      'version' => '1.2.3-alpha'
+      'version' => '1.2.3-alpha',
     }
   end
 
   let(:dep_one_bad_author) do
     {
       'name'    => 'narp/one',
-      'version' => '1.0.0'
+      'version' => '1.0.0',
     }
   end
 
   let(:dep_one_bad_version) do
     {
       'name'    => 'dep/one',
-      'version' => '5.5.5'
+      'version' => '5.5.5',
     }
   end
 

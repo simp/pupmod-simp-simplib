@@ -73,7 +73,7 @@ Puppet::Functions.create_function(:'simplib::parse_hosts') do
       unless parsed_hosts.key?(hostname)
         parsed_hosts[hostname] = {
           ports: [],
-          protocols: {}
+          protocols: {},
         }
       end
 

@@ -21,16 +21,16 @@ describe 'simplib::validate_uri_list' do
 
   context 'Valid URIs with IPv4' do
     it { is_expected.to run.with_params('rsync://127.0.0.1:1234') }
-    it {
+    it do
       is_expected.to run.with_params(
         ['ldap://1.2.3.4', 'ldaps://1.2.3.4'],
         ['ldap', 'ldaps'],
       )
-    }
+    end
   end
 
   context 'Valid URIs with IPv6' do
-    it {
+    it do
       is_expected.to run.with_params(
         [
           'ldap://[2001:db8:1f70::999:de8:7648:001]:100',
@@ -38,27 +38,27 @@ describe 'simplib::validate_uri_list' do
         ],
         ['ldap', 'ldaps'],
       )
-    }
+    end
   end
 
   context 'Invalid URIs' do
     it { is_expected.to run.with_params('').and_raise_error(ArgumentError) }
     it { is_expected.to run.with_params([]).and_raise_error(ArgumentError) }
     it { is_expected.to run.with_params('ldap://1.2.3.4:567:oops').and_raise_error(%r{is not a valid URI}) }
-    it {
+    it do
       is_expected.to run.with_params(
         [ 'ldap://1.2.3.4', 'ldaps://1.2.3.4' ], [ 'http', 'https' ]
       ).and_raise_error(%r{'ldap' must be one of \["http", "https"\]})
-    }
+    end
 
-    it {
+    it do
       is_expected.to run.with_params('ldap://[2001:db8:1f70::999:de8:7648:]').and_raise_error(%r{is not a valid URI})
-    }
+    end
 
-    it {
+    it do
       is_expected.to run.with_params(
           [ 'http://1.2.3.4', 'ldaps://[2001:db8:1f70::999:de8:7648:002]' ], [ 'http' ]
         ).and_raise_error(%r{'ldaps' must be one of \["http"\]})
-    }
+    end
   end
 end

@@ -48,7 +48,7 @@ describe 'simplib::passgen::simpkv::get' do
       meta = {
         'complexity'   => complexity,
         'complex_only' => complex_only,
-        'history'      => history
+        'history'      => history,
       }
       call_function('simpkv::put', key, value, meta)
 
@@ -64,7 +64,7 @@ describe 'simplib::passgen::simpkv::get' do
       meta = {
         'complexity'   => complexity,
         'complex_only' => complex_only,
-        'history'      => history
+        'history'      => history,
       }
       call_function('simpkv::put', key, value, meta)
 
@@ -79,8 +79,8 @@ describe 'simplib::passgen::simpkv::get' do
           'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
-          }
-        }
+          },
+        },
       }
 
       is_expected.to run.with_params(id, simpkv_options)

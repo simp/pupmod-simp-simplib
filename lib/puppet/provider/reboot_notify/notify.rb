@@ -17,8 +17,8 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   def self.default_control_metadata
     {
       'reboot_control_metadata' => {
-        'log_level' => 'notice'
-      }
+        'log_level' => 'notice',
+      },
     }
   end
 
@@ -164,7 +164,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     else
       @records[@resource[:name]] = {
         reason: @resource[:reason],
-        updated: Time.now.tv_sec
+        updated: Time.now.tv_sec,
       }
     end
   end

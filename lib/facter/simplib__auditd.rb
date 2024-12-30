@@ -26,7 +26,7 @@ Facter.add('simplib__auditd') do
     status = {
       'enforcing' => false,
       'kernel_enforcing' => false,
-      'enabled' => 0
+      'enabled' => 0,
     }
 
     audit_version = Facter::Core::Execution.exec("#{@auditctl} -v").split(%r{\s+}).last

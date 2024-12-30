@@ -11,7 +11,7 @@ Facter.add('simplib__sshd_config') do
     # Format:
     #   Key => Default Value
     selected_settings = {
-      'AuthorizedKeysFile' => '.ssh/authorized_keys'
+      'AuthorizedKeysFile' => '.ssh/authorized_keys',
     }
 
     sshd = Facter::Util::Resolution.which('sshd')
