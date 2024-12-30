@@ -28,11 +28,13 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
   #
   # @example
   #
-  #   simplib::ip::family_hash([
-  #     '1.2.3.4',
-  #     '2.3.4.5/8',
-  #     '::1'
-  #   ])
+  #   simplib::ip::family_hash(
+  #     [
+  #       '1.2.3.4',
+  #       '2.3.4.5/8',
+  #       '::1',
+  #     ]
+  #   )
   #
   #   Returns (YAML Formatted for clarity)
   #
@@ -73,15 +75,15 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
         'address' => addr,
         'netmask' => {
           'ddq'  => nil,
-          'cidr' => nil
-        }
+          'cidr' => nil,
+        },
       }
 
       begin
         ip = IPAddr.new(addr)
 
-        addr_normalized, cidr_netmask = call_function('simplib::nets2cidr', addr).
-          first.split('/')
+        addr_normalized, cidr_netmask = call_function('simplib::nets2cidr', addr)
+                                        .first.split('/')
 
         addr_normalized.delete!('[]')
 
@@ -91,8 +93,8 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
         if ip.ipv4?
           ip_family = 'ipv4'
 
-          ip_breakdown['netmask']['ddq'] = call_function('simplib::nets2ddq', addr).
-            first.split('/')[1] || '255.255.255.255'
+          ip_breakdown['netmask']['ddq'] = call_function('simplib::nets2ddq', addr)
+                                           .first.split('/')[1] || '255.255.255.255'
 
           ip_breakdown['netmask']['cidr'] = 32 unless ip_breakdown['netmask']['cidr']
         elsif ip.ipv6?
@@ -105,7 +107,6 @@ Puppet::Functions.create_function(:'simplib::ip::family_hash') do
       rescue
         ip_family = 'unknown'
       end
-
 
       results[ip_family] ||= {}
       results[ip_family][addr] = ip_breakdown

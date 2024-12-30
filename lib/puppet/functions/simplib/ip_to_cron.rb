@@ -2,7 +2,6 @@
 #  This can be used to avoid starting a certain cron job at the same
 #  time on all servers.
 Puppet::Functions.create_function(:'simplib::ip_to_cron') do
-
   local_types do
     type "IpToCronAlgorithm = Enum['ip_mod', 'sha256']"
   end
@@ -62,4 +61,3 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
     call_function('simplib::rand_cron', ipaddr, algorithm, occurs, max_value)
   end
 end
-

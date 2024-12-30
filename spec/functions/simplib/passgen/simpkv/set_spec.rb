@@ -29,7 +29,7 @@ describe 'simplib::passgen::simpkv::set' do
   end
 
   context 'successful operation' do
-    it 'should store a new password' do
+    it 'stores a new password' do
       is_expected.to run.with_params(id, password, salt, complexity, complex_only)
 
       # retrieve what has been stored by simpkv and validate
@@ -39,17 +39,17 @@ describe 'simplib::passgen::simpkv::set' do
       expected_meta = {
         'complexity' => complexity,
         'complex_only' => complex_only,
-        'history' => []
+        'history' => [],
       }
       expect(stored_info['metadata']).to eq(expected_meta)
     end
 
-    it 'should retain the history of the last 10 passwords with their salts' do
+    it 'retains the history of the last 10 passwords with their salts' do
       expected_history = []
       (1..12).each do |run|
         rpassword = "#{password} run #{run}"
         rsalt = "#{salt} run #{run}"
-        subject.execute(id, rpassword, rsalt, complexity, complex_only)
+        subject.execute(id, rpassword, rsalt, complexity, complex_only) # rubocop:disable RSpec/NamedSubject
         expected_history << [rpassword, rsalt]
       end
 
@@ -65,7 +65,7 @@ describe 'simplib::passgen::simpkv::set' do
       expected_meta = {
         'complexity' => complexity,
         'complex_only' => complex_only,
-        'history' => expected_history
+        'history' => expected_history,
       }
       expect(stored_info['metadata']).to eq(expected_meta)
     end
@@ -76,18 +76,17 @@ describe 'simplib::passgen::simpkv::set' do
       simpkv_options = {
         'backend'  => 'oops',
         'backends' => {
-          'oops'  => {
+          'oops' => {
             'type' => 'does_not_exist_type',
             'id'   => 'test',
-          }
-        }
+          },
+        },
       }
 
       is_expected.to run.with_params(
           id, password, salt, complexity, complex_only, simpkv_options
         ).and_raise_error(ArgumentError,
-        /simpkv Configuration Error/)
-
+        %r{simpkv Configuration Error})
     end
   end
 end

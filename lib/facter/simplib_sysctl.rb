@@ -4,7 +4,8 @@
 #
 # We don't grab the entire output due to the sheer size of it
 #
-Facter.add("simplib_sysctl") do
+require 'English'
+Facter.add('simplib_sysctl') do
   confine { Facter::Core::Execution.which('sysctl') }
 
   setcode do
@@ -18,7 +19,7 @@ Facter.add("simplib_sysctl") do
       'kernel.tainted',
       'kernel.threads-max',
       'net.ipv6.conf.all.disable_ipv6',
-      'vm.swappiness'
+      'vm.swappiness',
     ]
 
     retval = {}
@@ -31,20 +32,18 @@ Facter.add("simplib_sysctl") do
       # Facter.*.exec.
       #
       # For now we test around the issue by checking the output if $? is nil:
-      if ($?.nil? && module_value) ||
-          (!$?.nil? && $?.exitstatus.zero? && module_value && !module_value.strip.empty?)
-      then
-        module_value.strip!
+      next unless ($CHILD_STATUS.nil? && module_value) ||
+                  (!$CHILD_STATUS.nil? && $CHILD_STATUS.exitstatus.zero? && module_value && !module_value.strip.empty?)
+      module_value.strip!
 
-        # These can be too big for facter to process as Integers
-        unless entry.start_with?('kernel.shm')
-          if module_value =~ /^\d+$/
-            module_value = module_value.to_i
-          end
+      # These can be too big for facter to process as Integers
+      unless entry.start_with?('kernel.shm')
+        if %r{^\d+$}.match?(module_value)
+          module_value = module_value.to_i
         end
-
-        retval[entry] = module_value
       end
+
+      retval[entry] = module_value
     end
 
     retval

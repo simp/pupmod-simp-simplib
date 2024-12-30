@@ -6,7 +6,6 @@
 # and return those entries untouched.
 #
 Puppet::Functions.create_function(:'simplib::bracketize') do
-
   # @param ip_arr The array of IPv6 addresses to bracketize
   # @return [Variant[String, Array[String]]] converted input
   #
@@ -42,31 +41,31 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
   end
 
   def bracketize_string_input(ipaddr_string)
-    ip_arr = ipaddr_string.split(/\s|,|;/).delete_if{ |y| y.empty? }
+    ip_arr = ipaddr_string.split(%r{\s|,|;}).delete_if { |y| y.empty? }
     bracketize(ip_arr)
   end
 
   def bracketize(ip_arr)
     require 'ipaddr'
     ipaddr = Array(ip_arr).flatten
-    retval = Array.new
+    retval = []
     ipaddr.each do |x|
       begin
         ip = IPAddr.new(x)
       rescue
-        #allowed to fail because input can be string of hostname
+        # allowed to fail because input can be string of hostname
         # will just return unaltered input in that case
         retval << x
         next
       end
       # IPv6 Address?
-      if ip.ipv6?() then
-        if x[0].chr != '[' then
+      if ip.ipv6?
+        if x[0].chr != '['
           y = x.split('/')
           y[0] = "[#{y[0]}]"
           retval << y.join('/')
         else
-         retval << x
+          retval << x
         end
       else
         retval << x
@@ -74,6 +73,6 @@ Puppet::Functions.create_function(:'simplib::bracketize') do
     end
 
     retval = retval.first if retval.size == 1
-    return retval
+    retval
   end
 end

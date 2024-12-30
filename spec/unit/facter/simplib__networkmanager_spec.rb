@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'simplib__networkmanager' do
-
   before :each do
     Facter.clear
     # mock out Facter method called when evaluating confine for :kernel
@@ -21,66 +20,68 @@ describe 'simplib__networkmanager' do
   end
 
   context 'nmcli fails' do
-    let(:general_status){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
-    let(:general_hostname){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
-    let(:connections){ Puppet::Util::Execution::ProcessOutput.new('', 1) }
+    let(:general_status) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
+    let(:general_hostname) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
+    let(:connections) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
 
     it 'returns "enabled" = false' do
       # allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
 
-      expect(Facter.fact('simplib__networkmanager').value).to eq({'enabled' => false})
+      expect(Facter.fact('simplib__networkmanager').value).to eq({ 'enabled' => false })
     end
   end
 
   context 'nmcli succeeds' do
-    let(:general_status){
+    let(:general_status) do
       output = <<~EOM
-        STATE:connected
-        CONNECTIVITY:full
-        WIFI-HW:enabled
-        WIFI:enabled
-        WWAN-HW:enabled
-        WWAN:enabled
+          STATE:connected
+          CONNECTIVITY:full
+          WIFI-HW:enabled
+          WIFI:enabled
+          WWAN-HW:enabled
+          WWAN:enabled
         EOM
       Puppet::Util::Execution::ProcessOutput.new(output, 0)
-    }
+    end
 
-    let(:general_hostname){ Puppet::Util::Execution::ProcessOutput.new("foo.bar.baz\n", 0) }
+    let(:general_hostname) { Puppet::Util::Execution::ProcessOutput.new("foo.bar.baz\n", 0) }
 
-    let(:connections){
+    let(:connections) do
       output = <<~EOM
-        Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
-        Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
+          Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
+          Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
         EOM
       Puppet::Util::Execution::ProcessOutput.new(output, 0)
-    }
+    end
 
-    let(:expected){{
-      'enabled'    => true,
-      'general'    => {
-        'hostname' => general_hostname.strip,
-        'status'   => {
-          'STATE'        => 'connected',
-          'CONNECTIVITY' => 'full',
-          'WIFI-HW'      => 'enabled',
-          'WIFI'         => 'enabled',
-          'WWAN-HW'      => 'enabled',
-          'WWAN'         => 'enabled'
+    let(:expected) do
+      {
+        'enabled' => true,
+        'general'    => {
+          'hostname' => general_hostname.strip,
+          'status'   => {
+            'STATE'        => 'connected',
+            'CONNECTIVITY' => 'full',
+            'WIFI-HW'      => 'enabled',
+            'WIFI'         => 'enabled',
+            'WWAN-HW'      => 'enabled',
+            'WWAN'         => 'enabled',
+          },
         },
-      },
-      'connection' => {
-        'eth0'   => {
-          'uuid' => 'b961cb37-ae05-4c67-98b0-432465fe03c2',
-          'type' => '802-3-ethernet',
-          'name' => 'Eth Dev'
+        'connection' => {
+          'eth0'   => {
+            'uuid' => 'b961cb37-ae05-4c67-98b0-432465fe03c2',
+            'type' => '802-3-ethernet',
+            'name' => 'Eth Dev',
+          },
+          'virbr0' => {
+            'uuid' => '0c190f3f-262b-4585-a7de-2a146896ea86',
+            'type' => 'bridge',
+            'name' => 'Bridge Dev',
+          },
         },
-        'virbr0' => {
-          'uuid' => '0c190f3f-262b-4585-a7de-2a146896ea86',
-          'type' => 'bridge',
-          'name' => 'Bridge Dev'
-        }
       }
-    }}
+    end
 
     it 'is enabled' do
       expect(Facter.fact('simplib__networkmanager').value).to eq(expected)

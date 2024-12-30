@@ -1,7 +1,6 @@
 # Returns whether password information retrieved from simpkv is valid
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::valid_password_info') do
-
   # @param password_info  Hash of password information retrieved from simpkv
   #   * 'value'- Hash that should contain 'password' and 'salt' attributes
   #   * 'metadata' - Hash that should contain 'complexity', 'complex_only' and
@@ -17,11 +16,10 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::valid_password_inf
 
   def valid_password_info(password_info)
     password_info['value'].key?('password') &&
-    password_info['value'].key?('salt') &&
-    password_info.key?('metadata') &&
-    password_info['metadata'].key?('complexity') &&
-    password_info['metadata'].key?('complex_only') &&
-    password_info['metadata'].key?('history')
+      password_info['value'].key?('salt') &&
+      password_info.key?('metadata') &&
+      password_info['metadata'].key?('complexity') &&
+      password_info['metadata'].key?('complex_only') &&
+      password_info['metadata'].key?('history')
   end
 end
-

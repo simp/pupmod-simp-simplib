@@ -7,32 +7,34 @@ plural_item = 'priorities'
 
 valid_data = [
   'kern.warning',
-  'local6.notice'
+  'local6.notice',
 ]
 
 invalid_data = [
   'KERN.WARNING',
-  'LOCAL6.NOTICE'
+  'LOCAL6.NOTICE',
 ]
 
 describe test_data_type, type: :class do
   describe 'valid handling' do
-    let(:pre_condition) {%(
-      class #{class_name} (
-        #{test_data_type} $param
-      ){ }
+    let(:pre_condition) do
+      <<~END
+        class #{class_name} (
+          #{test_data_type} $param,
+        ) { }
 
-      class { '#{class_name}':
-        param => #{param}
-      }
-    )}
+        class { '#{class_name}':
+          param => #{param},
+        }
+      END
+    end
 
     context "with valid #{plural_item}" do
       valid_data.each do |data|
         context "with #{singular_item} #{data}" do
-          let(:param){ data.is_a?(String) ? "'#{data}'" : data }
+          let(:param) { data.is_a?(String) ? "'#{data}'" : data }
 
-          it 'should compile' do
+          it 'compiles' do
             is_expected.to compile
           end
         end
@@ -42,12 +44,12 @@ describe test_data_type, type: :class do
     context "with invalid #{plural_item}" do
       invalid_data.each do |data|
         context "with #{singular_item} #{data}" do
-          let(:param){
+          let(:param) do
             data.is_a?(String) ? "'#{data}'" : data
-          }
+          end
 
-          it 'should fail to compile' do
-            is_expected.to compile.and_raise_error(/parameter 'param'/)
+          it 'fails to compile' do
+            is_expected.to compile.and_raise_error(%r{parameter 'param'})
           end
         end
       end

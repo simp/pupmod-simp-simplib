@@ -20,7 +20,6 @@
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 #
 Puppet::Functions.create_function(:'simplib::passgen::remove') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -104,9 +103,8 @@ Puppet::Functions.create_function(:'simplib::passgen::remove') do
     optional_param 'Hash',      :simpkv_options
   end
 
-  def remove(identifier, simpkv_options={'app_id' => 'simplib::passgen'})
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
+  def remove(identifier, simpkv_options = { 'app_id' => 'simplib::passgen' })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
 
     if use_simpkv
       call_function('simplib::passgen::simpkv::remove', identifier, simpkv_options)

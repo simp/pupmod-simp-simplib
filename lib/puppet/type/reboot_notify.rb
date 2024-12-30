@@ -36,21 +36,21 @@ Puppet::Type.newtype(:reboot_notify) do
     defaultto('modified')
   end
 
-  newparam(:control_only, :boolean => true, :parent => Puppet::Parameter::Boolean) do
-    desc <<-EOM
-    This resource is only for control and should not add an item to the notification list
+  newparam(:control_only, boolean: true, parent: Puppet::Parameter::Boolean) do
+    desc <<~EOM
+      This resource is only for control and should not add an item to the notification list
 
-    You may only have ONE resource with this set to `true` in your catalog
+      You may only have ONE resource with this set to `true` in your catalog
     EOM
 
     defaultto(:false)
   end
 
   newparam(:log_level) do
-    desc <<-EOM
-    Set the message log level for notifications
+    desc <<~EOM
+      Set the message log level for notifications
 
-    This is only active with :control_only set to `true`
+      This is only active with :control_only set to `true`
     EOM
 
     defaultto(:notice)
@@ -63,10 +63,10 @@ Puppet::Type.newtype(:reboot_notify) do
 
   validate do
     if self[:control_only]
-      existing_resource = catalog.resources.find { |res| (res.type == self.type) && res[:control_only] }
+      existing_resource = catalog.resources.find { |res| (res.type == type) && res[:control_only] }
 
       if existing_resource
-        err = ["You can only have one #{self.type} resource with :control_only set to 'true'"]
+        err = ["You can only have one #{type} resource with :control_only set to 'true'"]
         err << "Conflicting resource found in file '#{existing_resource.file}' on line '#{existing_resource.line}'"
 
         raise(Puppet::Error, err.join("\n"))

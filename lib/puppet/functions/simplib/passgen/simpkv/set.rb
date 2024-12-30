@@ -13,7 +13,6 @@
 # * Terminates catalog compilation if any simpkv operation fails.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
-
   # @param identifier
   #   Unique `String` to identify the password usage.
   #   Must conform to the following:
@@ -113,35 +112,34 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::set') do
     optional_param 'Hash',         :simpkv_options
   end
 
-  def set(identifier, password, salt, complexity, complex_only,
-      simpkv_options={'app_id' => 'simplib::passgen'})
-
+  def set(identifier, password, salt, complexity, complex_only, simpkv_options = { 'app_id' => 'simplib::passgen' })
     key_root_dir = call_function('simplib::passgen::simpkv::root_dir')
     key = "#{key_root_dir}/#{identifier}"
     key_info = { 'password' => password, 'salt' => salt }
     metadata = {
       'complexity'   => complexity,
       'complex_only' => complex_only,
-      'history'      => get_history(identifier, simpkv_options)
+      'history'      => get_history(identifier, simpkv_options),
     }
 
-    # TODO If simpkv is updated to allow transaction locks, lock prior to
+    # TODO: If simpkv is updated to allow transaction locks, lock prior to
     # get_history() which calls simpkv::get under the hood, and release the
     # lock after this simpkv::put call.
     call_function('simpkv::put', key, key_info, metadata, simpkv_options)
   end
 
   def get_history(identifier, simpkv_options)
-    last_password_info = call_function('simplib::passgen::simpkv::get', identifier,
-      simpkv_options)
+    last_password_info = call_function('simplib::passgen::simpkv::get', identifier, simpkv_options)
 
     history = []
     unless last_password_info.empty?
       history = last_password_info['metadata']['history'].dup
-      history.unshift([
-        last_password_info['value']['password'],
-        last_password_info['value']['salt']
-      ])
+      history.unshift(
+        [
+          last_password_info['value']['password'],
+          last_password_info['value']['salt'],
+        ],
+      )
 
       # only keep the last 10 <password,salt> pairs
       history = history[0..9]

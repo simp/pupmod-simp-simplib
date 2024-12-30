@@ -9,7 +9,6 @@
 #   in the allotted time.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
-
   # @param identifier Unique `String` to identify the password usage.
   #   Must conform to the following:
   #   * Identifier must contain only the following characters:
@@ -138,7 +137,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     optional_param 'Hash',      :simpkv_options
   end
 
-  def passgen(identifier, password_options={}, simpkv_options={'app_id' => 'simplib::passgen'})
+  def passgen(identifier, password_options = {}, simpkv_options = { 'app_id' => 'simplib::passgen' })
     require 'timeout'
 
     # internal settings
@@ -148,7 +147,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     settings['crypt_map'] = {
       'md5'     => '1',
       'sha256'  => '5',
-      'sha512'  => '6'
+      'sha512'  => '6',
     }
 
     base_options = {
@@ -157,7 +156,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
       'hash'                => false,
       'complexity'          => 0,
       'complex_only'        => false,
-      'gen_timeout_seconds' => 30
+      'gen_timeout_seconds' => 30,
     }
 
     options = build_options(base_options, password_options, settings)
@@ -166,23 +165,20 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     salt = nil
     begin
       if options['last']
-        password,salt = get_last_password(identifier, options, simpkv_options)
+        password, salt = get_last_password(identifier, options, simpkv_options)
       else
-        password,salt = get_current_password(identifier, options, simpkv_options)
+        password, salt = get_current_password(identifier, options, simpkv_options)
       end
-    rescue Timeout::Error => e
+    rescue Timeout::Error
       # can get here if password/salt generation timed out
-      fail("simplib::passgen timed out for '#{identifier}'!")
+      raise("simplib::passgen timed out for '#{identifier}'!")
     end
 
     # Return the hash, not the password
-    if options['hash']
-      return password.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}")
-    else
-      return password
-    end
-  end
+    return password.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
 
+    password
+  end
 
   # Build a merged options hash and validate the options
   # @raise ArgumentError if any option in the password_options is invalid
@@ -192,11 +188,11 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
 
     # set internal options that help us validate whether a retrieved
     # password meets current criteria
-    options['length_configured'] = password_options.has_key?('length')
-    options['complexity_configured'] = password_options.has_key?('complexity')
-    options['complex_only_configured'] = password_options.has_key?('complex_only')
+    options['length_configured'] = password_options.key?('length')
+    options['complexity_configured'] = password_options.key?('complexity')
+    options['complex_only_configured'] = password_options.key?('complex_only')
 
-    if options['length'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['length'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Length '#{options['length']}' must be an integer!"
     else
@@ -208,14 +204,14 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
       end
     end
 
-    if options['complexity'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['complexity'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Complexity '#{options['complexity']}' must be an integer!"
     else
       options['complexity'] = options['complexity'].to_i
     end
 
-    if options['gen_timeout_seconds'].to_s !~ /^\d+$/
+    if !%r{^\d+$}.match?(options['gen_timeout_seconds'].to_s)
       raise ArgumentError,
         "simplib::passgen: Error: Password generation timeout '#{options['gen_timeout_seconds']}' must be an integer!"
     else
@@ -226,12 +222,12 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     if options['hash'] == true
       options['hash'] = 'sha256'
     end
-    if options['hash'] and !settings['crypt_map'].keys.include?(options['hash'])
+    if options['hash'] && !settings['crypt_map'].keys.include?(options['hash'])
       raise ArgumentError,
        "simplib::passgen: Error: '#{options['hash']}' is not a valid hash."
     end
 
-    return options
+    options
   end
 
   # Create a <password,salt> pair and then store it, pertinent options, and
@@ -248,8 +244,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
       options['length'],
       options['complexity'],
       options['complex_only'],
-      options['gen_timeout_seconds']
-    )
+      options['gen_timeout_seconds'])
 
     call_function('simplib::passgen::simpkv::set',
       identifier, password, salt, options['complexity'],
@@ -275,7 +270,6 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
   def get_current_password(identifier, options, simpkv_options)
     password = nil
     salt = nil
-    history = []
     generate = false
 
     password_info = call_function('simplib::passgen::simpkv::get', identifier,
@@ -316,20 +310,19 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     password = nil
     salt = nil
 
-    password_info = call_function('simplib::passgen::simpkv::get', identifier,
-      simpkv_options)
+    password_info = call_function('simplib::passgen::simpkv::get', identifier, simpkv_options)
 
     if password_info.empty?
-      warn_msg = "Could not retrieve a last or current value for" +
-        " #{identifier}. Generating a new value for 'last'. Please ensure" +
-        " that you have used simplib::passgen in the proper order in your" +
-        " manifest!"
+      warn_msg = 'Could not retrieve a last or current value for' \
+                 " #{identifier}. Generating a new value for 'last'. Please ensure" \
+                 ' that you have used simplib::passgen in the proper order in your' \
+                 ' manifest!'
       Puppet.warning warn_msg
       # generate password and salt and then store
       password, salt = create_and_store_password(identifier, options,
         simpkv_options)
     elsif !password_info['metadata']['history'].empty?
-      password,salt = password_info['metadata']['history'].first
+      password, salt = password_info['metadata']['history'].first
     else
       password = password_info['value']['password']
       salt = password_info['value']['salt']
@@ -344,21 +337,21 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
   # @param options current options
   def valid_password?(password_info, options)
     if options['length_configured']
-      unless (password_info['value']['password'].length == options['length'])
+      unless password_info['value']['password'].length == options['length']
         return false
       end
     end
 
     if options['complexity_configured']
-      unless ( password_info['metadata'].key?('complexity') &&
-        (password_info['metadata']['complexity'] == options['complexity']) )
+      unless password_info['metadata'].key?('complexity') &&
+             (password_info['metadata']['complexity'] == options['complexity'])
         return false
       end
     end
 
     if options['complex_only_configured']
-      unless ( password_info['metadata'].key?('complex_only') &&
-        (password_info['metadata']['complex_only'] == options['complex_only']) )
+      unless password_info['metadata'].key?('complex_only') &&
+             (password_info['metadata']['complex_only'] == options['complex_only'])
         return false
       end
     end

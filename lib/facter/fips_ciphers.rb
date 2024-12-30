@@ -1,8 +1,7 @@
 # List available FIPS-compatible OpenSSL ciphers on the system
 # Returns: Array[String]
 Facter.add('fips_ciphers') do
-
-  confine :kernel => 'Linux'
+  confine kernel: 'Linux'
   openssl_bin = Facter::Core::Execution.which('openssl')
 
   setcode do

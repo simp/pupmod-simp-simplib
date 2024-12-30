@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby -S rspec
 require 'spec_helper'
 
-class ClassWithoutTo_s
+class ClassWithoutToS
   undef_method :to_s
 end
 
@@ -13,12 +13,12 @@ describe 'simplib::to_string' do
 
     # Perhaps unexpected behavior? If we don't want this, we need to
     # change the required_param type in the :to_string dispatch
-    it { is_expected.to run.with_params( [34, 56] ).and_return('[34, 56]') }
-    it { is_expected.to run.with_params( {'tag'=> 'value'} ).and_return('{"tag"=>"value"}') }
+    it { is_expected.to run.with_params([34, 56]).and_return('[34, 56]') }
+    it { is_expected.to run.with_params({ 'tag' => 'value' }).and_return('{"tag"=>"value"}') }
   end
 
   context 'should fail when conversion is not possible' do
-   odd_var = ClassWithoutTo_s.new
-   it { is_expected.to run.with_params(odd_var).and_raise_error(/cannot be converted to a String/) }
+    odd_var = ClassWithoutToS.new
+    it { is_expected.to run.with_params(odd_var).and_raise_error(%r{cannot be converted to a String}) }
   end
 end

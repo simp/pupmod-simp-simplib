@@ -6,35 +6,35 @@ init_ulimit_type = Puppet::Type.type(:init_ulimit)
 
 describe init_ulimit_type do
   context 'when setting parameters' do
-    it 'should accept valid input' do
+    it 'accepts valid input' do
       resource = init_ulimit_type.new(
-        :name       => 'foo',
-        :target     => 'foo_svc',
-        :limit_type => 'both',
-        :item       => 'max_nice',
-        :value      => '10'
+        name: 'foo',
+        target: 'foo_svc',
+        limit_type: 'both',
+        item: 'max_nice',
+        value: '10',
       )
       expect(resource[:name]).to eq('foo')
       expect(resource[:item]).to eq('e')
     end
 
-    it 'should accept composite namevars' do
+    it 'accepts composite namevars' do
       resource = init_ulimit_type.new(
-        :name       => 'v|foo_svc',
-        :limit_type => 'both',
-        :value      => '10'
+        name: 'v|foo_svc',
+        limit_type: 'both',
+        value: '10',
       )
       expect(resource[:name]).to eq('v|foo_svc')
       expect(resource[:item]).to eq('v')
       expect(resource[:target]).to eq('foo_svc')
     end
 
-    it 'should translate "unlimited" for "max_open_files"' do
+    it 'translates "unlimited" for "max_open_files"' do
       resource = init_ulimit_type.new(
-        :name       => 'foo',
-        :target     => 'foo_svc',
-        :item       => 'max_open_files',
-        :value      => 'unlimited'
+        name: 'foo',
+        target: 'foo_svc',
+        item: 'max_open_files',
+        value: 'unlimited',
       )
       expect(resource[:name]).to eq('foo')
       expect(resource[:item]).to eq('n')

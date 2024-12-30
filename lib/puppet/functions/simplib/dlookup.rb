@@ -119,7 +119,7 @@ Puppet::Functions.create_function(:'simplib::dlookup') do
   def dlookup(define_id, param, options)
     target_param = "#{define_id}::#{param}"
 
-    return call_function('simplib::lookup', target_param, options )
+    call_function('simplib::lookup', target_param, options)
   end
 
   def dlookup_specific(define_id, param, resource_title, options)
@@ -132,6 +132,6 @@ Puppet::Functions.create_function(:'simplib::dlookup') do
       retval = dlookup(define_id, param, options)
     end
 
-    return retval
+    retval
   end
 end

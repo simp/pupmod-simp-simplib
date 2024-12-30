@@ -20,8 +20,8 @@ Facter.add('simplib__firewalls') do
       'ipfw'      => nil,
       'nft'       => nil,
       'pf'        => {
-        :command => 'pfctl'
-      }
+        command: 'pfctl',
+      },
     }
 
     firewall_metadata.each do |fw_name, fw_opts|

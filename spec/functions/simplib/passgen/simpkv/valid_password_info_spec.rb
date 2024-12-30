@@ -6,19 +6,21 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
   let(:salt) { 'salt for my_id 2' }
   let(:complexity) { 0 }
   let(:complex_only) { false }
-  let(:history) { [
-    [ 'password for my_id 1', 'salt for my_id 1'],
-    [ 'password for my_id 0', 'salt for my_id 0']
-  ] }
+  let(:history) do
+    [
+      [ 'password for my_id 1', 'salt for my_id 1'],
+      [ 'password for my_id 0', 'salt for my_id 0'],
+    ]
+  end
 
-  it 'should return true when password info is complete' do
+  it 'returns true when password info is complete' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
         'complexity'   => complexity,
         'complex_only' => complex_only,
-        'history'      => history
-      }
+        'history'      => history,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(true)
@@ -28,10 +30,10 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
-      'complex_only' => complex_only,
-      'history' => history
-      }
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
+        'history'      => history,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
@@ -41,10 +43,10 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password },
       'metadata' => {
-      'complexity' => complexity,
-      'complex_only' => complex_only,
-      'history' => history
-      }
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
+        'history'      => history,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
@@ -52,7 +54,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
 
   it 'fails when returned info is missing metadata key' do
     password_info = {
-      'value'    => { 'password' => password, 'salt' => salt }
+      'value'    => { 'password' => password, 'salt' => salt },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
@@ -62,9 +64,9 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complex_only' => complex_only,
-      'history' => history
-      }
+        'complex_only' => complex_only,
+        'history'      => history,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
@@ -74,9 +76,9 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
-      'history' => history
-      }
+        'complexity' => complexity,
+        'history'    => history,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
@@ -86,9 +88,9 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
     password_info = {
       'value'    => { 'password' => password, 'salt' => salt },
       'metadata' => {
-      'complexity' => complexity,
-      'complex_only' => complex_only
-      }
+        'complexity'   => complexity,
+        'complex_only' => complex_only,
+      },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)

@@ -20,7 +20,6 @@
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 #
 Puppet::Functions.create_function(:'simplib::passgen::list') do
-
   # @param folder Unique `String` to identify the password sub-folder
   #   of the root folder for simplib::passgen
   #   * Only applies when in simpkv mode
@@ -112,18 +111,13 @@ Puppet::Functions.create_function(:'simplib::passgen::list') do
     optional_param 'Hash',   :simpkv_options
   end
 
-  def list(folder='/', simpkv_options={'app_id' => 'simplib::passgen'})
-    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv',
-      { 'default_value' => false })
-
-    results = nil
-    if use_simpkv
-      results = call_function('simplib::passgen::simpkv::list', folder,
-        simpkv_options)
-    else
-      results = call_function('simplib::passgen::legacy::list')
-    end
+  def list(folder = '/', simpkv_options = { 'app_id' => 'simplib::passgen' })
+    use_simpkv = call_function('lookup', 'simplib::passgen::simpkv', { 'default_value' => false })
+    results = if use_simpkv
+                call_function('simplib::passgen::simpkv::list', folder, simpkv_options)
+              else
+                call_function('simplib::passgen::legacy::list')
+              end
     results
   end
 end
-

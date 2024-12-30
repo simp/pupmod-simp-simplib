@@ -20,13 +20,13 @@ describe 'simplib__mountpoints' do
       attr_accessor :name
 
       def initialize
-        @name= 'read_proc'
+        @name = 'read_proc'
       end
     end
 
     expect(Etc).to receive(:getgrgid).with(953).and_return(EtcStub.new)
 
-    expect(Facter::Core::Execution).to receive(:execute).with('cat /proc/mounts 2> /dev/null', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('cat /proc/mounts 2> /dev/null', on_fail: nil).and_return(
       <<~EL7_PROC_MOUNTS,
       rootfs / rootfs rw 0 0
       sysfs /sys sysfs rw,seclabel,nosuid,nodev,noexec,relatime 0 0
@@ -64,26 +64,26 @@ describe 'simplib__mountpoints' do
     )
 
     # Standard systemd tmp.mount
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /tmp', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /tmp', on_fail: nil).and_return(
       <<~EL7_FINDMNT_TMP,
       TARGET SOURCE FSTYPE OPTIONS
       /tmp   tmpfs  tmpfs  rw,seclabel
       EL7_FINDMNT_TMP
     )
     # Bind mounted onto itself
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /var/tmp', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /var/tmp', on_fail: nil).and_return(
       <<~EL7_FINDMNT_VAR_TMP,
       TARGET   SOURCE              FSTYPE OPTIONS
       /var/tmp /dev/sda1[/var/tmp] xfs    rw,relatime,seclabel,attr2,inode64,noquota
       EL7_FINDMNT_VAR_TMP
     )
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /dev/shm', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /dev/shm', on_fail: nil).and_return(
       <<~EL7_FINDMNT_DEV_SHM,
       TARGET   SOURCE FSTYPE OPTIONS
       /dev/shm tmpfs  tmpfs  rw,nosuid,nodev,seclabel
       EL7_FINDMNT_DEV_SHM
     )
-    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /proc', :on_fail => nil).and_return(
+    expect(Facter::Core::Execution).to receive(:execute).with('findmnt /proc', on_fail: nil).and_return(
       <<~EL7_FINDMNT_PROC,
       TARGET SOURCE FSTYPE OPTIONS
       /proc  proc   proc   rw,nosuid,nodev,noexec,relatime,hidepid=2,gid=953
@@ -102,8 +102,8 @@ describe 'simplib__mountpoints' do
         ],
         'options_hash' => {
           'rw' => nil,
-          'seclabel' => nil
-        }
+          'seclabel' => nil,
+        },
       },
       '/var/tmp' => {
         'device' => '/var/tmp',
@@ -124,8 +124,8 @@ describe 'simplib__mountpoints' do
           'attr2' => nil,
           'inode64' => nil,
           'noquota' => nil,
-          'bind' => nil
-        }
+          'bind' => nil,
+        },
       },
       '/dev/shm' => {
         'device' => 'tmpfs',
@@ -140,8 +140,8 @@ describe 'simplib__mountpoints' do
           'rw' => nil,
           'seclabel' => nil,
           'nosuid' => nil,
-          'nodev' => nil
-        }
+          'nodev' => nil,
+        },
       },
       '/proc' => {
         'device' => 'proc',
@@ -163,9 +163,9 @@ describe 'simplib__mountpoints' do
           'nodev' => nil,
           'noexec' => nil,
           'relatime' => nil,
-          '_gid__group' => 'read_proc'
-        }
-      }
+          '_gid__group' => 'read_proc',
+        },
+      },
     }
   end
 
@@ -200,7 +200,7 @@ describe 'simplib__mountpoints' do
           'size' => '39.98 GiB',
           'size_bytes' => 42_927_656_960,
           'used' => '3.32 GiB',
-          'used_bytes' => 3_568_381_952
+          'used_bytes' => 3_568_381_952,
         },
         '/dev' => {
           'available' => '2.83 GiB',
@@ -219,7 +219,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_035_959_296,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/dev/hugepages' => {
           'available' => '0 bytes',
@@ -235,7 +235,7 @@ describe 'simplib__mountpoints' do
           'size' => '0 bytes',
           'size_bytes' => 0,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/dev/shm' => {
           'available' => '2.83 GiB',
@@ -252,7 +252,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_043_655_680,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/tmp' => {
           'available' => '2.83 GiB',
@@ -267,7 +267,7 @@ describe 'simplib__mountpoints' do
           'size' => '2.83 GiB',
           'size_bytes' => 3_043_655_680,
           'used' => '0 bytes',
-          'used_bytes' => 0
+          'used_bytes' => 0,
         },
         '/var/tmp' => {
           'available' => '36.66 GiB',
@@ -286,8 +286,8 @@ describe 'simplib__mountpoints' do
           'size' => '39.98 GiB',
           'size_bytes' => 42_927_656_960,
           'used' => '3.32 GiB',
-          'used_bytes' => 3_568_381_952
-        }
+          'used_bytes' => 3_568_381_952,
+        },
       }
     end
 

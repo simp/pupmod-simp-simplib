@@ -6,11 +6,11 @@ describe 'simplib::module_exist' do
   end
 
   context 'with an author' do
-    it 'should be valid with simp/simplib' do
+    it 'is valid with simp/simplib' do
       is_expected.to run.with_params('simp/simplib').and_return(true)
     end
 
-    it 'should be invalid with foo/simplib' do
+    it 'is invalid with foo/simplib' do
       is_expected.to run.with_params('foo/simplib').and_return(false)
     end
   end

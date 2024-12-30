@@ -4,7 +4,7 @@ describe 'simplib::validate_net_list' do
   context 'IPv4' do
     describe 'valid IPv4 string' do
       it 'validates address-only' do
-       is_expected.to run.with_params('1.2.3.4')
+        is_expected.to run.with_params('1.2.3.4')
       end
 
       it 'validates address plus port' do
@@ -22,7 +22,7 @@ describe 'simplib::validate_net_list' do
 
     describe 'invalid IPv4 string' do
       it 'rejects invalid octet' do
-        is_expected.to run.with_params('1.2.3.256').and_raise_error(/'1.2.3.256' is not a valid network/)
+        is_expected.to run.with_params('1.2.3.256').and_raise_error(%r{'1.2.3.256' is not a valid network})
       end
 
       it 'rejects CIDR missing network mask' do
@@ -31,15 +31,15 @@ describe 'simplib::validate_net_list' do
       end
 
       it 'rejects CIDR with invalid numeric network mask' do
-        is_expected.to run.with_params('1.2.3.4/33').and_raise_error(/'1.2.3.4\/33' is not a valid network/)
+        is_expected.to run.with_params('1.2.3.4/33').and_raise_error(%r{'1.2.3.4/33' is not a valid network})
       end
 
       it 'rejects CIDR with invalid quad-dotted network mask' do
-        is_expected.to run.with_params('1.2.3.4/256.255.0.0').and_raise_error(/'1.2.3.4\/256.255.0.0' is not a valid network/)
+        is_expected.to run.with_params('1.2.3.4/256.255.0.0').and_raise_error(%r{'1.2.3.4/256.255.0.0' is not a valid network})
       end
 
       it 'rejects invalid port' do
-        is_expected.to run.with_params('1.2.3.4:66000').and_raise_error(/'66000' is not a valid port/)
+        is_expected.to run.with_params('1.2.3.4:66000').and_raise_error(%r{'66000' is not a valid port})
       end
     end
   end
@@ -69,7 +69,7 @@ describe 'simplib::validate_net_list' do
 
     describe 'invalid IPv6 string' do
       it 'rejects invalid octet' do
-        is_expected.to run.with_params('20011:db8:a::').and_raise_error(/'20011:db8:a::' is not a valid network/)
+        is_expected.to run.with_params('20011:db8:a::').and_raise_error(%r{'20011:db8:a::' is not a valid network})
       end
 
       it 'rejects CIDR missing network mask' do
@@ -78,15 +78,16 @@ describe 'simplib::validate_net_list' do
       end
 
       it 'rejects CIDR with invalid numeric network mask' do
-        is_expected.to run.with_params('20011:db8:a::/129').and_raise_error(/'20011:db8:a::\/129' is not a valid network/)
+        is_expected.to run.with_params('20011:db8:a::/129').and_raise_error(%r{'20011:db8:a::/129' is not a valid network})
       end
 
       it 'rejects CIDR with invalid hex network mask' do
-        is_expected.to run.with_params('2001:0db8:030a:4000:0360:ff00:0042:0000/FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFFFFF:0000').and_raise_error(/'2001:0db8:030a:4000:0360:ff00:0042:0000\/FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFFFFF:0000' is not a valid network/)
+        is_expected.to run.with_params('2001:0db8:030a:4000:0360:ff00:0042:0000/FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFFFFF:0000')
+                          .and_raise_error(%r{'2001:0db8:030a:4000:0360:ff00:0042:0000/FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFFFFF:0000' is not a valid network})
       end
 
       it 'rejects invalid port' do
-        is_expected.to run.with_params('[2001:db8:a::]:66000').and_raise_error(/'66000' is not a valid port/)
+        is_expected.to run.with_params('[2001:db8:a::]:66000').and_raise_error(%r{'66000' is not a valid port})
       end
     end
   end
@@ -112,11 +113,11 @@ describe 'simplib::validate_net_list' do
 
     describe 'invalid hostname string' do
       it 'rejects invalid hostname' do
-        is_expected.to run.with_params('my$bad$hostname').and_raise_error(/'my\$bad\$hostname' is not a valid network/)
+        is_expected.to run.with_params('my$bad$hostname').and_raise_error(%r{'my\$bad\$hostname' is not a valid network})
       end
 
       it 'rejects invalid port' do
-        is_expected.to run.with_params('myhostname:-10').and_raise_error(/'-10' is not a valid port/)
+        is_expected.to run.with_params('myhostname:-10').and_raise_error(%r{'-10' is not a valid port})
       end
     end
   end
@@ -140,11 +141,11 @@ describe 'simplib::validate_net_list' do
     end
 
     describe 'invalid array' do
-     it 'rejects when any element is invalid' do
-        is_expected.to run.with_params(['1.2.3.4:-10', '[2001:db8:a::]:64', 'myhost']).and_raise_error(/is not a valid/)
-        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a ::]:64', 'myhost']).and_raise_error(/is not a valid/)
-        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a::]:64', 'my?host']).and_raise_error(/is not a valid/)
-        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a::]:64', 'my?host '], '^my\?host$').and_raise_error(/is not a valid/)
+      it 'rejects when any element is invalid' do
+        is_expected.to run.with_params(['1.2.3.4:-10', '[2001:db8:a::]:64', 'myhost']).and_raise_error(%r{is not a valid})
+        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a ::]:64', 'myhost']).and_raise_error(%r{is not a valid})
+        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a::]:64', 'my?host']).and_raise_error(%r{is not a valid})
+        is_expected.to run.with_params(['1.2.3.4:10', '[2001:db8:a::]:64', 'my?host '], '^my\?host$').and_raise_error(%r{is not a valid})
       end
     end
   end

@@ -10,65 +10,65 @@ describe 'simplib::assert_metadata' do
     'operatingsystem_support' => [
       {
         'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => ['14.04']
-      }
-    ]
+        'operatingsystemrelease' => ['14.04'],
+      },
+    ],
   }.to_json
 
   valid_facts = {
-    :os => {
+    os: {
       'name' => 'Ubuntu',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_os = {
-    :os => {
+    os: {
       'name' => 'Foo',
       'release' => {
         'major' => '14',
-        'full'  => '14.04'
-      }
-    }
+        'full'  => '14.04',
+      },
+    },
   }
 
   bad_version = {
-    :os => {
+    os: {
       'name' => 'Ubuntu',
       'release' => {
         'major' => '10',
-        'full'  => '10.04'
-      }
-    }
+        'full'  => '10.04',
+      },
+    },
   }
 
   options_major = {
     'os' => {
       'options' => {
-        'release_match' => 'major'
-      }
-    }
+        'release_match' => 'major',
+      },
+    },
   }
 
   options_full = {
     'os' => {
       'options' => {
-        'release_match' => 'full'
-      }
-    }
+        'release_match' => 'full',
+      },
+    },
   }
 
   options_disable_global = {
-    'enable' => false
+    'enable' => false,
   }
 
   options_disable_validation = {
     'os' => {
-      'validate' => false
-    }
+      'validate' => false,
+    },
   }
 
   let(:pre_condition) do
@@ -110,19 +110,19 @@ describe 'simplib::assert_metadata' do
       context 'at the OS' do
         let(:facts) { bad_os }
 
-        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
 
       context 'at the major version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
 
       context 'at the full version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(/OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'/) }
+        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
       end
     end
   end

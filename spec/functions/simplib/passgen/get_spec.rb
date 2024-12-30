@@ -9,10 +9,12 @@ describe 'simplib::passgen::get' do
   let(:salt) { 'salt for my_id 2' }
   let(:complexity) { 0 }
   let(:complex_only) { false }
-  let(:history) { [
-    [ 'password for my_id 1', 'salt for my_id 1'],
-    [ 'password for my_id 0', 'salt for my_id 0']
-  ] }
+  let(:history) do
+    [
+      [ 'password for my_id 1', 'salt for my_id 1'],
+      [ 'password for my_id 0', 'salt for my_id 0'],
+    ]
+  end
 
   # The bulk of simplib::passgen::get testing is done in tests for
   # simplib::passgen::legacy::get and simplib::passgen::simpkv::get.
@@ -38,12 +40,12 @@ describe 'simplib::passgen::get' do
     #
     # end
     context 'successes' do
-      it 'should return {} when password does not exist' do
+      it 'returns {} when password does not exist' do
         is_expected.to run.with_params(id).and_return({})
       end
 
-      it 'should return current password and empty history when only current password exists' do
-        subject()
+      it 'returns current password and empty history when only current password exists' do
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
         password_file = File.join(settings['keydir'], id)
@@ -53,13 +55,13 @@ describe 'simplib::passgen::get' do
 
         expected = {
           'value'    => { 'password' => password, 'salt' => salt },
-          'metadata' => { 'history' => [] }
+          'metadata' => { 'history' => [] },
         }
         is_expected.to run.with_params(id).and_return(expected)
       end
 
-      it 'should return current password and history when both current and last passwords exist' do
-        subject()
+      it 'returns current password and history when both current and last passwords exist' do
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
         password_file = File.join(settings['keydir'], id)
@@ -74,7 +76,7 @@ describe 'simplib::passgen::get' do
 
         expected = {
           'value'    => { 'password' => password, 'salt' => salt },
-          'metadata' => { 'history' => [ history[0] ] }
+          'metadata' => { 'history' => [ history[0] ] },
         }
         is_expected.to run.with_params(id).and_return(expected)
       end
@@ -82,7 +84,7 @@ describe 'simplib::passgen::get' do
 
     context 'failures' do
       it 'fails when a password file cannot be read' do
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
         password_file = File.join(settings['keydir'], id)
@@ -90,17 +92,16 @@ describe 'simplib::passgen::get' do
         salt_file = File.join(settings['keydir'], "#{id}.salt")
         File.open(salt_file, 'w') { |file| file.puts salt }
 
-        expect(IO).to receive(:readlines).with(password_file).
-          and_raise(Errno::EACCES, 'read failed')
+        expect(IO).to receive(:readlines).with(password_file)
+                                         .and_raise(Errno::EACCES, 'read failed')
         is_expected.to run.with_params(id).and_raise_error(Errno::EACCES,
           'Permission denied - read failed')
       end
-
     end
   end
 
   context 'simpkv passgen::get' do
-    let(:hieradata){ 'simplib_passgen_simpkv' }
+    let(:hieradata) { 'simplib_passgen_simpkv' }
 
     after(:each) do
       # This is required for GitLab, because the spec tests are run by a
@@ -121,57 +122,57 @@ describe 'simplib::passgen::get' do
     end
 
     context 'successes' do
-      it 'should return {} when the password does not exist' do
-        is_expected.to run.with_params(id).and_return( {} )
+      it 'returns {} when the password does not exist' do
+        is_expected.to run.with_params(id).and_return({})
       end
 
-      it 'should return a stored password' do
+      it 'returns a stored password' do
         # call subject() to make sure test Puppet environment is created
         # before we try to pre-populate the default key/value store with
         # a password
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         value = { 'password' => password, 'salt' => salt }
         meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => history
+          'history' => history,
         }
         call_function('simpkv::put', key, value, meta)
 
-        expected = { 'value' => value, 'metadata' => meta}
-        expect( subject.execute(id) ).to eq expected
+        expected = { 'value' => value, 'metadata' => meta }
+        is_expected.to run.with_params(id).and_return(expected)
       end
     end
 
     context 'failures' do
       it 'fails when returned info is incomplete' do
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         value = { 'salt' => salt }
         meta = {
           'complexity' => complexity,
           'complex_only' => complex_only,
-          'history' => history
+          'history' => history,
         }
         call_function('simpkv::put', key, value, meta)
 
         is_expected.to run.with_params(id).and_raise_error(RuntimeError,
-          /Malformed password info retrieved for 'my_id'/)
+          %r{Malformed password info retrieved for 'my_id'})
       end
 
       it 'fails when simpkv operation fails' do
         simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
-            'oops'  => {
+            'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
-            }
-          }
+            },
+          },
         }
 
-        is_expected.to run.with_params(id, simpkv_options).
-          and_raise_error(ArgumentError,
-          /simpkv Configuration Error/)
+        is_expected.to run.with_params(id, simpkv_options)
+                          .and_raise_error(ArgumentError,
+          %r{simpkv Configuration Error})
       end
     end
   end

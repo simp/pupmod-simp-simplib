@@ -2,16 +2,17 @@
 require 'spec_helper'
 
 describe 'simplib::host_is_me' do
-
   context 'FQDN, hostname, and iterface facts exist' do
-    let(:facts) {{
-      :fqdn           => 'myhost.example.com',
-      :hostname       => 'myhost',
-      :interfaces     => 'eth0,eth1,lo',
-      :ipaddress_eth0 => '1.2.3.4',
-      :ipaddress_eth1 => '5.6.7.8',
-      :ipaddress_lo   => '127.0.0.1'
-    }}
+    let(:facts) do
+      {
+        fqdn: 'myhost.example.com',
+        hostname: 'myhost',
+        interfaces: 'eth0,eth1,lo',
+        ipaddress_eth0: '1.2.3.4',
+        ipaddress_eth1: '5.6.7.8',
+        ipaddress_lo: '127.0.0.1',
+      }
+    end
 
     context "one of host's hostname/IPv4 addresses matches the argument" do
       [
@@ -40,9 +41,9 @@ describe 'simplib::host_is_me' do
   end
 
   context 'FQDN, hostname, and iterface facts do not exist' do
-    let(:facts) {{ }}
+    let(:facts) { {} }
 
-    context "a localhost variant matches the argument" do
+    context 'a localhost variant matches the argument' do
       [
         'localhost',
         'localhost.localdomain',

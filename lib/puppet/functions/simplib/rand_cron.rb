@@ -3,7 +3,6 @@
 #  time on all servers.
 
 Puppet::Functions.create_function(:'simplib::rand_cron') do
-
   local_types do
     type "RandCronAlgorithm = Enum['crc32', 'ip_mod', 'sha256']"
   end
@@ -79,17 +78,16 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
 
     ip_num = nil
     begin
-     ip_num = IPAddr.new(input_string).to_i
+      ip_num = IPAddr.new(input_string).to_i
     rescue IPAddr::Error
+      # do nothing
     end
-
-    num = nil
-    if ip_num.nil?
-      # crc32 calculation for backward compatibility
-      num = generate_crc32_number(input_string)
-    else
-      num = ip_num
-    end
+    num = if ip_num.nil?
+            # crc32 calculation for backward compatibility
+            generate_crc32_number(input_string)
+          else
+            ip_num
+          end
     num
   end
 
@@ -105,7 +103,7 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
   #
   # @return Integer to be used as a basis for generated cron values
   def generate_numeric_modifier(modifier, algorithm)
-    eval("generate_#{algorithm}_number(modifier)")
+    send("generate_#{algorithm}_number", modifier)
   end
 
   def rand_cron(modifier, algorithm, occurs = 1, max_value = 59)
@@ -113,15 +111,13 @@ Puppet::Functions.create_function(:'simplib::rand_cron') do
     modulus = max_value + 1
     base = range_modifier % modulus
 
-    values = []
-    if occurs == 1
-      values << base
-    else
-      values = Array.new
-      (1..occurs).each do |i|
-        values << ((base - (modulus / occurs * i)) % modulus)
-      end
-    end
-    return values.sort
+    values = if occurs == 1
+               [base]
+             else
+               (1..occurs).map do |i|
+                 ((base - (modulus / occurs * i)) % modulus)
+               end
+             end
+    values.sort
   end
 end

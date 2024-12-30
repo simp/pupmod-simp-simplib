@@ -8,7 +8,6 @@
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_net_list') do
-
   # @param net Single network to be validated.
   # @param str_match Stringified regular expression (regex without
   #   the `//` delimiters)
@@ -68,32 +67,32 @@ Puppet::Functions.create_function(:'simplib::validate_net_list') do
     optional_param 'String', :str_match
   end
 
-  def validate_net(net, str_match=nil)
+  def validate_net(net, str_match = nil)
     validate_net_list(Array(net), str_match)
   end
 
-  def validate_net_list(net_list, str_match=nil)
-    local_net_list = Array(net_list.dup)  # not allowed to modify arguments
+  def validate_net_list(net_list, str_match = nil)
+    local_net_list = Array(net_list.dup) # not allowed to modify arguments
 
     if str_match
-      # hack to be backward compatible
+      # HACK: to be backward compatible
       local_str_match = str_match.dup
       local_str_match = '\*' if local_str_match == '*'
 
       local_str_match = Regexp.new(local_str_match)
-      local_net_list.delete_if{|x| local_str_match.match(x)}
+      local_net_list.delete_if { |x| local_str_match.match(x) }
     end
 
     require File.expand_path(File.dirname(__FILE__) + '/../../../puppetx/simp/simplib.rb')
     require 'ipaddr'
 
     # Needed to use other functions inside of this one
-#    Puppet::Parser::Functions.autoloader.loadall
+    #    Puppet::Parser::Functions.autoloader.loadall
 
     local_net_list.each do |net|
       # Do we have a port?
-      host,port = PuppetX::SIMP::Simplib.split_port(net)
-      call_function('simplib::validate_port', port) if (port && !port.empty?)
+      host, port = PuppetX::SIMP::Simplib.split_port(net)
+      call_function('simplib::validate_port', port) if port && !port.empty?
 
       # Valid quad-dotted IPv4 addresses will validate as hostnames.
       # So check for IP addresses first
@@ -106,13 +105,13 @@ Puppet::Functions.create_function(:'simplib::validate_net_list') do
         # it is not an oddly-named host, but a bad IPv4 address in which
         # one or more of the octets is out of range (configuration
         # fat-finger....)
-        if host.match(/^([0-9]+)(\.[0-9]+){3}$/)
-          fail("simplib::validate_net_list(): '#{net}' is not a valid network.")
+        if host.match?(%r{^([0-9]+)(\.[0-9]+){3}$})
+          raise("simplib::validate_net_list(): '#{net}' is not a valid network.")
         end
 
         # assume OK if this looks like hostname
         unless PuppetX::SIMP::Simplib.hostname_only?(host)
-          fail("simplib::validate_net_list(): '#{net}' is not a valid network.")
+          raise("simplib::validate_net_list(): '#{net}' is not a valid network.")
         end
       end
     end

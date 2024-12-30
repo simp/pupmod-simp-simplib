@@ -9,27 +9,27 @@ Facter.add('cpuinfo') do
   setcode do
     retval = {}
     begin
-    File.read('/proc/cpuinfo').split(/^\s*$/).each do |section|
-      procinfo = section.split("\n").map{|x| x = x.split(':').map(&:strip)}
+      File.read('/proc/cpuinfo').split(%r{^\s*$}).each do |section|
+        procinfo = section.split("\n").map { |x| x.split(':').map(&:strip) }
 
-      entry_hash = {}
-      procinfo.each do |entry|
-        next if (!entry || entry.empty?)
+        entry_hash = {}
+        procinfo.each do |entry|
+          next if !entry || entry.empty?
 
-        key = entry.first.gsub(/\s+/,'_')
-        value = entry.last
+          key = entry.first.gsub(%r{\s+}, '_')
+          value = entry.last
 
-        if key == 'flags'
-          value = value.split(/\s+/)
+          if key == 'flags'
+            value = value.split(%r{\s+})
+          end
+
+          entry_hash[key] = value
         end
 
-        entry_hash[key] = value
+        proc_id = entry_hash.delete('processor')
+
+        retval[%(processor#{proc_id})] = entry_hash
       end
-
-      proc_id = entry_hash.delete('processor')
-
-      retval[%(processor#{proc_id})] = entry_hash
-    end
     rescue => details
       Facter.warn("Could not gather data from /proc/cpuinfo: #{details.message}")
     end

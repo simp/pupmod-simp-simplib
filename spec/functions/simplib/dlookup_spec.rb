@@ -2,36 +2,37 @@ require 'spec_helper'
 
 # This just gives us a hook so that we can call the function later on
 describe 'simplib::stages', type: :class do
+  let(:pre_condition) do
+    <<~END
+      define mydef::test (
+        $attribute = simplib::dlookup('mydef::test', 'attribute', $title, { 'default_value' => 'lucille2' })
+      ) {
+        notify { "$title says": message => $attribute }
+      }
 
-  let(:pre_condition) {%(
-    define mydef::test (
-      $attribute = simplib::dlookup('mydef::test', 'attribute', $title, { 'default_value' => 'lucille2' })
-    ){
-      notify { "$title says": message => $attribute }
-    }
+      define mydef::othertest (
+        $attribute = simplib::dlookup('mydef::test', 'attribute', { 'default_value' => 'lucille2' })
+      ) {
+        notify { "other $title says": message => $attribute }
+      }
 
-    define mydef::othertest (
-      $attribute = simplib::dlookup('mydef::test', 'attribute', { 'default_value' => 'lucille2' })
-    ){
-      notify { "other $title says": message => $attribute }
-    }
+      mydef::test { 'gob': }
+      mydef::test { 'tobias': }
+      mydef::test { 'michael': attribute => 'bananastand' }
 
-    mydef::test { 'gob': }
-    mydef::test { 'tobias': }
-    mydef::test { 'michael': attribute => 'bananastand' }
+      mydef::othertest { 'gob': }
+      mydef::othertest { 'tobias': }
+      mydef::othertest { 'michael': attribute => 'bananastand' }
+    END
+  end
 
-    mydef::othertest { 'gob': }
-    mydef::othertest { 'tobias': }
-    mydef::othertest { 'michael': attribute => 'bananastand' }
-  )}
+  let(:gob) { catalogue.resource('Mydef::Test[gob]') }
+  let(:tobias) { catalogue.resource('Mydef::Test[tobias]') }
+  let(:michael) { catalogue.resource('Mydef::Test[michael]') }
 
-  let(:gob){catalogue.resource('Mydef::Test[gob]')}
-  let(:tobias){catalogue.resource('Mydef::Test[tobias]')}
-  let(:michael){catalogue.resource('Mydef::Test[michael]')}
-
-  let(:gob_other){catalogue.resource('Mydef::Othertest[gob]')}
-  let(:tobias_other){catalogue.resource('Mydef::Othertest[tobias]')}
-  let(:michael_other){catalogue.resource('Mydef::Othertest[michael]')}
+  let(:gob_other) { catalogue.resource('Mydef::Othertest[gob]') }
+  let(:tobias_other) { catalogue.resource('Mydef::Othertest[tobias]') }
+  let(:michael_other) { catalogue.resource('Mydef::Othertest[michael]') }
 
   it { is_expected.to compile.with_all_deps }
 
@@ -45,12 +46,14 @@ describe 'simplib::stages', type: :class do
   end
 
   context 'overrides' do
-    let(:facts){{
-      :cache_bust => Time.now.to_s,
-      :hieradata => 'simplib_dlookup_overrides'
-    }}
+    let(:facts) do
+      {
+        cache_bust: Time.now.to_s,
+        hieradata: 'simplib_dlookup_overrides',
+      }
+    end
 
-    let(:hieradata){ 'simplib_dlookup_overrides' }
+    let(:hieradata) { 'simplib_dlookup_overrides' }
 
     context 'with global overrides' do
       it { expect(gob[:attribute]).to eq('illusions') }

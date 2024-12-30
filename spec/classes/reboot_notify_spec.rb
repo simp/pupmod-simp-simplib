@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'simplib::reboot_notify' do
   context 'on supported operating systems' do
-    on_supported_os.each do |os, facts|
+    on_supported_os.each_key do |os|
       context "on #{os}" do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_reboot_notify('__simplib_control__').with_log_level('notice') }

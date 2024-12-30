@@ -12,12 +12,14 @@ describe 'simplib::validate_bool' do
     describe 'rejects invalid input' do
       it do
         is_expected.to run.with_params('True').and_raise_error(
-         /'True' is not a boolean/ )
+         %r{'True' is not a boolean},
+       )
       end
 
       it do
         is_expected.to run.with_params('FALSE').and_raise_error(
-         /'FALSE' is not a boolean/ )
+         %r{'FALSE' is not a boolean},
+       )
       end
     end
   end
@@ -30,7 +32,8 @@ describe 'simplib::validate_bool' do
     describe 'rejects invalid input' do
       it do
         is_expected.to run.with_params(true, 'TRUE', false, 'false').and_raise_error(
-         /'TRUE' is not a boolean/ )
+         %r{'TRUE' is not a boolean},
+       )
       end
     end
   end

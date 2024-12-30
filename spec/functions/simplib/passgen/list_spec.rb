@@ -12,57 +12,57 @@ describe 'simplib::passgen::list' do
   # function is called and failures are appropriately reported.
 
   context 'legacy passgen::list' do
-##############################################
+    ##############################################
 
     context 'successes' do
-      it 'should return {} when the root folder does not exist' do
-        is_expected.to run.with_params().and_return( {} )
+      it 'returns {} when the root folder does not exist' do
+        is_expected.to run.with_params.and_return({})
       end
 
-      it 'should return empty password and folder results when the root folder is empty' do
+      it 'returns empty password and folder results when the root folder is empty' do
         # call subject() to make sure test Puppet environment is created
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
 
         expected = { 'keys' => {}, 'folders' => [] }
-        is_expected.to run.with_params().and_return( expected )
+        is_expected.to run.with_params.and_return(expected)
       end
 
-      it 'should return password info and folders when root folder is not empty' do
-        subject()
+      it 'returns password info and folders when root folder is not empty' do
+        subject # rubocop:disable RSpec/NamedSubject
         call_function('simplib::passgen::legacy::set', id, password, salt)
 
         expected = {
-          'keys'    => {
+          'keys' => {
             id => {
               'value'    => { 'password' => password, 'salt' => salt },
-              'metadata' => { 'history' => [] }
-            }
+              'metadata' => { 'history' => [] },
+            },
           },
-          'folders' => []
+          'folders' => [],
         }
 
-        is_expected.to run.with_params().and_return( expected )
+        is_expected.to run.with_params.and_return(expected)
       end
     end
 
     context 'failures' do
       it 'fails when the password root directory cannot be accessed' do
-        subject()
+        subject # rubocop:disable RSpec/NamedSubject
         settings = call_function('simplib::passgen::legacy::common_settings')
         FileUtils.mkdir_p(settings['keydir'])
-        expect(Dir).to receive(:chdir).with(settings['keydir']).
-          and_raise(Errno::EACCES, 'chdir failed')
+        expect(Dir).to receive(:chdir).with(settings['keydir'])
+                                      .and_raise(Errno::EACCES, 'chdir failed')
 
-        is_expected.to run.with_params().and_raise_error(Errno::EACCES,
+        is_expected.to run.with_params.and_raise_error(Errno::EACCES,
           'Permission denied - chdir failed')
       end
     end
   end
 
   context 'simpkv passgen::list' do
-    let(:hieradata){ 'simplib_passgen_simpkv' }
+    let(:hieradata) { 'simplib_passgen_simpkv' }
 
     let(:key_root_dir) { 'gen_passwd' }
     let(:sub_folder) { 'my/sub/folder' }
@@ -87,75 +87,70 @@ describe 'simplib::passgen::list' do
 
     context 'successes' do
       context 'root folder' do
-        it 'should return {} when the root folder does not exist' do
-          is_expected.to run.with_params().and_return( {} )
-
+        it 'returns {} when the root folder does not exist' do
+          is_expected.to run.with_params.and_return({})
         end
 
-        it 'should return empty password and folder results when the root folder is empty' do
+        it 'returns empty password and folder results when the root folder is empty' do
           # call subject() to make sure test Puppet environment is created
           # before we try to pre-populate the default key/value store with
           # passwords
-          subject()
-          call_function('simplib::passgen::simpkv::set', id, password, salt, 1,
-            true)
+          subject # rubocop:disable RSpec/NamedSubject
+          call_function('simplib::passgen::simpkv::set', id, password, salt, 1, true)
           call_function('simplib::passgen::simpkv::remove', id)
 
           expected = { 'keys' => {}, 'folders' => [] }
-          is_expected.to run.with_params().and_return( expected )
+          is_expected.to run.with_params.and_return(expected)
         end
 
-        it 'should return password info and folders when root folder is not empty' do
-          subject()
-          call_function('simplib::passgen::simpkv::set', id, password, salt, 1,
-            true)
+        it 'returns password info and folders when root folder is not empty' do
+          subject # rubocop:disable RSpec/NamedSubject
+          call_function('simplib::passgen::simpkv::set', id, password, salt, 1, true)
           expected = {
-            'keys'    => {
+            'keys' => {
               id => {
                 'value'    => { 'password' => password, 'salt' => salt },
-                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] }
-              }
+                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] },
+              },
             },
-            'folders' => []
-           }
+            'folders' => [],
+          }
 
-          is_expected.to run.with_params().and_return( expected )
+          is_expected.to run.with_params.and_return(expected)
         end
       end
 
       context 'sub-folder' do
-        it 'should return {} when the sub-folder does not exist' do
-          is_expected.to run.with_params(sub_folder).and_return( {} )
+        it 'returns {} when the sub-folder does not exist' do
+          is_expected.to run.with_params(sub_folder).and_return({})
         end
 
-        it 'should return empty password and folder results when the sub-folder is empty' do
+        it 'returns empty password and folder results when the sub-folder is empty' do
           # call subject() to make sure test Puppet environment is created
           # before we try to pre-populate the default key/value store with
           # passwords
-          subject()
-          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}",
-            'password', 'salt', 1, true)
+          subject # rubocop:disable RSpec/NamedSubject
+          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", 'password', 'salt', 1, true)
           call_function('simplib::passgen::simpkv::remove', "#{sub_folder}/#{id}")
 
           expected = { 'keys' => {}, 'folders' => [] }
-          is_expected.to run.with_params(sub_folder).and_return( expected )
+          is_expected.to run.with_params(sub_folder).and_return(expected)
         end
 
-        it 'should return password info and folders when sub-folder is not empty' do
-          subject()
-          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", password,
-            salt, 1, true)
+        it 'returns password info and folders when sub-folder is not empty' do
+          subject # rubocop:disable RSpec/NamedSubject
+          call_function('simplib::passgen::simpkv::set', "#{sub_folder}/#{id}", password, salt, 1, true)
           expected = {
-            'keys'    => {
+            'keys' => {
               id => {
                 'value'    => { 'password' => password, 'salt' => salt },
-                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] }
-              }
+                'metadata' => { 'complexity' => 1, 'complex_only' => true, 'history' => [] },
+              },
             },
-            'folders' => []
-           }
+            'folders' => [],
+          }
 
-          is_expected.to run.with_params(sub_folder).and_return( expected )
+          is_expected.to run.with_params(sub_folder).and_return(expected)
         end
       end
     end
@@ -165,16 +160,16 @@ describe 'simplib::passgen::list' do
         simpkv_options = {
           'backend'  => 'oops',
           'backends' => {
-            'oops'  => {
+            'oops' => {
               'type' => 'does_not_exist_type',
               'id'   => 'test',
-            }
-          }
+            },
+          },
         }
 
-        is_expected.to run.with_params('/', simpkv_options).
-          and_raise_error(ArgumentError,
-          /simpkv Configuration Error/)
+        is_expected.to run.with_params('/', simpkv_options)
+                          .and_raise_error(ArgumentError,
+          %r{simpkv Configuration Error})
       end
     end
   end

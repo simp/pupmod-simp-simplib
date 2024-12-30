@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 #
 # This fact provides information about select mountpoints that are of interest
 # to other SIMP modules.
@@ -39,7 +40,7 @@
 require 'facter'
 
 Facter.add('simplib__mountpoints') do
-  confine :kernel => :Linux
+  confine kernel: :Linux
   confine { File.exist?('/proc/mounts') }
 
   setcode do
@@ -51,7 +52,7 @@ Facter.add('simplib__mountpoints') do
     facter_mountpoints = Facter.value('mountpoints') || {}
 
     # Sometimes Ruby has issues with /proc so fall back to a shell command
-    Facter::Core::Execution.execute('cat /proc/mounts 2> /dev/null', :on_fail => nil).each_line do |line|
+    Facter::Core::Execution.execute('cat /proc/mounts 2> /dev/null', on_fail: nil).each_line do |line|
       line.strip!
 
       next if line.empty? || line.match(%r{^\s+none\s+})
@@ -64,7 +65,7 @@ Facter.add('simplib__mountpoints') do
         'device' => dev,
         'filesystem' => fs,
         # Split on commas that are not in quotes
-        'options' => opts.gsub(%r{'|"}, '').split(%r{,(?=(?:(?:[^'"]*(?:'|")){2})*[^'"]*$)}).map(&:strip)
+        'options' => opts.gsub(%r{'|"}, '').split(%r{,(?=(?:(?:[^'"]*(?:'|")){2})*[^'"]*$)}).map(&:strip),
       }
 
       if facter_mountpoints[path]
@@ -75,8 +76,6 @@ Facter.add('simplib__mountpoints') do
       else
         mount_list[path] = path_settings
       end
-
-
     end
 
     # Lookup table so we don't constantly lookup found UIDs and GIDs, etc...
@@ -88,7 +87,7 @@ Facter.add('simplib__mountpoints') do
       mount_list[mnt]['options'] ||= []
 
       unless mount_list[mnt]['options'].include?('bind')
-        findmnt_output = Facter::Core::Execution.execute("findmnt #{mnt}", :on_fail => nil)
+        findmnt_output = Facter::Core::Execution.execute("findmnt #{mnt}", on_fail: nil)
         if findmnt_output
           mnt_source = findmnt_output.lines.last.split(%r{\s+})[1]
 

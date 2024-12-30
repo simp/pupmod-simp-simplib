@@ -5,7 +5,6 @@
 # * Terminates catalog compilation if validation fails.
 #
 Puppet::Functions.create_function(:'simplib::validate_re_array') do
-
   # @param input String to be validated
   # @param regex Stringified regex expression (regex without the `//`
   #    delimiters)
@@ -100,24 +99,23 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
     optional_param 'String', :err_msg
   end
 
-  def validate_re_array_1_to_1(input, regex, err_msg=nil)
+  def validate_re_array_1_to_1(input, regex, err_msg = nil)
     validate_re_array([ input ], [ regex ], err_msg)
   end
 
-  def validate_re_array_n_to_1(inputs, regex, err_msg=nil)
+  def validate_re_array_n_to_1(inputs, regex, err_msg = nil)
     validate_re_array(inputs, [ regex ], err_msg)
   end
 
-  def validate_re_array_1_to_n(input, regex_list, err_msg=nil)
+  def validate_re_array_1_to_n(input, regex_list, err_msg = nil)
     validate_re_array([ input ], regex_list, err_msg)
   end
 
-  def validate_re_array(inputs, regex_list, err_msg=nil)
-
+  def validate_re_array(inputs, regex_list, err_msg = nil)
     inputs.each do |to_check|
       valid = false
       regex_list.each do |re_str|
-        if "#{to_check}" =~ Regexp.compile(re_str)
+        if to_check.to_s&.match?(Regexp.compile(re_str))
           valid = true
           break
         end
@@ -126,9 +124,8 @@ Puppet::Functions.create_function(:'simplib::validate_re_array') do
       # Bail at the first failure.
       unless valid
         msg = err_msg || "simplib::validate_re_array(): #{to_check.inspect} does not match #{regex_list.inspect}"
-        fail(msg)
+        raise(msg)
       end
     end
-
   end
 end

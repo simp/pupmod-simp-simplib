@@ -3,15 +3,14 @@ require 'spec_helper_acceptance'
 test_name 'simplib::inspect function'
 
 describe 'simplib::inspect function' do
-
   # Only return simplib::inspect lines from the Puppet log minus any ANSI
   # escape sequences for formatting (e.g. color).
   #
   # NOTE: Have to remove ANSI formatting because beaker does not provide a
   # mechanism to enable the `--color=false` option on `puppet apply`.
   def normalize_inspect_lines(puppet_log)
-    normalized_lines = puppet_log.gsub(/\e\[\d*(;\d+)*m/, "").split("\n").select do |line|
-      line.match(/^Notice: .*Type =>/)
+    normalized_lines = puppet_log.gsub(%r{\e\[\d*(;\d+)*m}, '').split("\n").select do |line|
+      line.match(%r{^Notice: .*Type =>})
     end
 
     normalized_lines.join("\n")
@@ -19,7 +18,7 @@ describe 'simplib::inspect function' do
 
   hosts.each do |server|
     context "logs variables with simplib::inspect on #{server}" do
-      let (:manifest) {
+      let(:manifest) do
         <<~EOS
           $var1 = "var1 value"
           $var2 = true
@@ -31,11 +30,11 @@ describe 'simplib::inspect function' do
           simplib::inspect('var3', 'oneline_json')
           simplib::inspect('var4', 'oneline_json')
         EOS
-      }
+      end
 
-      it 'should be log variables' do
+      it 'is log variables' do
         results = apply_manifest_on(server, manifest)
-        output = results.output
+        results.output
 
         # this is ugly, but is logged twice
         expected = <<~EOM

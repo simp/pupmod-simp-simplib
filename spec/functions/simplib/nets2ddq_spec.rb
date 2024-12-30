@@ -10,7 +10,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost',
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64',
       ]
       expected_output = [
         '10.0.1.0/255.255.255.0',
@@ -18,7 +18,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost',
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64',
       ]
 
       is_expected.to run.with_params(input).and_return(expected_output)
@@ -32,7 +32,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost',
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
     end
@@ -45,7 +45,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost',
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
     end
@@ -58,7 +58,7 @@ describe 'simplib::nets2ddq' do
         '10.0.3.25',
         'myhost',
         '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64'
+        '2001:0db8:85a3:0000:0000:8a2e:0370:7334/64',
       ]
       is_expected.to run.with_params(input).and_return(expected_output)
     end
@@ -72,13 +72,12 @@ describe 'simplib::nets2ddq' do
       expected_output = []
       is_expected.to run.with_params(input_array).and_return(expected_output)
     end
-
   end
 
   context 'should fail when conversion is not possible' do
-   it {
-     input = ['myhost', '-bad.']
-     is_expected.to run.with_params(input).and_raise_error(/'-bad.' is not a valid network./)
-   }
+    it do
+      input = ['myhost', '-bad.']
+      is_expected.to run.with_params(input).and_raise_error(%r{'-bad.' is not a valid network.})
+    end
   end
 end
