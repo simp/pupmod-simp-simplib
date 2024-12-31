@@ -53,7 +53,7 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   def ip_to_cron(occurs = 1, max_value = 59, algorithm = 'ip_mod', ip = nil)
     if ip.nil?
       scope = closure_scope
-      ipaddr = scope['facts']['networking']['ip']
+      ipaddr = scope['facts'].dig('networking', 'ip')
     else
       ipaddr = ip.dup
     end
