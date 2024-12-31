@@ -124,7 +124,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       # If the number of seconds between the time that the record was written
       # and the current time is greater than the system uptime then we should
       # remove the record
-      (current_time - v['updated']) > Facter.value(:system_uptime)['seconds']
+      (current_time - v['updated']) > Facter.value(:system_uptime)&.dig('seconds')
     end
 
     unless records.empty?

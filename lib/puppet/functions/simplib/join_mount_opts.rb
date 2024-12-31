@@ -34,7 +34,7 @@ Puppet::Functions.create_function(:'simplib::join_mount_opts') do
 
     mount_options = {}
     scope = closure_scope
-    selinux_current_mode = scope['facts']['os'].dig('selinux', 'current_mode')
+    selinux_current_mode = scope['facts'].dig('os', 'selinux', 'current_mode')
 
     if !selinux_current_mode || (selinux_current_mode == 'disabled')
       # SELinux is off, get rid of selinux related items in the options
