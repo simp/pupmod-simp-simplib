@@ -29,7 +29,7 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   #
   # @param ip
   #   The IP address to use as the basis for the generated values.
-  #   When `nil`, the 'ipaddress' fact (IPv4) is used.
+  #   When `nil`, the 'networking.ip' fact (IPv4) is used.
   #
   # @return [Array[Integer]] Array of integers suitable for use in the
   #   ``minute`` or ``hour`` cron field.
@@ -53,7 +53,7 @@ Puppet::Functions.create_function(:'simplib::ip_to_cron') do
   def ip_to_cron(occurs = 1, max_value = 59, algorithm = 'ip_mod', ip = nil)
     if ip.nil?
       scope = closure_scope
-      ipaddr = scope['facts']['ipaddress']
+      ipaddr = scope['facts']['networking']['ip']
     else
       ipaddr = ip.dup
     end

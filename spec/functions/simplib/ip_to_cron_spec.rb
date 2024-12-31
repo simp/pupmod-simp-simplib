@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe 'simplib::ip_to_cron' do
-  let(:facts) { { ipaddress: '10.0.10.154' } }
+  let(:facts) { { networking: { ip: '10.0.10.154' } } }
 
   context 'with default parameters' do
     it { is_expected.to run.with_params.and_return([54]) }

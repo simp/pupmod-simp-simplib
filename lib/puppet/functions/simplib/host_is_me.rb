@@ -28,8 +28,8 @@ Puppet::Functions.create_function(:'simplib::host_is_me') do
     scope = closure_scope
 
     host_identifiers = [
-      scope['facts']['fqdn'],
-      scope['facts']['hostname'],
+      scope['facts']['networking']['fqdn'],
+      scope['facts']['networking']['hostname'],
       'localhost',
       'localhost.localdomain',
     ]

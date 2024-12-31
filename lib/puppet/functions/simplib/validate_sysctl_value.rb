@@ -44,13 +44,10 @@ Puppet::Functions.create_function(:'simplib::validate_sysctl_value') do
       validate_sysctl_err("#{key} cannot be #{value}")
     end
 
-    system_ram_mb = closure_scope['facts']['memorysize_mb']
-
-    return unless system_ram_mb
-    system_ram_mb = system_ram_mb.to_i
+    system_ram_mb = closure_scope['facts'].dig('memory', 'system', 'total_bytes').to_i >> 20
 
     size_multiplier = 512
-    size_multiplier = 1024 if closure_scope['facts']['architecture'] == 'x86_64'
+    size_multiplier = 1024 if closure_scope['facts'].dig('os', 'architecture') == 'x86_64'
 
     inode_ram_mb = (value.to_i * size_multiplier) / 1024 / 1024
 

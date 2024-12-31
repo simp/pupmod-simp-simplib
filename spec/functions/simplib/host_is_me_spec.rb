@@ -5,12 +5,15 @@ describe 'simplib::host_is_me' do
   context 'FQDN, hostname, and iterface facts exist' do
     let(:facts) do
       {
-        fqdn: 'myhost.example.com',
-        hostname: 'myhost',
-        interfaces: 'eth0,eth1,lo',
-        ipaddress_eth0: '1.2.3.4',
-        ipaddress_eth1: '5.6.7.8',
-        ipaddress_lo: '127.0.0.1',
+        networking: {
+          fqdn: 'myhost.example.com',
+          hostname: 'myhost',
+          interfaces: {
+            eth0: { ip: '1.2.3.4' },
+            eth1: { ip: '5.6.7.8' },
+            lo: { ip: '127.0.0.1' },
+          },
+        },
       }
     end
 

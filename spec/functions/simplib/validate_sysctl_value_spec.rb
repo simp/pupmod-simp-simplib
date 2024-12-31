@@ -34,8 +34,10 @@ describe 'simplib::validate_sysctl_value' do
   context 'fs.inotify.max_user_watches' do
     let(:facts) do
       {
-        architecture: 'x86_64',
-        memorysize_mb: 20,
+        os: { architecture: 'x86_64' },
+        memory: {
+          system: { total_bytes: 20_971_520 },
+        },
       }
     end
 
@@ -72,8 +74,10 @@ describe 'simplib::validate_sysctl_value' do
       context 'i686' do
         let(:facts) do
           {
-            architecture: 'i686',
-            memorysize_mb: 20,
+            os: { architecture: 'i686' },
+            memory: {
+              system: { total_bytes: 20_971_520 },
+            },
           }
         end
 

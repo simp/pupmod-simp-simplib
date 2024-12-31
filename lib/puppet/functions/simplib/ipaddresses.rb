@@ -13,14 +13,10 @@ Puppet::Functions.create_function(:'simplib::ipaddresses') do
   def ipaddresses(only_remote = false)
     retval = []
     scope = closure_scope
-    interfaces = scope['facts']['interfaces']
+    interfaces = scope['facts'].dig('networking', 'interfaces')
 
-    if interfaces
-      interfaces.split(',').each do |iface|
-        iface_addr = scope['facts']["ipaddress_#{iface}"]
-
-        retval << iface_addr unless iface_addr.nil? || iface_addr.strip.empty?
-      end
+    if interfaces.is_a?(Hash) && !interfaces.empty?
+      retval = interfaces.select { |_, v| v['ip'].is_a?(String) && !v['ip'].empty? }.map { |_, v| v['ip'] }
 
       retval.delete_if { |x| x =~ %r{^127} } if only_remote
     end
