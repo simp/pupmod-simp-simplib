@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: "Install Ruby 2.7"
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
         uses: ruby/setup-ruby@v1  # ruby/setup-ruby@ec106b438a1ff6ff109590de34ddc62c540232e0
         with:
           ruby-version: 2.7
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: "Install Ruby 2.7"
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
@@ -56,12 +56,13 @@ jobs:
       - run: "bundle exec rake metadata_lint"
 
   ruby-style:
-    name: 'Ruby Style'
+    if: false # TODO Modules will need: rubocop in Gemfile, .rubocop.yml
+    name: 'Ruby Style (experimental)'
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
       - uses: actions/checkout@v3
-      - name: "Install Ruby 2.7"
+      - name: "Install Ruby ${{matrix.puppet.ruby_version}}"
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
@@ -88,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: 'Install Ruby 2.7'
+      - name: 'Install Ruby ${{matrix.puppet.ruby_version}}'
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
