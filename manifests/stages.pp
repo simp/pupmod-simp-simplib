@@ -15,6 +15,6 @@
 class simplib::stages {
   include stdlib::stages
 
-  stage { 'simp_prep': before      => Stage['setup'] }
+  stage { 'simp_prep': before => Stage['setup'] }
   stage { 'simp_finalize': require => Stage['deploy'] }
 }

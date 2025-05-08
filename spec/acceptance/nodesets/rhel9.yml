@@ -2,9 +2,9 @@
 HOSTS:
   el9:
     platform: el-9-x86_64
-    box: generic/rocky9
+    box: generic/rhel9
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: rocky-linux-cloud/rocky-linux-9
+    family: rhel-cloud/rhel-9
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
