@@ -1,10 +1,10 @@
 ---
 HOSTS:
-  el9:
+  oel9:
     platform: el-9-x86_64
-    box: generic/rocky9
+    box: generic/oracle9
     hypervisor: "<%= ENV.fetch('BEAKER_HYPERVISOR', 'vagrant') %>"
-    family: rocky-linux-cloud/rocky-linux-9
+    family: sicura-image-build/oracle-linux-9
     gce_machine_type: n1-standard-2
 CONFIG:
   log_level: verbose
