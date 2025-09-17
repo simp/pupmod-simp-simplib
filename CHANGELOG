@@ -1,3 +1,6 @@
+* Wed Sep 17 2025 Steven Pritchard <steve@sicura.us> - 4.14.1
+- Update dependencies
+
 * Mon Dec 30 2024 Steven Pritchard <steve@sicura.us> - 4.14.0
 - Fix use of legacy facts (#301)
 
