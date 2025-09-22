@@ -90,7 +90,7 @@ Puppet::Functions.create_function(:'simplib::validate_deep_hash') do
     raise(err_msg)
   end
 
-  def valid_value(value)
+  def valid_value(value) # rubocop:disable Naming/PredicateMethod
     [String, TrueClass, FalseClass, Numeric, NilClass].each do |allowed_class|
       return true if value.is_a?(allowed_class)
     end

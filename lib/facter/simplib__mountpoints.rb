@@ -114,7 +114,7 @@ Facter.add('simplib__mountpoints') do
           else
             [opt_arr[0], opt_arr[1]]
           end
-        end
+        end,
       ]
       # rubocop:enable Style/MultilineBlockChain
 

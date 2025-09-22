@@ -61,7 +61,7 @@ Facter.add('simplib__auditd') do
       status['enforcing'] = procs.any? { |x| x =~ %r{\sauditd\Z} }
     else
       cmdline = Facter.value('cmdline') || {}
-      status['kernel_enforcing'] = ((cmdline['audit']).to_s == '1')
+      status['kernel_enforcing'] = (cmdline['audit'].to_s == '1')
     end
 
     status
