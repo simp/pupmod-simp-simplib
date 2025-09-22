@@ -14,7 +14,7 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::valid_password_inf
     required_param 'Hash', :password_info
   end
 
-  def valid_password_info(password_info)
+  def valid_password_info(password_info) # rubocop:disable Naming/PredicateMethod
     password_info['value'].key?('password') &&
       password_info['value'].key?('salt') &&
       password_info.key?('metadata') &&

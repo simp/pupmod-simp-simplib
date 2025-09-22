@@ -9,7 +9,7 @@ Puppet::Functions.create_function(:'simplib::module_exist') do
     required_param 'String[1]', :module_name
   end
 
-  def module_exist(module_name)
+  def module_exist(module_name) # rubocop:disable Naming/PredicateMethod
     author, name = module_name.split(%r{/|-})
 
     unless name

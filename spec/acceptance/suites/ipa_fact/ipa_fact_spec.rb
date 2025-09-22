@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 test_name 'ipa fact'
 
-def skip_fips(host)
+def skip_fips?(host)
   return true if fips_enabled(host) && host.host_hash[:roles].include?('no_fips')
 
   false
@@ -21,7 +21,7 @@ describe 'ipa fact' do
   ipa_realm = ipa_domain.upcase
 
   hosts.each do |host|
-    next if skip_fips(host)
+    next if skip_fips?(host)
 
     # IPA requires entropy!
     it 'is running haveged or rngd for entropy' do
@@ -52,7 +52,7 @@ describe 'ipa fact' do
   end
 
   hosts_with_role(hosts, 'server').each do |server|
-    next if skip_fips(server)
+    next if skip_fips?(server)
 
     context 'when IPA is not installed' do
       it 'ipa fact should be nil' do
@@ -130,7 +130,7 @@ describe 'ipa fact' do
   end
 
   hosts_with_role(hosts, 'client').each do |client|
-    next if skip_fips(client)
+    next if skip_fips?(client)
 
     context 'as an IPA client' do
       context 'prior to registration' do

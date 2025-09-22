@@ -38,7 +38,7 @@ Facter.add(:puppet_settings) do
             value = values.interpolate(setting_name)
             Facter.debug "#{section.to_s.ljust(12, '.')}" \
                          "#{setting_name.to_s.ljust(32)} = #{value.to_s.ljust(20)}" \
-                         "#{setting.deprecated? ? ' *** DEPRECATED ***' : ''}"
+                         "#{' *** DEPRECATED ***' if setting.deprecated?}"
             next if setting.deprecated?
             retval[section.to_s][setting_name.to_s] = value.to_s
           end

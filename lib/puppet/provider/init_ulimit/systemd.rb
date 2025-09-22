@@ -16,13 +16,13 @@ Puppet::Type.type(:init_ulimit).provide(:systemd) do
     true
   end
 
-  def create
+  def create # rubocop:disable Naming/PredicateMethod
     # Stub, never called
     debug('init_ulimit: If you got here, something very bad happened!')
     true
   end
 
-  def destroy
+  def destroy # rubocop:disable Naming/PredicateMethod
     warning('init_ulimit: ulimits cannot be removed when targeting systemd artifacts')
     true
   end

@@ -22,7 +22,7 @@ describe 'simplib::passgen::simpkv::passgen' do
   end
 
   let(:unsafe_special_chars) do
-    (((' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a)).map { |x|
+    ((' '..'/').to_a + ('['..'`').to_a + ('{'..'~').to_a).map { |x|
       Regexp.escape(x)
     } - safe_special_chars
   end

@@ -29,7 +29,7 @@ Puppet::Type.newtype(:prepend_file_line) do
   newparam(:path) do
     desc 'File to possibly prepend a line to.'
     validate do |value|
-      unless (Puppet.features.posix? && value =~ (%r{^/})) || (Puppet.features.microsoft_windows? && (value =~ (%r{^.:/}) || value =~ (%r{^//[^/]+/[^/]+})))
+      unless (Puppet.features.posix? && value =~ %r{^/}) || (Puppet.features.microsoft_windows? && (value =~ %r{^.:/} || value =~ %r{^//[^/]+/[^/]+}))
         raise(Puppet::Error, "File paths must be fully qualified, not '#{value}'")
       end
     end
