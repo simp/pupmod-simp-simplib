@@ -2,12 +2,6 @@ require 'spec_helper'
 
 describe 'simplib::assert_optional_dependency' do
   let(:func) { subject.func }
-
-  # Stub Puppet.err to avoid output during tests
-  before(:each) do
-    allow(Puppet).to receive(:err)
-  end
-
   let(:source_metadata) do
     {
       'name'    => 'my/module',
@@ -29,40 +23,40 @@ describe 'simplib::assert_optional_dependency' do
       },
     }
   end
-
   let(:dep_one_metadata) do
     {
       'name'    => 'dep/one',
       'version' => '1.0.0',
     }
   end
-
   let(:dep_two_metadata) do
     {
       'name'    => 'dep-two',
       'version' => '3.4.5',
     }
   end
-
   let(:dep_three_metadata) do
     {
       'name'    => 'dep-three',
       'version' => '1.2.3-alpha',
     }
   end
-
   let(:dep_one_bad_author) do
     {
       'name'    => 'narp/one',
       'version' => '1.0.0',
     }
   end
-
   let(:dep_one_bad_version) do
     {
       'name'    => 'dep/one',
       'version' => '5.5.5',
     }
+  end
+
+  # Stub Puppet.err to avoid output during tests
+  before(:each) do
+    allow(Puppet).to receive(:err)
   end
 
   context 'with a source module' do
