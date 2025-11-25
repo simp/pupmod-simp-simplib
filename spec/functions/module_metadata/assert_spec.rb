@@ -105,6 +105,10 @@ describe 'simplib::module_metadata::assert' do
     },
   }
 
+  options_fatal = {
+    'fatal' => true,
+  }
+
   let(:pre_condition) do
     <<~PRE_CONDITION
       function load_module_metadata(String $any) {
@@ -136,7 +140,13 @@ describe 'simplib::module_metadata::assert' do
       context 'at the OS' do
         let(:facts) { bad_os }
 
-        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib')
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect { is_expected.to run.with_params('simplib', options_fatal) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
 
         context 'when disabled globally' do
           it { is_expected.to run.with_params('simplib', options_disable_global) }
@@ -150,7 +160,15 @@ describe 'simplib::module_metadata::assert' do
       context 'at the major version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', options_major)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', options_major.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
 
         context 'when disabled globally' do
           it { is_expected.to run.with_params('simplib', options_major.merge(options_disable_global)) }
@@ -164,7 +182,15 @@ describe 'simplib::module_metadata::assert' do
       context 'at the full version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', options_full)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', options_full.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
 
         context 'when disabled globally' do
           it { is_expected.to run.with_params('simplib', options_full.merge(options_disable_global)) }
@@ -188,7 +214,15 @@ describe 'simplib::module_metadata::assert' do
       let(:facts) { valid_facts }
 
       context 'with a simple list' do
-        it { expect { is_expected.to run.with_params('simplib', blacklist_base) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', blacklist_base)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', blacklist_base.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
+        end
 
         context 'when disabled globally' do
           it { is_expected.to run.with_params('simplib', blacklist_base.merge(options_disable_global)) }
@@ -199,9 +233,13 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the major version' do
-          it do
+          it 'emits a non-fatal error by default' do
+            is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_major))
+          end
+
+          it 'raises a fatal error when fatal is true' do
             expect {
-              is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_major))
+              is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_major).merge(options_fatal))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
           end
 
@@ -215,9 +253,13 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the full version' do
-          it do
+          it 'emits a non-fatal error by default' do
+            is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_full))
+          end
+
+          it 'raises a fatal error when fatal is true' do
             expect {
-              is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_full))
+              is_expected.to run.with_params('simplib', blacklist_base.merge(blacklist_full).merge(options_fatal))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
           end
 
@@ -232,7 +274,15 @@ describe 'simplib::module_metadata::assert' do
       end
 
       context 'with complex options' do
-        it { expect { is_expected.to run.with_params('simplib', blacklist_advanced) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', blacklist_advanced)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', blacklist_advanced.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
+        end
 
         context 'when disabled globally' do
           it { is_expected.to run.with_params('simplib', blacklist_advanced.merge(options_disable_global)) }
@@ -243,9 +293,13 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the major version' do
-          it do
+          it 'emits a non-fatal error by default' do
+            is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_major))
+          end
+
+          it 'raises a fatal error when fatal is true' do
             expect {
-              is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_major))
+              is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_major).merge(options_fatal))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
           end
 
@@ -259,9 +313,13 @@ describe 'simplib::module_metadata::assert' do
         end
 
         context 'at the full version' do
-          it do
+          it 'emits a non-fatal error by default' do
+            is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_full))
+          end
+
+          it 'raises a fatal error when fatal is true' do
             expect {
-              is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_full))
+              is_expected.to run.with_params('simplib', blacklist_advanced.merge(blacklist_full).merge(options_fatal))
             }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported at '})
           end
 

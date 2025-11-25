@@ -71,6 +71,10 @@ describe 'simplib::assert_metadata' do
     },
   }
 
+  options_fatal = {
+    'fatal' => true,
+  }
+
   let(:pre_condition) do
     <<~PRE_CONDITION
       function load_module_metadata(String $any) {
@@ -110,19 +114,41 @@ describe 'simplib::assert_metadata' do
       context 'at the OS' do
         let(:facts) { bad_os }
 
-        it { expect { is_expected.to run.with_params('simplib') }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib')
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect { is_expected.to run.with_params('simplib', options_fatal) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
       end
 
       context 'at the major version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_major) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', options_major)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', options_major.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
       end
 
       context 'at the full version' do
         let(:facts) { bad_version }
 
-        it { expect { is_expected.to run.with_params('simplib', options_full) }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'}) }
+        it 'emits a non-fatal error by default' do
+          is_expected.to run.with_params('simplib', options_full)
+        end
+
+        it 'raises a fatal error when fatal is true' do
+          expect {
+            is_expected.to run.with_params('simplib', options_full.merge(options_fatal))
+          }.to raise_error(%r{OS '#{facts[:os]['name']} #{facts[:os]['release']['full']}' is not supported by 'simplib'})
+        end
       end
     end
   end
