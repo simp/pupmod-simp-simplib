@@ -1,3 +1,6 @@
+* Wed Jan 07 2026 Steven Pritchard <steve@sicura.us> - 5.0.1
+- Fix for CVE-2016-2183 in FIPS mode (#334)
+
 * Tue Nov 25 2025 Steven Pritchard <steve@sicura.us> - 5.0.0
 - Make the various `assert` functions non-fatal by default
 

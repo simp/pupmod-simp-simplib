@@ -9,7 +9,7 @@ describe 'fips_ciphers' do
   context 'openssl command exists' do
     it 'returns FIPS ciphers' do
       expect(Facter::Core::Execution).to receive(:which).with('openssl').and_return('/bin/openssl')
-      expect(Facter::Core::Execution).to receive(:exec).with('/bin/openssl ciphers FIPS:-LOW')
+      expect(Facter::Core::Execution).to receive(:exec).with("/bin/openssl ciphers 'FIPS:-3DES:-LOW:-NULL:-EXPORT:-aNULL'")
                                                        .and_return('ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA')
       expect(Facter.fact('fips_ciphers').value).to eq(['ECDHE-RSA-AES256-GCM-SHA384', 'ECDHE-ECDSA-AES256-GCM-SHA384', 'ECDHE-RSA-AES256-SHA384', 'ECDHE-ECDSA-AES256-SHA384', 'ECDHE-RSA-AES256-SHA'])
     end
