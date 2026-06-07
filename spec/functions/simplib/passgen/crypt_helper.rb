@@ -55,7 +55,7 @@ module CryptHelper
         retval = hash
       end
     rescue => e
-      puts e
+      puts e # rubocop:disable RSpec/Output
       retval = nil
     end
     retval

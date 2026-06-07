@@ -34,7 +34,7 @@ describe 'reboot_notify' do
           else
             host.reboot
             result = apply_manifest_on(host, manifest).stdout
-            expect(result).not_to match(%r{System Reboot Required Because:})
+            expect(result).not_to include('System Reboot Required Because:')
           end
         end
 
@@ -71,7 +71,7 @@ describe 'reboot_notify' do
 
         it 'does not display reboot notifications' do
           result = apply_manifest_on(host, manifest).stdout
-          expect(result).not_to match(%r{System Reboot Required Because:})
+          expect(result).not_to include('System Reboot Required Because:')
         end
       end
     end

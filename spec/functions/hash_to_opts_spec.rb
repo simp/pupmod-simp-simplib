@@ -48,10 +48,9 @@ describe 'simplib::hash_to_opts' do
 
   context 'with some secondary options set' do
     tests.each do |params|
-      opts = { 'connector' => ' ' }
-      result = params[:result].tr('=', ' ')
-
       it do
+        opts = { 'connector' => ' ' }
+        result = params[:result].tr('=', ' ')
         is_expected.to run.with_params(params[:content], opts) \
                           .and_return(result)
       end
@@ -60,17 +59,16 @@ describe 'simplib::hash_to_opts' do
 
   context 'with all secondary options set' do
     tests.each do |params|
-      opts = {
-        'connector' => ' ',
-        'prefix'    => '-',
-        'delimiter' => ':',
-      }
-      result = params[:result] \
-               .tr('=', ' ')
-               .gsub('--', '-')
-               .tr(',', ':')
-
       it do
+        opts = {
+          'connector' => ' ',
+          'prefix'    => '-',
+          'delimiter' => ':',
+        }
+        result = params[:result] \
+                 .tr('=', ' ')
+                 .gsub('--', '-')
+                 .tr(',', ':')
         is_expected.to run.with_params(params[:content], opts) \
                           .and_return(result)
       end
@@ -78,10 +76,10 @@ describe 'simplib::hash_to_opts' do
   end
 
   context 'with repeat set to repeat' do
-    params = { 'key' => ['yes', true, 1] }
-    opts   = { 'repeat' => 'repeat' }
-    result = '--key=yes --key=true --key=1'
     it do
+      params = { 'key' => ['yes', true, 1] }
+      opts   = { 'repeat' => 'repeat' }
+      result = '--key=yes --key=true --key=1'
       is_expected.to run.with_params(params, opts) \
                         .and_return(result)
     end

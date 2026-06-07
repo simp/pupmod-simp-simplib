@@ -1,113 +1,111 @@
 require 'spec_helper'
 
 describe 'simplib::module_metadata::assert' do
-  module_metadata = {
-    'name' => 'simp-simplib',
-    'version' => '1.2.3',
-    'author' => 'Yep',
-    'summary' => 'Stubby',
-    'license' => 'Apache-2.0',
-    'operatingsystem_support' => [
-      {
-        'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => ['14.04'],
+  let(:module_metadata) do
+    {
+      'name' => 'simp-simplib',
+      'version' => '1.2.3',
+      'author' => 'Yep',
+      'summary' => 'Stubby',
+      'license' => 'Apache-2.0',
+      'operatingsystem_support' => [
+        {
+          'operatingsystem' => 'Ubuntu',
+          'operatingsystemrelease' => ['14.04'],
+        },
+      ],
+    }.to_json
+  end
+
+  let(:valid_facts) do
+    {
+      os: {
+        'name' => 'Ubuntu',
+        'release' => {
+          'major' => '14',
+          'full'  => '14.04',
+        },
       },
-    ],
-  }.to_json
+    }
+  end
 
-  valid_facts = {
-    os: {
-      'name' => 'Ubuntu',
-      'release' => {
-        'major' => '14',
-        'full'  => '14.04',
+  let(:bad_os) do
+    {
+      os: {
+        'name' => 'Foo',
+        'release' => {
+          'major' => '14',
+          'full'  => '14.04',
+        },
       },
-    },
-  }
+    }
+  end
 
-  bad_os = {
-    os: {
-      'name' => 'Foo',
-      'release' => {
-        'major' => '14',
-        'full'  => '14.04',
+  let(:bad_version) do
+    {
+      os: {
+        'name' => 'Ubuntu',
+        'release' => {
+          'major' => '10',
+          'full'  => '10.04',
+        },
       },
-    },
-  }
+    }
+  end
 
-  bad_version = {
-    os: {
-      'name' => 'Ubuntu',
-      'release' => {
-        'major' => '10',
-        'full'  => '10.04',
+  let(:options_disable_global) { { 'enable' => false } }
+
+  let(:options_disable_blacklist) { { 'blacklist_validation' => { 'enable' => false } } }
+
+  let(:options_disable_os) { { 'os_validation' => { 'enable' => false } } }
+
+  let(:options_major) do
+    {
+      'os_validation' => {
+        'options' => {
+          'release_match' => 'major',
+        },
       },
-    },
-  }
+    }
+  end
 
-  options_disable_global = {
-    'enable' => false,
-  }
-
-  options_disable_blacklist = {
-    'blacklist_validation' => {
-      'enable' => false,
-    },
-  }
-
-  options_disable_os = {
-    'os_validation' => {
-      'enable' => false,
-    },
-  }
-
-  options_major = {
-    'os_validation' => {
-      'options' => {
-        'release_match' => 'major',
+  let(:options_full) do
+    {
+      'os_validation' => {
+        'options' => {
+          'release_match' => 'full',
+        },
       },
-    },
-  }
+    }
+  end
 
-  options_full = {
-    'os_validation' => {
-      'options' => {
-        'release_match' => 'full',
+  let(:blacklist_no_match) { { 'blacklist' => ['Foo', { 'Bar' => '1.1.1' }] } }
+
+  let(:blacklist_base) { { 'blacklist' => ['Ubuntu'] } }
+
+  let(:blacklist_advanced) { { 'blacklist' => [{ 'Ubuntu' => '14.04' }] } }
+
+  let(:blacklist_major) do
+    {
+      'blacklist_validation' => {
+        'options' => {
+          'release_match' => 'major',
+        },
       },
-    },
-  }
+    }
+  end
 
-  blacklist_no_match = {
-    'blacklist' => [ 'Foo', { 'Bar' => '1.1.1' } ],
-  }
-
-  blacklist_base = {
-    'blacklist' => [ 'Ubuntu' ],
-  }
-
-  blacklist_advanced = {
-    'blacklist' => [ { 'Ubuntu' => '14.04' } ],
-  }
-
-  blacklist_major = {
-    'blacklist_validation' => {
-      'options' => {
-        'release_match' => 'major',
+  let(:blacklist_full) do
+    {
+      'blacklist_validation' => {
+        'options' => {
+          'release_match' => 'full',
+        },
       },
-    },
-  }
+    }
+  end
 
-  blacklist_full = {
-    'blacklist_validation' => {
-      'options' => {
-        'release_match' => 'full',
-      },
-    },
-  }
-
-  options_fatal = {
-    'fatal' => true,
-  }
+  let(:options_fatal) { { 'fatal' => true } }
 
   let(:pre_condition) do
     <<~PRE_CONDITION

@@ -26,9 +26,9 @@ describe 'prelink fact' do
     context 'when prelink is not installed' do
       it 'prelink fact should be nil' do
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(%r{Notice: Type => NilClass Content => null})
+        expect(results.output).to include('Notice: Type => NilClass Content => null')
         results = on(server, 'puppet facts')
-        expect(results.output).not_to match(%r{"prelink": \{})
+        expect(results.output).not_to include('"prelink": {')
       end
     end
 
@@ -40,9 +40,9 @@ describe 'prelink fact' do
         on(server, "sed -i '/PRELINKING=yes/ c\\PRELINKING=no' /etc/sysconfig/prelink")
 
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(%r{Notice: Type => Hash Content => {"enabled":false}})
+        expect(results.output).to include('Notice: Type => Hash Content => {"enabled":false}')
         results = on(server, 'puppet facts')
-        expect(results.output).to match(%r{"prelink": \{})
+        expect(results.output).to include('"prelink": {')
       end
     end
 
@@ -51,9 +51,9 @@ describe 'prelink fact' do
         on(server, "sed -i '/PRELINKING=no/ c\\PRELINKING=yes' /etc/sysconfig/prelink")
 
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(%r{Notice: Type => Hash Content => \{"enabled":true\}})
+        expect(results.output).to include('Notice: Type => Hash Content => {"enabled":true}')
         results = on(server, 'puppet facts')
-        expect(results.output).to match(%r{"prelink": \{})
+        expect(results.output).to include('"prelink": {')
       end
     end
   end

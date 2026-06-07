@@ -2,9 +2,7 @@
 
 require 'spec_helper'
 
-runlevel_type = Puppet::Type.type(:runlevel)
-
-describe runlevel_type do
+describe Puppet::Type.type(:runlevel) do
   let(:catalog) { Puppet::Resource::Catalog.new }
 
   before(:each) do
@@ -32,14 +30,14 @@ describe runlevel_type do
     context ':name' do
       it 'accepts valid values' do
         valid_names.each_pair do |key, value|
-          resource = runlevel_type.new(name: key)
+          resource = described_class.new(name: key)
           expect(resource[:name]).to eq(value)
         end
       end
 
       it 'rejects invalid values' do
         invalid_names.each do |value|
-          expect { runlevel_type.new(name: value) }.to raise_error(%r{Invalid value})
+          expect { described_class.new(name: value) }.to raise_error(%r{Invalid value})
         end
       end
     end
@@ -47,7 +45,7 @@ describe runlevel_type do
     context ':level' do
       it 'accepts valid values' do
         valid_names.each_pair do |_key, value|
-          resource = runlevel_type.new(
+          resource = described_class.new(
             name: '5',
             level: value,
           )
@@ -59,7 +57,7 @@ describe runlevel_type do
       it 'rejects invalid values' do
         invalid_names.each do |value|
           expect {
-            runlevel_type.new(
+            described_class.new(
               name: '5',
               level: value,
             )
@@ -75,7 +73,7 @@ describe runlevel_type do
 
       it 'accepts valid values' do
         valid_values.each do |value|
-          resource = runlevel_type.new(
+          resource = described_class.new(
             name: '5',
             transition_timeout: value,
           )
@@ -87,7 +85,7 @@ describe runlevel_type do
       it 'rejects invalid values' do
         invalid_values.each do |value|
           expect {
-            runlevel_type.new(
+            described_class.new(
               name: '5',
               transition_timeout: value,
             )
@@ -101,7 +99,7 @@ describe runlevel_type do
 
       it 'accepts valid values' do
         valid_values.each do |value|
-          resource = runlevel_type.new(
+          resource = described_class.new(
             name: '5',
             persist: value,
           )

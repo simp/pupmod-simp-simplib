@@ -6,9 +6,8 @@ puppetver = SemanticPuppet::Version.parse(Puppet.version)
 requiredver = SemanticPuppet::Version.parse('4.9.0')
 if puppetver > requiredver
   describe 'simplib::filtered' do
-    shared_options = {
-      'function' => 'simplib::mock_data',
-    }
+    let(:shared_options) { { 'function' => 'simplib::mock_data' } }
+
     context 'using data_hash dispatch' do
       it 'runs successfully' do
         result = subject.execute(shared_options.dup.merge({ 'path' => 'nofile' }), Puppet::Pops::Lookup::Context.new('rp_env', 'simplib')) # rubocop:disable RSpec/NamedSubject

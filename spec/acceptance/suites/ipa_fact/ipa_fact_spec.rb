@@ -57,7 +57,7 @@ describe 'ipa fact' do
     context 'when IPA is not installed' do
       it 'ipa fact should be nil' do
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(%r{Notice: Type => NilClass Content => null})
+        expect(results.output).to include('Notice: Type => NilClass Content => null')
 
         expect(pfact_on(server, 'ipa')).to be_nil.or be_empty
       end
@@ -70,7 +70,7 @@ describe 'ipa fact' do
         server.reboot # WORKAROUND: https://bugzilla.redhat.com/show_bug.cgi?id=1504688
 
         results = apply_manifest_on(server, manifest)
-        expect(results.output).to match(%r{Notice: Type => NilClass Content => null})
+        expect(results.output).to include('Notice: Type => NilClass Content => null')
 
         expect(pfact_on(server, 'ipa')).to be_nil.or be_empty
       end
@@ -100,7 +100,7 @@ describe 'ipa fact' do
         on(server, 'ipactl status')
 
         # We only care about this data
-        expect(apply_manifest_on(server, manifest).output).to match(%r{Hash Content => \{"})
+        expect(apply_manifest_on(server, manifest).output).to include('Hash Content => {"')
 
         results = pfact_on(server, 'ipa')
 
