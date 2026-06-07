@@ -1,3 +1,6 @@
+* Sun Jun 07 2026 Steven Pritchard <steve@sicura.us> - 5.0.2
+- Additional cleanup for rubocop
+
 * Wed Jan 07 2026 Steven Pritchard <steve@sicura.us> - 5.0.1
 - Fix for CVE-2016-2183 in FIPS mode (#334)
 

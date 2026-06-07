@@ -78,40 +78,40 @@ describe 'simplib__numa' do
 
         File.open(File.join(memory2_tempdir, 'node1', 'meminfo'), 'w') do |fh|
           fh.puts <<~EOMEM
-              Node 1 MemTotal:       16094344 kB
-              Node 1 MemFree:         1459276 kB
-              Node 1 MemUsed:        14635068 kB
-              Node 1 Active:          7113068 kB
-              Node 1 Inactive:        5666656 kB
-              Node 1 Active(anon):    3718696 kB
-              Node 1 Inactive(anon):   911684 kB
-              Node 1 Active(file):    3394372 kB
-              Node 1 Inactive(file):  4754972 kB
-              Node 1 Unevictable:      278436 kB
-              Node 1 Mlocked:            2044 kB
-              Node 1 Dirty:               716 kB
-              Node 1 Writeback:             0 kB
-              Node 1 FilePages:       9088236 kB
-              Node 1 Mapped:          1068884 kB
-              Node 1 AnonPages:       3970156 kB
-              Node 1 Shmem:            940720 kB
-              Node 1 KernelStack:       17552 kB
-              Node 1 PageTables:        40160 kB
-              Node 1 NFS_Unstable:          0 kB
-              Node 1 Bounce:                0 kB
-              Node 1 WritebackTmp:          0 kB
-              Node 1 KReclaimable:     519780 kB
-              Node 1 Slab:             926580 kB
-              Node 1 SReclaimable:     519780 kB
-              Node 1 SUnreclaim:       406800 kB
-              Node 1 AnonHugePages:         0 kB
-              Node 1 ShmemHugePages:        0 kB
-              Node 1 ShmemPmdMapped:        0 kB
-              Node 1 FileHugePages:        0 kB
-              Node 1 FilePmdMapped:        0 kB
-              Node 1 HugePages_Total:     0
-              Node 1 HugePages_Free:      0
-              Node 1 HugePages_Surp:      0
+            Node 1 MemTotal:       16094344 kB
+            Node 1 MemFree:         1459276 kB
+            Node 1 MemUsed:        14635068 kB
+            Node 1 Active:          7113068 kB
+            Node 1 Inactive:        5666656 kB
+            Node 1 Active(anon):    3718696 kB
+            Node 1 Inactive(anon):   911684 kB
+            Node 1 Active(file):    3394372 kB
+            Node 1 Inactive(file):  4754972 kB
+            Node 1 Unevictable:      278436 kB
+            Node 1 Mlocked:            2044 kB
+            Node 1 Dirty:               716 kB
+            Node 1 Writeback:             0 kB
+            Node 1 FilePages:       9088236 kB
+            Node 1 Mapped:          1068884 kB
+            Node 1 AnonPages:       3970156 kB
+            Node 1 Shmem:            940720 kB
+            Node 1 KernelStack:       17552 kB
+            Node 1 PageTables:        40160 kB
+            Node 1 NFS_Unstable:          0 kB
+            Node 1 Bounce:                0 kB
+            Node 1 WritebackTmp:          0 kB
+            Node 1 KReclaimable:     519780 kB
+            Node 1 Slab:             926580 kB
+            Node 1 SReclaimable:     519780 kB
+            Node 1 SUnreclaim:       406800 kB
+            Node 1 AnonHugePages:         0 kB
+            Node 1 ShmemHugePages:        0 kB
+            Node 1 ShmemPmdMapped:        0 kB
+            Node 1 FileHugePages:        0 kB
+            Node 1 FilePmdMapped:        0 kB
+            Node 1 HugePages_Total:     0
+            Node 1 HugePages_Free:      0
+            Node 1 HugePages_Surp:      0
             EOMEM
         end
       end

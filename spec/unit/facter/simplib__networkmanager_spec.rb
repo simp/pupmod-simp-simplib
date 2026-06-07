@@ -34,12 +34,12 @@ describe 'simplib__networkmanager' do
   context 'nmcli succeeds' do
     let(:general_status) do
       output = <<~EOM
-          STATE:connected
-          CONNECTIVITY:full
-          WIFI-HW:enabled
-          WIFI:enabled
-          WWAN-HW:enabled
-          WWAN:enabled
+        STATE:connected
+        CONNECTIVITY:full
+        WIFI-HW:enabled
+        WIFI:enabled
+        WWAN-HW:enabled
+        WWAN:enabled
         EOM
       Puppet::Util::Execution::ProcessOutput.new(output, 0)
     end
@@ -48,8 +48,8 @@ describe 'simplib__networkmanager' do
 
     let(:connections) do
       output = <<~EOM
-          Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
-          Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
+        Eth Dev:b961cb37-ae05-4c67-98b0-432465fe03c2:802-3-ethernet:eth0
+        Bridge Dev:0c190f3f-262b-4585-a7de-2a146896ea86:bridge:virbr0
         EOM
       Puppet::Util::Execution::ProcessOutput.new(output, 0)
     end
