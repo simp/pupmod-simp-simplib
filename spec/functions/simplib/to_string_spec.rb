@@ -18,7 +18,8 @@ describe 'simplib::to_string' do
   end
 
   context 'should fail when conversion is not possible' do
-    odd_var = ClassWithoutToS.new
+    let(:odd_var) { ClassWithoutToS.new }
+
     it { is_expected.to run.with_params(odd_var).and_raise_error(%r{cannot be converted to a String}) }
   end
 end

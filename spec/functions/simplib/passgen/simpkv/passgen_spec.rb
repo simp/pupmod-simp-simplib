@@ -244,7 +244,7 @@ describe 'simplib::passgen::simpkv::passgen' do
         if File.exist?('/proc/sys/crypto/fips_enabled') &&
            File.open('/proc/sys/crypto/fips_enabled', &:readline)[0].chr == '1' &&
            hash_selection == 'md5'
-          puts 'Skipping md5, as not available on this FIPS-compliant server'
+          puts 'Skipping md5, as not available on this FIPS-compliant server' # rubocop:disable RSpec/Output
         else
           it 'parses as modular crypt' do
             result = subject.execute('spectest', shared_options) # rubocop:disable RSpec/NamedSubject

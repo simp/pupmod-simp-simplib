@@ -2,12 +2,10 @@
 
 require 'spec_helper'
 
-init_ulimit_type = Puppet::Type.type(:init_ulimit)
-
-describe init_ulimit_type do
+describe Puppet::Type.type(:init_ulimit) do
   context 'when setting parameters' do
     it 'accepts valid input' do
-      resource = init_ulimit_type.new(
+      resource = described_class.new(
         name: 'foo',
         target: 'foo_svc',
         limit_type: 'both',
@@ -19,7 +17,7 @@ describe init_ulimit_type do
     end
 
     it 'accepts composite namevars' do
-      resource = init_ulimit_type.new(
+      resource = described_class.new(
         name: 'v|foo_svc',
         limit_type: 'both',
         value: '10',
@@ -30,7 +28,7 @@ describe init_ulimit_type do
     end
 
     it 'translates "unlimited" for "max_open_files"' do
-      resource = init_ulimit_type.new(
+      resource = described_class.new(
         name: 'foo',
         target: 'foo_svc',
         item: 'max_open_files',

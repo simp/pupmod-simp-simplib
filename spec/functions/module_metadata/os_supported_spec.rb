@@ -2,17 +2,17 @@ require 'spec_helper'
 
 describe 'simplib::module_metadata::os_supported' do
   context 'on a supported OS' do
-    facts = {
-      os: {
-        'name' => 'Ubuntu',
-        'release' => {
-          'major' => '14',
-          'full'  => '14.999',
+    let(:facts) do
+      {
+        os: {
+          'name' => 'Ubuntu',
+          'release' => {
+            'major' => '14',
+            'full'  => '14.999',
+          },
         },
-      },
-    }
-
-    let(:facts) { facts }
+      }
+    end
 
     let(:module_metadata) do
       {

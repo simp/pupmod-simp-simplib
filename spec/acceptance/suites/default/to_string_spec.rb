@@ -18,8 +18,8 @@ describe 'simplib::to_string function' do
       it 'returns a string' do
         results = apply_manifest_on(server, manifest)
 
-        expect(results.output).to match(%r{Notice: Type => String Content => "-1"})
-        expect(results.output).to match(%r{Notice: Type => NilClass Content => null})
+        expect(results.output).to include('Notice: Type => String Content => "-1"')
+        expect(results.output).to include('Notice: Type => NilClass Content => null')
       end
     end
   end

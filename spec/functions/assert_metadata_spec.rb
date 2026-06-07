@@ -1,79 +1,89 @@
 require 'spec_helper'
 
 describe 'simplib::assert_metadata' do
-  module_metadata = {
-    'name' => 'simp-simplib',
-    'version' => '1.2.3',
-    'author' => 'Yep',
-    'summary' => 'Stubby',
-    'license' => 'Apache-2.0',
-    'operatingsystem_support' => [
-      {
-        'operatingsystem' => 'Ubuntu',
-        'operatingsystemrelease' => ['14.04'],
+  let(:module_metadata) do
+    {
+      'name' => 'simp-simplib',
+      'version' => '1.2.3',
+      'author' => 'Yep',
+      'summary' => 'Stubby',
+      'license' => 'Apache-2.0',
+      'operatingsystem_support' => [
+        {
+          'operatingsystem' => 'Ubuntu',
+          'operatingsystemrelease' => ['14.04'],
+        },
+      ],
+    }.to_json
+  end
+
+  let(:valid_facts) do
+    {
+      os: {
+        'name' => 'Ubuntu',
+        'release' => {
+          'major' => '14',
+          'full'  => '14.04',
+        },
       },
-    ],
-  }.to_json
+    }
+  end
 
-  valid_facts = {
-    os: {
-      'name' => 'Ubuntu',
-      'release' => {
-        'major' => '14',
-        'full'  => '14.04',
+  let(:bad_os) do
+    {
+      os: {
+        'name' => 'Foo',
+        'release' => {
+          'major' => '14',
+          'full'  => '14.04',
+        },
       },
-    },
-  }
+    }
+  end
 
-  bad_os = {
-    os: {
-      'name' => 'Foo',
-      'release' => {
-        'major' => '14',
-        'full'  => '14.04',
+  let(:bad_version) do
+    {
+      os: {
+        'name' => 'Ubuntu',
+        'release' => {
+          'major' => '10',
+          'full'  => '10.04',
+        },
       },
-    },
-  }
+    }
+  end
 
-  bad_version = {
-    os: {
-      'name' => 'Ubuntu',
-      'release' => {
-        'major' => '10',
-        'full'  => '10.04',
+  let(:options_major) do
+    {
+      'os' => {
+        'options' => {
+          'release_match' => 'major',
+        },
       },
-    },
-  }
+    }
+  end
 
-  options_major = {
-    'os' => {
-      'options' => {
-        'release_match' => 'major',
+  let(:options_full) do
+    {
+      'os' => {
+        'options' => {
+          'release_match' => 'full',
+        },
       },
-    },
-  }
+    }
+  end
 
-  options_full = {
-    'os' => {
-      'options' => {
-        'release_match' => 'full',
+  let(:options_disable_global) { { 'enable' => false } }
+
+  let(:options_disable_validation) do
+    {
+      'os' => {
+        'validate' => false,
       },
-    },
-  }
+    }
+  end
 
-  options_disable_global = {
-    'enable' => false,
-  }
-
-  options_disable_validation = {
-    'os' => {
-      'validate' => false,
-    },
-  }
-
-  options_fatal = {
-    'fatal' => true,
-  }
+  let(:options_fatal) { { 'fatal' => true } }
 
   let(:pre_condition) do
     <<~PRE_CONDITION
