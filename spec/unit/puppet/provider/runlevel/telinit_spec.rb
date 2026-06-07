@@ -59,7 +59,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           tempfile.write("id:#{resource[:level]}:initdefault:nil\n")
           tempfile.rewind
 
-          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(tempfile)
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_yield(tempfile)
 
           expect(provider.persist).to eq(:true)
         end
@@ -68,7 +68,7 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           tempfile.write('')
           tempfile.rewind
 
-          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(tempfile)
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_yield(tempfile)
 
           expect(provider.persist).to eq(:false)
         end
@@ -79,11 +79,15 @@ describe Puppet::Type.type(:runlevel).provider(:telinit) do
           tempfile.write("id:#{resource[:level]}:initdefault:nil\n")
           tempfile.rewind
 
-          expect(File).to receive(:open).with('/etc/inittab', 'r').and_return(tempfile)
+          expect(File).to receive(:open).with('/etc/inittab', 'r').and_yield(tempfile)
 
           fh = IO.open(IO.sysopen(tempfile, 'w'), 'w')
 
-          expect(File).to receive(:open).with('/etc/inittab', 'w').and_return(fh)
+          expect(File).to receive(:open).with('/etc/inittab', 'w') do |*_args, &block|
+            block.call(fh)
+          ensure
+            fh.close
+          end
 
           provider.persist = (resource[:level])
 
