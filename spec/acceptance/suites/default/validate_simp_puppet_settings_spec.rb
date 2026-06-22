@@ -18,7 +18,7 @@ describe 'validate simp puppet_settings fact' do
       # backwards compatibility, so both should resolve to the [server] vardir.
       ['server', 'master'].each do |section|
         it "#{section}.server_datadir should start with the [server] vardir" do
-          tmp_dir = create_tmpdir_on(host, 'validate_simp_puppet_settings_spec')
+          tmp_dir = host.tmpdir('validate_simp_puppet_settings_spec')
           tmp_puppet_conf_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--puppet.conf"
           tmp_puppet_manifest_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--manifest.pp"
           manifest = <<-MANIFEST.gsub(%r{^ {12}}, '')
