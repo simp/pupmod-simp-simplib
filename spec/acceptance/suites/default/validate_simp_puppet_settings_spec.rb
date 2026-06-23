@@ -7,28 +7,32 @@ describe 'validate simp puppet_settings fact' do
     <<-PUPPET_CONF.gsub(%r{^ {6}}, '')
       [main]
         vardir = /opt/puppetlabs/puppet/cache
-      [master]
+      [server]
         vardir = /opt/puppetlabs/server/data/puppetserver
     PUPPET_CONF
   end
 
   hosts.each do |host|
-    context 'when [main] and [master] have different vardirs in puppet.conf' do
-      it 'master.server_datadir should start with the [master] vardir' do
-        tmp_dir = create_tmpdir_on(host, 'validate_simp_puppet_settings_spec')
-        tmp_puppet_conf_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--puppet.conf"
-        tmp_puppet_manifest_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--manifest.pp"
-        manifest = <<-MANIFEST.gsub(%r{^ {10}}, '')
-          file{ '#{tmp_dir}/master-server_datadir.fact':
-            content => fact('puppet_settings.master.server_datadir')
-          }
-        MANIFEST
-        create_remote_file(host, tmp_puppet_conf_path, puppet_conf)
-        create_remote_file(host, tmp_puppet_manifest_path, manifest)
+    context 'when [main] and [server] have different vardirs in puppet.conf' do
+      # `puppet_settings` mirrors the `server` and `master` sections for
+      # backwards compatibility, so both should resolve to the [server] vardir.
+      ['server', 'master'].each do |section|
+        it "#{section}.server_datadir should start with the [server] vardir" do
+          tmp_dir = host.tmpdir('validate_simp_puppet_settings_spec')
+          tmp_puppet_conf_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--puppet.conf"
+          tmp_puppet_manifest_path = "#{tmp_dir}/validate_simp_puppet_settings_spec--manifest.pp"
+          manifest = <<-MANIFEST.gsub(%r{^ {12}}, '')
+            file{ '#{tmp_dir}/#{section}-server_datadir.fact':
+              content => fact('puppet_settings.#{section}.server_datadir')
+            }
+          MANIFEST
+          create_remote_file(host, tmp_puppet_conf_path, puppet_conf)
+          create_remote_file(host, tmp_puppet_manifest_path, manifest)
 
-        on host, "puppet apply '#{tmp_puppet_manifest_path}' --config '#{tmp_puppet_conf_path}'"
-        master_server_datadir = on(host, "cat #{tmp_dir}/master-server_datadir.fact").stdout
-        expect(master_server_datadir).to start_with('/opt/puppetlabs/server/data/puppetserver')
+          on host, "puppet apply '#{tmp_puppet_manifest_path}' --config '#{tmp_puppet_conf_path}'"
+          server_datadir = on(host, "cat #{tmp_dir}/#{section}-server_datadir.fact").stdout
+          expect(server_datadir).to start_with('/opt/puppetlabs/server/data/puppetserver')
+        end
       end
     end
   end
