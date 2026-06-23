@@ -1,3 +1,9 @@
+* Tue Jun 23 2026 Steven Pritchard <steve@sicura.us> - 6.0.1
+- Fix the `ipv6_enabled` and `shmall` facts so they read `/proc/sys` directly
+  instead of running `sysctl`. They no longer depend on the `procps-ng` package
+  and return a sensible value instead of erroring when the kernel setting is
+  unavailable (Closes #347)
+
 * Mon Jun 08 2026 Steven Pritchard <steven.pritchard@gmail.com> - 6.0.0
 - Switch `requirements` from `puppet` to `openvox` (>= 8 < 9)
 - Point `issues_url` at GitHub Issues
