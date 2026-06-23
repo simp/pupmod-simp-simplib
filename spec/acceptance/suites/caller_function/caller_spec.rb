@@ -12,12 +12,7 @@ describe 'simplib::caller function' do
   hosts.each do |host|
     host_modulepath = puppet_modulepath_on(host).first
 
-    copy_module_to(host,
-      {
-        source: File.absolute_path(File.join(__dir__, 'files', 'modules', 'testmod')),
-        module_name: 'testmod',
-        target_module_path: host_modulepath,
-      })
+    install_local_module_on(host, File.absolute_path(File.join(__dir__, 'files', 'modules', 'testmod')))
 
     it 'returns the correct location' do
       results = apply_manifest_on(host, manifest).output
