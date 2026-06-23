@@ -10,7 +10,7 @@ HOSTS:
     docker_preserve_image: true
     docker_image_commands:
       # Puppet Deps
-      - 'yum install -y rsync openssl openssh-server'
+      - 'yum install -y rsync openssl openssh-server procps-ng'
 CONFIG:
   log_level: verbose
   type: aio
