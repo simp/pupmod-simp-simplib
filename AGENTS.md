@@ -18,7 +18,7 @@ The module's real API is not its manifests but:
 - **`simplib::lookup`** — SIMP's Hiera-lookup wrapper. Unlike stock `lookup()`,
   it checks **global scope first** (a pre-declared class parameter or an ENC
   value) and only then falls back to the normal `lookup()` back-ends
-  (`lib/puppet/functions/simplib/lookup.rb:1-9`). This is why SIMP modules route
+  (`lib/puppet/functions/simplib/lookup.rb`). This is why SIMP modules route
   feature toggles through `simplib::lookup('simp_options::*', { 'default_value'
   => ... })` — the value resolves whether it was set via a declared class, an
   ENC, or Hiera.
@@ -37,39 +37,39 @@ The three actual manifests (`simplib::reboot_notify`, `simplib::stages`,
 
 **Manifests (3 total).** None of them call `assert_private()`; all are public.
 
-- **`simplib::reboot_notify` (`manifests/reboot_notify.pp:14-21`)** — Controller
+- **`simplib::reboot_notify` (`manifests/reboot_notify.pp`)** — Controller
   class for the `reboot_notify` custom type. Declares a single control resource
   `reboot_notify { '__simplib_control__': control_only => true }` and exposes one
   parameter, `$log_level` (`Simplib::PuppetLogLevel`, default `'notice'`), which
   sets the log level of the reboot messages. Set
   `simplib::reboot_notify::log_level: debug` in Hiera to silence the messages
-  outside debug runs (`reboot_notify.pp:7-12`).
-- **`simplib::stages` (`manifests/stages.pp:15-20`)** — `include stdlib::stages`,
+  outside debug runs (`reboot_notify.pp`).
+- **`simplib::stages` (`manifests/stages.pp`)** — `include stdlib::stages`,
   then adds two SIMP stages: `simp_prep` (`before => Stage['setup']`) and
   `simp_finalize` (`require => Stage['deploy']`). These bracket the stdlib run
   stages so SIMP changes with global ramifications (e.g. reboots) land at
-  predictable points (`stages.pp:1-14`).
-- **`simplib::install` (`manifests/install.pp:39-53`)** — Defined type that
+  predictable points (`stages.pp`).
+- **`simplib::install` (`manifests/install.pp`)** — Defined type that
   installs a `Hash` of packages via `ensure_packages`. Each hash key is a
   package name; its value is an optional per-package options hash merged over the
-  `$defaults` hash (`install.pp:41,44-49`). `$defaults` defaults to
+  `$defaults` hash (`install.pp`). `$defaults` defaults to
   `{ 'ensure' => 'present' }`. It is a **defined type rather than a function** so
   the resulting `Package` resources can be referenced in manifest ordering
-  (`install.pp:3-4`).
+  (`install.pp`).
 
 **Functions (`lib/puppet/functions/`, ~56).** Grouped by purpose:
 
 - **Lookup** — `simplib::lookup` (the flagship, described above);
   `simplib::dlookup` (a lookup variant for overriding **defined-type**
   parameters globally or per-instance; calls `simplib::lookup` under the hood,
-  `dlookup.rb:1-13`); `simplib::mock_data` (a Hiera `mock_data` backend for
-  tests, `mock_data.rb:1-2`).
+  `dlookup.rb`); `simplib::mock_data` (a Hiera `mock_data` backend for
+  tests, `mock_data.rb`).
 - **Password generation** — `simplib::passgen` generates/retrieves a persistent
   random password for an identifier in one of **two modes**: **simpkv** (stored
   in a key/value store via the `simp/simpkv` module) or **legacy** (stored as
   files under `Puppet.settings[:vardir]/.../simp_autofiles/gen_passwd/`). simpkv
   mode is enabled by setting `simplib::passgen::simpkv: true` in Hiera; minimum
-  length is 8 (`passgen.rb:1-20`). The `passgen/` submodule
+  length is 8 (`passgen.rb`). The `passgen/` submodule
   (`lib/puppet/functions/simplib/passgen/`) holds the get/set/list/remove
   helpers plus separate `simpkv/*` and `legacy/*` implementations.
   `simplib::gen_random_password` is the underlying stateless generator (no
@@ -79,15 +79,15 @@ The three actual manifests (`simplib::reboot_notify`, `simplib::stages`,
   `validate_array_member`, `validate_deep_hash`, `validate_re_array`,
   `validate_uri_list`, `validate_sysctl_value`.
 - **Network / IP helpers** — `simplib::nets2cidr` (netmask → CIDR, hostnames
-  passed through, `nets2cidr.rb:1-7`), `nets2ddq`, `ipaddresses`, `bracketize`
+  passed through, `nets2cidr.rb`), `nets2ddq`, `ipaddresses`, `bracketize`
   (wrap IPv6 in `[]`), `strip_ports`, `parse_hosts`, `host_is_me`, `ip_to_cron`,
   `rand_cron`, `join_mount_opts`.
 - **Ecosystem / meta** — `simplib::assert_optional_dependency` (fails the
   compile if a module listed in the caller's `metadata.json`
   `simp.optional_dependencies` is missing or version-mismatched; **other SIMP
-  modules call this to guard optional integrations**, `assert_optional_dependency.rb:1-45`);
+  modules call this to guard optional integrations**, `assert_optional_dependency.rb`);
   `simplib::deprecation` (deduped per-key deprecation warning,
-  `deprecation.rb:1-8`); `simplib::module_exist`, `caller`, `simp_version`,
+  `deprecation.rb`); `simplib::module_exist`, `caller`, `simp_version`,
   `filtered`, `params2hash`, `to_integer`, `to_string`, and the
   `debug/{classtrace,stacktrace,inspect}` helpers.
 - **Puppet-language functions (`functions/`)** — a separate, smaller set of
@@ -97,10 +97,10 @@ The three actual manifests (`simplib::reboot_notify`, `simplib::stages`,
 
 **Custom data types (`types/`, 24 top-level, ~50 with subtypes).** These are
 composed alias types — e.g. `Simplib::IP = Variant[Simplib::IP::V4,
-Simplib::IP::V6]` (`types/ip.pp:2`), `Simplib::Host = Variant[Simplib::IP,
-Simplib::Hostname]` (`types/host.pp:2`), `Simplib::Netlist = Array[Variant[...]]`
-(`types/netlist.pp:2`), `Simplib::Port = Variant[Port::Random, Port::System,
-Port::User, Port::Dynamic]` (`types/port.pp:2-7`). Families: IP/network
+Simplib::IP::V6]` (`types/ip.pp`), `Simplib::Host = Variant[Simplib::IP,
+Simplib::Hostname]` (`types/host.pp`), `Simplib::Netlist = Array[Variant[...]]`
+(`types/netlist.pp`), `Simplib::Port = Variant[Port::Random, Port::System,
+Port::User, Port::Dynamic]` (`types/port.pp`). Families: IP/network
 (`ip/`, `netlist/`), host/domain (`host/`, `hostname/`, `domain*`, `emailaddress`),
 port (`port/`), syslog (`syslog/` facility/severity/priority in string and C
 forms), cron (`cron/`), crypt-hash formats (`libcrypt/`, e.g. bcrypt / SHA-256 /
@@ -111,14 +111,14 @@ SHA-512), systemd (`systemd/`), and standalone aliases (`packageensure`,
 **Custom facts (`lib/facter/`, 33).** Notable ones:
 
 - `fips_enabled` — reads `/proc/sys/crypto/fips_enabled`; Linux-confined
-  (`fips_enabled.rb:6-19`). (Consumed by `simp/fips`.)
+  (`fips_enabled.rb`). (Consumed by `simp/fips`.)
 - `reboot_required` — scans `/var/run/puppet/reboot_triggers/*` and returns a
-  `name => reason` hash, or `false` if empty (`reboot_required.rb:10-25`). This
+  `name => reason` hash, or `false` if empty (`reboot_required.rb`). This
   pairs with the `reboot_notify` custom type, which writes those triggers.
 - `boot_dir_uuid` / `root_dir_uuid` — partition UUIDs of `/boot` and `/` via
-  `df` + `blkid` (`boot_dir_uuid.rb:1-12`).
+  `df` + `blkid` (`boot_dir_uuid.rb`).
 - `init_systems` — which init systems are present (`rc`/`upstart`/`systemd`/
-  `sysv`) by probing for binaries and directories (`init_systems.rb:1-15`).
+  `sysv`) by probing for binaries and directories (`init_systems.rb`).
 - `cpuinfo` — `/proc/cpuinfo` parsed per-processor into a hash.
 - `simplib__*` namespaced facts — `simplib__crypto_policy_state`,
   `simplib__secure_boot_enabled`, `simplib__efi_enabled`, `simplib__mountpoints`,
@@ -130,7 +130,7 @@ SHA-512), systemd (`systemd/`), and standalone aliases (`packageensure`,
 **Custom resource types + providers (`lib/puppet/type/`, 7).**
 `reboot_notify` (writes a summary file of reboot reasons; **registers entries
 only on refresh** — the driver behind the `reboot_required` fact,
-`type/reboot_notify.rb:3-14`), `ftpusers`, `init_ulimit`, `prepend_file_line`,
+`type/reboot_notify.rb`), `ftpusers`, `init_ulimit`, `prepend_file_line`,
 `runlevel`, `script_umask`, `simp_file_line`.
 
 ### Gotchas / non-obvious details
@@ -141,19 +141,19 @@ only on refresh** — the driver behind the `reboot_required` fact,
   the return shape of a fact/function/type can break downstream modules.
 - **`simplib::lookup` is not `lookup()`.** It checks global scope (declared
   class params / ENC) *before* the Hiera back-ends
-  (`lib/puppet/functions/simplib/lookup.rb:4-9`). Don't assume it behaves like
+  (`lib/puppet/functions/simplib/lookup.rb`). Don't assume it behaves like
   stock `lookup()`.
 - **`simplib::passgen` persists secrets.** In legacy mode it writes password
   files under the Puppet `vardir`; in simpkv mode it writes to the configured
   key/value store. Which one runs depends on the `simplib::passgen::simpkv`
-  Hiera flag (`passgen.rb:16-18`). This is why **`simp/simpkv` is a hard runtime
+  Hiera flag (`passgen.rb`). This is why **`simp/simpkv` is a hard runtime
   dependency** even though nothing in the three manifests references it.
 - **`reboot_notify` only records on refresh.** The custom type registers a
   reboot reason **only when it receives a refresh event**; a plain declaration
-  won't (`lib/puppet/type/reboot_notify.rb:10-12`). The `reboot_required` fact
+  won't (`lib/puppet/type/reboot_notify.rb`). The `reboot_required` fact
   then reports those triggers until the host reboots.
 - **`simplib::install` is a define, not a function**, specifically so its
-  `Package` resources are addressable for ordering (`manifests/install.pp:3-4`).
+  `Package` resources are addressable for ordering (`manifests/install.pp`).
 - **No `assert_private()` anywhere in the manifests** — all three classes/defines
   are public and meant to be `include`d/declared directly.
 - **This module does not consume the `simp_options::` seam** — see below.
@@ -215,14 +215,14 @@ OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
 - `spec/` — unit tests (rspec-puppet) and acceptance suites (beaker).
 - `REFERENCE.md` — generated Puppet Strings reference.
 - **Acceptance runs in CI:** `.github/workflows/pr_tests.yml` has an
-  `acceptance` job (`pr_tests.yml:116`) that runs beaker on **docker nodes via
+  `acceptance` job (`pr_tests.yml`) that runs beaker on **docker nodes via
   podman** — it starts the user podman socket and exports
   `DOCKER_HOST=unix:///run/user/$(id -u)/podman/podman.sock`
-  (`pr_tests.yml:162`). Suite matrix: `default`, `caller_function`,
+  (`pr_tests.yml`). Suite matrix: `default`, `caller_function`,
   `prelink_fact`; node matrix: `docker_alma8/9/10`, `docker_centos9/10`,
   `docker_oel8/9/10`, `docker_rocky8/9/10` (the `docker_rhel8/9/10` nodes are
   present but **commented out** — RHEL UBI containers can't install packages
-  without a subscription, `pr_tests.yml:142-144`). The `ipa_fact` and `windows`
+  without a subscription, `pr_tests.yml`). The `ipa_fact` and `windows`
   suites exist on disk but are excluded from CI. The workflow also runs the
   standard syntax / style / file-checks / releng-checks / spec-tests jobs.
 - `spec/acceptance/nodesets/` — 29 nodeset files.
@@ -255,12 +255,12 @@ puppet strings generate --format markdown --out REFERENCE.md
 bundle exec rake beaker:suites[default,docker_alma9]
 ```
 
-The `Gemfile` defaults `puppet_version` to `['>= 8', '< 9']` (`Gemfile:23`) and
+The `Gemfile` defaults `puppet_version` to `['>= 8', '< 9']` (`Gemfile`) and
 installs **both** the `openvox` and `puppet` gems during the OpenVox transition
-via `['openvox', 'puppet'].each do |gem_name|` (`Gemfile:30`). Relevant pins:
-`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile:33`), `simp-rake-helpers ~> 5.24.0`
-(`Gemfile:39`), `simp-beaker-helpers ~> 2.0.0` (`Gemfile:57`), and
-`rubocop ~> 1.88.0` (`Gemfile:16`). `spec/spec_helper.rb:11` requires
+via `['openvox', 'puppet'].each do |gem_name|` (`Gemfile`). Relevant pins:
+`puppetlabs_spec_helper ~> 8.0.0` (`Gemfile`), `simp-rake-helpers ~> 5.24.0`
+(`Gemfile`), `simp-beaker-helpers ~> 2.0.0` (`Gemfile`), and
+`rubocop ~> 1.88.0` (`Gemfile`). `spec/spec_helper.rb` requires
 `puppetlabs_spec_helper/module_spec_helper`.
 
 ## Conventions
