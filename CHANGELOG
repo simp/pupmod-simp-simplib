@@ -1,3 +1,6 @@
+* Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
+- Resolved puppet-lint manifest whitespace offenses; disabled the crashing strict_indent check
+
 * Tue Jun 23 2026 Steven Pritchard <steve@sicura.us> - 6.0.1
 - Fix the `ipv6_enabled` and `shmall` facts so they read `/proc/sys` directly
   instead of running `sysctl`. They no longer depend on the `procps-ng` package
