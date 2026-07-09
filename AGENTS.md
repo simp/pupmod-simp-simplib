@@ -6,7 +6,7 @@ This file provides guidance to AI agents when working with code in this reposito
 
 `simp-simplib` is SIMP's **core utility library**. It ships almost no
 Puppet-language classes — its value is in its Ruby surface: **~56 Puppet
-functions** (`lib/puppet/functions/`), **24 custom data types** (`types/`),
+functions** (`lib/puppet/functions/`), **15 top-level custom data types** (`types/`, plus namespaced subtypes),
 **33 custom facts** (`lib/facter/`), and **7 custom resource types with
 providers** (`lib/puppet/type/` + `lib/puppet/provider/`). Nearly every other
 SIMP module depends on it, so **it is a foundational dependency for the whole
@@ -16,8 +16,7 @@ compatibility matters far more than in a leaf module.
 The module's real API is not its manifests but:
 
 - **`simplib::lookup`** — SIMP's Hiera-lookup wrapper. Unlike stock `lookup()`,
-  it checks **global scope first** (a pre-declared class parameter or an ENC
-  value) and only then falls back to the normal `lookup()` back-ends
+  it checks **global scope first** (a pre-declared class parameter or an ENC value) — but returns that value only when it is *truthy* (`return global_param if global_param`); a global `false`/`undef` falls through to the normal `lookup()` back-ends
   (`lib/puppet/functions/simplib/lookup.rb`). This is why SIMP modules route
   feature toggles through `simplib::lookup('simp_options::*', { 'default_value'
   => ... })` — the value resolves whether it was set via a declared class, an
@@ -95,7 +94,7 @@ The three actual manifests (`simplib::reboot_notify`, `simplib::stages`,
   `inspect`, `knockout`, `safe_filename`, `error`, plus `cron/`, `ldap/`, and
   `module_metadata/` subdirs.
 
-**Custom data types (`types/`, 24 top-level, ~50 with subtypes).** These are
+**Custom data types (`types/`, 15 top-level aliases plus namespaced subtypes).** These are
 composed alias types — e.g. `Simplib::IP = Variant[Simplib::IP::V4,
 Simplib::IP::V6]` (`types/ip.pp`), `Simplib::Host = Variant[Simplib::IP,
 Simplib::Hostname]` (`types/host.pp`), `Simplib::Netlist = Array[Variant[...]]`
@@ -139,10 +138,7 @@ only on refresh** — the driver behind the `reboot_required` fact,
   `simp/simplib` in `metadata.json`. Treat the function signatures, type
   definitions, and fact names/shapes as a **public API** — renaming or changing
   the return shape of a fact/function/type can break downstream modules.
-- **`simplib::lookup` is not `lookup()`.** It checks global scope (declared
-  class params / ENC) *before* the Hiera back-ends
-  (`lib/puppet/functions/simplib/lookup.rb`). Don't assume it behaves like
-  stock `lookup()`.
+- **`simplib::lookup` is not `lookup()`.** It checks global scope (declared class params / ENC) *before* the Hiera back-ends, but only honors a global value when it is *truthy* — a global `false`/`undef` falls through (`lib/puppet/functions/simplib/lookup.rb`, `return global_param if global_param`). Don't assume it behaves like stock `lookup()`.
 - **`simplib::passgen` persists secrets.** In legacy mode it writes password
   files under the Puppet `vardir`; in simpkv mode it writes to the configured
   key/value store. Which one runs depends on the `simplib::passgen::simpkv`
@@ -204,7 +200,7 @@ OracleLinux 8/9/10; Rocky 8/9/10; AlmaLinux 8/9/10.
 - `lib/puppet/functions/` — ~56 Ruby functions (most under `simplib/`; the
   `passgen/` subtree holds the simpkv/legacy password implementations).
 - `functions/` — the smaller set of Puppet-language (`.pp`) functions.
-- `types/` — 24 custom data-type aliases (with subtype dirs `ip/`, `host/`,
+- `types/` — 15 top-level custom data-type aliases (with subtype dirs `ip/`, `host/`,
   `hostname/`, `netlist/`, `port/`, `cron/`, `syslog/`, `systemd/`, `libcrypt/`,
   `puppet/`).
 - `lib/facter/` — 33 custom facts (`fips_enabled`, `reboot_required`, the
