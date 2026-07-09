@@ -32,6 +32,9 @@ group :test do
   # renovate: datasource=rubygems versioning=ruby
   gem 'simp-rspec-puppet-facts', ENV.fetch('SIMP_RSPEC_PUPPET_FACTS_VERSION', '~> 4.0.0')
   gem 'syslog', require: false
+  # Ruby 3.4+ removed 'observer' from default gems, but 'drb' (pulled in by
+  # rspec/beaker dependencies) still requires it.
+  gem 'observer', require: false
 end
 
 group :development do
