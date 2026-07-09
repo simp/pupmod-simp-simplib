@@ -635,13 +635,13 @@
 - Added a 'simplib::inspect' debugging function for dumping parameters during
   Puppet runs.
 
-* Sun Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
+* Sat Mar 25 2017 Lucas Yamanishi <lucas.yamanishi@onyxpoint.com> - 3.2.2-0
 - Use PATH lookup for simp_version's rpm call
 
 * Mon Mar 20 2017 Liz Nemsick <lnemsick.simp@gmail.com> - 3.2.1-0
 - move passgen to Puppet[:vardir]
 
-* Thu Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
+* Wed Mar 15 2017 Dylan Cochran <dylan.cochran@onyxpoint.com> - 3.2.1-0
   - move passgen to /var/simp
 
 * Wed Mar 01 2017 Ryan Russel-Yates <ryan.russel-yates@onyxpoint.com> - 3.2.1-0
