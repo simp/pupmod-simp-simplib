@@ -36,6 +36,7 @@
 * [`simplib::debug::stacktrace`](#simplib--debug--stacktrace): Prints out a stacktrace of all files loaded up until the point where this function was called  WARNING: Uses **EXPERIMENTAL** features from P
 * [`simplib::deprecation`](#simplib--deprecation): Function to print deprecation warnings, logging a warning once for a given key.
 * [`simplib::dlookup`](#simplib--dlookup): A function for performing lookups targeted at ease of use with defined types.  Quite often you need to override something in an existing defi
+* [`simplib::error`](#simplib--error)
 * [`simplib::filtered`](#simplib--filtered): Hiera v5 backend that takes a list of allowed hiera key names, and only returns results from the underlying backend function that match those
 * [`simplib::gen_random_password`](#simplib--gen_random_password): Generates a random password string.  Terminates catalog compilation if the password cannot be created in the allotted time.
 * [`simplib::hash_to_opts`](#simplib--hash_to_opts): Turn a hash into a options string, for use in a shell command
@@ -754,15 +755,28 @@ NOTE: New capabilities will be added to the simplib::module_metadata::assert
 function instead of here but this will remain to preserve backwards
 compatibility
 
-#### `simplib::assert_metadata(String[1] $module_name, Optional[Struct[{
-    enable    => Optional[Boolean],
-    os        => Optional[Struct[{
-      validate => Optional[Boolean],
-      options  => Optional[Struct[{
-        release_match => Enum['none','full','major']
-      }]]
-    }]]
-  }]] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
+#### `simplib::assert_metadata(String[1] $module_name, Optional[
+    Struct[
+      {
+        enable => Optional[Boolean],
+        fatal  => Optional[Boolean],
+        os     => Optional[
+          Struct[
+            {
+              validate => Optional[Boolean],
+              options  => Optional[
+                Struct[
+                  {
+                    release_match => Enum['none', 'full', 'major']
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ] $options = simplib::lookup('simplib::assert_metadata::options', { 'default_value' => undef }))`
 
 Fails a compile if the client system is not compatible with the module's
 `metadata.json`
@@ -784,15 +798,28 @@ The name of the module that should be checked
 Data type:
 
 ```puppet
-Optional[Struct[{
-    enable    => Optional[Boolean],
-    os        => Optional[Struct[{
-      validate => Optional[Boolean],
-      options  => Optional[Struct[{
-        release_match => Enum['none','full','major']
-      }]]
-    }]]
-  }]]
+Optional[
+    Struct[
+      {
+        enable => Optional[Boolean],
+        fatal  => Optional[Boolean],
+        os     => Optional[
+          Struct[
+            {
+              validate => Optional[Boolean],
+              options  => Optional[
+                Struct[
+                  {
+                    release_match => Enum['none', 'full', 'major']
+                  }
+                ]
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  ]
 ```
 
 Behavior modifiers for the function
@@ -1362,6 +1389,30 @@ Hash of options for regular ``lookup()``
 Puppet ``lookup( [<NAME>], <OPTIONS HASH> )`` version of ``lookup()``
 * No other formats are supported!
 
+### <a name="simplib--error"></a>`simplib::error`
+
+Type: Puppet Language
+
+The simplib::error function.
+
+#### `simplib::error(String $message, Optional[Boolean] $fatal = false)`
+
+The simplib::error function.
+
+Returns: `Any`
+
+##### `message`
+
+Data type: `String`
+
+
+
+##### `fatal`
+
+Data type: `Optional[Boolean]`
+
+
+
 ### <a name="simplib--filtered"></a>`simplib::filtered`
 
 Type: Ruby 4.x API
@@ -1385,14 +1436,14 @@ defaults:  # Used for any hierarchy level that omits these keys.
   data_hash: "yaml_data"  # Use the built-in YAML backend.
 hierarchy: # Each hierarchy consists of multiple levels
   - name: "OSFamily"
-    path: "osfamily/%{facts.osfamily}.yaml"
+    path: "osfamily/%{facts.os.family}.yaml"
   - name: "datamodules"
     data_hash: simplib::filtered
     datadir: "delegated-data"
     paths:
-      - "%{facts.sitename}/osfamily/%{facts.osfamily}.yaml"
-      - "%{facts.sitename}/os/%{facts.operatingsystem}.yaml"
-      - "%{facts.sitename}/host/%{facts.fqdn}.yaml"
+      - "%{facts.sitename}/osfamily/%{facts.os.family}.yaml"
+      - "%{facts.sitename}/os/%{facts.os.name}.yaml"
+      - "%{facts.sitename}/host/%{facts.networking.fqdn}.yaml"
       - "%{facts.sitename}/common.yaml"
     options:
       function: yaml_data
@@ -1926,7 +1977,7 @@ hosts do not have linearly-assigned IP addresses.
 Data type: `Optional[Simplib::IP]`
 
 The IP address to use as the basis for the generated values.
-When `nil`, the 'ipaddress' fact (IPv4) is used.
+When `nil`, the 'networking.ip' fact (IPv4) is used.
 
 ### <a name="simplib--ipaddresses"></a>`simplib::ipaddresses`
 
@@ -2262,6 +2313,7 @@ Fails a compile if the client system is not compatible with the module's
 
 #### `simplib::module_metadata::assert(String[1] $module_name, Optional[Struct[{
     enable => Optional[Boolean],
+    fatal  => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],
@@ -2295,6 +2347,7 @@ Data type:
 ```puppet
 Optional[Struct[{
     enable => Optional[Boolean],
+    fatal  => Optional[Boolean],
     blacklist => Optional[Array[Variant[String[1], Hash[String[1], Variant[String[1], Array[String[1]]]]]]],
     blacklist_validation => Optional[Struct[{
       enable => Optional[Boolean],

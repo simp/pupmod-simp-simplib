@@ -14,7 +14,12 @@ describe 'simplib::to_string' do
     # Perhaps unexpected behavior? If we don't want this, we need to
     # change the required_param type in the :to_string dispatch
     it { is_expected.to run.with_params([34, 56]).and_return('[34, 56]') }
-    it { is_expected.to run.with_params({ 'tag' => 'value' }).and_return('{"tag"=>"value"}') }
+
+    # Ruby 3.4 changed Hash#to_s/#inspect formatting from `{"tag"=>"value"}`
+    # to `{"tag" => "value"}` (extra spaces around the hash rocket). Accept
+    # either format since simplib::to_string() intentionally passes through
+    # Ruby's native Hash#to_s.
+    it { is_expected.to run.with_params({ 'tag' => 'value' }).and_return(%r{\A\{"tag"\s*=>\s*"value"\}\z}) }
   end
 
   context 'should fail when conversion is not possible' do
