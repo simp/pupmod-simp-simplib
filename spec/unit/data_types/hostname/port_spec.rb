@@ -10,11 +10,17 @@ valid_data = [
   'localhost.localdomain:80',
   'my-domain.com:22',
   'aa.bb:65535',
+  # Single-character host names are valid per RFC 1123, Section 2.1
+  'a:80',
 ]
 
 invalid_data = [
   'a',
   'my_domain.com',
+  # The highest-level label may not be all-numeric (RFC 1123, Section 2.1)
+  '1.2.3.400:123',
+  '10.0.0.256:80',
+  '400:80',
   '0.0.0',
   '0.0.0.0',
   '1.2.3.4',

@@ -112,8 +112,8 @@
 * [`Simplib::EmailAddress`](#Simplib--EmailAddress): Matches valid email addresses
 * [`Simplib::Host`](#Simplib--Host): Matches a single IP Address or Hostname
 * [`Simplib::Host::Port`](#Simplib--Host--Port): Matches a single IP Address or Hostname with a Port
-* [`Simplib::Hostname`](#Simplib--Hostname): Valid Hostnames - May not match Unicode and does not validate against TLD registry
-* [`Simplib::Hostname::Port`](#Simplib--Hostname--Port): Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
+* [`Simplib::Hostname`](#Simplib--Hostname): Valid Hostnames  Complies with the host name restrictions of RFC 1123, Section 2.1:   * only ASCII alpha + numbers + hyphens are allowed  * l
+* [`Simplib::Hostname::Port`](#Simplib--Hostname--Port): Valid Hostnames with ports  The host name portion complies with the host name restrictions of RFC 1123, Section 2.1. See Simplib::Hostname fo
 * [`Simplib::IP`](#Simplib--IP): Matches a single IP Address
 * [`Simplib::IP::CIDR`](#Simplib--IP--CIDR): Matches valid CIDR IP addresses
 * [`Simplib::IP::Port`](#Simplib--IP--Port): Matches valid IP addresses with Ports
@@ -5770,10 +5770,9 @@ Complies with TLD restrictions from Section 2 of RFC 3696:
  * TLDs cannot be all-numeric
  * TLDs must be able to end with a period
  * A DNS label may be no more than 63 octets long
+ * A domain name may be no more than 253 octets long
 
-RegEx developed and tested at http://rubular.com/r/4yZ7R8v42f
-
-Alias of `Pattern['^(?i-mx:(?=^.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+$)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
+Alias of `Pattern['\A(?i-mx:(?=.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?\z)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
 
 ### <a name="Simplib--Domainlist"></a>`Simplib::Domainlist`
 
@@ -5801,15 +5800,32 @@ Alias of `Variant[Simplib::IP::Port, Simplib::Hostname::Port]`
 
 ### <a name="Simplib--Hostname"></a>`Simplib::Hostname`
 
-Valid Hostnames - May not match Unicode and does not validate against TLD registry
+Valid Hostnames
 
-Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?)$']`
+Complies with the host name restrictions of RFC 1123, Section 2.1:
+
+ * only ASCII alpha + numbers + hyphens are allowed
+ * labels can't begin or end with hyphens
+ * the highest-level label cannot be all-numeric, so that a host name can
+   never be confused with a dotted-decimal IP address
+ * a DNS label may be no more than 63 octets long
+ * a host name may be no more than 253 octets long
+ * host names may end with a period
+
+May not match Unicode and does not validate against the TLD registry
+
+Alias of `Pattern['\A(?i-mx:(?=.{1,253}\z)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?\z)([a-z0-9-]{1,63})(?<!-)\.?)\z']`
 
 ### <a name="Simplib--Hostname--Port"></a>`Simplib::Hostname::Port`
 
-Valid Hostnames with ports - May not match Unicode and does not validate against TLD registry
+Valid Hostnames with ports
 
-Alias of `Pattern['^(?i-mx:(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]{2}|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$']`
+The host name portion complies with the host name restrictions of RFC 1123,
+Section 2.1. See Simplib::Hostname for the full list.
+
+May not match Unicode and does not validate against the TLD registry
+
+Alias of `Pattern['\A(?i-mx:(?=[^:]{1,253}:)((?!-)[a-z0-9-]{1,63}(?<!-)\.)*(?!-|\d+\.?:)([a-z0-9-]{1,63})(?<!-)\.?):([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])\z']`
 
 ### <a name="Simplib--IP"></a>`Simplib::IP`
 

@@ -18,15 +18,24 @@ valid_data = [
     '::1',
     '[::1]',
     '[2001:db8:85a3:8d3:1319:8a2e:370:7348]:443',
+    # Single-character host names are valid per RFC 1123, Section 2.1
+    'a',
   ],
 ]
 
 invalid_data = [
   'localhost',
   [
-    'a',
     '0.0.0',
     '1.2.3.256',
+  ],
+  # Verify the malformed dotted-decimal address on its own, rather than
+  # relying on another entry in the list to fail the match
+  [
+    '1.2.3.400',
+  ],
+  [
+    '400',
   ],
 ]
 

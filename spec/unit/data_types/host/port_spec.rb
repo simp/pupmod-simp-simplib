@@ -10,12 +10,18 @@ valid_data = [
   'localhost.localdomain:443',
   'my-domain.com:22',
   '[2001:db8:85a3:8d3:1319:8a2e:370:7348]:443',
+  # Single-character host names are valid per RFC 1123, Section 2.1
+  'a:80',
 ]
 
 invalid_data = [
   'a',
   'my_domain.com',
   '0.0.0',
+  # Neither a valid IP address nor a valid host name
+  '1.2.3.400:80',
+  '10.0.0.256:80',
+  '400:80',
   '1.2.3.4/24',
   '1.2.3.4/255.255.224.0',
 ]
