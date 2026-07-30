@@ -19,6 +19,14 @@ describe 'Simplib::Macaddress' do
         it { is_expected.not_to allow_value('CA:FE:BE:EF::11') }
         it { is_expected.not_to allow_value('OO:PS:NO:TH:EX:11') }
       end
+
+      context 'the pattern is anchored to the whole string' do
+        # Regression: line anchors let any multi-line string containing a
+        # single valid line satisfy the type. See #353.
+        it { is_expected.not_to allow_value("CA:FE:BE:EF:00:11\nevil") }
+        it { is_expected.not_to allow_value("evil\nCA:FE:BE:EF:00:11") }
+        it { is_expected.not_to allow_value("CA:FE:BE:EF:00:11\n") }
+      end
     end
   end
 end

@@ -21,6 +21,27 @@
   `Simplib::Netlist::Port` inherit the fixes
 - Add the previously missing type alias tests for `Simplib::Hostname`,
   `Simplib::Hostname::Port`, `Simplib::Host`, and `Simplib::Host::Port`
+- BREAKING CHANGE: (#353) Anchor the remaining `Pattern` types to the whole
+  string with `\A`...`\z` instead of the line anchors `^`...`$`. Because
+  Puppet's `Pattern` performs a regex search, any multi-line string containing
+  a single valid line satisfied these types, which made an embedded newline a
+  config-injection primitive. Affects `Simplib::EmailAddress`,
+  `Simplib::Macaddress`, `Simplib::Umask`, `Simplib::URI`,
+  `Simplib::Systemd::ServiceName`, `Simplib::ShadowPass`, and all twelve
+  `Simplib::Libcrypt::*` types. The IPv4/IPv6 types were already anchored
+  internally and are unchanged
+- BREAKING CHANGE: Exclude newlines from the salt in
+  `Simplib::Libcrypt::MD5_FreeBSD`. The salt is a negated character class,
+  which matches a newline even when the pattern is anchored, so a newline
+  could be smuggled into the middle of an otherwise valid value
+- Fix `Simplib::Libcrypt::Yescrypt`, which has never been loadable (#354).
+  It was defined in `types/libcrypt/yescript.pp`, so the autoloader could not
+  find it, and the corresponding `Simplib::ShadowPass` branch silently never
+  matched - yescrypt hashes, the default on recent Fedora and EL10, were
+  rejected. Renamed to `types/libcrypt/yescrypt.pp`
+- Add type alias tests for the twelve `Simplib::Libcrypt::*` types, which had
+  no direct coverage, and for `Simplib::EmailAddress`, `Simplib::Umask`,
+  `Simplib::URI`, and `Simplib::Systemd::ServiceName`
 
 * Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - Resolved puppet-lint manifest whitespace offenses; disabled the crashing strict_indent check

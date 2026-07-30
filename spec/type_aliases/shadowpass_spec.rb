@@ -16,12 +16,30 @@ describe 'Simplib::ShadowPass' do
         it { is_expected.to allow_value('$2a$07$ybS56Js6xCcu5SxFwa2NsODRF109WEitIY52THiZh.eFdfQg8ovNe') }
         it { is_expected.to allow_value('$2y$10$RT.Z68QWbhbg5.TOba4gGOBEvj6anWfvPBaU3F1HMHTSz5g75Vrme') }
         it { is_expected.to allow_value('$1$0nIBDEfm$QNNyqbDS5ZkwScfmvI37z.') }
+
+        # Regression: types/libcrypt/yescript.pp defined
+        # Simplib::Libcrypt::Yescrypt, so the autoloader never found it and
+        # this branch of the Variant silently never matched
+        it { is_expected.to allow_value('$y$j9T$aaaa$aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') }
       end
 
       context 'with invalid entries' do
         it { is_expected.not_to allow_value('*$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1') }
         it { is_expected.not_to allow_value('$6$') }
         it { is_expected.not_to allow_value('mycleartextpassword') }
+      end
+
+      context 'the pattern is anchored to the whole string' do
+        # Regression: line anchors let any multi-line string containing a
+        # single valid line satisfy the type. An injected newline in the
+        # shadow password field is a file-injection primitive. See #353.
+        it { is_expected.not_to allow_value("$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1\nevil") }
+        it { is_expected.not_to allow_value("evil\n$6$h6k81gwg$J5QJ3DWz9G2CeIHMEXRfhd7Ocem.NNfQimxw/OUa2m/PD3Mx6q67ntjELlVgye4kHxG5ZfMAXLjioGWISJYFE1") }
+        it { is_expected.not_to allow_value("$1$0nIBDEfm$QNNyqbDS5ZkwScfmvI37z.\nevil") }
+
+        # The disabled-entry branch, Pattern['\A!.*\z']
+        it { is_expected.not_to allow_value("!locked\nevil") }
+        it { is_expected.not_to allow_value("evil\n!locked") }
       end
     end
   end

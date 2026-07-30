@@ -130,7 +130,7 @@
 * [`Simplib::Libcrypt::Bcrypt`](#Simplib--Libcrypt--Bcrypt): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::Bigcrypt`](#Simplib--Libcrypt--Bigcrypt): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::DES`](#Simplib--Libcrypt--DES): Regular expression pulled from the crypt(5) man page
-* [`Simplib::Libcrypt::MD5_FreeBSD`](#Simplib--Libcrypt--MD5_FreeBSD): Regular expression pulled from the crypt(5) man page
+* [`Simplib::Libcrypt::MD5_FreeBSD`](#Simplib--Libcrypt--MD5_FreeBSD): Regular expression pulled from the crypt(5) man page  The salt is a negated character class, which matches a newline even when the pattern is
 * [`Simplib::Libcrypt::MD5_Sun`](#Simplib--Libcrypt--MD5_Sun): Regular expression pulled from the crypt(5) man page lint:ignore:single_quote_string_with_variables
 * [`Simplib::Libcrypt::NTHASH`](#Simplib--Libcrypt--NTHASH): Regular expression pulled from the crypt(5) man page
 * [`Simplib::Libcrypt::SHA1`](#Simplib--Libcrypt--SHA1): Regular expression pulled from the crypt(5) man page
@@ -5784,7 +5784,7 @@ Alias of `Array[Simplib::Domain]`
 
 Matches valid email addresses
 
-Alias of `Pattern['^.+@.+$']`
+Alias of `Pattern['\A.+@.+\z']`
 
 ### <a name="Simplib--Host"></a>`Simplib::Host`
 
@@ -5958,80 +5958,83 @@ Alias of `Pattern['^(?x-mi:(?:(?x-mi:\A\[(?:[0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^_[./0-9A-Za-z]{19}$']`
+Alias of `Pattern['\A_[./0-9A-Za-z]{19}\z']`
 
 ### <a name="Simplib--Libcrypt--Bcrypt"></a>`Simplib::Libcrypt::Bcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}$']`
+Alias of `Pattern['\A\$2[abxy]\$[0-9]{2}\$[./A-Za-z0-9]{53}\z']`
 
 ### <a name="Simplib--Libcrypt--Bigcrypt"></a>`Simplib::Libcrypt::Bigcrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^[./0-9A-Za-z]{13,178}$']`
+Alias of `Pattern['\A[./0-9A-Za-z]{13,178}\z']`
 
 ### <a name="Simplib--Libcrypt--DES"></a>`Simplib::Libcrypt::DES`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^[./0-9A-Za-z]{13}$']`
+Alias of `Pattern['\A[./0-9A-Za-z]{13}\z']`
 
 ### <a name="Simplib--Libcrypt--MD5_FreeBSD"></a>`Simplib::Libcrypt::MD5_FreeBSD`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$1\$[^$]{1,8}\$[./0-9A-Za-z]{22}$']`
+The salt is a negated character class, which matches a newline even when the
+pattern is anchored to the whole string, so newlines are excluded explicitly
+
+Alias of `Pattern['\A\$1\$[^$\n]{1,8}\$[./0-9A-Za-z]{22}\z']`
 
 ### <a name="Simplib--Libcrypt--MD5_Sun"></a>`Simplib::Libcrypt::MD5_Sun`
 
 Regular expression pulled from the crypt(5) man page
 lint:ignore:single_quote_string_with_variables
 
-Alias of `Pattern['^\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}$']`
+Alias of `Pattern['\A\$md5(,rounds=[1-9][0-9]+)?\$[./0-9A-Za-z]{8}\${1,2}[./0-9A-Za-z]{22}\z']`
 
 ### <a name="Simplib--Libcrypt--NTHASH"></a>`Simplib::Libcrypt::NTHASH`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$3\$\$[0-9a-f]{32}$']`
+Alias of `Pattern['\A\$3\$\$[0-9a-f]{32}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA1"></a>`Simplib::Libcrypt::SHA1`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}$']`
+Alias of `Pattern['\A\$sha1\$[1-9][0-9]+\$[./0-9A-Za-z]{1,64}\$[./0-9A-Za-z]{8,64}[./0-9A-Za-z]{32}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA2_256"></a>`Simplib::Libcrypt::SHA2_256`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}$']`
+Alias of `Pattern['\A\$5\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{43}\z']`
 
 ### <a name="Simplib--Libcrypt--SHA2_512"></a>`Simplib::Libcrypt::SHA2_512`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$']`
+Alias of `Pattern['\A\$6\$(rounds=[1-9][0-9]+\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}\z']`
 
 ### <a name="Simplib--Libcrypt--Scrypt"></a>`Simplib::Libcrypt::Scrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}$']`
+Alias of `Pattern['\A\$7\$[./A-Za-z0-9]{11,97}\$[./A-Za-z0-9]{43}\z']`
 
 ### <a name="Simplib--Libcrypt--Yescrypt"></a>`Simplib::Libcrypt::Yescrypt`
 
 Regular expression pulled from the crypt(5) man page
 
-Alias of `Pattern['^\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}$']`
+Alias of `Pattern['\A\$y\$[./A-Za-z0-9]+\$[./A-Za-z0-9]{,86}\$[./A-Za-z0-9]{43}\z']`
 
 ### <a name="Simplib--Macaddress"></a>`Simplib::Macaddress`
 
 Matches MAC addresses
 
-Alias of `Pattern['^[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}$']`
+Alias of `Pattern['\A[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}:[0-9a-fA-F]{1,2}\z']`
 
 ### <a name="Simplib--Netlist"></a>`Simplib::Netlist`
 
@@ -6171,7 +6174,7 @@ They are ordered of most to least commonly used for optimization.
 
 Just because they are allowed, does not mean that you should use them....
 
-Alias of `Variant[Enum['*','!','!!'], Pattern['^!.*'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]`
+Alias of `Variant[Enum['*','!','!!'], Pattern['\A!.*\z'], Simplib::Libcrypt::SHA2_512, Simplib::Libcrypt::SHA2_256, Simplib::Libcrypt::SHA1, Simplib::Libcrypt::MD5_Sun, Simplib::Libcrypt::MD5_FreeBSD, Simplib::Libcrypt::NTHASH, Simplib::Libcrypt::Bcrypt, Simplib::Libcrypt::Scrypt, Simplib::Libcrypt::Yescrypt]`
 
 ### <a name="Simplib--Syslog--CFacility"></a>`Simplib::Syslog::CFacility`
 
@@ -6363,17 +6366,17 @@ Variant[Integer[0,7], Enum[
 
 Valid systemd service names
 
-Alias of `Pattern['^(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}$']`
+Alias of `Pattern['\A(([A-Za-z0-9.:_\\\\-])(@[A-Za-z0-9.:_\\\\-])?){1,256}\z']`
 
 ### <a name="Simplib--URI"></a>`Simplib::URI`
 
 Matches URI strings
 
-Alias of `Pattern['^[a-zA-Z][a-zA-Z0-9+-.]*://.*$']`
+Alias of `Pattern['\A[a-zA-Z][a-zA-Z0-9+-.]*://.*\z']`
 
 ### <a name="Simplib--Umask"></a>`Simplib::Umask`
 
 Matches umask patterns
 
-Alias of `Pattern['^[0-7]{3,4}$']`
+Alias of `Pattern['\A[0-7]{3,4}\z']`
 
