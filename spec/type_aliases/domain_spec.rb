@@ -40,6 +40,22 @@ describe 'Simplib::Domain' do
           it { is_expected.not_to allow_value('0212') }
           it { is_expected.not_to allow_value('test.0') }
           it { is_expected.not_to allow_value('t.t.t.t.0') }
+          it { is_expected.not_to allow_value('1.2.3.400') }
+        end
+
+        context 'a trailing period does not bypass the all-numeric check' do
+          # Regression: the previous pattern anchored the all-numeric check
+          # with '$', which a trailing period stepped past
+          it { is_expected.not_to allow_value('0.') }
+          it { is_expected.not_to allow_value('test.400.') }
+          it { is_expected.not_to allow_value('1.2.3.400.') }
+        end
+
+        context 'the pattern is anchored to the whole string' do
+          # Regression: the previous pattern used line anchors, so any
+          # multi-line string containing one valid line was accepted
+          it { is_expected.not_to allow_value("test.com\nevil") }
+          it { is_expected.not_to allow_value("evil\ntest.com") }
         end
 
         context 'A DNS label may be no more than 63 octets long' do

@@ -1,3 +1,27 @@
+* Thu Jul 30 2026 Steven Pritchard <steve@sicura.us> - 7.0.0
+- BREAKING CHANGE: (#351) Correct `Simplib::Hostname` so that it enforces the
+  host name restrictions of RFC 1123, Section 2.1. The highest-level label may
+  no longer be all-numeric, so malformed dotted-decimal addresses such as
+  `1.2.3.400` and `10.0.0.256` are now rejected instead of validating as host
+  names. This also fixes `Simplib::Host`, which silently accepted those values
+  because it falls back to `Simplib::Hostname` when `Simplib::IP` does not
+  match
+- BREAKING CHANGE: `Simplib::Hostname` and `Simplib::Domain` are now anchored
+  to the whole string rather than to a line. Multi-line strings containing a
+  single valid line, such as `"foo.com\nevil"`, are no longer accepted
+- `Simplib::Hostname` now accepts single-character host names such as `a`. The
+  previous pattern imposed a two-character minimum on the highest-level label
+  that has no basis in RFC 1123
+- `Simplib::Hostname` now enforces the 63-octet label and 253-octet name
+  length limits that `Simplib::Domain` already enforced
+- Fix `Simplib::Domain` so that a trailing period does not bypass the
+  all-numeric TLD check (`0.` and `test.400.` were accepted)
+- Apply the same corrections to `Simplib::Hostname::Port`.
+  `Simplib::Host::Port`, `Simplib::Netlist`, `Simplib::Netlist::Host`, and
+  `Simplib::Netlist::Port` inherit the fixes
+- Add the previously missing type alias tests for `Simplib::Hostname`,
+  `Simplib::Hostname::Port`, `Simplib::Host`, and `Simplib::Host::Port`
+
 * Thu Jul 09 2026 Steven Pritchard <steve@sicura.us> - 6.0.2
 - Resolved puppet-lint manifest whitespace offenses; disabled the crashing strict_indent check
 

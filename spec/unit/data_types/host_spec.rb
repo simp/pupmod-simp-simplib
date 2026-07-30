@@ -14,12 +14,18 @@ valid_data = [
   '1.2.3.4',
   '::1',
   '[::1]',
+  # Single-character host names are valid per RFC 1123, Section 2.1
+  'a',
 ]
 
 invalid_data = [
-  'a',
   'my_domain.com',
   '0.0.0',
+  # Neither a valid IP address nor a valid host name
+  '1.2.3.400',
+  '10.0.0.256',
+  '400',
+  "my-domain.com\nevil",
   '[2001:db8:85a3:8d3:1319:8a2e:370:7348]:443',
   '1.2.3.4/24',
   '1.2.3.4/255.255.224.0',

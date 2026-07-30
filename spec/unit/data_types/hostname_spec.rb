@@ -12,14 +12,24 @@ valid_data = [
   'localhost.localdomain',
   'my-domain.com',
   'aa.bb',
+  # Single-character host names are valid per RFC 1123, Section 2.1
+  'a',
+  'a.bb',
 ]
 
 invalid_data = [
-  'a',
   'my_domain.com',
   '0.0.0',
   '0.0.0.0',
   '1.2.3.4',
+  # The highest-level label may not be all-numeric, so a malformed
+  # dotted-decimal address is not a host name (RFC 1123, Section 2.1)
+  '1.2.3.400',
+  '10.0.0.256',
+  '400',
+  '400.',
+  '1.2.3.400.',
+  "my-domain.com\nevil",
   '1.2.3.4/24',
   '1.2.3.4/255.255.224.0',
   '1.2.3.4:443',
