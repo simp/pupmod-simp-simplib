@@ -49,14 +49,16 @@ describe 'simplib::stages', type: :class do
       end
 
       context 'overrides' do
+        # Select the override hieradata via this context's declared facts —
+        # unlike `let(:hieradata)`'s global default_facts mutation, these are
+        # part of rspec-puppet's catalogue cache key, so no cache_bust fact
+        # is needed. (The random CI failures here were a hiera.yaml write
+        # race under parallel_spec, fixed in spec_helper.rb — see #362.)
         let(:facts) do
           os_facts.merge(
-            cache_bust: Time.now.to_s,
-            hieradata: 'simplib_dlookup_overrides',
+            custom_hiera: 'simplib_dlookup_overrides',
           )
         end
-
-        let(:hieradata) { 'simplib_dlookup_overrides' }
 
         context 'with global overrides' do
           it { expect(gob[:attribute]).to eq('illusions') }
