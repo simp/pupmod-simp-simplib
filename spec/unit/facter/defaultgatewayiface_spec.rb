@@ -3,6 +3,8 @@ require 'spec_helper'
 describe 'defaultgatewayiface' do
   before :each do
     Facter.clear
+
+    allow(Facter::Core::Execution).to receive(:execute).with(any_args).and_call_original
   end
 
   let(:ipv4route) do
@@ -15,37 +17,36 @@ describe 'defaultgatewayiface' do
 
   context 'ip command exists' do
     before :each do
-      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
-      expect(Facter::Util::Resolution).to receive(:which).with('ip').and_return('/usr/bin/ip')
+      expect(Facter::Core::Execution).to receive(:which).with('ip').and_return('/usr/bin/ip')
     end
 
     it 'returns IP address of valid default route' do
-      expect(Facter::Core::Execution).to receive(:exec).with('/usr/bin/ip route').and_return(ipv4route)
+      expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/ip route', on_fail: nil).and_return(ipv4route)
       expect(Facter.fact(:defaultgatewayiface).value).to eq('eth0')
     end
 
     it 'returns IP address of last valid default route' do
       multiple_defaults = ipv4route + 'default via 10.0.2.1 dev eth1'
-      expect(Facter::Core::Execution).to receive(:exec).with('/usr/bin/ip route').and_return(multiple_defaults)
+      expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/ip route', on_fail: nil).and_return(multiple_defaults)
       expect(Facter.fact(:defaultgatewayiface).value).to eq('eth1')
     end
 
     it "returns 'unknown' when no default line exists" do
       bad_route = ipv4route.gsub('default', 'oops ')
-      expect(Facter::Core::Execution).to receive(:exec).with('/usr/bin/ip route').and_return(bad_route)
+      expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/ip route', on_fail: nil).and_return(bad_route)
       expect(Facter.fact(:defaultgatewayiface).value).to eq('unknown')
     end
 
     it "returns 'unknown' when device could not be extracted from the default line" do
       bad_route = ipv4route.gsub('dev eth0', 'dev ')
-      expect(Facter::Core::Execution).to receive(:exec).with('/usr/bin/ip route').and_return(bad_route)
+      expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/ip route', on_fail: nil).and_return(bad_route)
       expect(Facter.fact(:defaultgatewayiface).value).to eq('unknown')
     end
   end
 
   context 'ip command does not exist' do
     it "returns 'unknown'" do
-      expect(Facter::Util::Resolution).to receive(:which).with('ip').and_return(nil)
+      expect(Facter::Core::Execution).to receive(:which).with('ip').and_return(nil)
       expect(Facter.fact(:defaultgatewayiface).value).to eq('unknown')
     end
   end

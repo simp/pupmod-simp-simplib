@@ -29,7 +29,6 @@ describe 'custom fact prelink' do
     Facter.clear
 
     # mock out Facter method called when evaluating confine for :kernel
-    allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
 
     allow(File).to receive(:read).with(any_args).and_call_original
   end

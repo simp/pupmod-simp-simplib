@@ -1,7 +1,7 @@
 Facter.add(:simplib__networkmanager) do
   confine kernel: 'Linux'
 
-  @nmcli_cmd = Facter::Util::Resolution.which('nmcli')
+  @nmcli_cmd = Facter::Core::Execution.which('nmcli')
   confine { @nmcli_cmd }
 
   setcode do

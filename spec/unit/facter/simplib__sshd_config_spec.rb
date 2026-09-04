@@ -7,7 +7,7 @@ describe 'simplib__sshd_config' do
     allow(File).to receive(:read).with(any_args).and_call_original
     allow(File).to receive(:readable?).with(any_args).and_call_original
 
-    expect(Facter::Util::Resolution).to receive(:which).with('sshd').and_return('/usr/bin/sshd')
+    expect(Facter::Core::Execution).to receive(:which).with('sshd').and_return('/usr/bin/sshd')
     expect(Facter::Core::Execution).to receive(:execute).with('/usr/bin/sshd -. 2>&1', on_fail: :failed).and_return(openssh_version['full_version'])
 
     expect(File).to receive(:exist?).with('/etc/ssh/sshd_config').and_return(true).at_least(:once)

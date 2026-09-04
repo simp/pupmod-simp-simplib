@@ -7,12 +7,7 @@ describe 'tmp_mounts facts' do
     Facter.clear
 
     # mock out Facter method called when evaluating confine for :kernel
-    # Facter 4
-    if defined?(Facter::Resolvers::Uname)
-      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
-    else
-      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
-    end
+    allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
 
     # confine { File.directory?(dir) } passes for the target dirs
     allow(File).to receive(:directory?).with(any_args).and_call_original

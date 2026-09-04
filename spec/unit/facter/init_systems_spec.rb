@@ -11,8 +11,8 @@ describe 'init_systems' do
 
   context 'when on a base system' do
     before(:each) do
-      expect(Facter::Util::Resolution).to receive(:which).with('initctl').and_return(false)
-      expect(Facter::Util::Resolution).to receive(:which).with('systemctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('initctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('systemctl').and_return(false)
       expect(Dir).to receive(:exist?).with('/etc/init.d').and_return false
     end
 
@@ -21,8 +21,8 @@ describe 'init_systems' do
 
   context 'with initctl' do
     before(:each) do
-      expect(Facter::Util::Resolution).to receive(:which).with('initctl').and_return(true)
-      expect(Facter::Util::Resolution).to receive(:which).with('systemctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('initctl').and_return(true)
+      expect(Facter::Core::Execution).to receive(:which).with('systemctl').and_return(false)
       expect(Dir).to receive(:exist?).with('/etc/init.d').and_return(false)
     end
 
@@ -31,8 +31,8 @@ describe 'init_systems' do
 
   context 'with systemctl' do
     before(:each) do
-      expect(Facter::Util::Resolution).to receive(:which).with('initctl').and_return(false)
-      expect(Facter::Util::Resolution).to receive(:which).with('systemctl').and_return(true)
+      expect(Facter::Core::Execution).to receive(:which).with('initctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('systemctl').and_return(true)
       expect(Dir).to receive(:exist?).with('/etc/init.d').and_return(false)
     end
 
@@ -41,8 +41,8 @@ describe 'init_systems' do
 
   context 'with /etc/init.d' do
     before(:each) do
-      expect(Facter::Util::Resolution).to receive(:which).with('initctl').and_return(false)
-      expect(Facter::Util::Resolution).to receive(:which).with('systemctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('initctl').and_return(false)
+      expect(Facter::Core::Execution).to receive(:which).with('systemctl').and_return(false)
       expect(Dir).to receive(:exist?).with('/etc/init.d').and_return(true)
     end
 
@@ -51,8 +51,8 @@ describe 'init_systems' do
 
   context 'with all' do
     before(:each) do
-      expect(Facter::Util::Resolution).to receive(:which).with('initctl').and_return(true)
-      expect(Facter::Util::Resolution).to receive(:which).with('systemctl').and_return(true)
+      expect(Facter::Core::Execution).to receive(:which).with('initctl').and_return(true)
+      expect(Facter::Core::Execution).to receive(:which).with('systemctl').and_return(true)
       expect(Dir).to receive(:exist?).with('/etc/init.d').and_return(true)
     end
 

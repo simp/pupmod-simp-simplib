@@ -4,15 +4,16 @@ describe 'simplib__auditd' do
   before :each do
     Facter.clear
 
+    allow(Facter::Core::Execution).to receive(:execute).with(any_args).and_call_original
+
     allow(Facter).to receive(:value).with(any_args).and_call_original
     allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
-    allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
-    expect(Facter::Util::Resolution).to receive(:which).with('ps').and_return('/bin/ps')
+    expect(Facter::Core::Execution).to receive(:which).with('ps').and_return('/bin/ps')
   end
 
   context 'with auditctl not present' do
     it do
-      expect(Facter::Util::Resolution).to receive(:which).with('auditctl').and_return(nil)
+      expect(Facter::Core::Execution).to receive(:which).with('auditctl').and_return(nil)
 
       expect(Facter.fact('simplib__auditd').value).to be_nil
     end
@@ -20,13 +21,13 @@ describe 'simplib__auditd' do
 
   context 'with auditctl present' do
     before :each do
-      expect(Facter::Util::Resolution).to receive(:which).with('auditctl').and_return('/sbin/auditctl')
+      expect(Facter::Core::Execution).to receive(:which).with('auditctl').and_return('/sbin/auditctl')
     end
 
     context 'with audit disabled in the kernel' do
       it do
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -s').and_return("\n")
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -v').and_return("\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -s', on_fail: nil).and_return("\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -v', on_fail: nil).and_return("\n")
         expect(Facter).to receive(:value).with('cmdline').and_return({ 'audit' => '0' })
 
         expect(Facter.fact('simplib__auditd').value).to eq(
@@ -41,8 +42,8 @@ describe 'simplib__auditd' do
 
     context 'with auditd disabled and audit enabled in the kernel after reboot' do
       it do
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -v').and_return("1.2.3\n")
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -s').and_return("\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -v', on_fail: nil).and_return("1.2.3\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -s', on_fail: nil).and_return("\n")
         expect(Facter).to receive(:value).with('cmdline').and_return({ 'audit' => '1' })
 
         expect(Facter.fact('simplib__auditd').value).to eq(
@@ -58,9 +59,9 @@ describe 'simplib__auditd' do
 
     context 'after reboot where auditd was disabled before reboot' do
       before(:each) do
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -v').and_return("1.2.3\n")
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -s')
-                                                         .and_return(
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -v', on_fail: nil).and_return("1.2.3\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -s', on_fail: nil)
+                                                            .and_return(
                                                            [
                                                              'enabled 0',
                                                              'failure 1',
@@ -115,9 +116,9 @@ describe 'simplib__auditd' do
 
     context 'with a properly functioning auditd' do
       before(:each) do
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -v').and_return("1.2.3\n")
-        expect(Facter::Core::Execution).to receive(:exec).with('/sbin/auditctl -s')
-                                                         .and_return(
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -v', on_fail: nil).and_return("1.2.3\n")
+        expect(Facter::Core::Execution).to receive(:execute).with('/sbin/auditctl -s', on_fail: nil)
+                                                            .and_return(
                                                            [
                                                              'enabled 1',
                                                              'failure 1',
@@ -130,8 +131,8 @@ describe 'simplib__auditd' do
                                                              'loginuid_immutable 0 unlocked',
                                                            ].join("\n"),
                                                          )
-        expect(Facter::Core::Execution).to receive(:exec).with('/bin/ps -e')
-                                                         .and_return(
+        expect(Facter::Core::Execution).to receive(:execute).with('/bin/ps -e', on_fail: nil)
+                                                            .and_return(
                                                            [
                                                              'PID TTY          TIME CMD',
                                                              '  1 ?        00:00:04 systemd',

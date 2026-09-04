@@ -1,3 +1,12 @@
+* Fri Sep 04 2026 Steven Pritchard <steve@sicura.us> - 7.0.2
+- Replace long-deprecated Facter API calls, which OpenVox 9 (OpenFact 9) now
+  emits runtime deprecation warnings for:
+  - `Facter::Util::Resolution.which` -> `Facter::Core::Execution.which`
+  - `Facter::Util::Resolution.exec` and `Facter::Core::Execution.exec` ->
+    `Facter::Core::Execution.execute(..., on_fail: nil)`
+  This silences the warnings emitted by every affected fact on OpenVox 9. Fact
+  values are unchanged
+
 * Mon Aug 24 2026 Steven Pritchard <steve@sicura.us> - 7.0.1
 - [puppetsync] Update metadata.json dependency ranges from the Forge
 

@@ -4,15 +4,10 @@ describe 'simplib__networkmanager' do
   before :each do
     Facter.clear
     # mock out Facter method called when evaluating confine for :kernel
-    # Facter 4
-    if defined?(Facter::Resolvers::Uname)
-      allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
-    else
-      allow(Facter::Core::Execution).to receive(:exec).with('uname -s').and_return('Linux')
-    end
+    allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
 
-    allow(Facter::Util::Resolution).to receive(:which).and_call_original
-    allow(Facter::Util::Resolution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
+    allow(Facter::Core::Execution).to receive(:which).and_call_original
+    allow(Facter::Core::Execution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
 
     allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status').and_return(general_status)
     allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname').and_return(general_hostname)
