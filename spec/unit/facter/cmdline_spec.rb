@@ -50,8 +50,10 @@ describe 'cmdline' do
 
   context '/proc/cmdline does not exist' do
     it 'returns nil' do
-      expect(Facter::Core::Execution).to receive(:which).with('ip').and_return(nil)
-      expect(Facter.fact(:defaultgateway).value).to eq('unknown')
+      allow(File).to receive(:exist?).with(any_args).and_call_original
+      expect(File).to receive(:exist?).with('/proc/cmdline').and_return(false)
+      expect(File).not_to receive(:read).with('/proc/cmdline')
+      expect(Facter.fact(:cmdline).value).to be_nil
     end
   end
 end
