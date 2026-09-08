@@ -4,7 +4,8 @@ describe 'simplib__auditd' do
   before :each do
     Facter.clear
 
-    allow(Facter::Core::Execution).to receive(:execute).with(any_args).and_call_original
+    # mock out Facter method called when evaluating confine for :kernel
+    allow(Facter::Resolvers::Uname).to receive(:resolve).with(any_args).and_return('Linux')
 
     allow(Facter).to receive(:value).with(any_args).and_call_original
     allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
