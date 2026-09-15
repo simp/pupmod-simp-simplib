@@ -148,6 +148,52 @@ describe 'simplib__networkmanager' do
       end
     end
 
+    # https://github.com/simp/pupmod-simp-simplib/issues/367
+    #
+    # In terse tabular mode nmcli escapes ':' as '\:' and '\' as '\\' inside
+    # values. These lines are verbatim output from NetworkManager 1.56.1 for
+    # connections named 'simplib:test:colon' and 'simplib\back'.
+    context 'when a connection name contains escaped characters' do
+      let(:connections) do
+        output = <<~EOM
+          simplib\\:test\\:colon:fc3e33e0-7ae1-4a45-b136-49433f4b0c57:802-3-ethernet:
+          simplib\\\\back:29a737eb-ade9-475b-81cb-0ca3f46f8752:802-3-ethernet:eth0
+          EOM
+        Puppet::Util::Execution::ProcessOutput.new(output, 0)
+      end
+
+      it 'unescapes a colon in the name without shifting the other fields' do
+        connection = Facter.fact('simplib__networkmanager').value['connection']['fc3e33e0-7ae1-4a45-b136-49433f4b0c57']
+
+        expect(connection).to eq(
+          'device' => nil,
+          'uuid' => 'fc3e33e0-7ae1-4a45-b136-49433f4b0c57',
+          'type' => '802-3-ethernet',
+          'name' => 'simplib:test:colon',
+        )
+      end
+
+      # The separator after 'simplib\\back' follows a backslash, so a naive
+      # lookbehind would treat it as escaped and swallow the whole line
+      it 'unescapes a backslash at the end of a value and still splits on the next colon' do
+        connection = Facter.fact('simplib__networkmanager').value['connection']['29a737eb-ade9-475b-81cb-0ca3f46f8752']
+
+        expect(connection).to eq(
+          'device' => 'eth0',
+          'uuid' => '29a737eb-ade9-475b-81cb-0ca3f46f8752',
+          'type' => '802-3-ethernet',
+          'name' => 'simplib\\back',
+        )
+      end
+
+      it 'keys both connections by their real UUID' do
+        expect(Facter.fact('simplib__networkmanager').value['connection'].keys).to contain_exactly(
+          'fc3e33e0-7ae1-4a45-b136-49433f4b0c57',
+          '29a737eb-ade9-475b-81cb-0ca3f46f8752',
+        )
+      end
+    end
+
     # NetworkManager does not enforce unique connection names; nmcli itself
     # disambiguates with the UUID, which is why the fact keys on it
     context 'when two connections share a name' do
