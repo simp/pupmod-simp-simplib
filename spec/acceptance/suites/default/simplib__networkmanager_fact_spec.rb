@@ -4,8 +4,11 @@ test_name 'simplib__networkmanager fact'
 
 describe 'simplib__networkmanager fact' do
   # Somewhere early in the PATH, so that it takes precedence over a real
-  # `nmcli` if NetworkManager happens to be installed
+  # `nmcli` if NetworkManager happens to be installed. Packaged NetworkManager
+  # installs `nmcli` in /usr/bin, so nothing should own this path, but move
+  # anything that does out of the way rather than clobbering it.
   stub_nmcli = '/usr/local/sbin/nmcli'
+  stub_backup = "#{stub_nmcli}.simplib-spec-backup"
 
   # `nmcli` output from https://github.com/simp/pupmod-simp-simplib/issues/289
   #
@@ -51,12 +54,14 @@ describe 'simplib__networkmanager fact' do
       context 'with connections that have no device' do
         before(:all) do
           on(host, "mkdir -p #{File.dirname(stub_nmcli)}")
+          on(host, "if [ -e #{stub_nmcli} ] || [ -L #{stub_nmcli} ]; then mv -f #{stub_nmcli} #{stub_backup}; fi")
           create_remote_file(host, stub_nmcli, stub_nmcli_content)
           on(host, "chmod 755 #{stub_nmcli}")
         end
 
         after(:all) do
           on(host, "rm -f #{stub_nmcli}")
+          on(host, "if [ -e #{stub_backup} ] || [ -L #{stub_backup} ]; then mv -f #{stub_backup} #{stub_nmcli}; fi")
         end
 
         it 'finds the stubbed nmcli first' do
