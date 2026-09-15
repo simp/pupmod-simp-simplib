@@ -1,3 +1,14 @@
+* Tue Sep 15 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
+- (#289) Key the connections in the `simplib__networkmanager` fact by
+  connection UUID rather than by device, and report the device as a member of
+  each connection. Connections that are not attached to a device (defined but
+  inactive connections) have no device, so they were all stored under a single
+  empty key, overwriting each other and sometimes replacing an unrelated
+  connection whose device happened to match their name.
+  - NetworkManager only guarantees that the UUID is unique and present for
+    every connection, so it is the only safe key
+  - Thanks to Daniel Forste for reporting the issue and proposing the fix
+
 * Fri Sep 04 2026 Steven Pritchard <steve@sicura.us> - 7.0.2
 - Replace long-deprecated Facter API calls, which OpenVox 9 (OpenFact 9) now
   emits runtime deprecation warnings for:
