@@ -13,6 +13,15 @@
 #     'enabled'           => false # The `enabled` status from auditctl
 #   }
 #
+# When the `simp/auditd` module is installed, its `auditd_state` fact already
+# holds everything this fact reports, and this fact is built from it rather
+# than running `auditctl` and `ps` a second time. Without it, this fact
+# gathers the data itself. The result is the same either way.
+#
+# `enabled` is `true` only when the kernel reports `1`. An immutable rule set
+# (`2`) reads as `false` here, as it always has; use `auditd_state` to tell
+# the two apart.
+#
 Facter.add('simplib__auditd') do
   confine kernel: 'Linux'
 
@@ -29,36 +38,51 @@ Facter.add('simplib__auditd') do
       'enabled' => 0,
     }
 
-    audit_version = Facter::Core::Execution.execute("#{@auditctl} -v", on_fail: nil).split(%r{\s+}).last
+    auditd_state = Facter.value('auditd_state')
 
-    status['version'] = audit_version if audit_version && !audit_version.empty?
+    if auditd_state
+      # Everything auditd_state read from auditctl. The keys it derives are
+      # left out: this fact derives its own below, with its own meaning of
+      # `enabled`.
+      status = status.merge(auditd_state.reject { |k, _v| ['immutable', 'kernel_enforcing', 'enforcing'].include?(k) })
+    else
+      audit_version = Facter::Core::Execution.execute("#{@auditctl} -v", on_fail: nil).split(%r{\s+}).last
 
-    auditctl_status = {}
+      status['version'] = audit_version if audit_version && !audit_version.empty?
 
-    Facter::Core::Execution.execute("#{@auditctl} -s", on_fail: nil).lines.each do |l|
-      l.strip!
+      auditctl_status = {}
 
-      next if l.empty?
+      Facter::Core::Execution.execute("#{@auditctl} -s", on_fail: nil).lines.each do |l|
+        l.strip!
 
-      k, v = l.split(%r{\s+}, 2)
+        next if l.empty?
 
-      begin
-        v = Integer(v)
-      rescue
-        nil
+        k, v = l.split(%r{\s+}, 2)
+
+        begin
+          v = Integer(v)
+        rescue
+          nil
+        end
+
+        auditctl_status[k] = v
       end
 
-      auditctl_status[k] = v
+      status = status.merge(auditctl_status)
     end
 
-    status = status.merge(auditctl_status)
     status['enabled'] = (status['enabled'] == 1) ? true : false
 
     if status['enabled']
       status['kernel_enforcing'] = true
 
-      procs = Facter::Core::Execution.execute("#{@ps} -e", on_fail: nil).lines
-      status['enforcing'] = procs.any? { |x| x =~ %r{\sauditd\Z} }
+      status['enforcing'] = if auditd_state
+                              # The same process check, already made.
+                              auditd_state['enforcing'] == true
+                            else
+                              procs = Facter::Core::Execution.execute("#{@ps} -e", on_fail: nil).lines
+                              procs.any? { |x| x =~ %r{\sauditd\Z} }
+                            end
     else
       cmdline = Facter.value('cmdline') || {}
       status['kernel_enforcing'] = (cmdline['audit'].to_s == '1')
