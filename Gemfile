@@ -35,6 +35,9 @@ group :test do
   # Ruby 3.4+ removed 'observer' from default gems, but 'drb' (pulled in by
   # rspec/beaker dependencies) still requires it.
   gem 'observer', require: false
+  # openvox 8 accepts openfact 6, which no OpenVox 8 AIO agent ships; CI pins
+  # the openfact each agent release actually ships with OPENFACT_VERSION
+  gem 'openfact', ENV.fetch('OPENFACT_VERSION', '>= 5')
 end
 
 group :development do
