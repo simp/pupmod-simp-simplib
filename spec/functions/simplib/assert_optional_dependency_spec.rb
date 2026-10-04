@@ -13,7 +13,7 @@ describe 'simplib::assert_optional_dependency' do
             'version_requirement' => '>= 0.0.1 < 2.0.0',
           },
           {
-            'name'                => 'dep/two',
+            'name' => 'dep/two',
           },
           {
             'name'                => 'dep-three',
