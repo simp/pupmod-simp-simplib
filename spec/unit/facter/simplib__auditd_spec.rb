@@ -9,6 +9,8 @@ describe 'simplib__auditd' do
 
     allow(Facter).to receive(:value).with(any_args).and_call_original
     allow(Facter).to receive(:value).with(:kernel).and_return('Linux')
+    # Without simp/auditd installed, this fact gathers its own data.
+    allow(Facter).to receive(:value).with('auditd_state').and_return(nil)
     expect(Facter::Core::Execution).to receive(:which).with('ps').and_return('/bin/ps')
   end
 
@@ -165,6 +167,84 @@ describe 'simplib__auditd' do
         it do
           expect(Facter.fact('simplib__auditd').value).to eq(simplib__auditd_value)
         end
+      end
+    end
+
+    # simp/auditd's auditd_state fact carries the same auditctl data. When it
+    # is present, this fact is built from it without running auditctl or ps,
+    # and must come out exactly as if it had gathered the data itself.
+    context 'with the auditd_state fact from simp/auditd' do
+      let(:auditctl_keys) do
+        {
+          'failure'            => 1,
+          'pid'                => 1337,
+          'rate_limit'         => 0,
+          'backlog_limit'      => 64,
+          'lost'               => 0,
+          'backlog'            => 0,
+          'backlog_wait_time'  => 60_000,
+          'loginuid_immutable' => '0 unlocked',
+          'version'            => '1.2.3',
+        }
+      end
+
+      before(:each) do
+        expect(Facter::Core::Execution).not_to receive(:execute)
+      end
+
+      it 'matches a properly functioning auditd' do
+        allow(Facter).to receive(:value).with('auditd_state').and_return(
+          auditctl_keys.merge('enabled' => 1, 'immutable' => false, 'kernel_enforcing' => true, 'enforcing' => true),
+        )
+
+        expect(Facter.fact('simplib__auditd').value).to eq(
+          auditctl_keys.merge('enabled' => true, 'kernel_enforcing' => true, 'enforcing' => true),
+        )
+      end
+
+      it 'matches a kernel that is auditing without auditd running' do
+        allow(Facter).to receive(:value).with('auditd_state').and_return(
+          auditctl_keys.merge('enabled' => 1, 'immutable' => false, 'kernel_enforcing' => true, 'enforcing' => false),
+        )
+
+        expect(Facter.fact('simplib__auditd').value).to eq(
+          auditctl_keys.merge('enabled' => true, 'kernel_enforcing' => true, 'enforcing' => false),
+        )
+      end
+
+      it 'matches audit disabled, taking kernel_enforcing from the kernel command line' do
+        allow(Facter).to receive(:value).with('auditd_state').and_return(
+          auditctl_keys.merge('enabled' => 0, 'immutable' => false, 'kernel_enforcing' => true, 'enforcing' => false),
+        )
+        expect(Facter).to receive(:value).with('cmdline').and_return({ 'audit' => '1' })
+
+        expect(Facter.fact('simplib__auditd').value).to eq(
+          auditctl_keys.merge('enabled' => false, 'kernel_enforcing' => true, 'enforcing' => false),
+        )
+      end
+
+      # An immutable rule set (enabled 2) has always read as disabled here.
+      # auditd_state reports it as enforcing; this fact keeps its old answer.
+      it 'keeps the historical answer for an immutable rule set' do
+        allow(Facter).to receive(:value).with('auditd_state').and_return(
+          auditctl_keys.merge('enabled' => 2, 'immutable' => true, 'kernel_enforcing' => true, 'enforcing' => true),
+        )
+        expect(Facter).to receive(:value).with('cmdline').and_return({})
+
+        expect(Facter.fact('simplib__auditd').value).to eq(
+          auditctl_keys.merge('enabled' => false, 'kernel_enforcing' => false, 'enforcing' => false),
+        )
+      end
+
+      it 'matches an unreadable status (only the version known)' do
+        allow(Facter).to receive(:value).with('auditd_state').and_return(
+          { 'version' => '1.2.3', 'immutable' => false, 'kernel_enforcing' => false, 'enforcing' => false },
+        )
+        expect(Facter).to receive(:value).with('cmdline').and_return({})
+
+        expect(Facter.fact('simplib__auditd').value).to eq(
+          { 'version' => '1.2.3', 'enabled' => false, 'kernel_enforcing' => false, 'enforcing' => false },
+        )
       end
     end
   end

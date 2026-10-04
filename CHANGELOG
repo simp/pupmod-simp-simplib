@@ -1,3 +1,10 @@
+* Wed Sep 23 2026 Steven Pritchard <steve@sicura.us> - 7.1.1
+- Build the `simplib__auditd` fact from the `auditd_state` fact when the
+  `simp/auditd` module (11.0.0 or later) provides it, instead of running
+  `auditctl` and `ps` a second time. Without it, the fact gathers the data
+  itself as before. The result is the same either way, including `enabled`
+  reading `false` for an immutable (`-e 2`) rule set.
+
 * Tue Sep 15 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
 - (#289) Key the connections in the `simplib__networkmanager` fact by
   connection UUID rather than by device, and report the device as a member of
