@@ -11,6 +11,12 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   let(:catalog) { Puppet::Resource::Catalog.new }
   let(:tmpdir) { Dir.mktmpdir('rspec_reboot_notify') }
   let(:target) { File.join(tmpdir, 'reboot_notifications.json') }
+  let(:records) do
+    {
+      'reboot_control_metadata' => { 'log_level' => 'notice' },
+      'Other' => { 'reason' => 'Unrelated', 'updated' => 12_345 },
+    }
+  end
 
   before(:each) do
     # rubocop:disable RSpec/AnyInstance
@@ -103,6 +109,53 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
     end
   end
 
+  context '#exists? with ensure => absent' do
+    let(:resource) do
+      Puppet::Type.type(:reboot_notify).new(
+        name: 'Foo',
+        ensure: 'absent',
+      )
+    end
+
+    it 'does not exist without a target' do
+      expect(provider.exists?).to be_falsey
+    end
+
+    it 'does not exist without a matching record' do
+      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records)) }
+
+      expect(provider.exists?).to be_falsey
+    end
+
+    it 'exists with a matching record, whatever its reason' do
+      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records.merge('Foo' => { 'reason' => 'Other', 'updated' => 12_345 }))) }
+
+      expect(provider.exists?).to be_truthy
+    end
+
+    context 'control_only is set' do
+      let(:resource) do
+        Puppet::Type.type(:reboot_notify).new(
+          name: 'Foo',
+          ensure: 'absent',
+          control_only: true,
+        )
+      end
+
+      it 'exists with control metadata' do
+        File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records)) }
+
+        expect(provider.exists?).to be_truthy
+      end
+
+      it 'does not exist without control metadata' do
+        File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records.reject { |k, _v| k == 'reboot_control_metadata' })) }
+
+        expect(provider.exists?).to be_falsey
+      end
+    end
+  end
+
   context '#create' do
     it 'creates a valid JSON file' do
       content = nil
@@ -130,17 +183,50 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   end
 
   context '#destroy' do
-    it 'removes the target file' do
-      expect { provider.destroy }.not_to raise_error
-
-      expect(File.exist?(target)).to be_falsey
+    let(:resource) do
+      Puppet::Type.type(:reboot_notify).new(
+        name: 'Foo',
+        ensure: 'absent',
+      )
     end
 
-    context 'the target has been removed' do
-      it do
-        FileUtils.rm_f(target)
+    before(:each) do
+      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records.merge('Foo' => { 'reason' => 'Bar', 'updated' => 12_345 }))) }
 
+      # This populates the record content
+      expect(provider.exists?).to be_truthy
+    end
+
+    it 'removes only its own record' do
+      expect { provider.destroy }.not_to raise_error
+
+      expect(JSON.parse(File.read(target))).to eq(records)
+    end
+
+    context 'control_only is set' do
+      let(:resource) do
+        Puppet::Type.type(:reboot_notify).new(
+          name: 'Foo',
+          ensure: 'absent',
+          control_only: true,
+        )
+      end
+
+      it 'removes only the control metadata' do
         expect { provider.destroy }.not_to raise_error
+
+        output = JSON.parse(File.read(target))
+
+        expect(output.keys).not_to include('reboot_control_metadata')
+        expect(output.keys).to include('Foo', 'Other')
+      end
+    end
+
+    context 'the target directory has been removed' do
+      it do
+        FileUtils.remove_dir(tmpdir) if File.exist?(tmpdir)
+
+        expect { provider.destroy }.to raise_error(%r{Could not update.*#{target}})
       end
     end
   end
@@ -256,10 +342,35 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
     end
 
     context 'the target has been removed' do
-      it do
-        FileUtils.remove_dir(tmpdir) if File.exist?(tmpdir)
+      it 'does nothing' do
+        FileUtils.rm_f(target)
 
-        expect { provider.class.post_resource_eval }.to raise_error(%r{Could not read file '#{target}'})
+        expect(Puppet).not_to receive(:notice).with(%r{System Reboot Required Because:})
+        expect { provider.class.post_resource_eval }.not_to raise_error
+        expect(File.exist?(target)).to be_falsey
+      end
+    end
+
+    context 'the target has no control metadata' do
+      it 'does not add it' do
+        File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records.reject { |k, _v| k == 'reboot_control_metadata' })) }
+
+        expect { provider.class.post_resource_eval }.not_to raise_error
+        expect(JSON.parse(File.read(target)).keys).not_to include('reboot_control_metadata')
+      end
+    end
+
+    context 'with --noop' do
+      it 'reports but does not update the target' do
+        File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records.merge('Current' => { 'reason' => 'New', 'updated' => Time.now.tv_sec }))) }
+        content = File.read(target)
+
+        allow(Puppet.settings).to receive(:[]).and_call_original
+        allow(Puppet.settings).to receive(:[]).with(:noop).and_return(true)
+
+        expect(Puppet).to receive(:notice).with(%r{System Reboot Required Because:}).once
+        expect { provider.class.post_resource_eval }.not_to raise_error
+        expect(File.read(target)).to eq(content)
       end
     end
 

@@ -11,7 +11,11 @@ Puppet::Type.newtype(:reboot_notify) do
     other use of the type will not report the necessary reboot.
 
     A reboot notification will be printed at each puppet run until
-    the system is successfully rebooted.'
+    the system is successfully rebooted.
+
+    Setting `ensure => absent` removes only the notification registered
+    under the resource name. For the `control_only` resource, it removes
+    the control settings so that the defaults apply.'
 
   ensurable do
     desc 'Whether the notification should be added or removed'

@@ -34,6 +34,9 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
 
       @records = JSON.parse(File.read(target))
 
+      # Removal only needs to know whether this resource's own record is there
+      return @records.key?(record_key) if @resource[:ensure] == :absent
+
       if @resource[:control_only]
         @records = @records.deep_merge(self.class.default_control_metadata)
       end
@@ -74,10 +77,15 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
   end
 
   def destroy
-    # This resource is all or nothing so it doesn't make sense to cherry pick
-    # items out of the results
+    # Only remove this resource's record so that notifications registered by
+    # other resources are preserved
+    @records.delete(record_key)
 
-    File.unlink(target) if File.exist?(target)
+    begin
+      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(@records)) }
+    rescue => e
+      raise(Puppet::Error, "reboot_notify: Could not update '#{target}': #{e}")
+    end
   end
 
   def update
@@ -96,6 +104,9 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
     records = {}
     content = ''
 
+    # Nothing has registered a notification on this system
+    return unless File.exist?(target)
+
     begin
       content = File.read(target)
     rescue => e
@@ -110,12 +121,9 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
 
     current_time = Time.now.tv_sec
 
-    # Need to pull this out of the data structure
-    reboot_control_metadata = if records['reboot_control_metadata']
-                                records.delete('reboot_control_metadata')
-                              else
-                                default_control_metadata['reboot_control_metadata']
-                              end
+    # Need to pull this out of the data structure. It is only written back if
+    # it was present, so that removing the control resource stays removed.
+    reboot_control_metadata = records.delete('reboot_control_metadata')
 
     # Purge any records older than our uptime (we rebooted).
     records.delete_if do |_k, v|
@@ -138,7 +146,7 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
         msg << ["  #{k} => #{v['reason']}"]
       end
 
-      log_level = reboot_control_metadata['log_level'].to_sym
+      log_level = (reboot_control_metadata || default_control_metadata['reboot_control_metadata'])['log_level'].to_sym
 
       begin
         Puppet.send(log_level, msg.join("\n"))
@@ -148,15 +156,25 @@ Puppet::Type.type(:reboot_notify).provide(:notify) do
       end
     end
 
+    # This runs even with --noop, so expired records are only purged on a real
+    # run
+    return if Puppet.settings[:noop]
+
+    records = { 'reboot_control_metadata' => reboot_control_metadata }.merge(records) if reboot_control_metadata
+
     begin
-      reboot_control_hash = { 'reboot_control_metadata' => reboot_control_metadata }
-      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(reboot_control_hash.merge(records))) }
-    rescue
+      File.open(target, 'w') { |fh| fh.puts(JSON.pretty_generate(records)) }
+    rescue => e
       raise(Puppet::Error, "reboot_notify: Could not update '#{target}': #{e}")
     end
   end
 
   private
+
+  # The key of the record in the target file that this resource manages
+  def record_key
+    @resource[:control_only] ? 'reboot_control_metadata' : @resource[:name]
+  end
 
   def update_record
     if @resource[:control_only]
