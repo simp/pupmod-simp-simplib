@@ -103,7 +103,7 @@ Facter.add('simplib__mountpoints') do
       end
 
       # Add an 'options_hash' for easy processing
-      # rubocop:disable Style/MultilineBlockChain
+      # rubocop:disable-next Style/MultilineBlockChain
       mount_list[mnt]['options_hash'] = Hash[
         mount_list[mnt]['options'].map { |opt|
           # Split on options that are not in quotes
@@ -116,7 +116,6 @@ Facter.add('simplib__mountpoints') do
           end
         end,
       ]
-      # rubocop:enable Style/MultilineBlockChain
 
       # Helper translation material
       if mount_list[mnt]['options_hash']['uid']

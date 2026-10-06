@@ -6,9 +6,8 @@ describe Puppet::Type.type(:runlevel) do
   let(:catalog) { Puppet::Resource::Catalog.new }
 
   before(:each) do
-    # rubocop:disable RSpec/AnyInstance
+    # rubocop:disable-next RSpec/AnyInstance
     allow_any_instance_of(Puppet::Type::Runlevel).to receive(:catalog).and_return(catalog)
-    # rubocop:enable RSpec/AnyInstance
   end
 
   context 'when setting parameters' do
