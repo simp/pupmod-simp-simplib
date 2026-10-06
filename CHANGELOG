@@ -1,3 +1,8 @@
+* Tue Oct 06 2026 Hazel Caballero <hazel@sicura.us> - 7.1.2
+- Fix `reboot_notify` with `ensure => absent`, which deleted every pending
+  notification and logged a `post_resource_eval` error. It now removes only its
+  own notification, and `--noop` runs no longer write the notification file.
+
 * Sun Oct 04 2026 Steven Pritchard <steve@sicura.us> - 7.1.1
 - Fix rubocop 1.91 style offenses (no functional change)
 
