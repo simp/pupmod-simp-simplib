@@ -1,3 +1,6 @@
+* Sun Oct 04 2026 Steven Pritchard <steve@sicura.us> - 7.1.1
+- Fix rubocop 1.91 style offenses (no functional change)
+
 * Tue Sep 15 2026 Steven Pritchard <steve@sicura.us> - 7.1.0
 - (#289) Key the connections in the `simplib__networkmanager` fact by
   connection UUID rather than by device, and report the device as a member of

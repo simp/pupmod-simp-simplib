@@ -13,9 +13,8 @@ describe Puppet::Type.type(:reboot_notify).provider(:notify) do
   let(:target) { File.join(tmpdir, 'reboot_notifications.json') }
 
   before(:each) do
-    # rubocop:disable RSpec/AnyInstance
+    # rubocop:disable-next RSpec/AnyInstance
     allow_any_instance_of(Puppet::Type::Reboot_notify).to receive(:catalog).and_return(catalog)
-    # rubocop:enable RSpec/AnyInstance
 
     allow(Puppet).to receive(:[]).with(any_args).and_call_original
     expect(Puppet).to receive(:[]).with(:vardir).at_least(:once).and_return(tmpdir)

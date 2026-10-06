@@ -6,9 +6,8 @@ describe Puppet::Type.type(:runlevel).provider(:systemd) do
   let(:catalog) { Puppet::Resource::Catalog.new }
 
   before(:each) do
-    # rubocop:disable RSpec/AnyInstance
+    # rubocop:disable-next RSpec/AnyInstance
     allow_any_instance_of(Puppet::Type::Runlevel).to receive(:catalog).and_return(catalog)
-    # rubocop:enable RSpec/AnyInstance
 
     allow(described_class).to receive(:command).with(:systemctl).and_return('/usr/bin/systemctl')
     allow(described_class).to receive(:command).with(:pgrep).and_return('/bin/pgrep')

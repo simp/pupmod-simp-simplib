@@ -54,7 +54,7 @@ describe 'simplib::passgen::simpkv::valid_password_info' do
 
   it 'fails when returned info is missing metadata key' do
     password_info = {
-      'value'    => { 'password' => password, 'salt' => salt },
+      'value' => { 'password' => password, 'salt' => salt },
     }
 
     is_expected.to run.with_params(password_info).and_return(false)
