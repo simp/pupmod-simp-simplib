@@ -1,6 +1,6 @@
 {
   "name": "simp-simplib",
-  "version": "7.1.2",
+  "version": "7.2.0",
   "author": "SIMP Team",
   "summary": "A collection of common SIMP functions, facts, and types",
   "license": "Apache-2.0",
@@ -69,7 +69,7 @@
   "requirements": [
     {
       "name": "openvox",
-      "version_requirement": ">= 8.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 10.0.0"
     }
   ],
   "package_release_version": "0"

@@ -1,3 +1,7 @@
+* Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 7.2.0
+- Add support for OpenVox 9
+- Update metadata.json dependency ranges from the Forge
+
 * Tue Oct 06 2026 Hazel Caballero <hazel@sicura.us> - 7.1.2
 - Fix `reboot_notify` with `ensure => absent`, which deleted every pending
   notification and logged a `post_resource_eval` error. It now removes only its
