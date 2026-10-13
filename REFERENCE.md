@@ -18,7 +18,7 @@
 * [`ftpusers`](#ftpusers): Adds all system users to the named file, preserving any other entries currently in the file.
 * [`init_ulimit`](#init_ulimit): Please use the ``systemd`` module for systems that support ``systemd``  Update ``ulimit`` settings in init scripts.  The resource name does h
 * [`prepend_file_line`](#prepend_file_line): Type that can prepend whole a line to a file if it does not already contain it.  Example:  file_prepend_line { 'sudo_rule':   path => '/etc/s
-* [`reboot_notify`](#reboot_notify): Notifies users when a system reboot is required.  This type creates a file at $target the contents of which provide a summary of the reasons 
+* [`reboot_notify`](#reboot_notify): Notifies users when a system reboot is required.  This type creates a file at $target the contents of which provide a summary of the reasons
 * [`runlevel`](#runlevel): Changes the system runlevel by re-evaluating the inittab or systemd link. Arguments:  name   - the runlevel to evaluate for the system  persi
 * [`script_umask`](#script_umask): Alters the umask settings in the passed file.
 * [`simp_file_line`](#simp_file_line): Ensures that a given line is contained within a file.  The implementation matches the full line, including whitespace at the beginning and en
@@ -27,7 +27,7 @@
 
 * [`simplib::assert_metadata`](#simplib--assert_metadata): Fails a compile if the client system is not compatible with the module's `metadata.json`  NOTE: New capabilities will be added to the simplib
 * [`simplib::assert_optional_dependency`](#simplib--assert_optional_dependency): Fails a compile if the system does not contain a correct version of the required module in the current environment.  Provides a message about
-* [`simplib::bracketize`](#simplib--bracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything 
+* [`simplib::bracketize`](#simplib--bracketize): Add brackets to strings of IPv6 addresses and `Arrays` of IPv6 addresses based on the rules for bracketing IPv6 addresses.  Ignores anything
 * [`simplib::caller`](#simplib--caller): Returns the location of whatever called the item that called this function (two levels up)  This is meant to be used inside other functions t
 * [`simplib::cron::expand_range`](#simplib--cron--expand_range): Expand all ranges ('-') into a comma separated list
 * [`simplib::cron::to_systemd`](#simplib--cron--to_systemd): Convert a set of 'cron' native type parameters to a 'best effort' systemd calendar String
@@ -42,9 +42,9 @@
 * [`simplib::hash_to_opts`](#simplib--hash_to_opts): Turn a hash into a options string, for use in a shell command
 * [`simplib::host_is_me`](#simplib--host_is_me): Detect if a local system identifier hostname/IPv4 address matches a specified hostname/IPv4 address or an entry in a list of hostnames and/or
 * [`simplib::in_bolt`](#simplib--in_bolt): Returns ``true`` if the run is active inside of Bolt and ``false`` otherwise.  Presently, this function is extremely basic. However, this che
-* [`simplib::inspect`](#simplib--inspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the 
+* [`simplib::inspect`](#simplib--inspect): Prints the passed variable's Ruby type and value for debugging purposes  This uses a ``Notify`` resource to print the information during the
 * [`simplib::ip::family_hash`](#simplib--ip--family_hash): Process an array of IP addresses and return them split by IP family and include metadata and/or processed versions.
-* [`simplib::ip_to_cron`](#simplib--ip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time 
+* [`simplib::ip_to_cron`](#simplib--ip_to_cron): Transforms an IP address to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  time
 * [`simplib::ipaddresses`](#simplib--ipaddresses): Return an `Array` of all IPv4 addresses known to be associated with the client, optionally excluding local addresses.
 * [`simplib::join_mount_opts`](#simplib--join_mount_opts): Merge two sets of `mount` options in a reasonable fashion, giving precedence to the second set.
 * [`simplib::knockout`](#simplib--knockout): uses the knockout prefix of '--' to remove elements from an array.
@@ -58,7 +58,7 @@
 * [`simplib::nets2cidr`](#simplib--nets2cidr): Take an input list of networks and returns an equivalent `Array` in CIDR notation.  * Hostnames are passed through untouched. * Terminates ca
 * [`simplib::nets2ddq`](#simplib--nets2ddq): Tranforms a list of networks into an equivalent array in dotted quad notation.  * IPv4 CIDR networks are converted to dotted quad notation ne
 * [`simplib::params2hash`](#simplib--params2hash): Returns a Hash of the parameters of the calling resource  This is meant to get the parameters of classes and defined types. The behavior when
-* [`simplib::parse_hosts`](#simplib--parse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames 
+* [`simplib::parse_hosts`](#simplib--parse_hosts): Convert an `Array` of items that may contain port numbers or protocols into a structured `Hash` of host information.  * Works with Hostnames
 * [`simplib::passgen`](#simplib--passgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Supports 2 modes:   * simpkv     * Password info is stor
 * [`simplib::passgen::gen_password_and_salt`](#simplib--passgen--gen_password_and_salt): Generates a password and salt  * Password length, complexity and complex-only settings are specified by   the caller. * Salt length, complexi
 * [`simplib::passgen::gen_salt`](#simplib--passgen--gen_salt): Generates a salt  * Terminates catalog compilation if the salt cannot be created   in the allotted time.
@@ -73,11 +73,11 @@
 * [`simplib::passgen::remove`](#simplib--passgen--remove): Removes a generated password, history and stored attributes  * Supports 2 modes:   * simpkv     * Password info is stored in a key/value stor
 * [`simplib::passgen::set`](#simplib--passgen--set): Sets a generated password with attributes  * Sets the password and salt, backs up the previous password and salt, and   depending upon mode s
 * [`simplib::passgen::simpkv::get`](#simplib--passgen--simpkv--get): Retrieves a generated password and stored attributes from a key/value store using simpkv  Terminates catalog compilation if any simpkv operat
-* [`simplib::passgen::simpkv::list`](#simplib--passgen--simpkv--list): Using simpkv, retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder in a 
+* [`simplib::passgen::simpkv::list`](#simplib--passgen--simpkv--list): Using simpkv, retrieves the list of generated passwords with attributes and the list of sub-folders stored at a simplib::passgen folder in a
 * [`simplib::passgen::simpkv::passgen`](#simplib--passgen--simpkv--passgen): Generates/retrieves a random password string or its hash for a passed identifier.  * Password info is stored in a key/value store and accesse
 * [`simplib::passgen::simpkv::remove`](#simplib--passgen--simpkv--remove): Removes a generated password, history and stored attributes  * Password info is stored in a key/value store and removed using simpkv.   * sim
 * [`simplib::passgen::simpkv::root_dir`](#simplib--passgen--simpkv--root_dir): Returns the root directory in simpkv for password info generated by simplib::passgen
-* [`simplib::passgen::simpkv::set`](#simplib--passgen--simpkv--set): Using simpkv, sets a generated password with attributes  * simpkv key is the identifier. * simpkv value is a Hash with 'password' and 'salt' 
+* [`simplib::passgen::simpkv::set`](#simplib--passgen--simpkv--set): Using simpkv, sets a generated password with attributes  * simpkv key is the identifier. * simpkv value is a Hash with 'password' and 'salt'
 * [`simplib::passgen::simpkv::valid_password_info`](#simplib--passgen--simpkv--valid_password_info): Returns whether password information retrieved from simpkv is valid
 * [`simplib::rand_cron`](#simplib--rand_cron): Transforms an input string to one or more interval values for `cron`.  This can be used to avoid starting a certain cron job at the same  tim
 * [`simplib::safe_filename`](#simplib--safe_filename): Convert a string into a filename that is 'path safe'  The goal is to ensure that files do not contain characters that may accidentally turn i
@@ -86,14 +86,14 @@
 * [`simplib::to_integer`](#simplib--to_integer): Converts the argument into an `Integer`.  Terminates catalog compilation if the argument's class does not respond to the `to_i()` Ruby method
 * [`simplib::to_string`](#simplib--to_string): Converts the argument into a `String`.
 * [`simplib::validate_array_member`](#simplib--validate_array_member): Validate that an single input is a member of another `Array` or an `Array` input is a subset of another `Array`.  * The comparison can option
-* [`simplib::validate_between`](#simplib--validate_between): Validate that the first value is between the second and third values numerically. The range is inclusive.  Terminates catalog compilation if 
+* [`simplib::validate_between`](#simplib--validate_between): Validate that the first value is between the second and third values numerically. The range is inclusive.  Terminates catalog compilation if
 * [`simplib::validate_bool`](#simplib--validate_bool): Validate that all passed values are either `true`, 'true', `false` or 'false'.  Terminates catalog compilation if validation fails.
 * [`simplib::validate_deep_hash`](#simplib--validate_deep_hash): Perform a deep validation on two passed `Hashes`.  * All keys must be defined in the reference `Hash` that is being   validated against. * Un
 * [`simplib::validate_net_list`](#simplib--validate_net_list): Validate that a passed list (`Array` or single `String`) of networks is filled with valid IP addresses, network addresses (CIDR notation), or
 * [`simplib::validate_port`](#simplib--validate_port): Validates whether each passed argument contains valid port(s).  * Each element of each argument must, numerically, be in the   range [1, 6553
 * [`simplib::validate_re_array`](#simplib--validate_re_array): Perform simple validation of a `String`, or `Array` of `Strings`, against one or more regular expressions.  * Derived from the Puppet Labs st
 * [`simplib::validate_sysctl_value`](#simplib--validate_sysctl_value): Validate that the passed value is correct for the passed `sysctl` key.  * If a key is not known, assumes the value is valid. * Terminates cat
-* [`simplib::validate_uri_list`](#simplib--validate_uri_list): Validate that a passed list (`Array` or single `String`) of URIs is valid according to Ruby's URI parser.  * *Caution*:  No scheme (protocol 
+* [`simplib::validate_uri_list`](#simplib--validate_uri_list): Validate that a passed list (`Array` or single `String`) of URIs is valid according to Ruby's URI parser.  * *Caution*:  No scheme (protocol
 
 ### Data types
 
@@ -154,7 +154,7 @@
 * [`Simplib::Puppet::Metadata::OS_support`](#Simplib--Puppet--Metadata--OS_support): The 'operating_support' data structure in metadata.json
 * [`Simplib::PuppetLogLevel`](#Simplib--PuppetLogLevel): A valid log level Type
 * [`Simplib::Serverdistribution`](#Simplib--Serverdistribution): Valid options for Serverdistribution
-* [`Simplib::ShadowPass`](#Simplib--ShadowPass): Valid entries for the password field of the 'shadow' file  These items are recognized by recent versions of crypt but may not be exhaustive  
+* [`Simplib::ShadowPass`](#Simplib--ShadowPass): Valid entries for the password field of the 'shadow' file  These items are recognized by recent versions of crypt but may not be exhaustive
 * [`Simplib::Syslog::CFacility`](#Simplib--Syslog--CFacility): Syslog facilities in `C` compatible format
 * [`Simplib::Syslog::CPriority`](#Simplib--Syslog--CPriority): Syslog priorities in `C` compatible format
 * [`Simplib::Syslog::CSeverity`](#Simplib--Syslog--CSeverity): Syslog severities in `C` compatible format
@@ -1780,7 +1780,7 @@ include metadata and/or processed versions.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 
@@ -1847,7 +1847,7 @@ ipv6:
 
 ##### Examples
 
-###### 
+######
 
 ```puppet
 
@@ -4686,7 +4686,7 @@ Terminates catalog compilation if
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 
@@ -4717,7 +4717,7 @@ Raises:
 
 ##### Examples
 
-###### 
+######
 
 ```puppet
 
@@ -6383,4 +6383,3 @@ Alias of `Pattern['\A[a-zA-Z][a-zA-Z0-9+-.]*://.*\z']`
 Matches umask patterns
 
 Alias of `Pattern['\A[0-7]{3,4}\z']`
-
