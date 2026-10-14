@@ -9,15 +9,20 @@ describe 'simplib__networkmanager' do
     allow(Facter::Core::Execution).to receive(:which).and_call_original
     allow(Facter::Core::Execution).to receive(:which).with('nmcli').and_return('/usr/sbin/nmcli')
 
-    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status').and_return(general_status)
-    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname').and_return(general_hostname)
-    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t connection show').and_return(connections)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t -m multiline general status', failonfail: false).and_return(general_status)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t general hostname', failonfail: false).and_return(general_hostname)
+    allow(Puppet::Util::Execution).to receive(:execute).with('/usr/sbin/nmcli -t connection show', failonfail: false).and_return(connections)
   end
 
   context 'nmcli fails' do
     let(:general_status) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
     let(:general_hostname) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
     let(:connections) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
+
+    it 'does not warn when NetworkManager is not running' do
+      expect(Facter).not_to receive(:warn)
+      Facter.fact('simplib__networkmanager').value
+    end
 
     it 'returns "enabled" = false' do
       # allow_any_instance_of(Process::Status).to receive(:success?).and_return(false)
@@ -215,6 +220,20 @@ describe 'simplib__networkmanager' do
         expect(connection['5b6d3d0e-8d55-4c0e-9b8c-6bb25f6b5dc9']['device']).to eq('eth0')
         expect(connection['8e1d8a5b-2fd4-4a29-9e5f-1b2c3d4e5f60']['device']).to be_nil
         expect(connection.values.map { |conn| conn['name'] }).to eq(['Wired connection 1', 'Wired connection 1'])
+      end
+    end
+
+    context 'when only the general status succeeds' do
+      let(:general_hostname) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
+      let(:connections) { Puppet::Util::Execution::ProcessOutput.new('', 1) }
+
+      it 'is enabled' do
+        expect(Facter.fact('simplib__networkmanager').value).to eq(
+          {
+            'enabled' => true,
+            'general' => { 'status' => expected_general['status'] },
+          },
+        )
       end
     end
   end

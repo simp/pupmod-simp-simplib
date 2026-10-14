@@ -45,6 +45,15 @@ describe 'simplib__networkmanager fact' do
     esac
   STUB
 
+  # What nmcli prints when it is installed but NetworkManager is not running
+  # (https://github.com/simp/pupmod-simp-simplib/issues/304)
+  stub_nmcli_stopped_content = <<~STUB
+    #!/bin/bash
+    # Test stub installed by #{__FILE__}
+    echo 'Error: NetworkManager is not running.' >&2
+    exit 8
+  STUB
+
   # A connection that is never activated, so that NetworkManager reports no
   # device for it
   live_connection = 'simplib-test-nodev'
@@ -123,6 +132,27 @@ describe 'simplib__networkmanager fact' do
           connection = pfact_on(host, 'simplib__networkmanager')['connection']
 
           expect(connection['fc3e33e0-7ae1-4a45-b136-49433f4b0c57']).to include('name' => 'simplib:test:colon')
+        end
+      end
+
+      context 'with NetworkManager not running' do
+        before(:all) do
+          on(host, "mkdir -p #{File.dirname(stub_nmcli)}")
+          on(host, "if [ -e #{stub_nmcli} ] || [ -L #{stub_nmcli} ]; then mv -f #{stub_nmcli} #{stub_backup}; fi")
+          create_remote_file(host, stub_nmcli, stub_nmcli_stopped_content)
+          on(host, "chmod 755 #{stub_nmcli}")
+        end
+
+        after(:all) do
+          on(host, "rm -f #{stub_nmcli}")
+          on(host, "if [ -e #{stub_backup} ] || [ -L #{stub_backup} ]; then mv -f #{stub_backup} #{stub_nmcli}; fi")
+        end
+
+        it 'reports NetworkManager as disabled without a warning' do
+          result = on(host, 'puppet facts show simplib__networkmanager --render-as json')
+
+          expect(result.stdout + result.stderr).not_to include('NetworkManager is not running')
+          expect(JSON.parse(result.stdout)['simplib__networkmanager']).to eq('enabled' => false)
         end
       end
 
