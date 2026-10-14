@@ -1,3 +1,10 @@
+* Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 7.2.1
+- Fix the `simplib__networkmanager` fact on hosts where NetworkManager is
+  installed but not running. It logged a warning on every run and resolved to
+  nothing; it now reports `enabled => false`.
+- Fix `simplib__networkmanager` omitting `enabled` when only
+  `nmcli general status` succeeded
+
 * Thu Oct 08 2026 Steven Pritchard <steve@sicura.us> - 7.2.0
 - Add support for OpenVox 9
 - Update metadata.json dependency ranges from the Forge

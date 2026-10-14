@@ -9,20 +9,16 @@ Facter.add(:simplib__networkmanager) do
 
     nmcli_cmd = @nmcli_cmd + ' -t'
 
-    general_status = Puppet::Util::Execution.execute(%(#{nmcli_cmd} -m multiline general status))
+    general_status = Puppet::Util::Execution.execute(%(#{nmcli_cmd} -m multiline general status), failonfail: false)
 
     if general_status.exitstatus.zero?
       general_status = general_status.lines.map { |line| line.strip.split(':') }
 
       info['enabled'] = true
-      info = {
-        'general' => {
-          'status' => Hash[general_status],
-        },
-      }
+      info['general'] = { 'status' => Hash[general_status] }
     end
 
-    general_hostname = Puppet::Util::Execution.execute(%(#{nmcli_cmd} general hostname))
+    general_hostname = Puppet::Util::Execution.execute(%(#{nmcli_cmd} general hostname), failonfail: false)
 
     if general_hostname.exitstatus.zero?
       info['enabled'] = true
@@ -30,7 +26,7 @@ Facter.add(:simplib__networkmanager) do
       info['general']['hostname'] = general_hostname.strip
     end
 
-    connections = Puppet::Util::Execution.execute(%(#{nmcli_cmd} connection show))
+    connections = Puppet::Util::Execution.execute(%(#{nmcli_cmd} connection show), failonfail: false)
 
     if connections.exitstatus.zero?
       info['enabled'] = true
