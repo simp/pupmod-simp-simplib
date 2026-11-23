@@ -180,8 +180,16 @@ describe 'simplib::passgen::legacy::passgen' do
   end
 
   context 'password encryption ' do
-    before(:each) do
-      skip("This Ruby's String#crypt does not support modular crypt") unless CryptHelper.modular_crypt?
+    if CryptHelper.des_only_tolerated?
+      ['md5', 'sha256', 'sha512'].each do |hash_selection|
+        it "fails when hash == #{hash_selection}" do
+          is_expected.to run.with_params('spectest', { 'hash' => hash_selection }).and_raise_error(
+            RuntimeError, %r{simplib::passgen: Could not generate a '#{hash_selection}' hash}
+          )
+        end
+      end
+
+      next
     end
 
     # These tests check the resulting modular crypt formatted hash.
