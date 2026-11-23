@@ -97,20 +97,27 @@ See [REFERENCE.md](./REFERENCE.md) for all other reference documentation.
                                          `/` directory
   * **runlevel**                      -  Return the current system runlevel
   * **shmall**                        -  Return the value of shmall from sysctl
+  * **simplib__auditd**               -  Return the status of auditing on the system
+  * **simplib__crypto_policy_state**  -  Returns the state of the configured crypto
+                                         policies
   * **simplib__efi_enabled**          -  Returns true if the system is using EFI
   * **simplib__secure_boot_enabled**  -  Returns true if the host is using uEFI Secure Boot
   * **simplib__firewalls**            -  Return an array of known firewall commands that
                                          are present on the system.
   * **simplib__mountpoints**          -  Return a hash of mountpoints of particular
                                          interest to SIMP modules.
+  * **simplib__networkmanager**       -  Returns a hash of NetworkManager state gathered
+                                         from `nmcli`
   * **simplib__numa**                 -  Return hash of numa values about your system.
+  * **simplib__sshd_config**          -  Return values from the `/etc/ssh/sshd_config` file
   * **simplib_sysctl**                -  Return hash of sysctl values that are relevant
                                          to SIMP
-  * **simp_puppet_settings**          -  Returns a hash of all Puppet settings on a node
-  * **tmp_mounts**                    -  DEPRECATED - use `simplib__mountpoints`
-                                         This fact provides information about `/tmp`,
-                                         `/var/tmp`, and `/dev/shm` should they be present
-                                         on the system
+  * **puppet_settings**               -  Returns a hash of all Puppet settings on a node
+  * **tmp_mount_\<dir\>**, **tmp_mount_path_\<dir\>**, **tmp_mount_fstype_\<dir\>**
+                                      -  DEPRECATED - use `simplib__mountpoints`
+                                         Mount options, device path and filesystem
+                                         type of `/tmp`, `/var/tmp` and `/dev/shm`,
+                                         where `<dir>` is `tmp`, `var_tmp` or `dev_shm`
   * **uid_min**                       -  Return the minimum uid allowed
 
 ### Run stages

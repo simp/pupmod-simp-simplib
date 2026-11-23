@@ -46,7 +46,7 @@ Puppet::Type.type(:runlevel).provide(:telinit) do
 
   def persist=(_should)
     # Essentially do the same as the read, but save contents to new file
-    newfile = ''
+    newfile = +''
     found_line = false
 
     File.open('/etc/inittab', 'r') do |inittab|
