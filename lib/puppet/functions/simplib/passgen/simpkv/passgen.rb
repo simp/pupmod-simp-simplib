@@ -175,7 +175,19 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     end
 
     # Return the hash, not the password
-    return password.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
+    if options['hash']
+      prefix = "$#{settings['crypt_map'][options['hash']]}$"
+      hashed = password.crypt("#{prefix}#{salt}")
+
+      # A String#crypt without modular crypt support ignores the prefix and
+      # returns a traditional DES hash
+      unless hashed.start_with?(prefix)
+        raise("simplib::passgen: Could not generate a '#{options['hash']}' hash: " \
+              'String#crypt in this Ruby does not support it')
+      end
+
+      return hashed
+    end
 
     password
   end

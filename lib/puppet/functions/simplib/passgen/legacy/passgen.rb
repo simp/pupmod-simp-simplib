@@ -125,7 +125,19 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     lockdown_stored_password_perms(settings)
 
     # Return the hash, not the password
-    return passwd.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
+    if options['hash']
+      prefix = "$#{settings['crypt_map'][options['hash']]}$"
+      hashed = passwd.crypt("#{prefix}#{salt}")
+
+      # A String#crypt without modular crypt support ignores the prefix and
+      # returns a traditional DES hash
+      unless hashed.start_with?(prefix)
+        raise("simplib::passgen: Could not generate a '#{options['hash']}' hash: " \
+              'String#crypt in this Ruby does not support it')
+      end
+
+      return hashed
+    end
 
     passwd
   rescue Timeout::Error

@@ -281,6 +281,14 @@ describe 'simplib::passgen::simpkv::passgen' do
   end
 
   context 'misc errors' do
+    it 'fails when String#crypt does not return the requested hash type' do
+      # A String#crypt that only supports traditional DES
+      allow_any_instance_of(String).to receive(:crypt).and_return('$6aEPTnyKi88Q') # rubocop:disable RSpec/AnyInstance
+      is_expected.to run.with_params('spectest', { 'hash' => 'sha512' }).and_raise_error(
+        RuntimeError, %r{simplib::passgen: Could not generate a 'sha512' hash}
+      )
+    end
+
     it 'fails when password generation times out' do
       expect(Timeout).to receive(:timeout).with(30).and_raise(Timeout::Error, 'Timeout')
       is_expected.to run.with_params('spectest').and_raise_error(RuntimeError, %r{simplib::passgen timed out for 'spectest'!})

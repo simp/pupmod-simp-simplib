@@ -258,6 +258,14 @@ describe 'simplib::passgen::legacy::passgen' do
   end
 
   context 'misc errors' do
+    it 'fails when String#crypt does not return the requested hash type' do
+      # A String#crypt that only supports traditional DES
+      allow_any_instance_of(String).to receive(:crypt).and_return('$6aEPTnyKi88Q') # rubocop:disable RSpec/AnyInstance
+      is_expected.to run.with_params('spectest', { 'hash' => 'sha512' }).and_raise_error(
+        RuntimeError, %r{simplib::passgen: Could not generate a 'sha512' hash}
+      )
+    end
+
     it 'fails when keydir cannot be created' do
       skip("Test can't be run as root") if (ENV['USER'] == 'root') || (ENV['HOME'] == '/root')
 
