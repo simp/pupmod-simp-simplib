@@ -1,6 +1,12 @@
 require 'base64'
 
 module CryptHelper
+  # Some Ruby builds only support traditional DES in String#crypt and return
+  # a 13-character DES hash for a `$<code>$<salt>` setting.
+  def self.modular_crypt?
+    'x'.crypt('$6$salt').start_with?('$6$salt$')
+  end
+
   def parse_modular_crypt(input)
     retval = nil
     support_params = {

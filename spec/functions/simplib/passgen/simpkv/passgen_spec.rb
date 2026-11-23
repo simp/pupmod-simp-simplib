@@ -215,6 +215,10 @@ describe 'simplib::passgen::simpkv::passgen' do
   end
 
   context 'password encryption ' do
+    before(:each) do
+      skip("This Ruby's String#crypt does not support modular crypt") unless CryptHelper.modular_crypt?
+    end
+
     # These tests check the resulting modular crypt formatted hash.
     {
       'md5' => {
