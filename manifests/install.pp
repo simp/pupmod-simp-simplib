@@ -42,12 +42,12 @@ define simplib::install (
 ) {
   $packages.each |String $package, Optional[Hash] $opts| {
     if $opts =~ Hash {
-      $_opts = merge($defaults, $opts)
+      $_opts = $defaults + $opts
     }
     else {
       $_opts = $defaults
     }
 
-    ensure_packages($package, $_opts)
+    stdlib::ensure_packages($package, $_opts)
   }
 }
