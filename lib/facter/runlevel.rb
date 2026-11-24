@@ -20,7 +20,7 @@ Facter.add('runlevel') do
           'systemctl list-units --type=target --state=active --plain --no-legend --no-pager',
           on_fail: nil,
         ) || ''
-      ).split.map { |line| line.split.first }
+      ).lines.map { |line| line.split.first }.compact
 
       # Highest runlevel wins, mirroring runlevel(8): a system booted into
       # graphical.target also has multi-user.target active, but reports 5.
