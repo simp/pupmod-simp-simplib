@@ -180,7 +180,10 @@ describe 'simplib::passgen::legacy::passgen' do
   end
 
   context 'password encryption ' do
-    if CryptHelper.des_only_tolerated?
+    # Without modular crypt support in String#crypt, passgen fails for every
+    # hash type, so the hashing examples are replaced by examples for that
+    # failure.
+    unless CryptHelper.modular_crypt?
       ['md5', 'sha256', 'sha512'].each do |hash_selection|
         it "fails when hash == #{hash_selection}" do
           is_expected.to run.with_params('spectest', { 'hash' => hash_selection }).and_raise_error(
@@ -266,12 +269,14 @@ describe 'simplib::passgen::legacy::passgen' do
   end
 
   context 'misc errors' do
-    it 'fails when String#crypt does not return the requested hash type' do
-      # A String#crypt that only supports traditional DES
-      allow_any_instance_of(String).to receive(:crypt).and_return('$6aEPTnyKi88Q') # rubocop:disable RSpec/AnyInstance
-      is_expected.to run.with_params('spectest', { 'hash' => 'sha512' }).and_raise_error(
-        RuntimeError, %r{simplib::passgen: Could not generate a 'sha512' hash}
-      )
+    { 'md5' => '$1nkSVq.BqR8g', 'sha256' => '$5rxA3j3XfFmY', 'sha512' => '$6aEPTnyKi88Q' }.each do |hash_selection, des_hash|
+      it "fails when String#crypt does not return a #{hash_selection} hash" do
+        # A String#crypt that only supports traditional DES
+        allow_any_instance_of(String).to receive(:crypt).and_return(des_hash) # rubocop:disable RSpec/AnyInstance
+        is_expected.to run.with_params('spectest', { 'hash' => hash_selection }).and_raise_error(
+          RuntimeError, %r{simplib::passgen: Could not generate a '#{hash_selection}' hash}
+        )
+      end
     end
 
     it 'fails when keydir cannot be created' do

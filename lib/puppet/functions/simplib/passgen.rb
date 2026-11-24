@@ -5,15 +5,17 @@
 #   * simpkv
 #     * Password info is stored in a key/value store and accessed using simpkv.
 #     * Terminates catalog compilation if `password_options` contains invalid
-#       parameters, any simpkv operation fails or the password cannot be
-#       created in the allotted time.
+#       parameters, any simpkv operation fails, the password cannot be
+#       created in the allotted time, or the system cannot produce the
+#       requested `hash` type.
 #   * Legacy
 #     * Password info is stored in files on the local file system at
 #       `Puppet.settings[:vardir]/simp/environments/$environment/simp_autofiles/gen_passwd/`.
 #     * Terminates catalog compilation if the password storage directory
 #       cannot be created/accessed by the Puppet user, the password cannot
-#       be created in the allotted time, or files not owned by the Puppet
-#       user are present in the password storage directory.
+#       be created in the allotted time, files not owned by the Puppet
+#       user are present in the password storage directory, or the system
+#       cannot produce the requested `hash` type.
 # * To enable the simpkv mode, set `simplib::passgen::simpkv` to `true`
 #   in hieradata. When that setting absent or false, legacy mode will be used.
 # * The minimum length password that this function will return is `8`

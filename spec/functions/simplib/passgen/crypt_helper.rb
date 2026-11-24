@@ -7,14 +7,6 @@ module CryptHelper
     'x'.crypt('$6$salt').start_with?('$6$salt$')
   end
 
-  # A DES-only String#crypt is tolerated on Ruby < 4 only, where the hashing
-  # examples are replaced by examples for the resulting failure. Any newer
-  # Ruby must produce real hashes, so the hashing examples always run
-  # somewhere.
-  def self.des_only_tolerated?
-    !modular_crypt? && RUBY_VERSION.to_i < 4
-  end
-
   def parse_modular_crypt(input)
     retval = nil
     support_params = {

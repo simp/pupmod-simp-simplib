@@ -1,7 +1,7 @@
 * Mon Nov 23 2026 Hazel Caballero <hazel@sicura.us> - 7.2.2
-- `simplib::passgen` now fails when the Ruby it runs under cannot produce the
-  requested `hash` type. It previously returned a traditional DES hash without
-  any error.
+- `simplib::passgen` now fails catalog compilation when the system can't
+  produce the requested `hash` type (`md5`, `sha256` or `sha512`). It
+  previously returned a traditional DES hash without any error.
 
 * Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 7.2.1
 - Fix the `simplib__networkmanager` fact on hosts where NetworkManager is
