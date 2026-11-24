@@ -6,6 +6,9 @@
   >= 9.0.0
 - Corrected the README fact list: added four undocumented `simplib__*` facts
   and fixed two entries that named files instead of facts
+- Fix the `runlevel` fact on systemd-only distributions without
+  `/sbin/runlevel` (e.g. Fedora 43+). It now reports the highest active
+  runlevel-mapped target. Thanks to @bufferoverflow
 
 * Wed Oct 14 2026 Hazel Caballero <hazel@sicura.us> - 7.2.1
 - Fix the `simplib__networkmanager` fact on hosts where NetworkManager is
