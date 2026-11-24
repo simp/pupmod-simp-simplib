@@ -33,7 +33,7 @@ Puppet::Functions.create_function(:'simplib::simp_version') do
       retval = version if version
     end
 
-    retval.strip! if strip_whitespace
+    retval = retval.strip if strip_whitespace
     retval
   end
 end
