@@ -7,8 +7,9 @@
 #   characters.
 # * Terminates catalog compilation if the password storage directory
 #   cannot be created/accessed by the Puppet user, the password cannot
-#   be created in the allotted time, or files not owned by the Puppet
-#   user are present in the password storage directory.
+#   be created in the allotted time, files not owned by the Puppet
+#   user are present in the password storage directory, or the system
+#   cannot produce the requested `hash` type.
 #
 Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
   # @param identifier Unique `String` to identify the password usage.
@@ -125,7 +126,19 @@ Puppet::Functions.create_function(:'simplib::passgen::legacy::passgen') do
     lockdown_stored_password_perms(settings)
 
     # Return the hash, not the password
-    return passwd.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
+    if options['hash']
+      prefix = "$#{settings['crypt_map'][options['hash']]}$"
+      hashed = passwd.crypt("#{prefix}#{salt}")
+
+      # A String#crypt without modular crypt support ignores the prefix and
+      # returns a traditional DES hash
+      unless hashed.start_with?(prefix)
+        raise("simplib::passgen: Could not generate a '#{options['hash']}' hash for '#{identifier}': " \
+              "String#crypt returned a result without the '#{prefix}' prefix, so this Ruby or system can't produce that hash type")
+      end
+
+      return hashed
+    end
 
     passwd
   rescue Timeout::Error

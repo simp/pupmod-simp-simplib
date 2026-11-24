@@ -5,8 +5,9 @@
 # * The minimum length password that this function will return is `8`
 #   characters.
 # * Terminates catalog compilation if `password_options` contains invalid
-#   parameters, any simpkv operation fails or the password cannot be created
-#   in the allotted time.
+#   parameters, any simpkv operation fails, the password cannot be created
+#   in the allotted time, or the system cannot produce the requested `hash`
+#   type.
 #
 Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
   # @param identifier Unique `String` to identify the password usage.
@@ -129,7 +130,8 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
   #       new password.
   #
   # @raise Exception if `password_options` contains invalid parameters,
-  #   a simpkv operation fails, or password generation times out
+  #   a simpkv operation fails, password generation times out, or the system
+  #   cannot produce the requested `hash` type
   #
   dispatch :passgen do
     required_param 'String[1]', :identifier
@@ -175,7 +177,19 @@ Puppet::Functions.create_function(:'simplib::passgen::simpkv::passgen') do
     end
 
     # Return the hash, not the password
-    return password.crypt("$#{settings['crypt_map'][options['hash']]}$#{salt}") if options['hash']
+    if options['hash']
+      prefix = "$#{settings['crypt_map'][options['hash']]}$"
+      hashed = password.crypt("#{prefix}#{salt}")
+
+      # A String#crypt without modular crypt support ignores the prefix and
+      # returns a traditional DES hash
+      unless hashed.start_with?(prefix)
+        raise("simplib::passgen: Could not generate a '#{options['hash']}' hash for '#{identifier}': " \
+              "String#crypt returned a result without the '#{prefix}' prefix, so this Ruby or system can't produce that hash type")
+      end
+
+      return hashed
+    end
 
     password
   end

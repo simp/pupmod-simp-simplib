@@ -215,8 +215,19 @@ describe 'simplib::passgen::simpkv::passgen' do
   end
 
   context 'password encryption ' do
-    before(:each) do
-      skip("This Ruby's String#crypt does not support modular crypt") unless CryptHelper.modular_crypt?
+    # Without modular crypt support in String#crypt, passgen fails for every
+    # hash type, so the hashing examples are replaced by examples for that
+    # failure.
+    unless CryptHelper.modular_crypt?
+      ['md5', 'sha256', 'sha512'].each do |hash_selection|
+        it "fails when hash == #{hash_selection}" do
+          is_expected.to run.with_params('spectest', { 'hash' => hash_selection }).and_raise_error(
+            RuntimeError, %r{simplib::passgen: Could not generate a '#{hash_selection}' hash}
+          )
+        end
+      end
+
+      next
     end
 
     # These tests check the resulting modular crypt formatted hash.
@@ -281,6 +292,16 @@ describe 'simplib::passgen::simpkv::passgen' do
   end
 
   context 'misc errors' do
+    { 'md5' => '$1nkSVq.BqR8g', 'sha256' => '$5rxA3j3XfFmY', 'sha512' => '$6aEPTnyKi88Q' }.each do |hash_selection, des_hash|
+      it "fails when String#crypt does not return a #{hash_selection} hash" do
+        # A String#crypt that only supports traditional DES
+        allow_any_instance_of(String).to receive(:crypt).and_return(des_hash) # rubocop:disable RSpec/AnyInstance
+        is_expected.to run.with_params('spectest', { 'hash' => hash_selection }).and_raise_error(
+          RuntimeError, %r{simplib::passgen: Could not generate a '#{hash_selection}' hash}
+        )
+      end
+    end
+
     it 'fails when password generation times out' do
       expect(Timeout).to receive(:timeout).with(30).and_raise(Timeout::Error, 'Timeout')
       is_expected.to run.with_params('spectest').and_raise_error(RuntimeError, %r{simplib::passgen timed out for 'spectest'!})
